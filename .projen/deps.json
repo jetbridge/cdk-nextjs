@@ -22,12 +22,16 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "2.1.0",
+      "version": "2.39.0",
       "type": "build"
     },
     {
       "name": "constructs",
       "version": "10.0.5",
+      "type": "build"
+    },
+    {
+      "name": "eslint-config-prettier",
       "type": "build"
     },
     {
@@ -40,6 +44,10 @@
     },
     {
       "name": "eslint-plugin-import",
+      "type": "build"
+    },
+    {
+      "name": "eslint-plugin-prettier",
       "type": "build"
     },
     {
@@ -83,6 +91,10 @@
       "type": "build"
     },
     {
+      "name": "prettier",
+      "type": "build"
+    },
+    {
       "name": "projen",
       "type": "build"
     },
@@ -101,6 +113,42 @@
       "type": "build"
     },
     {
+      "name": "@types/cross-spawn",
+      "type": "bundled"
+    },
+    {
+      "name": "@types/fs-extra",
+      "type": "bundled"
+    },
+    {
+      "name": "@types/micromatch",
+      "type": "bundled"
+    },
+    {
+      "name": "chalk",
+      "type": "bundled"
+    },
+    {
+      "name": "cross-spawn",
+      "type": "bundled"
+    },
+    {
+      "name": "esbuild",
+      "type": "bundled"
+    },
+    {
+      "name": "fs-extra",
+      "type": "bundled"
+    },
+    {
+      "name": "indent-string",
+      "type": "bundled"
+    },
+    {
+      "name": "micromatch",
+      "type": "bundled"
+    },
+    {
       "name": "@types/prettier",
       "version": "2.6.0",
       "type": "override"
@@ -117,7 +165,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "^2.1.0",
+      "version": "^2.39.0",
       "type": "peer"
     },
     {

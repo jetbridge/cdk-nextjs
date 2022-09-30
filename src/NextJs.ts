@@ -86,7 +86,8 @@ export interface NextJsProps {
   };
 
   /**
-   * Path to the directory where the website source is located.
+   * Path to the directory where the NextJS project is located.
+   * Preferably an absolute path.
    */
   path: string;
 
@@ -327,9 +328,9 @@ export class NextJs extends Construct {
       : this.createCloudFrontDistribution();
     s3Deployments.forEach((s3Deployment) => this.cdk.distribution.node.addDependency(s3Deployment));
 
-    // Invalidate CloudFront (might already be handled by S3 deployment?)
-    const invalidationCR = this.createCloudFrontInvalidation();
-    invalidationCR.node.addDependency(this.cdk.distribution);
+    // // Invalidate CloudFront (might already be handled by S3 deployment?)
+    // const invalidationCR = this.createCloudFrontInvalidation();
+    // invalidationCR.node.addDependency(this.cdk.distribution);
 
     // Connect Custom Domain to CloudFront Distribution
     this.createRoute53Records();
@@ -540,7 +541,7 @@ export class NextJs extends Construct {
     // path to public folder; root static assets
     const staticDir = this.getNextStaticDir();
     let publicDir = this.isPlaceholder
-      ? path.resolve(__dirname, '../assets/NextjsSite/site-stub')
+      ? path.resolve(__dirname, '../assets/placeholder-site')
       : this.getNextPublicDir();
 
     // static dir
@@ -795,7 +796,6 @@ export class NextJs extends Construct {
   /////////////////////
 
   private createServerFunction(): NodejsFunction {
-    const app = App.of(this) as App;
     const { defaults, environment, path: nextjsPath } = this.props;
 
     // build native deps layer
@@ -854,7 +854,10 @@ export class NextJs extends Construct {
     return fn;
   }
 
-  private bundleServerHandler(nextjsPath: string, standaloneDirAbsolute: string) {
+  private bundleServerHandler() {
+    const { path: nextjsPath } = this.props;
+
+    const standaloneDirAbsolute = this.getNextStandaloneDir();
     // delete default nextjs handler if it exists
     const defaultServerPath = path.join(standaloneDirAbsolute, nextjsPath, 'server.js');
     if (fs.existsSync(defaultServerPath)) {
@@ -865,7 +868,7 @@ export class NextJs extends Construct {
     this.rewriteEnvVars();
 
     // build our server handler
-    const serverHandler = path.resolve(__dirname, '../assets/NextjsSite/server-lambda/server.ts');
+    const serverHandler = path.resolve(__dirname, './NextJsHandler.ts');
     // server should live in the same dir as the nextjs app to access deps properly
     const serverPath = path.join(nextjsPath, 'server.cjs');
     const esbuildResult = esbuild.buildSync({
@@ -918,7 +921,7 @@ export class NextJs extends Construct {
     const standaloneDirAbsolute = this.getNextStandaloneDir();
 
     // build our handler
-    this.bundleServerHandler(this.props.path, standaloneDirAbsolute);
+    this.bundleServerHandler();
 
     // zip up the directory
     const zipFilePath = this.createArchive(standaloneDirAbsolute, 'standalone.zip');
@@ -1451,9 +1454,8 @@ export class NextJs extends Construct {
   // get the path to the directory containing the nextjs project
   // it may be the project root or a subdirectory in a monorepo setup
   private getNextDir() {
-    const app = App.of(this) as App;
     const { path: nextjsPath } = this.props; // path to nextjs dir inside project
-    const absolutePath = path.join(app.appPath, nextjsPath); // e.g. /home/me/myapp/web
+    const absolutePath = path.resolve(nextjsPath); // e.g. /home/me/myapp/web
     if (!fs.existsSync(absolutePath)) {
       throw new Error(`Could not find ${absolutePath} directory.`);
     }

@@ -5,7 +5,11 @@ const project = new awscdk.AwsCdkConstructLibrary({
   cdkVersion: '2.39.0',
   defaultReleaseBranch: 'main',
   name: 'cdk-nextjs',
-  repositoryUrl: 'https://github.com/revmischa/nextjs-cdk.git',
+  repositoryUrl: 'https://github.com/jetbridge/nextjs-cdk.git',
+  authorOrganization: 'JetBridge',
+  packageName: 'cdk-nextjs-standalone',
+  description: 'Deploy a NextJS app to AWS using CDK. Uses standalone build and output tracing.',
+  keywords: ['nextjs', 'aws', 'cdk', 'standalone', 'next'],
 
   bundledDeps: [
     'chalk',
@@ -18,10 +22,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@types/micromatch',
     'esbuild',
   ] /* Runtime dependencies of this module. */,
-  // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],             /* Build dependencies for this module. */
-  // packageName: undefined,  /* The "name" in package.json. */
-
-  eslintOptions: { prettier: true },
+  eslintOptions: { prettier: true, ignorePatterns: ['src/Functions/**/*'] },
 });
 project.synth();

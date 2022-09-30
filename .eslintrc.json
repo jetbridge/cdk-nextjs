@@ -36,12 +36,7 @@
     }
   },
   "ignorePatterns": [
-    "*.js",
-    "!.projenrc.js",
-    "*.d.ts",
-    "node_modules/",
-    "*.generated.ts",
-    "coverage"
+    "src/Functions/**/*"
   ],
   "rules": {
     "prettier/prettier": [

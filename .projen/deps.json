@@ -125,7 +125,7 @@
       "type": "bundled"
     },
     {
-      "name": "chalk",
+      "name": "aws-lambda",
       "type": "bundled"
     },
     {

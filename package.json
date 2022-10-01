@@ -1,8 +1,9 @@
 {
-  "name": "cdk-nextjs",
+  "name": "cdk-nextjs-standalone",
+  "description": "Deploy a NextJS app to AWS using CDK. Uses standalone build and output tracing.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/revmischa/nextjs-cdk.git"
+    "url": "https://github.com/jetbridge/nextjs-cdk.git"
   },
   "scripts": {
     "build": "npx projen build",
@@ -31,7 +32,7 @@
   "author": {
     "name": "Mischa Spiegelmock",
     "email": "me@mish.dev",
-    "organization": false
+    "organization": "JetBridge"
   },
   "devDependencies": {
     "@types/jest": "^27",
@@ -68,7 +69,7 @@
     "@types/cross-spawn": "^6.0.2",
     "@types/fs-extra": "^9.0.13",
     "@types/micromatch": "^4.0.2",
-    "chalk": "*",
+    "aws-lambda": "^1.0.7",
     "cross-spawn": "^7.0.3",
     "esbuild": "^0.15.10",
     "fs-extra": "^10.1.0",
@@ -79,7 +80,7 @@
     "@types/cross-spawn",
     "@types/fs-extra",
     "@types/micromatch",
-    "chalk",
+    "aws-lambda",
     "cross-spawn",
     "esbuild",
     "fs-extra",
@@ -87,7 +88,11 @@
     "micromatch"
   ],
   "keywords": [
-    "cdk"
+    "aws",
+    "cdk",
+    "next",
+    "nextjs",
+    "standalone"
   ],
   "main": "lib/index.js",
   "license": "Apache-2.0",

@@ -12,7 +12,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
   keywords: ['nextjs', 'aws', 'cdk', 'standalone', 'next'],
 
   bundledDeps: [
-    'chalk',
     'cross-spawn',
     'fs-extra',
     'indent-string',
@@ -21,8 +20,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@types/fs-extra',
     '@types/micromatch',
     'esbuild',
+    'aws-lambda',
   ] /* Runtime dependencies of this module. */,
   // devDeps: [],             /* Build dependencies for this module. */
-  eslintOptions: { prettier: true, ignorePatterns: ['src/Functions/**/*'] },
+  eslintOptions: { prettier: true, ignorePatterns: ['assets/**/*'] },
+  // bundlerOptions: { assetsDir: 'assets' },
 });
 project.synth();

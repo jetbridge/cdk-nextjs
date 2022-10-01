@@ -36,7 +36,7 @@
     }
   },
   "ignorePatterns": [
-    "src/Functions/**/*"
+    "assets/**/*"
   ],
   "rules": {
     "prettier/prettier": [

@@ -1,1 +1,68 @@
-# replace this
+# Deploy a NextJS with CDK
+
+## What is this?
+
+A CDK construct to deploy a NextJS 12.3.0+ app using AWS CDK.
+
+## Quickstart
+
+```ts
+import path from 'path';
+import { NextJs } from 'cdk-nextjs-standalone';
+
+new NextJs(this, 'Web', {
+  path: path.resolve('./web'), // provide path to nextjs project root
+});
+```
+
+## About
+
+There is a new (since Next 12) `standalone` output mode which uses output tracing to generate a minimal server and static files.
+
+This standalone server can be converted into a CloudFront distribution and a lambda handler that translates between a APIGatewayProxyV2 request/response and Next request/response.
+
+The CloudFront default origin first checks S3 for static files and falls back to an HTTP origin using a lambda function URL.
+
+## Status
+
+This is _experimental_ and a work in progress. I hope others can benefit from it and contribute to improve it.
+
+I have managed to get the server bundling working even under the most finicky of circumstances (pnpm monorepo).
+
+## Caveats
+
+Nextjs requires the `sharp` native library. It is provided in a zip file from [lambda-layer-sharp](https://github.com/Umkus/lambda-layer-sharp/releases).
+
+It should be possible to build the lambda handler as a Lambda@Edge function, the main blocker is resolving the CDK tokens in env vars on the server side because edge functions cannot have environment variables. These tokens are not present at build-time. One of these issues needs to be fixed for that to work most likely: https://github.com/vercel/next.js/issues/40827 https://github.com/aws/aws-cdk/issues/19257
+
+## Performance
+
+**Testing with [sst-prisma](https://github.com/jetbridge/sst-prisma):**
+
+`Duration: 616.43 ms Billed Duration: 617 ms Memory Size: 2048 MB Max Memory Used: 131 MB Init Duration: 481.08 ms`
+
+**On my nextjs app using Material-UI**
+
+`Duration: 957.56 ms Billed Duration: 958 ms Memory Size: 1024 MB Max Memory Used: 127 MB Init Duration: 530.86 ms`
+
+<img width="1835" alt="next-server-mui" src="https://user-images.githubusercontent.com/245131/191592979-fe83f0a5-7926-4094-be9e-2f9193df5487.png">
+
+## Heavily based on:
+
+- https://github.com/iiroj/iiro.fi/commit/bd43222032d0dbb765e1111825f64dbb5db851d9
+- https://github.com/sladg/nextjs-lambda
+- https://github.com/serverless-nextjs/serverless-next.js/tree/master/packages/compat-layers/apigw-lambda-compat
+- [Serverless Stack](https://github.com/serverless-stack/sst)
+  - [RemixSite](https://github.com/serverless-stack/sst/blob/master/packages/resources/src/NextjsSite.ts) construct
+  - [NextjsSite](https://github.com/serverless-stack/sst/blob/master/packages/resources/src/RemixSite.ts) construct
+
+This module is largely made up of code from the above projects.
+
+## Questions
+
+- Do we need to manually handle CloudFront invalidation? It looks like `BucketDeployment` takes care of that for us
+- How is the `public` dir supposed to be handled? (Right now using an OriginGroup to look in the S3 origin first and if 403/404 then try lambda origin)
+- Is there anything we should be doing with the various manifests nextjs spits out? (e.g., not sure what the purpose of [this](https://github.com/serverless-stack/sst/blob/master/packages/resources/src/NextjsSite.ts#L1357) is)
+  - Do we need to create static routes? Or anything else?
+- Do we need to handle ISR?
+- How should images be handled?

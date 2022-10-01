@@ -176,7 +176,7 @@
     },
     "release": {
       "name": "release",
-      "description": "Prepare a release from \"main\" branch",
+      "description": "Prepare a release from \"master\" branch",
       "env": {
         "RELEASE": "true"
       },

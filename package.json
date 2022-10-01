@@ -90,8 +90,12 @@
   "keywords": [
     "aws",
     "cdk",
+    "cloud",
+    "iac",
+    "infrastructure",
     "next",
     "nextjs",
+    "serverless",
     "standalone"
   ],
   "main": "lib/index.js",

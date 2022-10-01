@@ -16,7 +16,6 @@ export interface IBaseSiteDomainProps {
    * An alternative domain to be assigned to the website URL. Visitors to the alias will be redirected to the main domain. (ie. `www.domain.com`).
    *
    * Use this to create a `www.` version of your domain and redirect visitors to the root domain.
-   * @default no alias configured
    */
   domainAlias?: string;
   /**
@@ -26,7 +25,6 @@ export interface IBaseSiteDomainProps {
   alternateNames?: string[];
   /**
    * Set this option if the domain is not hosted on Amazon Route 53.
-   * @default `false`
    */
   isExternalDomain?: boolean;
 

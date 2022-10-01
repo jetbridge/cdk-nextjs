@@ -167,8 +167,6 @@ export interface NextJsProps {
  *
  * @example
  *
- * Deploys a Nextjs app located in the `packages/web` directory.
- *
  * new NextJs(stack, "web", {
  *   path: path.resolve("packages/web"),
  * });

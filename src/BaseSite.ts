@@ -20,7 +20,6 @@ export interface IBaseSiteDomainProps {
   domainAlias?: string;
   /**
    * Specify additional names that should route to the Cloudfront Distribution. Note, certificates for these names will not be automatically generated so the `certificate` option must be specified.
-   * @default `[]`
    */
   alternateNames?: string[];
   /**

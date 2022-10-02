@@ -64,6 +64,9 @@ export interface NextJsCachePolicyProps {
   readonly imageCachePolicy?: cloudfront.ICachePolicy;
 }
 
+/**
+ * Resources that will be created automatically if not supplied.
+ */
 export interface NextJsCdkProps {
   readonly bucket?: s3.BucketProps | s3.IBucket;
   /**
@@ -80,6 +83,7 @@ export interface NextJsCdkProps {
    */
   readonly imageOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
 }
+
 export interface NextJsProps {
   /**
    * Allows you to override default settings this construct uses internally to ceate the bucket
@@ -166,7 +170,6 @@ export interface NextJsProps {
  * You must use Next.js 10.3.0 or newer.
  *
  * @example
- *
  * new NextJs(stack, "web", {
  *   path: path.resolve("packages/web"),
  * });

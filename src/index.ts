@@ -1,3 +1,14 @@
-export * from './NextJs';
-export * from './Construct';
-export * from './BaseSite';
+export {
+  INextJsDomainProps,
+  NextJs,
+  NextJsCachePolicyProps,
+  NextJsCdkDistributionProps,
+  NextJsCdkProps,
+  NextJsProps,
+} from './NextJs';
+export {
+  BaseSiteCdkDistributionProps,
+  BaseSiteEnvironmentOutputsInfo,
+  BaseSiteReplaceProps,
+  IBaseSiteDomainProps,
+} from './BaseSite';

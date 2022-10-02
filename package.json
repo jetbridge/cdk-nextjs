@@ -89,6 +89,7 @@
   ],
   "keywords": [
     "aws",
+    "aws-cdk",
     "cdk",
     "cloud",
     "iac",

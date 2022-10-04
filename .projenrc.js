@@ -3,7 +3,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   author: 'JetBridge',
   authorAddress: 'mischa@jetbridge.com',
   cdkVersion: '2.39.0',
-  defaultReleaseBranch: 'master',
+  defaultReleaseBranch: 'main',
   name: 'cdk-nextjs-standalone',
   repositoryUrl: 'https://github.com/jetbridge/nextjs-cdk.git',
   authorOrganization: true,

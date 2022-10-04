@@ -22,12 +22,12 @@ import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
 import {
   BaseSiteCdkDistributionProps,
-  IBaseSiteDomainProps,
+  BaseSiteDomainProps,
   BaseSiteReplaceProps,
   buildErrorResponsesForRedirectToIndex,
   getBuildCmdEnvironment,
 } from './BaseSite';
-import { isCDKConstruct } from './Construct';
+// import { isCDKConstruct } from './Construct';
 // import { App } from './App.js';
 // import {
 //   BaseSiteCdkDistributionProps,
@@ -52,7 +52,7 @@ const NEXTJS_BUILD_STANDALONE_ENV = 'NEXT_PRIVATE_STANDALONE';
 // contains server-side resolved environment vars in config bucket
 const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
-export interface INextJsDomainProps extends IBaseSiteDomainProps {}
+export interface NextJsDomainProps extends BaseSiteDomainProps {}
 export interface NextJsCdkDistributionProps extends BaseSiteCdkDistributionProps {}
 
 export interface NextJsCachePolicyProps {
@@ -119,7 +119,7 @@ export interface NextJsProps {
    *   },
    * });
    */
-  readonly customDomain?: string | INextJsDomainProps;
+  readonly customDomain?: string | NextJsDomainProps;
 
   /**
    * An object with the key being the environment variable name.
@@ -169,10 +169,7 @@ export interface NextJsProps {
  * Your standalone application will be bundled using output tracing and will be deployed to a Lambda function.
  * You must use Next.js 10.3.0 or newer.
  *
- * @example
- * new NextJs(stack, "web", {
- *   path: path.resolve("packages/web"),
- * });
+
  */
 export class NextJs extends Construct {
   /**
@@ -883,7 +880,7 @@ export class NextJs extends Construct {
     }
   }
 
-  rewriteEnvVars() {
+  private rewriteEnvVars() {
     // undo inlining of NEXT_PUBLIC_ env vars for server code
     // https://github.com/vercel/next.js/issues/40827
     const replaceValues = this._getServerContentReplaceValues();
@@ -1250,7 +1247,7 @@ export class NextJs extends Construct {
     return acmCertificate;
   }
 
-  protected createRoute53Records(): void {
+  private createRoute53Records(): void {
     const { customDomain } = this.props;
 
     if (!customDomain || !this.hostedZone) {
@@ -1446,4 +1443,10 @@ export class NextJs extends Construct {
   private _getNextPublicDir() {
     return path.join(this._getNextDir(), NEXTJS_PUBLIC_DIR);
   }
+}
+// taken from https://github.com/serverless-stack/sst/blob/8d377e941467ced81d8cc31ee67d5a06550f04d4/packages/resources/src/Construct.ts
+const JSII_RTTI_SYMBOL_1 = Symbol.for('jsii.rtti');
+function isCDKConstruct(construct: any): construct is Construct {
+  const fqn = construct?.constructor?.[JSII_RTTI_SYMBOL_1]?.fqn;
+  return typeof fqn === 'string' && (fqn.startsWith('@aws-cdk/') || fqn.startsWith('aws-cdk-lib'));
 }

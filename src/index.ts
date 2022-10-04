@@ -1,5 +1,5 @@
 export {
-  INextJsDomainProps,
+  NextJsDomainProps as INextJsDomainProps,
   NextJs,
   NextJsCachePolicyProps,
   NextJsCdkDistributionProps,
@@ -10,5 +10,5 @@ export {
   BaseSiteCdkDistributionProps,
   BaseSiteEnvironmentOutputsInfo,
   BaseSiteReplaceProps,
-  IBaseSiteDomainProps,
+  BaseSiteDomainProps,
 } from './BaseSite';

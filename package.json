@@ -30,9 +30,9 @@
     "projen": "npx projen"
   },
   "author": {
-    "name": "Mischa Spiegelmock",
-    "email": "me@mish.dev",
-    "organization": "JetBridge"
+    "name": "JetBridge",
+    "email": "mischa@jetbridge.com",
+    "organization": true
   },
   "devDependencies": {
     "@types/jest": "^27",

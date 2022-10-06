@@ -1,4 +1,3 @@
-import { Token } from 'aws-cdk-lib';
 import { ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { DistributionProps, ErrorResponse } from 'aws-cdk-lib/aws-cloudfront';
 import { IHostedZone } from 'aws-cdk-lib/aws-route53';
@@ -60,19 +59,6 @@ export interface BaseSiteEnvironmentOutputsInfo {
 /////////////////////
 // Helper Functions
 /////////////////////
-
-export function getBuildCmdEnvironment(siteEnvironment?: { [key: string]: string }): Record<string, string> {
-  // Generate environment placeholders to be replaced
-  // ie. environment => { API_URL: api.url }
-  //     environment => API_URL="{{ API_URL }}"
-  //
-  const buildCmdEnvironment: Record<string, string> = {};
-  Object.entries(siteEnvironment || {}).forEach(([key, value]) => {
-    buildCmdEnvironment[key] = Token.isUnresolved(value) ? `{{ ${key} }}` : value;
-  });
-
-  return buildCmdEnvironment;
-}
 
 export function buildErrorResponsesForRedirectToIndex(indexPage: string): ErrorResponse[] {
   return [

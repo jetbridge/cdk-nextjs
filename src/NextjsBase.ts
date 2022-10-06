@@ -1,94 +1,123 @@
-// import * as fs from 'node:fs';
-// import * as path from 'path';
-// import { CfnOutput, Stack, Token } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-// import * as spawn from 'cross-spawn';
-// import * as micromatch from 'micromatch';
-// import { BaseSiteReplaceProps } from './BaseSite';
+import { ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { DistributionProps, ErrorResponse } from 'aws-cdk-lib/aws-cloudfront';
+import { IHostedZone } from 'aws-cdk-lib/aws-route53';
 
 /**
- * Common functionality for NextJS-related CDK constructs.
+ * Common props shared across NextJS-related CDK constructs.
  */
-export abstract class NextjsBase extends Construct {
-  // this can hold our resolved environment vars for the server
-  protected createConfigBucket() {
-    // won't work until this is fixed: https://github.com/aws/aws-cdk/issues/19257
-    return undefined;
-    // const bucket = new s3.Bucket(this, "ConfigBucket", { removalPolicy: RemovalPolicy.DESTROY, });
-    // upload environment config to s3
-    // new BucketDeployment(this, 'EnvJsonDeployment', {
-    //   sources: [Source.jsonData(CONFIG_ENV_JSON_PATH, this.props.environment)],
-    //   destinationBucket: bucket,
-    // })
-    // return bucket
-  }
+export interface NextjsBaseProps {
+  /**
+   * Path to the directory where the NextJS project is located.
+   * Can be the root of your project or a subdirectory.
+   * Preferably an absolute path.
+   */
+  readonly nextjsPath: string;
+
+  /**
+   * Custom environment variables to pass to the NextJS build and runtime.
+   */
+  readonly environment?: Record<string, string>;
+
+  /**
+   * Skip building app and deploy a placeholder.
+   * Useful when using `next dev` for local development.
+   */
+  readonly isPlaceholder: boolean;
+
+  /**
+   * Directory to store temporary build files in.
+   * Defaults to os.mkdtempSync().
+   */
+  readonly tempBuildDir?: string; // move to NextjsBuildProps?
+
+  /**
+   * Optional value for NODE_ENV during build and runtime.
+   */
+  readonly nodeEnv?: string;
+}
+
+///// stuff below taken from https://github.com/serverless-stack/sst/blob/8d377e941467ced81d8cc31ee67d5a06550f04d4/packages/resources/src/BaseSite.ts
+
+export interface BaseSiteDomainProps {
+  /**
+   * The domain to be assigned to the website URL (ie. domain.com).
+   *
+   * Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally.
+   */
+  readonly domainName: string;
+  /**
+   * An alternative domain to be assigned to the website URL. Visitors to the alias will be redirected to the main domain. (ie. `www.domain.com`).
+   *
+   * Use this to create a `www.` version of your domain and redirect visitors to the root domain.
+   */
+  readonly domainAlias?: string;
+  /**
+   * Specify additional names that should route to the Cloudfront Distribution. Note, certificates for these names will not be automatically generated so the `certificate` option must be specified.
+   */
+  readonly alternateNames?: string[];
+  /**
+   * Set this option if the domain is not hosted on Amazon Route 53.
+   */
+  readonly isExternalDomain?: boolean;
+
+  /**
+   * Import the underlying Route 53 hosted zone.
+   */
+  readonly hostedZone?: IHostedZone;
+  /**
+   * Import the certificate for the domain. By default, SST will create a certificate with the domain name. The certificate will be created in the `us-east-1`(N. Virginia) region as required by AWS CloudFront.
+   *
+   * Set this option if you have an existing certificate in the `us-east-1` region in AWS Certificate Manager you want to use.
+   */
+  readonly certificate?: ICertificate;
+}
+
+export type BaseSiteCdkDistributionProps = DistributionProps;
+// export interface BaseSiteCdkDistributionProps extends Omit<DistributionProps, 'defaultBehavior'> {
+//   readonly defaultBehavior?: Omit<BehaviorOptions, 'origin'> & {
+//     origin?: IOrigin;
+//   };
+// }
+export interface BaseSiteReplaceProps {
+  readonly files: string;
+  readonly search: string;
+  readonly replace: string;
+}
+
+export interface BaseSiteEnvironmentOutputsInfo {
+  readonly path: string;
+  readonly stack: string;
+  readonly environmentOutputs: { [key: string]: string };
 }
 
 /////////////////////
 // Helper Functions
 /////////////////////
 
-// export function registerSiteEnvironment() {
-//   const environmentOutputs: Record<string, string> = {};
-//   for (const [key, value] of Object.entries(this.props.environment || {})) {
-//     const outputId = `SstSiteEnv_${key}`;
-//     const output = new CfnOutput(this, outputId, { value });
-//     environmentOutputs[key] = Stack.of(this).getLogicalId(output);
-//   }
+export function buildErrorResponsesForRedirectToIndex(indexPage: string): ErrorResponse[] {
+  return [
+    {
+      httpStatus: 403,
+      responsePagePath: `/${indexPage}`,
+      responseHttpStatus: 200,
+    },
+    {
+      httpStatus: 404,
+      responsePagePath: `/${indexPage}`,
+      responseHttpStatus: 200,
+    },
+  ];
+}
 
-// FIXME: SST
-// const root = this.node.root as App;
-// root.registerSiteEnvironment({
-//   id: this.node.id,
-//   path: this.props.path,
-//   stack: Stack.of(this).node.id,
-//   environmentOutputs,
-// } as BaseSiteEnvironmentOutputsInfo);
-// }
-
-// TODO: needed for edge function support probably
-// export function _getLambdaContentReplaceValues(): BaseSiteReplaceProps[] {
-//   const replaceValues: BaseSiteReplaceProps[] = [];
-
-//   // The Next.js app can have environment variables like
-//   // `process.env.API_URL` in the JS code. `process.env.API_URL` might or
-//   // might not get resolved on `next build` if it is used in
-//   // server-side functions, ie. getServerSideProps().
-//   // Because Lambda@Edge does not support environment variables, we will
-//   // use the trick of replacing "{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}" with
-//   // a JSON encoded string of all environment key-value pairs. This string
-//   // will then get decoded at run time.
-//   const lambdaEnvs: { [key: string]: string } = {};
-
-//   Object.entries(this.props.environment || {}).forEach(([key, value]) => {
-//     const token = `{{ ${key} }}`;
-//     replaceValues.push(
-//       ...this.replaceTokenGlobs.map((glob) => ({
-//         files: glob,
-//         search: token,
-//         replace: value,
-//       }))
-//     );
-//     lambdaEnvs[key] = value;
-//   });
-
-//   replaceValues.push(
-//     {
-//       files: '**/*.mjs',
-//       search: '"{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
-//       replace: JSON.stringify(lambdaEnvs),
-//     },
-//     {
-//       files: '**/*.cjs',
-//       search: '"{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
-//       replace: JSON.stringify(lambdaEnvs),
-//     },
-//     {
-//       files: '**/*.js',
-//       search: '"{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
-//       replace: JSON.stringify(lambdaEnvs),
-//     }
-//   );
-
-//   return replaceValues;
-// }
+export function buildErrorResponsesFor404ErrorPage(errorPage: string): ErrorResponse[] {
+  return [
+    {
+      httpStatus: 403,
+      responsePagePath: `/${errorPage}`,
+    },
+    {
+      httpStatus: 404,
+      responsePagePath: `/${errorPage}`,
+    },
+  ];
+}

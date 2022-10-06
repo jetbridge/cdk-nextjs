@@ -9,22 +9,22 @@ import * as cr from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
-import { BaseSiteReplaceProps } from './BaseSite';
-import { createArchive, NextjsBaseProps, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
+import { BaseSiteReplaceProps, NextjsBaseProps } from './NextjsBase';
+import { createArchive, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
 
 export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
-  build: NextjsBuild;
+  readonly nextBuild: NextjsBuild;
 
   /**
    * Properties for the S3 bucket containing the NextJS assets.
    * You can also supply your own bucket here.
    */
-  bucket?: s3.IBucket | s3.BucketProps;
+  readonly bucket?: s3.IBucket | s3.BucketProps;
 
   /**
    * Distribution to invalidate when assets change.
    */
-  distribution?: cloudfront.IDistribution;
+  readonly distribution?: cloudfront.IDistribution;
 }
 
 export class NextJsAssetsDeployment extends Construct {
@@ -53,10 +53,10 @@ export class NextJsAssetsDeployment extends Construct {
     const deployments: BucketDeployment[] = [];
 
     // path to public folder; root static assets
-    const staticDir = this.props.build.nextStaticDir;
+    const staticDir = this.props.nextBuild.nextStaticDir;
     let publicDir = this.props.isPlaceholder
       ? path.resolve(__dirname, '../assets/placeholder-site')
-      : this.props.build.nextPublicDir;
+      : this.props.nextBuild.nextPublicDir;
 
     // static dir
     if (!this.props.isPlaceholder && fs.existsSync(staticDir)) {
@@ -79,7 +79,7 @@ export class NextJsAssetsDeployment extends Construct {
         directory: publicDir,
         zipFileName: 'public.zip',
         fileGlob: '*',
-        zipOutDir: this.props.build.tempBuildDir,
+        zipOutDir: this.props.nextBuild.tempBuildDir,
       });
 
       // upload public files to root of S3 bucket
@@ -179,8 +179,8 @@ export class NextJsAssetsDeployment extends Construct {
     // where to find static files
     const globs = [...new Set(replaceValues.flatMap((replaceValue) => replaceValue.files))];
     const searchDirs = [
-      { dir: this.props.build.nextStaticDir, prefix: '_next/static' },
-      { dir: this.props.build.nextStaticDir, prefix: '' },
+      { dir: this.props.nextBuild.nextStaticDir, prefix: '_next/static' },
+      { dir: this.props.nextBuild.nextStaticDir, prefix: '' },
     ];
 
     // traverse static dirs

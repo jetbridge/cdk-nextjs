@@ -11,9 +11,14 @@ import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
-import { BaseSiteCdkDistributionProps, BaseSiteDomainProps, buildErrorResponsesForRedirectToIndex } from './BaseSite';
 import { NextJsAssetsDeployment } from './NextjsAssetsDeployment';
-import { NextjsBaseProps, NextjsBuild } from './NextjsBuild';
+import {
+  BaseSiteCdkDistributionProps,
+  BaseSiteDomainProps,
+  buildErrorResponsesForRedirectToIndex,
+  NextjsBaseProps,
+} from './NextjsBase';
+import { NextjsBuild } from './NextjsBuild';
 import { NextJsLambda } from './NextjsLambda';
 
 // contains server-side resolved environment vars in config bucket
@@ -156,7 +161,7 @@ export class Nextjs extends Construct {
   /**
    * Built NextJS project output.
    */
-  public build: NextjsBuild;
+  public nextBuild: NextjsBuild;
 
   /**
    * Bucket containing NextJS static assets.
@@ -201,11 +206,11 @@ export class Nextjs extends Construct {
     // this.configBucket = this.createConfigBucket();
 
     // build nextjs app
-    this.build = new NextjsBuild(scope, id, props);
-    this.serverFunction = new NextJsLambda(this, 'Fn', { ...props, build: this.build });
+    this.nextBuild = new NextjsBuild(scope, id, props);
+    this.serverFunction = new NextJsLambda(this, 'Fn', { ...props, build: this.nextBuild });
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
       ...props,
-      build: this.build,
+      nextBuild: this.nextBuild,
     });
     this.bucket = this.assetsDeployment.bucket;
 
@@ -399,7 +404,7 @@ export class Nextjs extends Construct {
 
     // if we don't have a static file called index.html then we should
     // redirect to the lambda handler
-    const hasIndexHtml = this.build.readPublicFileList().includes('index.html');
+    const hasIndexHtml = this.nextBuild.readPublicFileList().includes('index.html');
 
     return new cloudfront.Distribution(this, 'Distribution', {
       // defaultRootObject: "index.html",

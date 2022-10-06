@@ -4,7 +4,7 @@ import { Construct } from 'constructs';
 import * as spawn from 'cross-spawn';
 import * as fs from 'fs-extra';
 import { listDirectory } from './NextjsAssetsDeployment';
-import { EnvironmentVars } from './NextjsLambda';
+import { NextjsBaseProps } from './NextjsBase';
 
 const NEXTJS_BUILD_DIR = '.next';
 const NEXTJS_STATIC_DIR = 'static';
@@ -15,40 +15,7 @@ const NEXTJS_BUILD_STANDALONE_ENV = 'NEXT_PRIVATE_STANDALONE';
 // files to rewrite CloudFormation tokens in environment variables
 export const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*.json'];
 
-export interface NextjsBaseProps {
-  /**
-   * Path to the directory where the NextJS project is located.
-   * Can be the root of your project or a subdirectory.
-   * Preferably an absolute path.
-   */
-  readonly nextjsPath: string;
-
-  /**
-   * Custom environment variables to pass to the NextJS build and runtime.
-   */
-  readonly environment?: Record<string, string>;
-
-  /**
-   * Skip building app and deploy a placeholder.
-   * Useful when using `next dev` for local development.
-   */
-  readonly isPlaceholder: boolean;
-
-  /**
-   * Directory to store temporary build files in.
-   * Defaults to os.mkdtempSync().
-   */
-  readonly tempBuildDir?: string; // move to NextjsBuildProps?
-
-  /**
-   * Optional value for NODE_ENV during build and runtime.
-   */
-  readonly nodeEnv?: string;
-}
-
-export interface NextjsBuildProps extends NextjsBaseProps {
-  environment?: EnvironmentVars;
-}
+export interface NextjsBuildProps extends NextjsBaseProps {}
 
 /**
  * Represents a built NextJS application.
@@ -246,10 +213,10 @@ export class NextjsBuild extends Construct {
 }
 
 export interface CreateArchiveArgs {
-  directory: string;
-  zipFileName: string;
-  zipOutDir: string; //  path.resolve(path.join(tempBuildDir, `standalone`));
-  fileGlob?: string;
+  readonly directory: string;
+  readonly zipFileName: string;
+  readonly zipOutDir: string; //  path.resolve(path.join(tempBuildDir, `standalone`));
+  readonly fileGlob?: string;
 }
 
 // zip up a directory and return path to zip file

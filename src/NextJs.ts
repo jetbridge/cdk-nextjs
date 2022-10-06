@@ -15,21 +15,6 @@ import { BaseSiteCdkDistributionProps, BaseSiteDomainProps, buildErrorResponsesF
 import { NextJsAssetsDeployment } from './NextjsAssetsDeployment';
 import { NextjsBaseProps, NextjsBuild } from './NextjsBuild';
 import { NextJsLambda } from './NextjsLambda';
-// import { isCDKConstruct } from './Construct';
-// import { App } from './App.js';
-// import {
-//   BaseSiteCdkDistributionProps,
-//   BaseSiteDomainProps,
-//   BaseSiteEnvironmentOutputsInfo,
-//   BaseSiteReplaceProps,
-//   buildErrorResponsesForRedirectToIndex,
-//   getBuildCmdEnvironment,
-// } from './BaseSite.js';
-// import { isCDKConstruct, SSTConstruct } from './Construct.js';
-// import { Stack } from './Stack.js';
-// import { attachPermissionsToRole, Permissions } from './util/permission.js';
-
-// const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 // contains server-side resolved environment vars in config bucket
 // const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -102,12 +87,12 @@ export interface NextjsProps extends NextjsBaseProps {
 }
 
 /**
- * The `Nextjs` construct is a higher level CDK construct that makes it easy to create a Nextjs app.
+ * The `Nextjs` construct is a higher level CDK construct that makes it easy to create a NextJS app.
  *
- * Your standalone application will be bundled using output tracing and will be deployed to a Lambda function.
+ * Your standalone server application will be bundled using output tracing and will be deployed to a Lambda function.
+ * Static assets will be deployed to an S3 bucket and served via CloudFront.
  * You must use Next.js 10.3.0 or newer.
  *
-
  */
 export class Nextjs extends Construct {
   /**
@@ -448,7 +433,7 @@ export class Nextjs extends Construct {
         // but we run into the limit of CacheBehaviors per distribution
         '_next/*': staticBehavior,
 
-        // TODO
+        // TODO: what goes here?
         '_next/image*': lambdaBehavior,
         // "_next/image*": {
         //   viewerProtocolPolicy,

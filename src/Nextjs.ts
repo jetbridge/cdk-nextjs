@@ -207,7 +207,7 @@ export class Nextjs extends Construct {
 
     // build nextjs app
     this.nextBuild = new NextjsBuild(scope, id, props);
-    this.serverFunction = new NextJsLambda(this, 'Fn', { ...props, build: this.nextBuild });
+    this.serverFunction = new NextJsLambda(this, 'Fn', { ...props, nextBuild: this.nextBuild });
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
       ...props,
       nextBuild: this.nextBuild,

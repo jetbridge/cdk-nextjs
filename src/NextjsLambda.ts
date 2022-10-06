@@ -15,7 +15,7 @@ import { NextjsLayer } from './NextjsLayer';
 export type EnvironmentVars = Record<string, string>;
 
 export interface NextjsLambdaProps extends Partial<FunctionProps>, NextjsBaseProps {
-  readonly build: NextjsBuild;
+  readonly nextBuild: NextjsBuild;
 }
 
 /**
@@ -25,17 +25,17 @@ export class NextJsLambda extends Function {
   // protected awsCliLayer: AwsCliLayer;
 
   constructor(scope: Construct, id: string, props: NextjsLambdaProps) {
-    const { build } = props;
+    const { nextBuild } = props;
 
     // bundle server handler
     // delete default nextjs handler if it exists
-    const defaultServerPath = path.join(build.nextStandaloneDir, props.nextjsPath, 'server.js');
+    const defaultServerPath = path.join(nextBuild.nextStandaloneDir, props.nextjsPath, 'server.js');
     if (fs.existsSync(defaultServerPath)) {
       fs.unlinkSync(defaultServerPath);
     }
 
     // rewrite env var placeholders
-    if (props.environment) rewriteEnvVars(props.environment, build.nextStandaloneDir);
+    if (props.environment) rewriteEnvVars(props.environment, nextBuild.nextStandaloneDir);
 
     // build our server handler in build.nextStandaloneDir
     const serverHandler = path.resolve(__dirname, '../assets/lambda/NextJsHandler.ts');
@@ -50,7 +50,7 @@ export class NextJsLambda extends Function {
       platform: 'node',
       external: ['sharp', 'next'],
       format: 'cjs', // hope one day we can use esm
-      outfile: path.join(build.nextStandaloneDir, serverPath),
+      outfile: path.join(nextBuild.nextStandaloneDir, serverPath),
     });
     if (esbuildResult.errors.length > 0) {
       esbuildResult.errors.forEach((error) => console.error(error));
@@ -64,7 +64,7 @@ export class NextJsLambda extends Function {
       )
     );
     const zipFilePath = createArchive({
-      directory: build.nextStandaloneDir,
+      directory: nextBuild.nextStandaloneDir,
       zipFileName: 'standalone.zip',
       zipOutDir,
       fileGlob: '*',
@@ -107,7 +107,7 @@ export class NextJsLambda extends Function {
   // this can hold our resolved environment vars for the server
   protected createConfigBucket() {
     // won't work until this is fixed: https://github.com/aws/aws-cdk/issues/19257
-    return undefined;
+    return null;
     // const bucket = new s3.Bucket(this, "ConfigBucket", { removalPolicy: RemovalPolicy.DESTROY, });
     // upload environment config to s3
     // new BucketDeployment(this, 'EnvJsonDeployment', {

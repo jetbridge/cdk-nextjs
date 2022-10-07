@@ -1,7 +1,6 @@
 import * as path from 'path';
-import { Duration } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { Function, FunctionProps } from 'aws-cdk-lib/aws-lambda';
+import { Function } from 'aws-cdk-lib/aws-lambda';
 import * as s3Assets from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
 import * as esbuild from 'esbuild';
@@ -14,9 +13,12 @@ import { NextjsLayer } from './NextjsLayer';
 
 export type EnvironmentVars = Record<string, string>;
 
-export interface NextjsLambdaProps extends Partial<FunctionProps>, NextjsBaseProps {
+export interface NextjsLambdaProps extends NextjsBaseProps {
   readonly nextBuild: NextjsBuild;
+  // readonly function?: Partial<FunctionProps>;
 }
+
+const RUNTIME = lambda.Runtime.NODEJS_16_X;
 
 /**
  * Build a lambda function from a NextJS application to handle server-side rendering, API routes, and image optimization.
@@ -84,9 +86,11 @@ export class NextJsLambda extends Function {
     // build the lambda function
     super(scope, id, {
       ...props,
-      memorySize: props.memorySize || 1024,
-      timeout: props.timeout ?? Duration.seconds(10),
-      runtime: props.runtime ?? lambda.Runtime.NODEJS_16_X,
+      // TODO: allow caller to specify function props
+      // memorySize: props.memorySize || 1024,
+      // timeout: props.timeout ?? Duration.seconds(10),
+      // runtime: props.functionProps?.runtime ?? lambda.Runtime.NODEJS_16_X,
+      runtime: RUNTIME,
       handler: path.join(props.nextjsPath, 'server.handler'),
       layers: [nextLayer],
       code,
@@ -105,17 +109,16 @@ export class NextJsLambda extends Function {
   }
 
   // this can hold our resolved environment vars for the server
-  protected createConfigBucket() {
-    // won't work until this is fixed: https://github.com/aws/aws-cdk/issues/19257
-    return null;
-    // const bucket = new s3.Bucket(this, "ConfigBucket", { removalPolicy: RemovalPolicy.DESTROY, });
-    // upload environment config to s3
-    // new BucketDeployment(this, 'EnvJsonDeployment', {
-    //   sources: [Source.jsonData(CONFIG_ENV_JSON_PATH, this.props.environment)],
-    //   destinationBucket: bucket,
-    // })
-    // return bucket
-  }
+  // protected createConfigBucket() {
+  // won't work until this is fixed: https://github.com/aws/aws-cdk/issues/19257
+  // const bucket = new s3.Bucket(this, "ConfigBucket", { removalPolicy: RemovalPolicy.DESTROY, });
+  // upload environment config to s3
+  // new BucketDeployment(this, 'EnvJsonDeployment', {
+  //   sources: [Source.jsonData(CONFIG_ENV_JSON_PATH, this.props.environment)],
+  //   destinationBucket: bucket,
+  // })
+  // return bucket
+  // }
 }
 
 // replace env vars in the built NextJS server source

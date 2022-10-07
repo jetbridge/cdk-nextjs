@@ -69,13 +69,13 @@ export interface NextjsProps extends NextjsBaseProps {
    * [following this guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/MigratingDNS.html).
    *
    * @example
-   * new Nextjs(stack, "Site", {
-   *   path: path.resolve("packages/web"),
+   * new Nextjs(this, "Web", {
+   *   nextjsPath: path.resolve("packages/web"),
    *   customDomain: "domain.com",
    * });
    *
-   * new Nextjs(stack, "Site", {
-   *   path: path.resolve("packages/web")",
+   * new Nextjs(this, "Web", {
+   *   nextjsPath: path.resolve("packages/web")",
    *   customDomain: {
    *     domainName: "domain.com",
    *     domainAlias: "www.domain.com",
@@ -98,6 +98,12 @@ export interface NextjsProps extends NextjsBaseProps {
  * Static assets will be deployed to an S3 bucket and served via CloudFront.
  * You must use Next.js 10.3.0 or newer.
  *
+ * Please provide a `nextjsPath` to the Next.js app inside your project.
+ *
+ * @example
+ * new Nextjs(this, "Web", {
+ *   nextjsPath: path.resolve("packages/web"),
+ * })
  */
 export class Nextjs extends Construct {
   /**
@@ -206,7 +212,7 @@ export class Nextjs extends Construct {
     // this.configBucket = this.createConfigBucket();
 
     // build nextjs app
-    this.nextBuild = new NextjsBuild(scope, id, props);
+    this.nextBuild = new NextjsBuild(this, id, props);
     this.serverFunction = new NextJsLambda(this, 'Fn', { ...props, nextBuild: this.nextBuild });
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
       ...props,

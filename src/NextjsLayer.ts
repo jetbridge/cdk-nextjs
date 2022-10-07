@@ -1,9 +1,11 @@
 import * as path from 'path';
-import { LayerVersion, LayerVersionProps } from 'aws-cdk-lib/aws-lambda';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { LayerVersion } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 
-export interface NextjsLayerProps extends Partial<LayerVersionProps> {}
+// jsii forbids this:
+// export interface NextjsLayerProps extends Partial<LayerVersionProps> {}
+export interface NextjsLayerProps {}
 
 /**
  * Lambda layer for Next.js.

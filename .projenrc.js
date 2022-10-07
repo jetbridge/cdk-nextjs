@@ -5,7 +5,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   cdkVersion: '2.39.0',
   defaultReleaseBranch: 'main',
   name: 'cdk-nextjs-standalone',
-  repositoryUrl: 'https://github.com/jetbridge/nextjs-cdk.git',
+  repositoryUrl: 'https://github.com/jetbridge/cdk-nextjs.git',
   authorOrganization: true,
   packageName: 'cdk-nextjs-standalone',
   description: 'Deploy a NextJS app to AWS using CDK. Uses standalone build and output tracing.',

@@ -1,3 +1,4 @@
+import * as os from 'os';
 import * as path from 'path';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Function } from 'aws-cdk-lib/aws-lambda';
@@ -62,7 +63,9 @@ export class NextJsLambda extends Function {
     // zip up the standalone directory
     const zipOutDir = path.resolve(
       path.join(
-        props.tempBuildDir ? path.resolve(path.join(props.tempBuildDir, `standalone`)) : fs.mkdtempSync('standalone-')
+        props.tempBuildDir
+          ? path.resolve(path.join(props.tempBuildDir, `standalone`))
+          : fs.mkdtempSync(path.join(os.tmpdir(), 'standalone-'))
       )
     );
     const zipFilePath = createArchive({
@@ -141,7 +144,7 @@ function rewriteEnvVars(environment: EnvironmentVars, nextStandaloneDir: string)
     // do replacements
     let fileContent = fs.readFileSync(file, 'utf8');
     Object.entries(replaceValues).forEach(([key, value]) => {
-      console.log(`Replacing ${key} with ${value} in ${file}`);
+      // console.log(`Replacing ${key} with ${value} in ${file}`);
       fileContent = fileContent.replace(key, value);
     });
     fs.writeFileSync(file, fileContent);
@@ -158,28 +161,9 @@ export function getNextPublicEnvReplaceValues(environment: EnvironmentVars): Env
 }
 
 /////////////////////
-// FOR SST AND EDGE FUNCTIONS
+// FOR EDGE FUNCTIONS
 // TO BE CLEANED UP LATER
 /////////////////////
-
-// export function registerSiteEnvironment() {
-//   const environmentOutputs: Record<string, string> = {};
-//   for (const [key, value] of Object.entries(this.props.environment || {})) {
-//     const outputId = `SstSiteEnv_${key}`;
-//     const output = new CfnOutput(this, outputId, { value });
-//     environmentOutputs[key] = Stack.of(this).getLogicalId(output);
-//   }
-
-// FIXME: SST
-// const root = this.node.root as App;
-// root.registerSiteEnvironment({
-//   id: this.node.id,
-//   path: this.props.path,
-//   stack: Stack.of(this).node.id,
-//   environmentOutputs,
-// } as BaseSiteEnvironmentOutputsInfo);
-// }
-
 // TODO: needed for edge function support probably
 // export function _getLambdaContentReplaceValues(): BaseSiteReplaceProps[] {
 //   const replaceValues: BaseSiteReplaceProps[] = [];

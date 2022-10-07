@@ -22,7 +22,7 @@ export interface NextjsBaseProps {
    * Skip building app and deploy a placeholder.
    * Useful when using `next dev` for local development.
    */
-  readonly isPlaceholder: boolean;
+  readonly isPlaceholder?: boolean;
 
   /**
    * Directory to store temporary build files in.

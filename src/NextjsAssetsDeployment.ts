@@ -9,8 +9,8 @@ import * as cr from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
-import { BaseSiteReplaceProps, NextjsBaseProps } from './NextjsBase';
-import { createArchive, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
+import { NextjsBaseProps } from './NextjsBase';
+import { createArchive, NextjsBuild } from './NextjsBuild';
 
 export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
   readonly nextBuild: NextjsBuild;
@@ -26,6 +26,11 @@ export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
    */
   readonly distribution?: cloudfront.IDistribution;
 }
+
+// interface EnvReplaceValues {
+//   files: string[]; // file globs
+//   replacements: Record<string, string>;
+// }
 
 export class NextJsAssetsDeployment extends Construct {
   /**
@@ -95,13 +100,14 @@ export class NextJsAssetsDeployment extends Construct {
     }
 
     // do rewrites of unresolved CDK tokens in static files
-    const rewriter = this.createRewriteResource();
-    rewriter?.node.addDependency(...deployments);
+    this.createRewriteResource();
+    // rewriter?.node.addDependency(...deployments);
 
     return deployments;
   }
 
   private createRewriteResource() {
+    return;
     const s3keys = this._getStaticFilesForRewrite();
     if (s3keys.length === 0) return;
 
@@ -120,19 +126,20 @@ export class NextJsAssetsDeployment extends Construct {
         if (requestType === 'Create' || requestType === 'Update') {
           // rewrite static files
           const s3 = new AWS.S3();
-          const {s3keys, bucket, replacements} = event.ResourceProperties;
+          const { s3keys, bucket, replacements } = event.ResourceProperties;
           if (!s3keys || !bucket || !replacements) {
             console.error("Missing required properties")
             return
           }
+          console.log(process.env)
           const promises = s3keys.map(async (key) => {
-            const params = {Bucket: bucket, Key: key};
+            const params = { Bucket: bucket, Key: key };
             const data = await s3.getObject(params).promise();
             let body = data.Body.toString('utf-8');
 
             // do replacements of tokens
-            replacements.forEach((replacement) => {
-              body = body.replace(replacement.search, replacement.replace);
+            Object.entries(replacements).forEach(([key, value]) => {
+              body = body.replace(key, value);
             });
             const putParams = {
               ...params,
@@ -151,8 +158,9 @@ export class NextJsAssetsDeployment extends Construct {
       `),
       initialPolicy: [
         new iam.PolicyStatement({
-          actions: ['s3:GetObject', 's3:PutObject'],
-          resources: [this.bucket.arnForObjects('*')],
+          // actions: ['s3:GetObject', 's3:PutObject'],
+          actions: ['s3:*'],
+          resources: [this.bucket.bucketArn, this.bucket.arnForObjects('*')],
         }),
       ],
     });
@@ -161,12 +169,14 @@ export class NextJsAssetsDeployment extends Construct {
     const provider = new cr.Provider(this, 'RewriteStaticProvider', {
       onEventHandler: rewriteFn,
     });
+    const replacements = this._getS3ContentReplaceValues();
+    console.log('replacements', replacements);
     return new CustomResource(this, 'RewriteStatic', {
       serviceToken: provider.serviceToken,
       properties: {
         bucket: this.bucket.bucketName,
         s3keys,
-        replacements: this._getS3ContentReplaceValues(),
+        replacements,
       },
     });
   }
@@ -177,7 +187,7 @@ export class NextJsAssetsDeployment extends Construct {
     if (!replaceValues) return s3keys;
 
     // where to find static files
-    const globs = [...new Set(replaceValues.flatMap((replaceValue) => replaceValue.files))];
+    const globs = replaceValues.files;
     const searchDirs = [
       { dir: this.props.nextBuild.nextStaticDir, prefix: '_next/static' },
       { dir: this.props.nextBuild.nextStaticDir, prefix: '' },
@@ -269,22 +279,17 @@ export class NextJsAssetsDeployment extends Construct {
   }
 
   // inline env vars for client code
-  private _getS3ContentReplaceValues(): BaseSiteReplaceProps[] {
-    const replaceValues: BaseSiteReplaceProps[] = [];
+  private _getS3ContentReplaceValues(): Record<string, string> {
+    const replacements: Record<string, string> = {};
 
     Object.entries(this.props.environment || {})
       .filter(([, value]) => Token.isUnresolved(value))
       .forEach(([key, value]) => {
         const token = `{{ ${key} }}`;
-        replaceValues.push(
-          ...replaceTokenGlobs.map((glob) => ({
-            files: glob,
-            search: token,
-            replace: value,
-          }))
-        );
+        replacements[token] = value.toString();
       });
-    return replaceValues;
+
+    return replacements;
   }
 }
 

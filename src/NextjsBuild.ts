@@ -1,3 +1,4 @@
+import * as os from 'os';
 import * as path from 'path';
 import { Token } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
@@ -58,7 +59,7 @@ export class NextjsBuild extends Construct {
     // save config
     this.tempBuildDir = props.tempBuildDir
       ? path.resolve(path.join(props.tempBuildDir, `nextjs-cdk-build`))
-      : fs.mkdtempSync('nextjs-cdk-build-');
+      : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
     this.props = props;
 
     // validate paths
@@ -215,12 +216,13 @@ export class NextjsBuild extends Construct {
 export interface CreateArchiveArgs {
   readonly directory: string;
   readonly zipFileName: string;
-  readonly zipOutDir: string; //  path.resolve(path.join(tempBuildDir, `standalone`));
+  readonly zipOutDir: string;
   readonly fileGlob?: string;
 }
 
 // zip up a directory and return path to zip file
 export function createArchive({ directory, zipFileName, zipOutDir, fileGlob = '*' }: CreateArchiveArgs): string {
+  zipOutDir = path.resolve(zipOutDir);
   // get output path
   fs.removeSync(zipOutDir);
   fs.mkdirpSync(zipOutDir);

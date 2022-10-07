@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { CfnOutput, Duration, Fn, Stack } from 'aws-cdk-lib';
+import { Duration, Fn } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
@@ -207,8 +207,6 @@ export class Nextjs extends Construct {
       : fs.mkdtempSync('nextjs-cdk-build-');
 
     this.props = props;
-    // this.awsCliLayer = new AwsCliLayer(this, 'AwsCliLayer');
-    this.registerSiteEnvironment();
     // this.configBucket = this.createConfigBucket();
 
     // build nextjs app
@@ -684,27 +682,5 @@ export class Nextjs extends Construct {
         targetDomain: recordName,
       });
     }
-  }
-
-  /////////////////////
-  // Helper Functions
-  /////////////////////
-
-  private registerSiteEnvironment() {
-    const environmentOutputs: Record<string, string> = {};
-    for (const [key, value] of Object.entries(this.props.environment || {})) {
-      const outputId = `SstSiteEnv_${key}`;
-      const output = new CfnOutput(this, outputId, { value });
-      environmentOutputs[key] = Stack.of(this).getLogicalId(output);
-    }
-
-    // FIXME: SST
-    // const root = this.node.root as App;
-    // root.registerSiteEnvironment({
-    //   id: this.node.id,
-    //   path: this.props.path,
-    //   stack: Stack.of(this).node.id,
-    //   environmentOutputs,
-    // } as BaseSiteEnvironmentOutputsInfo);
   }
 }

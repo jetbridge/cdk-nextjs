@@ -30,9 +30,6 @@ export interface NextjsCdkDistributionProps extends BaseSiteCdkDistributionProps
 export interface NextjsCachePolicyProps {
   readonly staticCachePolicy?: cloudfront.ICachePolicy;
   readonly lambdaCachePolicy?: cloudfront.ICachePolicy;
-  /**
-   * Not yet supported.
-   */
   readonly imageCachePolicy?: cloudfront.ICachePolicy;
 }
 
@@ -58,7 +55,7 @@ export interface NextjsCdkProps {
 
 export interface NextjsProps extends NextjsBaseProps {
   /**
-   * Allows you to override default settings this construct uses internally to ceate the bucket
+   * Allows you to override default settings this construct uses internally to create the cloudfront distribution.
    */
   readonly cdk?: NextjsCdkProps;
   /**
@@ -363,9 +360,8 @@ export class Nextjs extends Construct {
 
     const staticCachePolicy = cdk?.cachePolicies?.staticCachePolicy ?? this.createCloudFrontStaticCachePolicy();
 
-    // TODO
-    // const imageCachePolicy = cdk?.cachePolicies?.imageCachePolicy ?? this.createCloudFrontImageCachePolicy();
-    // const imageOriginRequestPolicy = cdk?.imageOriginRequestPolicy ?? this.createCloudFrontImageOriginRequestPolicy();
+    const imageCachePolicy = cdk?.cachePolicies?.imageCachePolicy ?? this.createCloudFrontImageCachePolicy();
+    const imageOriginRequestPolicy = cdk?.imageOriginRequestPolicy ?? this.createCloudFrontImageOriginRequestPolicy();
 
     // main server function origin (lambda URL HTTP origin)
     const fnUrl = this.serverFunction.addFunctionUrl({
@@ -442,17 +438,16 @@ export class Nextjs extends Construct {
         // but we run into the limit of CacheBehaviors per distribution
         '_next/*': staticBehavior,
 
-        // TODO: what goes here?
-        '_next/image*': lambdaBehavior,
-        // "_next/image*": {
-        //   viewerProtocolPolicy,
-        //   origin,
-        //   allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-        //   cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
-        //   compress: true,
-        //   cachePolicy: imageCachePolicy,
-        //   originRequestPolicy: imageOriginRequestPolicy,
-        // },
+        // dynamic images go to lambda
+        '_next/image*': {
+          viewerProtocolPolicy,
+          origin: serverFunctionOrigin,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+          cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
+          compress: true,
+          cachePolicy: imageCachePolicy,
+          originRequestPolicy: imageOriginRequestPolicy,
+        },
 
         ...(cfDistributionProps?.additionalBehaviors || {}),
       },
@@ -463,8 +458,6 @@ export class Nextjs extends Construct {
     return new cloudfront.CachePolicy(this, 'StaticsCache', Nextjs.staticCachePolicyProps);
   }
 
-  // TODO
-  /*
   private createCloudFrontImageCachePolicy(): cloudfront.CachePolicy {
     return new cloudfront.CachePolicy(this, 'ImageCache', Nextjs.imageCachePolicyProps);
   }
@@ -472,7 +465,6 @@ export class Nextjs extends Construct {
   private createCloudFrontImageOriginRequestPolicy(): cloudfront.OriginRequestPolicy {
     return new cloudfront.OriginRequestPolicy(this, 'ImageOriginRequest', Nextjs.imageOriginRequestPolicyProps);
   }
-  */
 
   private createCloudFrontLambdaCachePolicy(): cloudfront.CachePolicy {
     return new cloudfront.CachePolicy(this, 'LambdaCache', Nextjs.lambdaCachePolicyProps);

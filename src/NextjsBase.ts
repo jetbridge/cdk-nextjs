@@ -1,9 +1,41 @@
-import { Token } from 'aws-cdk-lib';
 import { ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { DistributionProps, ErrorResponse } from 'aws-cdk-lib/aws-cloudfront';
 import { IHostedZone } from 'aws-cdk-lib/aws-route53';
 
-// taken from https://github.com/serverless-stack/sst/blob/8d377e941467ced81d8cc31ee67d5a06550f04d4/packages/resources/src/BaseSite.ts
+/**
+ * Common props shared across NextJS-related CDK constructs.
+ */
+export interface NextjsBaseProps {
+  /**
+   * Relative path to the directory where the NextJS project is located.
+   * Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+   */
+  readonly nextjsPath: string;
+
+  /**
+   * Custom environment variables to pass to the NextJS build and runtime.
+   */
+  readonly environment?: Record<string, string>;
+
+  /**
+   * Skip building app and deploy a placeholder.
+   * Useful when using `next dev` for local development.
+   */
+  readonly isPlaceholder?: boolean;
+
+  /**
+   * Directory to store temporary build files in.
+   * Defaults to os.mkdtempSync().
+   */
+  readonly tempBuildDir?: string; // move to NextjsBuildProps?
+
+  /**
+   * Optional value for NODE_ENV during build and runtime.
+   */
+  readonly nodeEnv?: string;
+}
+
+///// stuff below taken from https://github.com/serverless-stack/sst/blob/8d377e941467ced81d8cc31ee67d5a06550f04d4/packages/resources/src/BaseSite.ts
 
 export interface BaseSiteDomainProps {
   /**
@@ -60,19 +92,6 @@ export interface BaseSiteEnvironmentOutputsInfo {
 /////////////////////
 // Helper Functions
 /////////////////////
-
-export function getBuildCmdEnvironment(siteEnvironment?: { [key: string]: string }): Record<string, string> {
-  // Generate environment placeholders to be replaced
-  // ie. environment => { API_URL: api.url }
-  //     environment => API_URL="{{ API_URL }}"
-  //
-  const buildCmdEnvironment: Record<string, string> = {};
-  Object.entries(siteEnvironment || {}).forEach(([key, value]) => {
-    buildCmdEnvironment[key] = Token.isUnresolved(value) ? `{{ ${key} }}` : value;
-  });
-
-  return buildCmdEnvironment;
-}
 
 export function buildErrorResponsesForRedirectToIndex(indexPage: string): ErrorResponse[] {
   return [

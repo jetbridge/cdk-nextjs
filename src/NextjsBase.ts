@@ -7,9 +7,8 @@ import { IHostedZone } from 'aws-cdk-lib/aws-route53';
  */
 export interface NextjsBaseProps {
   /**
-   * Path to the directory where the NextJS project is located.
-   * Can be the root of your project or a subdirectory.
-   * Preferably an absolute path.
+   * Relative path to the directory where the NextJS project is located.
+   * Can be the root of your project (`.`) or a subdirectory (`packages/web`).
    */
   readonly nextjsPath: string;
 

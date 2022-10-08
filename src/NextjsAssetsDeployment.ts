@@ -10,7 +10,7 @@ import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { NextjsBaseProps } from './NextjsBase';
-import { createArchive, NextjsBuild } from './NextjsBuild';
+import { createArchive, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
 
 export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
   readonly nextBuild: NextjsBuild;
@@ -100,20 +100,19 @@ export class NextJsAssetsDeployment extends Construct {
     }
 
     // do rewrites of unresolved CDK tokens in static files
-    this.createRewriteResource();
-    // rewriter?.node.addDependency(...deployments);
+    const rewriter = this.createRewriteResource();
+    rewriter?.node.addDependency(...deployments);
 
     return deployments;
   }
 
   private createRewriteResource() {
-    return;
     const s3keys = this._getStaticFilesForRewrite();
     if (s3keys.length === 0) return;
 
     // create a custom resource to find and replace tokenized strings in static files
     // must happen after deployment when tokens can be resolved
-    const rewriteFn = new lambda.Function(this, 'OnEventHandler', {
+    const rewriteFn = new lambda.Function(this, 'RewriteOnEventHandler', {
       runtime: lambda.Runtime.NODEJS_16_X,
       memorySize: 1024,
       handler: 'index.handler',
@@ -131,9 +130,9 @@ export class NextJsAssetsDeployment extends Construct {
             console.error("Missing required properties")
             return
           }
-          console.log(process.env)
           const promises = s3keys.map(async (key) => {
             const params = { Bucket: bucket, Key: key };
+            console.info('Rewriting', key, 'in bucket', bucket);
             const data = await s3.getObject(params).promise();
             let body = data.Body.toString('utf-8');
 
@@ -158,9 +157,8 @@ export class NextJsAssetsDeployment extends Construct {
       `),
       initialPolicy: [
         new iam.PolicyStatement({
-          // actions: ['s3:GetObject', 's3:PutObject'],
-          actions: ['s3:*'],
-          resources: [this.bucket.bucketArn, this.bucket.arnForObjects('*')],
+          actions: ['s3:GetObject', 's3:PutObject'],
+          resources: [this.bucket.arnForObjects('*')],
         }),
       ],
     });
@@ -170,7 +168,6 @@ export class NextJsAssetsDeployment extends Construct {
       onEventHandler: rewriteFn,
     });
     const replacements = this._getS3ContentReplaceValues();
-    console.log('replacements', replacements);
     return new CustomResource(this, 'RewriteStatic', {
       serviceToken: provider.serviceToken,
       properties: {
@@ -183,14 +180,11 @@ export class NextJsAssetsDeployment extends Construct {
 
   private _getStaticFilesForRewrite() {
     const s3keys: string[] = [];
-    const replaceValues = this._getS3ContentReplaceValues();
-    if (!replaceValues) return s3keys;
 
     // where to find static files
-    const globs = replaceValues.files;
     const searchDirs = [
       { dir: this.props.nextBuild.nextStaticDir, prefix: '_next/static' },
-      { dir: this.props.nextBuild.nextStaticDir, prefix: '' },
+      { dir: this.props.nextBuild.nextPublicDir, prefix: '' },
     ];
 
     // traverse static dirs
@@ -201,8 +195,11 @@ export class NextJsAssetsDeployment extends Construct {
       listDirectory(dir).forEach((file) => {
         const relativePath = path.relative(dir, file);
 
+        // skip bogus system files
+        if (relativePath.endsWith('.DS_Store')) return;
+
         // is this file a glob match?
-        if (!micromatch.isMatch(relativePath, globs, { dot: true })) {
+        if (!micromatch.isMatch(relativePath, replaceTokenGlobs, { dot: true })) {
           return;
         }
         s3keys.push(`${prefix}/${relativePath}`);

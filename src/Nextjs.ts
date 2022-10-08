@@ -1,3 +1,4 @@
+import * as os from 'os';
 import * as path from 'path';
 import { Duration, Fn } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
@@ -67,12 +68,12 @@ export interface NextjsProps extends NextjsBaseProps {
    *
    * @example
    * new Nextjs(this, "Web", {
-   *   nextjsPath: path.resolve("packages/web"),
+   *   nextjsPath: ".",
    *   customDomain: "domain.com",
    * });
    *
    * new Nextjs(this, "Web", {
-   *   nextjsPath: path.resolve("packages/web")",
+   *   nextjsPath: "packages/web", // monorepo: relative to the root of the CDK project
    *   customDomain: {
    *     domainName: "domain.com",
    *     domainAlias: "www.domain.com",
@@ -201,7 +202,7 @@ export class Nextjs extends Construct {
     // get dir to store temp build files in
     this.tempBuildDir = props.tempBuildDir
       ? path.resolve(path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr}`))
-      : fs.mkdtempSync('nextjs-cdk-build-');
+      : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
 
     this.props = props;
     // this.configBucket = this.createConfigBucket();

@@ -1,5 +1,6 @@
 import * as os from 'os';
 import * as path from 'path';
+import { Duration } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Function } from 'aws-cdk-lib/aws-lambda';
 import * as s3Assets from 'aws-cdk-lib/aws-s3-assets';
@@ -93,6 +94,8 @@ export class NextJsLambda extends Function {
       // memorySize: props.memorySize || 1024,
       // timeout: props.timeout ?? Duration.seconds(10),
       // runtime: props.functionProps?.runtime ?? lambda.Runtime.NODEJS_16_X,
+      memorySize: 1024,
+      timeout: Duration.seconds(30),
       runtime: RUNTIME,
       handler: path.join(props.nextjsPath, 'server.handler'),
       layers: [nextLayer],

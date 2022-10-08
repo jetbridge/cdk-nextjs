@@ -41,8 +41,7 @@ If you
 
 ## To-do
 
-- [ ] Handle Next image requests
-- [ ] Support deployment as a Lambda@Edge function (see caveats)
+- [ ] Support deployment as a Lambda@Edge function if this is even desirable (see caveats)
 - [ ] [Serverless stack integration](https://github.com/serverless-stack/sst/pull/2049)
 
 ## Depdendencies

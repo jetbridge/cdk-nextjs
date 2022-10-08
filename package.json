@@ -3,7 +3,7 @@
   "description": "Deploy a NextJS app to AWS using CDK. Uses standalone build and output tracing.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jetbridge/nextjs-cdk.git"
+    "url": "https://github.com/jetbridge/cdk-nextjs.git"
   },
   "scripts": {
     "build": "npx projen build",
@@ -101,7 +101,7 @@
   ],
   "main": "lib/index.js",
   "license": "Apache-2.0",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "jest": {
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",

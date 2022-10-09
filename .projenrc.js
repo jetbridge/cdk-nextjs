@@ -24,5 +24,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'aws-lambda',
   ] /* Runtime dependencies of this module. */,
   devDeps: ['constructs@10.0.57'] /* Build dependencies for this module. */,
+
+  // holy shit
+  sampleCode: false,
 });
 project.synth();

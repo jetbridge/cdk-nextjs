@@ -28,6 +28,12 @@ export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
    * Distribution to invalidate when assets change.
    */
   readonly distribution?: cloudfront.IDistribution;
+
+  /**
+   * Set to true to delete old assets (defaults to false).
+   * Recommended to only set to true if you don't need the ability to roll back deployments.
+   */
+  readonly prune?: boolean;
 }
 
 // interface EnvReplaceValues {
@@ -80,7 +86,7 @@ export class NextJsAssetsDeployment extends Construct {
           destinationKeyPrefix: '_next/static',
           sources: [Source.asset(staticDir)],
           distribution: this.props.distribution, // invalidate Cloudfront distribution caches
-          prune: false, // do not delete stale files
+          prune: this.props.prune,
         })
       );
     }
@@ -102,7 +108,7 @@ export class NextJsAssetsDeployment extends Construct {
           destinationKeyPrefix: this.props.isPlaceholder ? '/placeholder' : '/',
           sources: [Source.asset(zipFilePath)],
           distribution: this.props.distribution,
-          prune: false,
+          prune: this.props.prune,
         })
       );
     }
@@ -151,14 +157,14 @@ export class NextJsAssetsDeployment extends Construct {
             });
 
             // didn't change?
-            if (bodyPost !== bodyPre)
+            if (bodyPost === bodyPre)
               return;
 
             // upload
             console.info('Rewrote', key, 'in bucket', bucket);
             const putParams = {
               ...params,
-              Body: body,
+              Body: bodyPost,
               ContentType: data.ContentType,
               ContentEncoding: data.ContentEncoding,
               CacheControl: data.CacheControl,

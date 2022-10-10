@@ -12,7 +12,7 @@ import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
-import { NextJsAssetsDeployment } from './NextjsAssetsDeployment';
+import { NextJsAssetsDeployment, NextjsAssetsDeploymentProps } from './NextjsAssetsDeployment';
 import {
   BaseSiteCdkDistributionProps,
   BaseSiteDomainProps,
@@ -20,7 +20,7 @@ import {
   NextjsBaseProps,
 } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
-import { NextJsLambda } from './NextjsLambda';
+import { NextJsLambda, NextjsLambdaFunctionProps } from './NextjsLambda';
 
 // contains server-side resolved environment vars in config bucket
 // const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -38,20 +38,31 @@ export interface NextjsCachePolicyProps {
  * Resources that will be created automatically if not supplied.
  */
 export interface NextjsCdkProps {
-  readonly bucket?: s3.BucketProps | s3.IBucket;
   /**
    * Pass in a value to override the default settings this construct uses to
    * create the CDK `Distribution` internally.
    */
   readonly distribution?: NextjsCdkDistributionProps;
+
   /**
    * Override the default CloudFront cache policies created internally.
    */
   readonly cachePolicies?: NextjsCachePolicyProps;
+
   /**
    * Override the default CloudFront image origin request policy created internally
    */
   readonly imageOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
+
+  /**
+   * Override static file deployment settings.
+   */
+  readonly deployment?: NextjsAssetsDeploymentProps;
+
+  /**
+   * Override server lambda function settings.
+   */
+  readonly lambda?: NextjsLambdaFunctionProps;
 }
 
 export interface NextjsProps extends NextjsBaseProps {
@@ -209,9 +220,10 @@ export class Nextjs extends Construct {
 
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, props);
-    this.serverFunction = new NextJsLambda(this, 'Fn', { ...props, nextBuild: this.nextBuild });
+    this.serverFunction = new NextJsLambda(this, 'Fn', { ...props, nextBuild: this.nextBuild, ...props.cdk?.lambda });
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
       ...props,
+      ...props.cdk?.deployment,
       nextBuild: this.nextBuild,
     });
     this.bucket = this.assetsDeployment.bucket;

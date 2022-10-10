@@ -13,6 +13,9 @@ import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
 
 export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
+  /**
+   * The `NextjsBuild` instance representing the built Nextjs application.
+   */
   readonly nextBuild: NextjsBuild;
 
   /**
@@ -32,6 +35,11 @@ export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
 //   replacements: Record<string, string>;
 // }
 
+/**
+ * Uploads NextJS-built static and public files to S3.
+ *
+ * Will rewrite CloudFormation references with their resolved values after uploading.
+ */
 export class NextJsAssetsDeployment extends Construct {
   /**
    * Bucket containing assets.

@@ -2,7 +2,7 @@ import * as os from 'os';
 import * as path from 'path';
 import { Duration } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { Function } from 'aws-cdk-lib/aws-lambda';
+import { Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as s3Assets from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
 import * as esbuild from 'esbuild';
@@ -15,9 +15,20 @@ import { NextjsLayer } from './NextjsLayer';
 
 export type EnvironmentVars = Record<string, string>;
 
+export interface NextjsLambdaFunctionProps extends Function {
+  readonly handler?: string;
+}
+
 export interface NextjsLambdaProps extends NextjsBaseProps {
+  /**
+   * Built nextJS application.
+   */
   readonly nextBuild: NextjsBuild;
-  // readonly function?: Partial<FunctionProps>;
+
+  /**
+   * Override function properties.
+   */
+  readonly function?: FunctionOptions;
 }
 
 const RUNTIME = lambda.Runtime.NODEJS_16_X;
@@ -29,7 +40,7 @@ export class NextJsLambda extends Function {
   // protected awsCliLayer: AwsCliLayer;
 
   constructor(scope: Construct, id: string, props: NextjsLambdaProps) {
-    const { nextBuild } = props;
+    const { nextBuild, function: functionOptions } = props;
 
     // bundle server handler
     // delete default nextjs handler if it exists
@@ -89,19 +100,16 @@ export class NextJsLambda extends Function {
 
     // build the lambda function
     super(scope, id, {
-      ...props,
-      // TODO: allow caller to specify function props
-      // memorySize: props.memorySize || 1024,
-      // timeout: props.timeout ?? Duration.seconds(10),
-      // runtime: props.functionProps?.runtime ?? lambda.Runtime.NODEJS_16_X,
-      memorySize: 1024,
-      timeout: Duration.seconds(30),
+      memorySize: functionOptions?.memorySize || 1024,
+      timeout: functionOptions?.timeout ?? Duration.seconds(10),
       runtime: RUNTIME,
       handler: path.join(props.nextjsPath, 'server.handler'),
       layers: [nextLayer],
       code,
       environment: {
         ...props.environment,
+        ...functionOptions?.environment,
+
         ...(props.nodeEnv ? { NODE_ENV: props.nodeEnv } : {}),
         // TODO: shove env config into S3
         // ...(this.configBucket
@@ -111,6 +119,8 @@ export class NextJsLambda extends Function {
         //     }
         //   : {}),
       },
+
+      ...functionOptions,
     });
   }
 

@@ -20,6 +20,8 @@ export interface NextjsBuildProps extends NextjsBaseProps {}
 
 /**
  * Represents a built NextJS application.
+ * This construct runs `npm build` in standalone output mode inside your `nextjsPath`.
+ * This construct can be used by higher level constructs or used directly.
  */
 export class NextjsBuild extends Construct {
   // build outputs
@@ -51,15 +53,10 @@ export class NextjsBuild extends Construct {
 
   public props: NextjsBuildProps;
 
-  public tempBuildDir: string;
-
   constructor(scope: Construct, id: string, props: NextjsBuildProps) {
     super(scope, id);
 
     // save config
-    this.tempBuildDir = props.tempBuildDir
-      ? path.resolve(path.join(props.tempBuildDir, `nextjs-cdk-build`))
-      : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
     this.props = props;
 
     // validate paths

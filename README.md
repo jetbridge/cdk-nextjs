@@ -19,6 +19,10 @@ new Nextjs(this, 'Web', {
 });
 ```
 
+## Reference
+
+Reference documentation is in [API.md](https://github.com/jetbridge/cdk-nextjs/blob/main/API.md).
+
 ## About
 
 Deploys a NextJs static site with server-side rendering and API support. Uses AWS lambda and CloudFront.

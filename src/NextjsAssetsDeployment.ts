@@ -140,14 +140,22 @@ export class NextJsAssetsDeployment extends Construct {
           }
           const promises = s3keys.map(async (key) => {
             const params = { Bucket: bucket, Key: key };
-            console.info('Rewriting', key, 'in bucket', bucket);
+            // console.info('Rewriting', key, 'in bucket', bucket);
             const data = await s3.getObject(params).promise();
-            let body = data.Body.toString('utf-8');
+            const bodyPre = data.Body.toString('utf-8');
+            let bodyPost = bodyPre;
 
             // do replacements of tokens
             Object.entries(replacements).forEach(([key, value]) => {
-              body = body.replace(key, value);
+              bodyPost = bodyPost.replace(key, value);
             });
+
+            // didn't change?
+            if (bodyPost !== bodyPre)
+              return;
+
+            // upload
+            console.info('Rewrote', key, 'in bucket', bucket);
             const putParams = {
               ...params,
               Body: body,

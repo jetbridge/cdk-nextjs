@@ -21,7 +21,7 @@ new Nextjs(this, 'Web', {
 
 Deploys a NextJs static site with server-side rendering and API support. Uses AWS lambda and CloudFront.
 
-There is a new (since Next 12) [`standalone` output mode which uses output tracing](https://nextjs.org/docs/advanced-features/output-file-tracing) to generate a minimal server and static files.
+There is a new (since Next 12) [standalone output mode which uses output tracing](https://nextjs.org/docs/advanced-features/output-file-tracing) to generate a minimal server and static files.
 This standalone server can be converted into a CloudFront distribution and a lambda handler that translates between a APIGatewayProxyV2 request/response and Next request/response.
 
 The CloudFront default origin first checks S3 for static files and falls back to an HTTP origin using a lambda function URL.

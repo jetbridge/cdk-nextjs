@@ -8,10 +8,10 @@ A CDK construct to deploy a NextJS 12.3.0+ app using AWS CDK.
 
 ```ts
 import path from 'path';
-import { NextJs } from 'cdk-nextjs-standalone';
+import { Nextjs } from 'cdk-nextjs-standalone';
 
-new NextJs(this, 'Web', {
-  path: path.resolve('./web'), // provide path to nextjs project root
+new Nextjs(this, 'Web', {
+  path: './web', // relative path to nextjs project root
 });
 ```
 
@@ -85,3 +85,45 @@ This module is largely made up of code from the above projects.
   - Do we need to create static routes? Or anything else?
 - Do we need to handle ISR?
 - How should images be handled?
+
+## Serverless-stack (SST) wrapper
+
+```ts
+export interface NextjsSstProps extends NextjsProps {
+  app: App;
+}
+
+class NextjsSst extends Nextjs {
+  constructor(scope: Construct, id: string, props: NextjsSstProps) {
+    const app = props.app;
+
+    super(scope as any, id, {
+      ...props,
+      isPlaceholder: app.local,
+      tempBuildDir: app.buildDir,
+
+      // make path relative to the app root
+      nextjsPath: path.isAbsolute(props.nextjsPath) ? path.relative(app.appPath, props.nextjsPath) : props.nextjsPath,
+    });
+
+    this.registerSiteEnvironment();
+  }
+
+  protected registerSiteEnvironment() {
+    const environmentOutputs: Record<string, string> = {};
+    for (const [key, value] of Object.entries(this.props.environment || {})) {
+      const outputId = `SstSiteEnv_${key}`;
+      const output = new CfnOutput(this, outputId, { value });
+      environmentOutputs[key] = Stack.of(this).getLogicalId(output);
+    }
+
+    const app = this.node.root as App;
+    app.registerSiteEnvironment({
+      id: this.node.id,
+      path: this.props.path,
+      stack: Stack.of(this).node.id,
+      environmentOutputs,
+    } as BaseSiteEnvironmentOutputsInfo);
+  }
+}
+```

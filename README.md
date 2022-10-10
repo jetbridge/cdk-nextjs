@@ -19,9 +19,9 @@ new Nextjs(this, 'Web', {
 });
 ```
 
-## Reference
+## Documentation
 
-Reference documentation is in [API.md](https://github.com/jetbridge/cdk-nextjs/blob/main/API.md).
+Available on [Construct Hub](https://constructs.dev/packages/cdk-nextjs-standalone/).
 
 ## About
 

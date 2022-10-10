@@ -495,6 +495,7 @@ export class Nextjs extends Construct {
         }),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
+      ...this.props.cdk?.distribution,
     });
   }
 

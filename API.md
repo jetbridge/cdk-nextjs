@@ -374,6 +374,10 @@ The Route 53 hosted zone for the custom domain.
 
 ### NextJsAssetsDeployment <a name="NextJsAssetsDeployment" id="cdk-nextjs-standalone.NextJsAssetsDeployment"></a>
 
+Uploads NextJS-built static and public files to S3.
+
+Will rewrite CloudFormation references with their resolved values after uploading.
+
 #### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextJsAssetsDeployment.Initializer"></a>
 
 ```typescript
@@ -500,6 +504,9 @@ Asset deployments to S3.
 ### NextjsBuild <a name="NextjsBuild" id="cdk-nextjs-standalone.NextjsBuild"></a>
 
 Represents a built NextJS application.
+
+This construct runs `npm build` in standalone output mode inside your `nextjsPath`.
+This construct can be used by higher level constructs or used directly.
 
 #### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsBuild.Initializer"></a>
 
@@ -2319,7 +2326,7 @@ const nextjsAssetsDeploymentProps: NextjsAssetsDeploymentProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket \| aws-cdk-lib.aws_s3.BucketProps</code> | Properties for the S3 bucket containing the NextJS assets. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | Distribution to invalidate when assets change. |
 
@@ -2398,6 +2405,8 @@ public readonly nextBuild: NextjsBuild;
 ```
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+
+The `NextjsBuild` instance representing the built Nextjs application.
 
 ---
 
@@ -3168,7 +3177,8 @@ const nextjsLambdaProps: NextjsLambdaProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built nextJS application. |
+| <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.function">function</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
 
 ---
 
@@ -3245,6 +3255,20 @@ public readonly nextBuild: NextjsBuild;
 ```
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+
+Built nextJS application.
+
+---
+
+##### `function`<sup>Optional</sup> <a name="function" id="cdk-nextjs-standalone.NextjsLambdaProps.property.function"></a>
+
+```typescript
+public readonly function: FunctionOptions;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.FunctionOptions
+
+Override function properties.
 
 ---
 

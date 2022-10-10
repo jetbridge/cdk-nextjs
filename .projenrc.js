@@ -25,7 +25,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   ] /* Runtime dependencies of this module. */,
   devDeps: ['constructs@10.0.57'] /* Build dependencies for this module. */,
 
-  // holy shit
+  // do not generate sample test files
   sampleCode: false,
 });
 project.synth();

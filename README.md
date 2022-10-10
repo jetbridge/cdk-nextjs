@@ -37,24 +37,13 @@ This is _experimental_ and a work in progress. I hope others can benefit from it
 
 I have managed to get the server bundling working even under the most finicky of circumstances (pnpm monorepo). Server-side rendering works. Static files and public files work.
 
-If you
-
-## To-do
-
-- [ ] Support deployment as a Lambda@Edge function if this is even desirable (see caveats)
-- [ ] [Serverless stack integration](https://github.com/serverless-stack/sst/pull/2049)
-
 ## Depdendencies
 
 NextJs requires the `sharp` native library. It is provided in a zip file from [lambda-layer-sharp](https://github.com/Umkus/lambda-layer-sharp/releases).
 
 All other required dependencies should be bundled by NextJs [output tracing](https://nextjs.org/docs/advanced-features/output-file-tracing). This standalone output is included in the lambda function bundle.
 
-## Edge functions
-
-It should be possible to build the lambda handler as a Lambda@Edge function, the main blocker is resolving the CDK tokens in env vars on the server side because edge functions cannot have environment variables. These tokens are not present at build-time. One of these issues needs to be fixed for that to work most likely: https://github.com/vercel/next.js/issues/40827 https://github.com/aws/aws-cdk/issues/19257
-
-## Performance
+## Cold start performance
 
 **Testing with [sst-prisma](https://github.com/jetbridge/sst-prisma):**
 
@@ -127,3 +116,12 @@ class NextjsSst extends Nextjs {
   }
 }
 ```
+
+## To-do
+
+- [ ] Support deployment as a Lambda@Edge function if this is even desirable (see caveats)
+- [ ] [Serverless stack integration](https://github.com/serverless-stack/sst/pull/2049)
+
+### Edge functions
+
+It should be possible to build the lambda handler as a Lambda@Edge function, the main blocker is resolving the CDK tokens in env vars on the server side because edge functions cannot have environment variables. These tokens are not present at build-time. One of these issues needs to be fixed for that to work most likely: https://github.com/vercel/next.js/issues/40827 https://github.com/aws/aws-cdk/issues/19257

@@ -20,7 +20,7 @@ import {
   NextjsBaseProps,
 } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
-import { NextJsLambda, NextjsLambdaFunctionProps } from './NextjsLambda';
+import { NextJsLambda, NextjsLambdaProps } from './NextjsLambda';
 
 // contains server-side resolved environment vars in config bucket
 // const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -62,7 +62,7 @@ export interface NextjsCdkProps {
   /**
    * Override server lambda function settings.
    */
-  readonly lambda?: NextjsLambdaFunctionProps;
+  readonly lambda?: NextjsLambdaProps;
 }
 
 export interface NextjsProps extends NextjsBaseProps {

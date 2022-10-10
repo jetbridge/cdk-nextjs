@@ -15,10 +15,6 @@ import { NextjsLayer } from './NextjsLayer';
 
 export type EnvironmentVars = Record<string, string>;
 
-export interface NextjsLambdaFunctionProps extends Function {
-  readonly handler?: string;
-}
-
 export interface NextjsLambdaProps extends NextjsBaseProps {
   /**
    * Built nextJS application.

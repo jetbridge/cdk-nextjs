@@ -3013,20 +3013,11 @@ const nextjsCdkProps: NextjsCdkProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket \| aws-cdk-lib.aws_s3.BucketProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps">NextjsCachePolicyProps</a></code> | Override the default CloudFront cache policies created internally. |
+| <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.deployment">deployment</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps">NextjsAssetsDeploymentProps</a></code> | Override static file deployment settings. |
 | <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.distribution">distribution</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCdkDistributionProps">NextjsCdkDistributionProps</a></code> | Pass in a value to override the default settings this construct uses to create the CDK `Distribution` internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.imageOriginRequestPolicy">imageOriginRequestPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy</code> | Override the default CloudFront image origin request policy created internally. |
-
----
-
-##### `bucket`<sup>Optional</sup> <a name="bucket" id="cdk-nextjs-standalone.NextjsCdkProps.property.bucket"></a>
-
-```typescript
-public readonly bucket: IBucket | BucketProps;
-```
-
-- *Type:* aws-cdk-lib.aws_s3.IBucket | aws-cdk-lib.aws_s3.BucketProps
+| <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.lambda">lambda</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps">NextjsLambdaProps</a></code> | Override server lambda function settings. |
 
 ---
 
@@ -3039,6 +3030,18 @@ public readonly cachePolicies: NextjsCachePolicyProps;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsCachePolicyProps">NextjsCachePolicyProps</a>
 
 Override the default CloudFront cache policies created internally.
+
+---
+
+##### `deployment`<sup>Optional</sup> <a name="deployment" id="cdk-nextjs-standalone.NextjsCdkProps.property.deployment"></a>
+
+```typescript
+public readonly deployment: NextjsAssetsDeploymentProps;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps">NextjsAssetsDeploymentProps</a>
+
+Override static file deployment settings.
 
 ---
 
@@ -3063,6 +3066,18 @@ public readonly imageOriginRequestPolicy: IOriginRequestPolicy;
 - *Type:* aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy
 
 Override the default CloudFront image origin request policy created internally.
+
+---
+
+##### `lambda`<sup>Optional</sup> <a name="lambda" id="cdk-nextjs-standalone.NextjsCdkProps.property.lambda"></a>
+
+```typescript
+public readonly lambda: NextjsLambdaProps;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsLambdaProps">NextjsLambdaProps</a>
+
+Override server lambda function settings.
 
 ---
 

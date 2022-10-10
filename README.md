@@ -1,5 +1,7 @@
 # Deploy NextJS with CDK
 
+[![View on Construct Hub](https://constructs.dev/badge?package=cdk-nextjs-standalone)](https://constructs.dev/packages/cdk-nextjs-standalone)
+
 ## What is this?
 
 A CDK construct to deploy a NextJS 12.3.0+ app using AWS CDK.

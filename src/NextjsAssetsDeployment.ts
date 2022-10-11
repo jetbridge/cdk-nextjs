@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { CustomResource, RemovalPolicy, Token } from 'aws-cdk-lib';
+import { CustomResource, Duration, RemovalPolicy, Token } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
@@ -115,7 +115,7 @@ export class NextJsAssetsDeployment extends Construct {
 
     // do rewrites of unresolved CDK tokens in static files
     const rewriter = this.createRewriteResource();
-    rewriter?.node.addDependency(...deployments);
+    rewriter?.node.addDependency(...deployments.map((d) => d.deployedBucket));
 
     return deployments;
   }
@@ -129,53 +129,74 @@ export class NextJsAssetsDeployment extends Construct {
     const rewriteFn = new lambda.Function(this, 'RewriteOnEventHandler', {
       runtime: lambda.Runtime.NODEJS_16_X,
       memorySize: 1024,
+      timeout: Duration.minutes(5),
       handler: 'index.handler',
       code: lambda.Code.fromInline(`
-      const AWS = require('aws-sdk');
+const AWS = require("aws-sdk");
 
-      // search and replace tokenized values of designated objects in s3
-      exports.handler = async (event) => {
-        const requestType = event.RequestType;
-        if (requestType === 'Create' || requestType === 'Update') {
-          // rewrite static files
-          const s3 = new AWS.S3();
-          const { s3keys, bucket, replacements } = event.ResourceProperties;
-          if (!s3keys || !bucket || !replacements) {
-            console.error("Missing required properties")
-            return
-          }
-          const promises = s3keys.map(async (key) => {
-            const params = { Bucket: bucket, Key: key };
-            // console.info('Rewriting', key, 'in bucket', bucket);
-            const data = await s3.getObject(params).promise();
-            const bodyPre = data.Body.toString('utf-8');
-            let bodyPost = bodyPre;
+async function tryGetObject(bucket, key, tries) {
+  const s3 = new AWS.S3();
+  try {
+    return await s3.getObject({ Bucket: bucket, Key: key }).promise();
+  } catch (err) {
+    console.error("Failed to retrieve object", key, "\\nCode:", err.code, err);
+    // if access denied - wait a few seconds and try again
+    if (err.code === "AccessDenied" && tries < 3) {
+      console.info("Retrying for object", key);
+      await new Promise((res) => setTimeout(res, 5000));
+      return tryGetObject(bucket, key, ++tries);
+    } else {
+      throw err;
+    }
+  }
+}
 
-            // do replacements of tokens
-            Object.entries(replacements).forEach(([key, value]) => {
-              bodyPost = bodyPost.replace(key, value);
-            });
+async function doRewrites(event) {
+  // rewrite static files
+  const s3 = new AWS.S3();
+  const { s3keys, bucket, replacements } = event.ResourceProperties;
+  if (!s3keys || !bucket || !replacements) {
+    console.error("Missing required properties");
+    return;
+  }
+  const promises = s3keys.map(async (key) => {
+    const params = { Bucket: bucket, Key: key };
+    console.info("Rewriting", key, "in bucket", bucket);
+    const res = await tryGetObject(bucket, key, 0);
+    const bodyPre = res.Body.toString("utf-8");
+    let bodyPost = bodyPre;
 
-            // didn't change?
-            if (bodyPost === bodyPre)
-              return;
+    // do replacements of tokens
+    Object.entries(replacements).forEach(([key, value]) => {
+      bodyPost = bodyPost.replace(key, value);
+    });
 
-            // upload
-            console.info('Rewrote', key, 'in bucket', bucket);
-            const putParams = {
-              ...params,
-              Body: bodyPost,
-              ContentType: data.ContentType,
-              ContentEncoding: data.ContentEncoding,
-              CacheControl: data.CacheControl,
-            }
-            await s3.putObject(putParams).promise();
-          });
-          await Promise.all(promises);
-        }
+    // didn't change?
+    if (bodyPost === bodyPre) return;
 
-        return event;
-      };
+    // upload
+    console.info("Rewrote", key, "in bucket", bucket);
+    const putParams = {
+      ...params,
+      Body: bodyPost,
+      ContentType: res.ContentType,
+      ContentEncoding: res.ContentEncoding,
+      CacheControl: res.CacheControl,
+    };
+    await s3.putObject(putParams).promise();
+  });
+  await Promise.all(promises);
+}
+
+// search and replace tokenized values of designated objects in s3
+exports.handler = async (event) => {
+  const requestType = event.RequestType;
+  if (requestType === "Create" || requestType === "Update") {
+    await doRewrites(event);
+  }
+
+  return event;
+}
       `),
       initialPolicy: [
         new iam.PolicyStatement({
@@ -303,6 +324,7 @@ export class NextJsAssetsDeployment extends Construct {
 
     Object.entries(this.props.environment || {})
       .filter(([, value]) => Token.isUnresolved(value))
+      .filter(([key]) => key.startsWith('NEXT_PUBLIC_')) // don't replace server-only env vars
       .forEach(([key, value]) => {
         const token = `{{ ${key} }}`;
         replacements[token] = value.toString();

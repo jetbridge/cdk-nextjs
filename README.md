@@ -117,7 +117,7 @@ class NextjsSst extends Nextjs {
     const app = this.node.root as App;
     app.registerSiteEnvironment({
       id: this.node.id,
-      path: this.props.path,
+      path: this.props.nextjsPath,
       stack: Stack.of(this).node.id,
       environmentOutputs,
     } as BaseSiteEnvironmentOutputsInfo);

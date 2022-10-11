@@ -50,9 +50,9 @@ export interface NextjsCdkProps {
   readonly cachePolicies?: NextjsCachePolicyProps;
 
   /**
-   * Override the default CloudFront image origin request policy created internally
+   * Override the default CloudFront lambda origin request policy created internally
    */
-  readonly imageOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
+  readonly lambdaOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
 
   /**
    * Override static file deployment settings.
@@ -161,11 +161,13 @@ export class Nextjs extends Construct {
   };
 
   /**
-   * The default CloudFront image origin request policy properties for Next images.
+   * The default CloudFront lambda origin request policy.
    */
-  public static imageOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
+  public static lambdaOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
+    cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(),
     queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-    comment: 'Nextjs Lambda Default Origin Request Policy',
+    headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
+    comment: 'Nextjs Lambda Origin Request Policy',
   };
 
   /**
@@ -318,21 +320,6 @@ export class Nextjs extends Construct {
   }
 
   /////////////////////
-  // Public Methods
-  /////////////////////
-
-  // FIXME: SST
-  // public getConstructMetadata() {
-  //   return {
-  //     type: 'Nextjs' as const,
-  //     data: {
-  //       distributionId: this.distribution.distributionId,
-  //       customDomainUrl: this.customDomainUrl,
-  //     },
-  //   };
-  // }
-
-  /////////////////////
   // CloudFront Distribution
   /////////////////////
 
@@ -372,9 +359,9 @@ export class Nextjs extends Construct {
     }
 
     const staticCachePolicy = cdk?.cachePolicies?.staticCachePolicy ?? this.createCloudFrontStaticCachePolicy();
-
     const imageCachePolicy = cdk?.cachePolicies?.imageCachePolicy ?? this.createCloudFrontImageCachePolicy();
-    const imageOriginRequestPolicy = cdk?.imageOriginRequestPolicy ?? this.createCloudFrontImageOriginRequestPolicy();
+
+    const lambdaOriginRequestPolicy = cdk?.lambdaOriginRequestPolicy ?? this.createLambdaOriginRequestPolicy();
 
     // main server function origin (lambda URL HTTP origin)
     const fnUrl = this.serverFunction.addFunctionUrl({
@@ -410,9 +397,12 @@ export class Nextjs extends Construct {
       viewerProtocolPolicy,
       origin: serverFunctionOrigin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-      cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
+      // allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+      // cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
+      originRequestPolicy: lambdaOriginRequestPolicy,
       compress: true,
       cachePolicy: lambdaCachePolicy,
+      // cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
     };
 
     // if we don't have a static file called index.html then we should
@@ -430,12 +420,15 @@ export class Nextjs extends Construct {
       domainNames,
       certificate: this.certificate,
       defaultBehavior: {
-        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         origin: fallbackOriginGroup, // try S3 first, then lambda
-        // allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        // allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL, // doesn't work with an OriginGroup
         // cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
         compress: true,
-        cachePolicy: lambdaCachePolicy, // what goes here? static or lambda/
+
+        // what goes here? static or lambda?
+        cachePolicy: lambdaCachePolicy,
+        originRequestPolicy: lambdaOriginRequestPolicy,
       },
 
       additionalBehaviors: {
@@ -455,11 +448,11 @@ export class Nextjs extends Construct {
         '_next/image*': {
           viewerProtocolPolicy,
           origin: serverFunctionOrigin,
-          allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
           cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
           compress: true,
           cachePolicy: imageCachePolicy,
-          originRequestPolicy: imageOriginRequestPolicy,
+          originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER, // not sure what goes here
         },
 
         ...(cfDistributionProps?.additionalBehaviors || {}),
@@ -475,8 +468,8 @@ export class Nextjs extends Construct {
     return new cloudfront.CachePolicy(this, 'ImageCache', Nextjs.imageCachePolicyProps);
   }
 
-  private createCloudFrontImageOriginRequestPolicy(): cloudfront.OriginRequestPolicy {
-    return new cloudfront.OriginRequestPolicy(this, 'ImageOriginRequest', Nextjs.imageOriginRequestPolicyProps);
+  private createLambdaOriginRequestPolicy(): cloudfront.OriginRequestPolicy {
+    return new cloudfront.OriginRequestPolicy(this, 'LambdaOriginPolicy', Nextjs.lambdaOriginRequestPolicyProps);
   }
 
   private createCloudFrontLambdaCachePolicy(): cloudfront.CachePolicy {

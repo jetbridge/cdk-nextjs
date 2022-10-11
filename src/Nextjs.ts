@@ -230,7 +230,7 @@ export class Nextjs extends Construct {
     });
     this.bucket = this.assetsDeployment.bucket;
 
-    this.originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI(', {
+    this.originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
       comment: 'Allows CloudFront to access S3 bucket with assets',
     });
 
@@ -239,7 +239,7 @@ export class Nextjs extends Construct {
       new iam.PolicyStatement({
         // only allow getting of files - not listing
         actions: ['s3:GetObject'],
-        resources: [`${this.bucket.bucketArn}/*`],
+        resources: [this.bucket.arnForObjects('*')],
         principals: [this.originAccessIdentity.grantPrincipal],
       })
     );
@@ -253,7 +253,9 @@ export class Nextjs extends Construct {
       ? this.createCloudFrontDistributionForStub()
       : this.createCloudFrontDistribution();
     // wait for asset deployments to finish
-    this.assetsDeployment.deployments.forEach((s3Deployment) => this.distribution.node.addDependency(s3Deployment));
+    this.assetsDeployment.deployments.forEach((s3Deployment) =>
+      this.distribution.node.addDependency(s3Deployment.deployedBucket)
+    );
 
     // // Invalidate CloudFront (might already be handled by deployments?)
     // const invalidationCR = this.createCloudFrontInvalidation();

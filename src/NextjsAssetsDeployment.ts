@@ -10,13 +10,7 @@ import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { NextjsBaseProps } from './NextjsBase';
-import {
-  createArchive,
-  makeTokenPlaceholder,
-  NextjsBuild,
-  replaceTokenGlobs,
-  TOKEN_PLACEHOLDER_BEGIN,
-} from './NextjsBuild';
+import { createArchive, makeTokenPlaceholder, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
 
 export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
   /**
@@ -330,7 +324,7 @@ exports.handler = async (event) => {
 
     Object.entries(this.props.environment || {})
       .filter(([, value]) => Token.isUnresolved(value))
-      .filter(([key]) => key.startsWith(TOKEN_PLACEHOLDER_BEGIN + 'NEXT_PUBLIC_')) // don't replace server-only env vars
+      .filter(([key]) => key.startsWith('NEXT_PUBLIC_')) // don't replace server-only env vars
       .forEach(([key, value]) => {
         const token = makeTokenPlaceholder(key);
         replacements[token] = value.toString();

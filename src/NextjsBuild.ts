@@ -256,9 +256,7 @@ export function getBuildCmdEnvironment(siteEnvironment?: { [key: string]: string
   //
   const buildCmdEnvironment: Record<string, string> = {};
   Object.entries(siteEnvironment || {}).forEach(([key, value]) => {
-    buildCmdEnvironment[key] = Token.isUnresolved(value)
-      ? TOKEN_PLACEHOLDER_BEGIN + key.toString() + TOKEN_PLACEHOLDER_END
-      : value;
+    buildCmdEnvironment[key] = Token.isUnresolved(value) ? makeTokenPlaceholder(key) : value;
   });
 
   return buildCmdEnvironment;

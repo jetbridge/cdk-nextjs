@@ -10,7 +10,7 @@ import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { listDirectory } from './NextjsAssetsDeployment';
 import { NextjsBaseProps } from './NextjsBase';
-import { createArchive, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
+import { createArchive, makeTokenPlaceholder, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
 import { NextjsLayer } from './NextjsLayer';
 
 export type EnvironmentVars = Record<string, string>;
@@ -165,7 +165,7 @@ export function getNextPublicEnvReplaceValues(environment: EnvironmentVars): Env
   return Object.fromEntries(
     Object.entries(environment || {})
       .filter(([key]) => key.startsWith('NEXT_PUBLIC_'))
-      .map(([key]) => [`"{{ ${key} }}"`, `process.env.${key}`]) // will need to replace with actual value for edge functions
+      .map(([key]) => [makeTokenPlaceholder(key), `process.env.${key}`]) // will need to replace with actual value for edge functions
   );
 }
 
@@ -182,7 +182,7 @@ export function getNextPublicEnvReplaceValues(environment: EnvironmentVars): Env
 //   // might not get resolved on `next build` if it is used in
 //   // server-side functions, ie. getServerSideProps().
 //   // Because Lambda@Edge does not support environment variables, we will
-//   // use the trick of replacing "{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}" with
+//   // use the trick of replacing "{{! _SST_NEXTJS_SITE_ENVIRONMENT_ !}}" with
 //   // a JSON encoded string of all environment key-value pairs. This string
 //   // will then get decoded at run time.
 //   const lambdaEnvs: { [key: string]: string } = {};
@@ -202,7 +202,7 @@ export function getNextPublicEnvReplaceValues(environment: EnvironmentVars): Env
 //   replaceValues.push(
 //     {
 //       files: '**/*.mjs',
-//       search: '"{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
+//       search: '"{{! _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
 //       replace: JSON.stringify(lambdaEnvs),
 //     },
 //     {

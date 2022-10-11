@@ -10,7 +10,13 @@ import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { NextjsBaseProps } from './NextjsBase';
-import { createArchive, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
+import {
+  createArchive,
+  makeTokenPlaceholder,
+  NextjsBuild,
+  replaceTokenGlobs,
+  TOKEN_PLACEHOLDER_BEGIN,
+} from './NextjsBuild';
 
 export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
   /**
@@ -33,7 +39,7 @@ export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
    * Set to true to delete old assets (defaults to false).
    * Recommended to only set to true if you don't need the ability to roll back deployments.
    */
-  readonly prune?: boolean;
+  // readonly prune?: boolean;
 }
 
 // interface EnvReplaceValues {
@@ -86,7 +92,7 @@ export class NextJsAssetsDeployment extends Construct {
           destinationKeyPrefix: '_next/static',
           sources: [Source.asset(staticDir)],
           distribution: this.props.distribution, // invalidate Cloudfront distribution caches
-          prune: this.props.prune,
+          prune: false,
         })
       );
     }
@@ -108,7 +114,7 @@ export class NextJsAssetsDeployment extends Construct {
           destinationKeyPrefix: this.props.isPlaceholder ? '/placeholder' : '/',
           sources: [Source.asset(zipFilePath)],
           distribution: this.props.distribution,
-          prune: this.props.prune,
+          prune: false,
         })
       );
     }
@@ -139,9 +145,9 @@ async function tryGetObject(bucket, key, tries) {
   try {
     return await s3.getObject({ Bucket: bucket, Key: key }).promise();
   } catch (err) {
-    console.error("Failed to retrieve object", key, "\\nCode:", err.code, err);
+    console.error("Failed to retrieve object", key, err);
     // if access denied - wait a few seconds and try again
-    if (err.code === "AccessDenied" && tries < 3) {
+    if (err.code === "AccessDenied" && tries < 10) {
       console.info("Retrying for object", key);
       await new Promise((res) => setTimeout(res, 5000));
       return tryGetObject(bucket, key, ++tries);
@@ -253,7 +259,7 @@ exports.handler = async (event) => {
 
   /*
   private createLambdaCodeReplacer(name: string, asset: s3Assets.Asset): CustomResource {
-    // Note: Source code for the Lambda functions have "{{ ENV_KEY }}" in them.
+    // Note: Source code for the Lambda functions have "{{! ENV_KEY !}}" in them.
     //       They need to be replaced with real values before the Lambda
     //       functions get deployed.
 
@@ -324,9 +330,9 @@ exports.handler = async (event) => {
 
     Object.entries(this.props.environment || {})
       .filter(([, value]) => Token.isUnresolved(value))
-      .filter(([key]) => key.startsWith('NEXT_PUBLIC_')) // don't replace server-only env vars
+      .filter(([key]) => key.startsWith(TOKEN_PLACEHOLDER_BEGIN + 'NEXT_PUBLIC_')) // don't replace server-only env vars
       .forEach(([key, value]) => {
-        const token = `{{ ${key} }}`;
+        const token = makeTokenPlaceholder(key);
         replacements[token] = value.toString();
       });
 

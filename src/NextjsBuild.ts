@@ -256,8 +256,15 @@ export function getBuildCmdEnvironment(siteEnvironment?: { [key: string]: string
   //
   const buildCmdEnvironment: Record<string, string> = {};
   Object.entries(siteEnvironment || {}).forEach(([key, value]) => {
-    buildCmdEnvironment[key] = Token.isUnresolved(value) ? `{{ ${key} }}` : value;
+    buildCmdEnvironment[key] = Token.isUnresolved(value)
+      ? TOKEN_PLACEHOLDER_BEGIN + key.toString() + TOKEN_PLACEHOLDER_END
+      : value;
   });
 
   return buildCmdEnvironment;
 }
+
+export const TOKEN_PLACEHOLDER_BEGIN = '{{! ';
+export const TOKEN_PLACEHOLDER_END = ' !}}';
+export const makeTokenPlaceholder = (value: string): string =>
+  TOKEN_PLACEHOLDER_BEGIN + value.toString() + TOKEN_PLACEHOLDER_END;

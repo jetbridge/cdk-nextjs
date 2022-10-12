@@ -1,10 +1,11 @@
 import * as os from 'os';
 import * as path from 'path';
-import { Duration, Fn } from 'aws-cdk-lib';
+import { App, Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53Patterns from 'aws-cdk-lib/aws-route53-patterns';
@@ -98,6 +99,8 @@ export interface NextjsProps extends NextjsBaseProps {
    * While deploying, waits for the CloudFront cache invalidation process to finish. This ensures that the new content will be served once the deploy command finishes. However, this process can sometimes take more than 5 mins. For non-prod environments it might make sense to pass in `false`. That'll skip waiting for the cache to invalidate and speed up the deploy process.
    */
   readonly waitForInvalidation?: boolean;
+
+  readonly stageName?: string;
 }
 
 /**
@@ -166,7 +169,7 @@ export class Nextjs extends Construct {
   public static lambdaOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
     cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(),
     queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-    headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
+    headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(), // can't include host
     comment: 'Nextjs Lambda Origin Request Policy',
   };
 
@@ -360,16 +363,38 @@ export class Nextjs extends Construct {
       });
     }
 
+    // cache policies
     const staticCachePolicy = cdk?.cachePolicies?.staticCachePolicy ?? this.createCloudFrontStaticCachePolicy();
     const imageCachePolicy = cdk?.cachePolicies?.imageCachePolicy ?? this.createCloudFrontImageCachePolicy();
 
+    // origin request policies
     const lambdaOriginRequestPolicy = cdk?.lambdaOriginRequestPolicy ?? this.createLambdaOriginRequestPolicy();
+
+    // lambda behavior edge function
+    const lambdaOriginRequestEdgeFn = this.buildDefaultOriginRequestEdgeFunction();
+    const lambdaOriginRequestEdgeFnVersion = lambda.Version.fromVersionArn(
+      this,
+      'Version',
+      lambdaOriginRequestEdgeFn.currentVersion.functionArn
+    );
+    const lambdaOriginEdgeFns: cloudfront.EdgeLambda[] = [
+      {
+        eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
+        functionVersion: lambdaOriginRequestEdgeFnVersion,
+        includeBody: false,
+      },
+    ];
 
     // main server function origin (lambda URL HTTP origin)
     const fnUrl = this.serverFunction.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,
     });
-    const serverFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url));
+    const serverFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), {
+      // TODO: useful stuff here?
+      // customHeaders: {
+      //   host: fnUrl.
+      // },
+    });
 
     // default handler for requests that don't match any other path:
     //   - try S3 first
@@ -381,7 +406,6 @@ export class Nextjs extends Construct {
       fallbackStatusCodes: [403, 404],
     });
 
-    // TODO: how to apply to fallbackOrigin?
     const lambdaCachePolicy = cdk?.cachePolicies?.lambdaCachePolicy ?? this.createCloudFrontLambdaCachePolicy();
 
     // requests for static objects
@@ -394,7 +418,7 @@ export class Nextjs extends Construct {
       cachePolicy: staticCachePolicy,
     };
 
-    // requests going to lambda
+    // requests going to lambda (api, etc)
     const lambdaBehavior: cloudfront.BehaviorOptions = {
       viewerProtocolPolicy,
       origin: serverFunctionOrigin,
@@ -403,9 +427,26 @@ export class Nextjs extends Construct {
       // cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
       originRequestPolicy: lambdaOriginRequestPolicy,
       compress: true,
-      cachePolicy: lambdaCachePolicy,
-      // cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+      // cachePolicy: lambdaCachePolicy,
+      cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+      edgeLambdas: lambdaOriginEdgeFns,
     };
+
+    // requests to fallback origin group (default behavior)
+    // used for S3 and lambda. would prefer to forward all headers to lambda but need to strip out host
+    // TODO: try to do this with headers whitelist or edge lambda
+    const fallbackOriginRequestPolicy = new cloudfront.OriginRequestPolicy(this, 'FallbackOriginRequestPolicy', {
+      cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(), // pretty much disables caching - maybe can be changed
+      queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
+      // we cannot forward the host header to a lambda URL
+      headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList(
+        'Accept',
+        'Referer',
+        'User-Agent',
+        'Content-Type'
+      ),
+      comment: 'Nextjs Fallback Origin Request Policy',
+    });
 
     // if we don't have a static file called index.html then we should
     // redirect to the lambda handler
@@ -430,7 +471,9 @@ export class Nextjs extends Construct {
 
         // what goes here? static or lambda?
         cachePolicy: lambdaCachePolicy,
-        originRequestPolicy: lambdaOriginRequestPolicy,
+        originRequestPolicy: fallbackOriginRequestPolicy,
+
+        // edgeLambdas: lambdaOriginEdgeFns,
       },
 
       additionalBehaviors: {
@@ -505,6 +548,53 @@ export class Nextjs extends Construct {
       domainNames.push(customDomain.domainName);
     }
     return domainNames;
+  }
+
+  private buildDefaultOriginRequestEdgeFunction() {
+    const app = App.of(this) as App;
+
+    // ridiculous error: The function execution role must be assumable with edgelambda.amazonaws.com as well as lambda.amazonaws.com principals.
+    // const role = new Role(this, 'NextEdgeLambdaRole', {
+    //   assumedBy: new CompositePrincipal(
+    //     new ServicePrincipal('lambda.amazonaws.com'),
+    //     new ServicePrincipal('edgelambda.amazonaws.com')
+    //   ),
+    //   managedPolicies: [
+    //     ManagedPolicy.fromManagedPolicyArn(
+    //       this,
+    //       'NextApiLambdaPolicy',
+    //       'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+    //     ),
+    //   ],
+    // });
+
+    const fn = new cloudfront.experimental.EdgeFunction(this, 'DefaultOriginRequestEdgeFn', {
+      runtime: lambda.Runtime.NODEJS_16_X,
+      // role,
+      handler: 'index.handler',
+      // code: lambda.Code.fromAsset(path.join(__dirname, '..', 'assets', 'lambda@edge', 'DefaultOriginRequest')),
+      code: lambda.Code.fromInline(`
+        exports.handler = (event, context, callback) => {
+          console.log(JSON.stringify(event, null, 2))
+          const request = event.Records[0].cf.request;
+          request.headers['x-forwarded-host'] = [ { key: 'x-forwarded-host', value: request.headers.host[0].value } ]
+          request.headers['host'] = [ { key: 'host', value: 'p3t2xocqdls5e5ilvgpcar7wge0glzky.lambda-url.us-west-2.on.aws' } ]
+          callback(null, request);
+        };
+      `),
+      currentVersionOptions: {
+        removalPolicy: RemovalPolicy.DESTROY, // destroy old versions
+        retryAttempts: 1, // async retry attempts
+      },
+      stackId:
+        `Nextjs-${this.props.stageName || app.stageName || 'default'}-EdgeFunctions-` + this.node.addr.substring(0, 5),
+    });
+    fn.grantInvoke(new ServicePrincipal('lambda.amazonaws.com'));
+    fn.grantInvoke(new ServicePrincipal('edgelambda.amazonaws.com'));
+    fn.currentVersion.grantInvoke(new ServicePrincipal('edgelambda.amazonaws.com'));
+    fn.currentVersion.grantInvoke(new ServicePrincipal('lambda.amazonaws.com'));
+
+    return fn;
   }
 
   /* handled by BucketDeployment supposedly?

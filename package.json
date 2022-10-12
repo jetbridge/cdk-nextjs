@@ -35,6 +35,7 @@
     "organization": true
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.106",
     "@types/jest": "^27",
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
@@ -74,7 +75,8 @@
     "esbuild": "^0.15.10",
     "fs-extra": "^10.1.0",
     "indent-string": "*",
-    "micromatch": "^4.0.5"
+    "micromatch": "^4.0.5",
+    "serverless-http": "^3.0.3"
   },
   "bundledDependencies": [
     "@types/cross-spawn",

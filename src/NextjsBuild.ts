@@ -87,9 +87,8 @@ export class NextjsBuild extends Construct {
 
     // validate site path exists
     if (!fs.existsSync(nextjsPath)) {
-      throw new Error(`No path found at "${path.resolve(nextjsPath)}"`);
+      throw new Error(`Invalid nextjsPath ${nextjsPath} - directory does not exist at "${path.resolve(nextjsPath)}"`);
     }
-
     // Ensure that the site has a build script defined
     if (!fs.existsSync(path.join(nextjsPath, 'package.json'))) {
       throw new Error(`No package.json found at "${nextjsPath}".`);
@@ -104,8 +103,8 @@ export class NextjsBuild extends Construct {
     const buildEnv = {
       ...process.env,
       [NEXTJS_BUILD_STANDALONE_ENV]: 'true',
-      ...(this.props.nodeEnv ? { NODE_ENV: this.props.nodeEnv } : {}),
       ...getBuildCmdEnvironment(this.props.environment),
+      ...(this.props.nodeEnv ? { NODE_ENV: this.props.nodeEnv } : {}),
     };
     const buildResult = spawn.sync('npm', ['run', 'build'], {
       cwd: nextjsPath,

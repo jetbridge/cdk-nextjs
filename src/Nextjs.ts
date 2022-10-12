@@ -593,22 +593,23 @@ export class Nextjs extends Construct {
       handler: 'index.handler',
       // code: lambda.Code.fromAsset(path.join(__dirname, '..', 'assets', 'lambda@edge', 'DefaultOriginRequest')),
       code: lambda.Code.fromInline(`
-        const URL = require('url');
+        const url = require('url');
 
         exports.handler = (event, context, callback) => {
           const request = event.Records[0].cf.request;
-          console.log(JSON.stringify(request, null, 2))
+          // console.log(JSON.stringify(request, null, 2))
 
           // get origin url from header
-          const originUrlHeader = request.headers['x-origin-url']
+          const originUrlHeader = request.origin.custom.customHeaders['x-origin-url']
           if (!originUrlHeader || !originUrlHeader[0]) {
             console.error('Origin header wasn"t set correctly, cannot get origin url')
             return callback(null, request)
           }
-          const originUrl = new URL(originUrlHeader[0].value);
+          const urlHeader = originUrlHeader[0].value
+          const originUrl = url.parse(urlHeader, true);
 
           request.headers['x-forwarded-host'] = [ { key: 'x-forwarded-host', value: request.headers.host[0].value } ]
-          request.headers['host'] = [ { key: 'host', value: new URL(originUrl).host } ]
+          request.headers['host'] = [ { key: 'host', value: originUrl.host } ]
           callback(null, request);
         };
       `),

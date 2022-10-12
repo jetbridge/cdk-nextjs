@@ -4,7 +4,7 @@ import { Token } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as spawn from 'cross-spawn';
 import * as fs from 'fs-extra';
-import { listDirectory } from './NextjsAssetsDeployment';
+import { CompressionLevel, listDirectory } from './NextjsAssetsDeployment';
 import { NextjsBaseProps } from './NextjsBase';
 
 const NEXTJS_BUILD_DIR = '.next';
@@ -215,6 +215,7 @@ export class NextjsBuild extends Construct {
 }
 
 export interface CreateArchiveArgs {
+  readonly compressionLevel?: CompressionLevel;
   readonly directory: string;
   readonly zipFileName: string;
   readonly zipOutDir: string;
@@ -222,7 +223,13 @@ export interface CreateArchiveArgs {
 }
 
 // zip up a directory and return path to zip file
-export function createArchive({ directory, zipFileName, zipOutDir, fileGlob = '*' }: CreateArchiveArgs): string {
+export function createArchive({
+  directory,
+  zipFileName,
+  zipOutDir,
+  fileGlob = '*',
+  compressionLevel = 1,
+}: CreateArchiveArgs): string {
   zipOutDir = path.resolve(zipOutDir);
   // get output path
   fs.removeSync(zipOutDir);
@@ -232,7 +239,7 @@ export function createArchive({ directory, zipFileName, zipOutDir, fileGlob = '*
   // run script to create zipfile, preserving symlinks for node_modules (e.g. pnpm structure)
   const result = spawn.sync(
     'bash', // getting ENOENT when specifying 'node' here for some reason
-    ['-xc', [`cd '${directory}'`, `zip -ryq2 '${zipFilePath}' ${fileGlob}`].join('&&')],
+    ['-xc', [`cd '${directory}'`, `zip -ryq${compressionLevel} '${zipFilePath}' ${fileGlob}`].join('&&')],
     { stdio: 'inherit' }
   );
   if (result.status !== 0) {

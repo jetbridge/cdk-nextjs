@@ -149,6 +149,10 @@
       "type": "bundled"
     },
     {
+      "name": "serverless-http",
+      "type": "bundled"
+    },
+    {
       "name": "@types/prettier",
       "version": "2.6.0",
       "type": "override"

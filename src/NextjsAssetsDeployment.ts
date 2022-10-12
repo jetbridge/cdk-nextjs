@@ -12,6 +12,8 @@ import * as micromatch from 'micromatch';
 import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, makeTokenPlaceholder, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
 
+export type CompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+
 export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
   /**
    * The `NextjsBuild` instance representing the built Nextjs application.
@@ -34,6 +36,8 @@ export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
    * Recommended to only set to true if you don't need the ability to roll back deployments.
    */
   // readonly prune?: boolean;
+
+  readonly compressionLevel?: CompressionLevel;
 }
 
 // interface EnvReplaceValues {
@@ -99,6 +103,7 @@ export class NextJsAssetsDeployment extends Construct {
         zipFileName: 'public.zip',
         fileGlob: '*',
         zipOutDir: this.props.nextBuild.tempBuildDir,
+        compressionLevel: this.props.compressionLevel,
       });
 
       // upload public files to root of S3 bucket

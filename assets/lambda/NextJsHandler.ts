@@ -42,7 +42,7 @@ const nextHandler = new NextNodeServer(config).getRequestHandler();
 // wrap next request handler with serverless-http
 // to translate from API Gateway v2 to next request/response
 const server = slsHttp(
-  async (req: any, res: ServerResponse) => {
+  async (req, res: ServerResponse) => {
     await nextHandler(req, res).catch((e) => {
       console.error(`NextJS request failed due to:`);
       console.error(e);
@@ -50,6 +50,8 @@ const server = slsHttp(
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify(getErrMessage(e), null, 3));
     });
+    console.log('req headers: ', req);
+    console.log('res headers: ', res.getHeaders());
   },
   {
     binary: false,

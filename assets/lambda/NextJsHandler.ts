@@ -2,16 +2,14 @@
 // - https://github.com/iiroj/iiro.fi/commit/bd43222032d0dbb765e1111825f64dbb5db851d9
 // - https://github.com/sladg/nextjs-lambda/blob/master/lib/standalone/server-handler.ts
 
-import fs from 'node:fs';
-import path from 'node:path';
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import type { NextConfig } from 'next';
-import { NodeNextRequest, NodeNextResponse } from 'next/dist/server/base-http/node';
-import type { NodeRequestHandler, Options } from 'next/dist/server/next-server';
+import type { Options } from 'next/dist/server/next-server';
 import * as nss from 'next/dist/server/next-server';
-// import { convertRequest, convertResponse, makeResponse } from './LambdaNextCompat';
-import slsHttp from 'serverless-http';
+import fs from 'node:fs';
+import path from 'node:path';
 import { ServerResponse } from 'node:http';
+import slsHttp from 'serverless-http';
 
 const getErrMessage = (e: any) => ({ message: 'Server failed to respond.', details: e });
 
@@ -60,37 +58,3 @@ const server = slsHttp(
 );
 
 export const handler: LambdaUrlFunctionHandler = server;
-
-// export const handler: LambdaUrlFunctionHandler = async (event, context, callback) => {
-//   // const { req, res, responsePromise } = reqResMapper(event, callback);
-//   // convert from lambda event to node incoming message
-//   // const req = convertRequest(event);
-
-//   // response object
-//   // const res = makeResponse(req);
-
-//   if (!requestHandler) {
-//     const nextDir = path.join(__dirname, '.next');
-//     const requiredServerFilesPath = path.join(nextDir, 'required-server-files.json');
-//     const json = await fs.readFile(requiredServerFilesPath, 'utf-8');
-//     const requiredServerFiles = JSON.parse(json) as { version: number; config: NextConfig };
-
-//     requestHandler = new NextNodeServer({
-//       // Next.js compression should be disabled because of a bug
-//       // in the bundled `compression` package. See:
-//       // https://github.com/vercel/next.js/issues/11669
-//       conf: { ...requiredServerFiles.config, compress: false },
-//       customServer: false,
-//       dev: false,
-//       dir: __dirname,
-//       minimalMode: true,
-//     }).getRequestHandler();
-//   }
-
-//   const nextRequest = new NodeNextRequest(req);
-//   const nextResponse = new NodeNextResponse(res);
-
-//   await requestHandler(nextRequest, nextResponse);
-
-//   return convertResponse(nextResponse);
-// };

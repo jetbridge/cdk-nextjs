@@ -13,7 +13,7 @@ import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
-import { CompressionLevel, NextJsAssetsDeployment, NextjsAssetsDeploymentProps } from './NextjsAssetsDeployment';
+import { NextJsAssetsDeployment, NextjsAssetsDeploymentProps } from './NextjsAssetsDeployment';
 import {
   BaseSiteCdkDistributionProps,
   BaseSiteDomainProps,
@@ -24,7 +24,7 @@ import { NextjsBuild } from './NextjsBuild';
 import { NextJsLambda, NextjsLambdaProps } from './NextjsLambda';
 
 // contains server-side resolved environment vars in config bucket
-// const CONFIG_ENV_JSON_PATH = 'next-env.json';
+export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
 export interface NextjsDomainProps extends BaseSiteDomainProps {}
 export interface NextjsCdkDistributionProps extends BaseSiteCdkDistributionProps {}
@@ -101,13 +101,6 @@ export interface NextjsProps extends NextjsBaseProps {
   readonly waitForInvalidation?: boolean;
 
   readonly stageName?: string;
-
-  /**
-   * 0 - no compression, fatest
-   * 9 - maximum compression, slowest
-   * @default 1
-   */
-  readonly compressionLevel?: CompressionLevel;
 }
 
 /**
@@ -238,7 +231,6 @@ export class Nextjs extends Construct {
       ...props,
       ...props.cdk?.deployment,
       nextBuild: this.nextBuild,
-      compressionLevel: props.compressionLevel,
     });
     this.bucket = this.assetsDeployment.bucket;
 

@@ -1,3 +1,4 @@
+import * as os from 'os';
 import * as path from 'path';
 import { CustomResource, Duration, RemovalPolicy, Token } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
@@ -11,8 +12,6 @@ import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, makeTokenPlaceholder, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
-
-export type CompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
   /**
@@ -35,9 +34,7 @@ export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
    * Set to true to delete old assets (defaults to false).
    * Recommended to only set to true if you don't need the ability to roll back deployments.
    */
-  // readonly prune?: boolean;
-
-  readonly compressionLevel?: CompressionLevel;
+  readonly prune?: boolean;
 }
 
 // interface EnvReplaceValues {
@@ -61,19 +58,31 @@ export class NextJsAssetsDeployment extends Construct {
    */
   public deployments: BucketDeployment[];
 
+  public staticTempDir: string;
+
   protected props: NextjsAssetsDeploymentProps;
 
   constructor(scope: Construct, id: string, props: NextjsAssetsDeploymentProps) {
     super(scope, id);
 
     this.props = props;
-    this.bucket = this.createAssetBucket();
 
+    this.bucket = this.createAssetBucket();
+    this.staticTempDir = this.prepareArchiveDirectory();
     this.deployments = this.uploadS3Assets();
+
+    // do rewrites of unresolved CDK tokens in static files
+    const rewriter = this.createRewriteResource();
+    rewriter?.node.addDependency(this.deployments.map((deployment) => deployment.deployedBucket));
   }
 
-  private uploadS3Assets() {
-    const deployments: BucketDeployment[] = [];
+  // arrange directory structure for S3 asset deployments
+  // should contain _next/static and ./ for public files
+  protected prepareArchiveDirectory(): string {
+    const archiveDir = fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-static-assets-'));
+    console.debug(`Static assets: ${archiveDir}`);
+
+    // theoretically we could move the files instead of copy for speed...
 
     // path to public folder; root static assets
     const staticDir = this.props.nextBuild.nextStaticDir;
@@ -81,48 +90,50 @@ export class NextJsAssetsDeployment extends Construct {
       ? path.resolve(__dirname, '../assets/placeholder-site')
       : this.props.nextBuild.nextPublicDir;
 
-    // static dir
     if (!this.props.isPlaceholder && fs.existsSync(staticDir)) {
-      // upload static assets
-      deployments.push(
-        new BucketDeployment(this, 'StaticAssetsDeployment', {
-          destinationBucket: this.bucket,
-          destinationKeyPrefix: '_next/static',
-          sources: [Source.asset(staticDir)],
-          distribution: this.props.distribution, // invalidate Cloudfront distribution caches
-          prune: false,
-        })
-      );
-    }
-
-    // public dir
-    if (fs.existsSync(publicDir)) {
-      // zip up assets
-      const zipFilePath = createArchive({
-        directory: publicDir,
-        zipFileName: 'public.zip',
-        fileGlob: '*',
-        zipOutDir: this.props.nextBuild.tempBuildDir,
-        compressionLevel: this.props.compressionLevel,
+      // copy static files
+      const staticDestinationDir = path.join(archiveDir, '_next', 'static');
+      fs.mkdirpSync(staticDestinationDir);
+      fs.copySync(this.props.nextBuild.nextStaticDir, staticDestinationDir, {
+        recursive: true,
+        dereference: true,
+        preserveTimestamps: true,
       });
-
-      // upload public files to root of S3 bucket
-      deployments.push(
-        new BucketDeployment(this, 'PublicFilesDeployment', {
-          destinationBucket: this.bucket,
-          destinationKeyPrefix: this.props.isPlaceholder ? '/placeholder' : '/',
-          sources: [Source.asset(zipFilePath)],
-          distribution: this.props.distribution,
-          prune: false,
-        })
-      );
     }
 
-    // do rewrites of unresolved CDK tokens in static files
-    const rewriter = this.createRewriteResource();
-    rewriter?.node.addDependency(...deployments.map((d) => d.deployedBucket));
+    // copy public files to root of bucket
+    if (fs.existsSync(publicDir)) {
+      fs.copySync(publicDir, archiveDir, {
+        recursive: true,
+        dereference: true,
+        preserveTimestamps: true,
+      });
+    }
 
-    return deployments;
+    return archiveDir;
+  }
+
+  private uploadS3Assets() {
+    // copy files
+    const archiveDir = this.prepareArchiveDirectory();
+
+    // zip up bucket contents and upload to bucket
+    const archiveZipFilePath = createArchive({
+      directory: archiveDir,
+      zipFileName: 'assets.zip',
+      zipOutDir: this.props.nextBuild.tempBuildDir,
+      compressionLevel: this.props.compressionLevel,
+    });
+
+    const deployment = new BucketDeployment(this, 'NextStaticAssetsS3Deployment', {
+      destinationBucket: this.bucket,
+      destinationKeyPrefix: this.props.isPlaceholder ? '/placeholder' : '/',
+      sources: [Source.asset(archiveZipFilePath)],
+      distribution: this.props.distribution,
+      prune: this.props.prune,
+    });
+
+    return [deployment];
   }
 
   private createRewriteResource() {
@@ -137,71 +148,71 @@ export class NextJsAssetsDeployment extends Construct {
       timeout: Duration.minutes(5),
       handler: 'index.handler',
       code: lambda.Code.fromInline(`
-const AWS = require("aws-sdk");
+          const AWS = require("aws-sdk");
 
-async function tryGetObject(bucket, key, tries) {
-  const s3 = new AWS.S3();
-  try {
-    return await s3.getObject({ Bucket: bucket, Key: key }).promise();
-  } catch (err) {
-    console.error("Failed to retrieve object", key, err);
-    // if access denied - wait a few seconds and try again
-    if (err.code === "AccessDenied" && tries < 10) {
-      console.info("Retrying for object", key);
-      await new Promise((res) => setTimeout(res, 5000));
-      return tryGetObject(bucket, key, ++tries);
-    } else {
-      throw err;
-    }
-  }
-}
+          async function tryGetObject(bucket, key, tries) {
+            const s3 = new AWS.S3();
+            try {
+              return await s3.getObject({ Bucket: bucket, Key: key }).promise();
+            } catch (err) {
+              console.error("Failed to retrieve object", key, err);
+              // if access denied - wait a few seconds and try again
+              if (err.code === "AccessDenied" && tries < 10) {
+                console.info("Retrying for object", key);
+                await new Promise((res) => setTimeout(res, 5000));
+                return tryGetObject(bucket, key, ++tries);
+              } else {
+                throw err;
+              }
+            }
+          }
 
-async function doRewrites(event) {
-  // rewrite static files
-  const s3 = new AWS.S3();
-  const { s3keys, bucket, replacements } = event.ResourceProperties;
-  if (!s3keys || !bucket || !replacements) {
-    console.error("Missing required properties");
-    return;
-  }
-  const promises = s3keys.map(async (key) => {
-    const params = { Bucket: bucket, Key: key };
-    console.info("Rewriting", key, "in bucket", bucket);
-    const res = await tryGetObject(bucket, key, 0);
-    const bodyPre = res.Body.toString("utf-8");
-    let bodyPost = bodyPre;
+          async function doRewrites(event) {
+            // rewrite static files
+            const s3 = new AWS.S3();
+            const { s3keys, bucket, replacements } = event.ResourceProperties;
+            if (!s3keys || !bucket || !replacements) {
+              console.error("Missing required properties");
+              return;
+            }
+            const promises = s3keys.map(async (key) => {
+              const params = { Bucket: bucket, Key: key };
+              console.info("Rewriting", key, "in bucket", bucket);
+              const res = await tryGetObject(bucket, key, 0);
+              const bodyPre = res.Body.toString("utf-8");
+              let bodyPost = bodyPre;
 
-    // do replacements of tokens
-    Object.entries(replacements).forEach(([key, value]) => {
-      bodyPost = bodyPost.replace(key, value);
-    });
+              // do replacements of tokens
+              Object.entries(replacements).forEach(([key, value]) => {
+                bodyPost = bodyPost.replace(key, value);
+              });
 
-    // didn't change?
-    if (bodyPost === bodyPre) return;
+              // didn't change?
+              if (bodyPost === bodyPre) return;
 
-    // upload
-    console.info("Rewrote", key, "in bucket", bucket);
-    const putParams = {
-      ...params,
-      Body: bodyPost,
-      ContentType: res.ContentType,
-      ContentEncoding: res.ContentEncoding,
-      CacheControl: res.CacheControl,
-    };
-    await s3.putObject(putParams).promise();
-  });
-  await Promise.all(promises);
-}
+              // upload
+              console.info("Rewrote", key, "in bucket", bucket);
+              const putParams = {
+                ...params,
+                Body: bodyPost,
+                ContentType: res.ContentType,
+                ContentEncoding: res.ContentEncoding,
+                CacheControl: res.CacheControl,
+              };
+              await s3.putObject(putParams).promise();
+            });
+            await Promise.all(promises);
+          }
 
-// search and replace tokenized values of designated objects in s3
-exports.handler = async (event) => {
-  const requestType = event.RequestType;
-  if (requestType === "Create" || requestType === "Update") {
-    await doRewrites(event);
-  }
+          // search and replace tokenized values of designated objects in s3
+          exports.handler = async (event) => {
+            const requestType = event.RequestType;
+            if (requestType === "Create" || requestType === "Update") {
+              await doRewrites(event);
+            }
 
-  return event;
-}
+            return event;
+          }
       `),
       initialPolicy: [
         new iam.PolicyStatement({
@@ -227,31 +238,22 @@ exports.handler = async (event) => {
   }
 
   private _getStaticFilesForRewrite() {
+    const staticDir = this.staticTempDir;
     const s3keys: string[] = [];
+    if (!fs.existsSync(staticDir)) {
+      return [];
+    }
+    listDirectory(staticDir).forEach((file) => {
+      const relativePath = path.relative(staticDir, file);
 
-    // where to find static files
-    const searchDirs = [
-      { dir: this.props.nextBuild.nextStaticDir, prefix: '_next/static' },
-      { dir: this.props.nextBuild.nextPublicDir, prefix: '' },
-    ];
+      // skip bogus system files
+      if (relativePath.endsWith('.DS_Store')) return;
 
-    // traverse static dirs
-    searchDirs.forEach(({ dir, prefix }) => {
-      if (!fs.existsSync(dir)) {
+      // is this file a glob match?
+      if (!micromatch.isMatch(relativePath, replaceTokenGlobs, { dot: true })) {
         return;
       }
-      listDirectory(dir).forEach((file) => {
-        const relativePath = path.relative(dir, file);
-
-        // skip bogus system files
-        if (relativePath.endsWith('.DS_Store')) return;
-
-        // is this file a glob match?
-        if (!micromatch.isMatch(relativePath, replaceTokenGlobs, { dot: true })) {
-          return;
-        }
-        s3keys.push(`${prefix}/${relativePath}`);
-      });
+      s3keys.push(relativePath);
     });
     return s3keys;
   }

@@ -4,8 +4,8 @@ import { Token } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as spawn from 'cross-spawn';
 import * as fs from 'fs-extra';
-import { CompressionLevel, listDirectory } from './NextjsAssetsDeployment';
-import { NextjsBaseProps } from './NextjsBase';
+import { listDirectory } from './NextjsAssetsDeployment';
+import { CompressionLevel, NextjsBaseProps } from './NextjsBase';
 
 const NEXTJS_BUILD_DIR = '.next';
 const NEXTJS_STATIC_DIR = 'static';
@@ -115,53 +115,6 @@ export class NextjsBuild extends Construct {
       throw new Error('The app "build" script failed.');
     }
   }
-
-  // TODO: needed for edge function support probably
-  // private _getLambdaContentReplaceValues(): BaseSiteReplaceProps[] {
-  //   const replaceValues: BaseSiteReplaceProps[] = [];
-
-  //   // The Next.js app can have environment variables like
-  //   // `process.env.API_URL` in the JS code. `process.env.API_URL` might or
-  //   // might not get resolved on `next build` if it is used in
-  //   // server-side functions, ie. getServerSideProps().
-  //   // Because Lambda@Edge does not support environment variables, we will
-  //   // use the trick of replacing "{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}" with
-  //   // a JSON encoded string of all environment key-value pairs. This string
-  //   // will then get decoded at run time.
-  //   const lambdaEnvs: { [key: string]: string } = {};
-
-  //   Object.entries(this.props.environment || {}).forEach(([key, value]) => {
-  //     const token = `{{ ${key} }}`;
-  //     replaceValues.push(
-  //       ...this.replaceTokenGlobs.map((glob) => ({
-  //         files: glob,
-  //         search: token,
-  //         replace: value,
-  //       }))
-  //     );
-  //     lambdaEnvs[key] = value;
-  //   });
-
-  //   replaceValues.push(
-  //     {
-  //       files: '**/*.mjs',
-  //       search: '"{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
-  //       replace: JSON.stringify(lambdaEnvs),
-  //     },
-  //     {
-  //       files: '**/*.cjs',
-  //       search: '"{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
-  //       replace: JSON.stringify(lambdaEnvs),
-  //     },
-  //     {
-  //       files: '**/*.js',
-  //       search: '"{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
-  //       replace: JSON.stringify(lambdaEnvs),
-  //     }
-  //   );
-
-  //   return replaceValues;
-  // }
 
   // getNextBuildId() {
   //   return fs.readFileSync(path.join(this._getNextStandaloneBuildDir(), 'BUILD_ID'), 'utf-8');

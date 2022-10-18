@@ -8,7 +8,6 @@ import * as s3Assets from 'aws-cdk-lib/aws-s3-assets';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
-import * as esbuild from 'esbuild';
 import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { bundleFunction } from './BundleFunction';

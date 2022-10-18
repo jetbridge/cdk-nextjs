@@ -66,6 +66,7 @@
     "constructs": "^10.0.5"
   },
   "dependencies": {
+    "@types/aws-lambda": "^8.10.107",
     "@types/cross-spawn": "^6.0.2",
     "@types/fs-extra": "^9.0.13",
     "@types/micromatch": "^4.0.2",
@@ -78,6 +79,7 @@
     "serverless-http": "^3.0.3"
   },
   "bundledDependencies": [
+    "@types/aws-lambda",
     "@types/cross-spawn",
     "@types/fs-extra",
     "@types/micromatch",

@@ -19,6 +19,17 @@ new Nextjs(this, 'Web', {
 });
 ```
 
+If using a **monorepo**, you will [need](https://nextjs.org/docs/advanced-features/output-file-tracing#caveats) to point your `next.config.js` at the project root:
+
+```ts
+{
+  ...
+  experimental: {
+    outputFileTracingRoot: path.join(__dirname, '..'), // if your nextjs app lives one level deep
+  },
+}
+```
+
 ## Documentation
 
 Available on [Construct Hub](https://constructs.dev/packages/cdk-nextjs-standalone/).
@@ -74,7 +85,7 @@ All other required dependencies should be bundled by NextJs [output tracing](htt
 
 This module is largely made up of code from the above projects.
 
-## Questions
+## Open questions
 
 - Do we need to manually handle CloudFront invalidation? It looks like `BucketDeployment` takes care of that for us
 - How is the `public` dir supposed to be handled? (Right now using an OriginGroup to look in the S3 origin first and if 403/404 then try lambda origin)

@@ -60,7 +60,7 @@ export class NextjsBuild extends Construct {
 
     // save config
     this.tempBuildDir = props.tempBuildDir
-      ? path.resolve(path.join(props.tempBuildDir, `nextjs-cdk-build`))
+      ? path.resolve(props.tempBuildDir)
       : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
     this.props = props;
 
@@ -98,17 +98,19 @@ export class NextjsBuild extends Construct {
       throw new Error(`No "build" script found within package.json in "${nextjsPath}".`);
     }
 
-    // Run build
-    console.debug('Running "npm build" script');
+    // build environment vars
     const buildEnv = {
       ...process.env,
       [NEXTJS_BUILD_STANDALONE_ENV]: 'true',
       ...getBuildCmdEnvironment(this.props.environment),
       ...(this.props.nodeEnv ? { NODE_ENV: this.props.nodeEnv } : {}),
     };
+
+    // run build
+    console.debug('├ Running "npm build" in', nextjsPath);
     const buildResult = spawn.sync('npm', ['run', 'build'], {
       cwd: nextjsPath,
-      stdio: 'inherit',
+      stdio: this.props.quiet ? 'ignore' : 'inherit',
       env: buildEnv,
     });
     if (buildResult.status !== 0) {
@@ -173,6 +175,7 @@ export interface CreateArchiveArgs {
   readonly zipFileName: string;
   readonly zipOutDir: string;
   readonly fileGlob?: string;
+  readonly quiet?: boolean;
 }
 
 // zip up a directory and return path to zip file
@@ -182,17 +185,20 @@ export function createArchive({
   zipOutDir,
   fileGlob = '*',
   compressionLevel = 1,
+  quiet,
 }: CreateArchiveArgs): string {
   zipOutDir = path.resolve(zipOutDir);
-  // get output path
-  fs.removeSync(zipOutDir);
   fs.mkdirpSync(zipOutDir);
+  // get output path
   const zipFilePath = path.join(zipOutDir, zipFileName);
 
   // run script to create zipfile, preserving symlinks for node_modules (e.g. pnpm structure)
   const result = spawn.sync(
     'bash', // getting ENOENT when specifying 'node' here for some reason
-    ['-xc', [`cd '${directory}'`, `zip -ryq${compressionLevel} '${zipFilePath}' ${fileGlob}`].join('&&')],
+    [
+      quiet ? '-c' : '-xc',
+      [`cd '${directory}'`, `zip -ryq${compressionLevel} '${zipFilePath}' ${fileGlob}`].join('&&'),
+    ],
     { stdio: 'inherit' }
   );
   if (result.status !== 0) {

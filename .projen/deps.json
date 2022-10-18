@@ -113,6 +113,10 @@
       "type": "build"
     },
     {
+      "name": "@types/aws-lambda",
+      "type": "bundled"
+    },
+    {
       "name": "@types/cross-spawn",
       "type": "bundled"
     },

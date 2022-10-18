@@ -35,6 +35,7 @@ const config: Options = {
   dir: __dirname,
   minimalMode: true,
 };
+console.debug('Environment:', JSON.stringify(process.env, null, 2));
 
 // next request handler
 const nextHandler = new NextNodeServer(config).getRequestHandler();

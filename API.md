@@ -2373,7 +2373,6 @@ const nextjsAssetsDeploymentProps: NextjsAssetsDeploymentProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket \| aws-cdk-lib.aws_s3.BucketProps</code> | Properties for the S3 bucket containing the NextJS assets. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | Set to true to delete old assets (defaults to false). |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | Distribution to invalidate when assets change. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | Set to true to delete old assets (defaults to false). |
 
@@ -2481,20 +2480,6 @@ public readonly bucket: IBucket | BucketProps;
 Properties for the S3 bucket containing the NextJS assets.
 
 You can also supply your own bucket here.
-
----
-
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-
-Set to true to delete old assets (defaults to false).
-
-Recommended to only set to true if you don't need the ability to roll back deployments.
 
 ---
 
@@ -3449,7 +3434,6 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.cdk">cdk</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCdkProps">NextjsCdkProps</a></code> | Allows you to override default settings this construct uses internally to create the cloudfront distribution. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fatest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.customDomain">customDomain</a></code> | <code>string \| <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | The customDomain for this website. Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.stageName">stageName</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.waitForInvalidation">waitForInvalidation</a></code> | <code>boolean</code> | While deploying, waits for the CloudFront cache invalidation process to finish. |
@@ -3544,19 +3528,6 @@ public readonly cdk: NextjsCdkProps;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsCdkProps">NextjsCdkProps</a>
 
 Allows you to override default settings this construct uses internally to create the cloudfront distribution.
-
----
-
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fatest 9 - maximum compression, slowest.
 
 ---
 

@@ -2298,6 +2298,7 @@ const createArchiveArgs: CreateArchiveArgs = { ... }
 | <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.zipOutDir">zipOutDir</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.fileGlob">fileGlob</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -2348,6 +2349,16 @@ public readonly fileGlob: string;
 ```
 
 - *Type:* string
+
+---
+
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.CreateArchiveArgs.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
 
 ---
 
@@ -2466,7 +2477,7 @@ public readonly tempBuildDir: string;
 
 Directory to store temporary build files in.
 
-Defaults to os.mkdtempSync().
+Defaults to os.tmpdir().
 
 ---
 
@@ -2635,7 +2646,7 @@ public readonly tempBuildDir: string;
 
 Directory to store temporary build files in.
 
-Defaults to os.mkdtempSync().
+Defaults to os.tmpdir().
 
 ---
 
@@ -2750,7 +2761,7 @@ public readonly tempBuildDir: string;
 
 Directory to store temporary build files in.
 
-Defaults to os.mkdtempSync().
+Defaults to os.tmpdir().
 
 ---
 
@@ -3426,7 +3437,7 @@ public readonly tempBuildDir: string;
 
 Directory to store temporary build files in.
 
-Defaults to os.mkdtempSync().
+Defaults to os.tmpdir().
 
 ---
 
@@ -3580,7 +3591,7 @@ public readonly tempBuildDir: string;
 
 Directory to store temporary build files in.
 
-Defaults to os.mkdtempSync().
+Defaults to os.tmpdir().
 
 ---
 

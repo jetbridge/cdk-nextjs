@@ -1,5 +1,5 @@
 import type { CdkCustomResourceEvent, CdkCustomResourceHandler } from 'aws-lambda';
-import AWS from 'aws-sdk';
+import * as AWS from 'aws-sdk';
 
 async function tryGetObject(bucket, key, tries) {
   const s3 = new AWS.S3();

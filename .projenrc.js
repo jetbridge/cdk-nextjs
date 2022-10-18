@@ -32,7 +32,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'aws-lambda',
     'serverless-http',
   ] /* Runtime dependencies of this module. */,
-  // devDeps: ['constructs@10.0.57'] /* Build dependencies for this module. */,
+  devDeps: ['aws-sdk'] /* Build dependencies for this module. */,
 
   // do not generate sample test files
   sampleCode: false,

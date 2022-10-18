@@ -10,7 +10,7 @@ import * as cr from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
-import { bundleFunction, ESM_BUNDLE_DEFAULTS } from './BundleFunction';
+import { bundleFunction } from './BundleFunction';
 import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, makeTokenPlaceholder, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
 
@@ -138,7 +138,6 @@ export class NextJsAssetsDeployment extends Construct {
   }
 
   private createRewriteResource() {
-    return;
     const s3keys = this._getStaticFilesForRewrite();
     if (s3keys.length === 0) return;
 
@@ -146,7 +145,7 @@ export class NextJsAssetsDeployment extends Construct {
     // must happen after deployment when tokens can be resolved
     // compile function
     const inputPath = path.resolve(__dirname, '../assets/lambda/S3StaticEnvRewriter.ts');
-    const outputPath = path.join(this.props.nextBuild.tempBuildDir, 'deployment-scripts', 'S3StaticEnvRewriter.mjs');
+    const outputPath = path.join(this.props.nextBuild.tempBuildDir, 'deployment-scripts', 'S3StaticEnvRewriter.cjs');
     const handlerDir = bundleFunction({
       inputPath,
       outputPath,
@@ -156,7 +155,7 @@ export class NextJsAssetsDeployment extends Construct {
         external: ['aws-sdk'],
         target: 'node16',
         platform: 'node',
-        ...ESM_BUNDLE_DEFAULTS,
+        format: 'cjs',
       },
     });
 

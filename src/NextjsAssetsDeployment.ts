@@ -8,8 +8,8 @@ import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { NextjsBaseProps } from './NextjsBase';
-import { createArchive, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
-import { getS3ReplaceValues, NextjsS3EnvRewriter } from './NextjsS3EnvRewriter';
+import { createArchive, NextjsBuild } from './NextjsBuild';
+import { getS3ReplaceValues, NextjsS3EnvRewriter, replaceTokenGlobs } from './NextjsS3EnvRewriter';
 
 export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
   /**

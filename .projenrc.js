@@ -31,6 +31,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'esbuild',
     'aws-lambda',
     'serverless-http',
+    'jszip',
   ] /* Runtime dependencies of this module. */,
   devDeps: ['aws-sdk'] /* Build dependencies for this module. */,
 

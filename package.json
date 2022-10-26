@@ -40,7 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "aws-cdk-lib": "2.39.0",
-    "aws-sdk": "^2.1234.0",
+    "aws-sdk": "^2.1240.0",
     "constructs": "10.0.5",
     "eslint": "^8",
     "eslint-config-prettier": "^8.5.0",
@@ -76,6 +76,7 @@
     "esbuild": "^0.15.11",
     "fs-extra": "^10.1.0",
     "indent-string": "*",
+    "jszip": "^3.10.1",
     "micromatch": "^4.0.5",
     "serverless-http": "^3.0.3"
   },
@@ -89,6 +90,7 @@
     "esbuild",
     "fs-extra",
     "indent-string",
+    "jszip",
     "micromatch",
     "serverless-http"
   ],

@@ -16,6 +16,7 @@ import { listDirectory } from './NextjsAssetsDeployment';
 import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, makeTokenPlaceholder, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
 import { NextjsLayer } from './NextjsLayer';
+import { getS3ReplaceValues, NextjsS3EnvRewriter } from './NextjsS3EnvRewriter';
 
 export type EnvironmentVars = Record<string, string>;
 
@@ -114,6 +115,7 @@ export class NextJsLambda extends Function {
       : lambda.Code.fromBucket(s3asset.bucket, s3asset.s3ObjectKey);
 
     // build the lambda function
+    const environment = getEnvironment(props);
     super(scope, id, {
       memorySize: functionOptions?.memorySize || 1024,
       timeout: functionOptions?.timeout ?? Duration.seconds(10),
@@ -121,10 +123,18 @@ export class NextJsLambda extends Function {
       handler: path.join(props.nextjsPath, 'server.handler'),
       layers: [nextLayer],
       code,
-      environment: getEnvironment(props),
+      environment,
 
       ...functionOptions,
     });
+
+    const rewriter = new NextjsS3EnvRewriter(this, 'NextjsS3EnvRewriter', {
+      ...props,
+      s3Bucket: s3asset.bucket,
+      s3keys: [s3asset.s3ObjectKey],
+      replacements: getS3ReplaceValues(environment, false),
+    });
+    rewriter.node.addDependency(this);
 
     this.configBucket = this.createConfigBucket(props);
   }

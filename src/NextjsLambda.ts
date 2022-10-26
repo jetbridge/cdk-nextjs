@@ -14,9 +14,9 @@ import { bundleFunction } from './BundleFunction';
 import { CONFIG_ENV_JSON_PATH } from './Nextjs';
 import { listDirectory } from './NextjsAssetsDeployment';
 import { NextjsBaseProps } from './NextjsBase';
-import { createArchive, makeTokenPlaceholder, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
+import { createArchive, makeTokenPlaceholder, NextjsBuild } from './NextjsBuild';
 import { NextjsLayer } from './NextjsLayer';
-import { getS3ReplaceValues, NextjsS3EnvRewriter } from './NextjsS3EnvRewriter';
+import { getS3ReplaceValues, NextjsS3EnvRewriter, replaceTokenGlobs } from './NextjsS3EnvRewriter';
 
 export type EnvironmentVars = Record<string, string>;
 

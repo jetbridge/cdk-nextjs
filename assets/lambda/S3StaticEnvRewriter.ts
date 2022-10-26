@@ -1,6 +1,7 @@
 import type { CdkCustomResourceEvent, CdkCustomResourceHandler } from 'aws-lambda';
 import * as AWS from 'aws-sdk';
 import * as JSZip from 'jszip';
+import * as micromatch from 'micromatch';
 
 type Replacements = Record<string, string>;
 
@@ -9,6 +10,8 @@ interface RewriterParams {
   s3keys: string[];
   replacements: Replacements;
 }
+
+export const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*.json'];
 
 async function tryGetObject(bucket, key, tries) {
   const s3 = new AWS.S3();
@@ -101,6 +104,10 @@ export const doRewritesForZipFile = async (object: AWS.S3.GetObjectOutput, repla
     const file = archive.files[key];
     if (file.dir) return;
 
+    // file type we care about?
+    if (!micromatch.isMatch(file.name, replaceTokenGlobs, { dot: true })) return;
+
+    // unzip to buffer
     const bodyPre = await file.async('string');
     let bodyPost = bodyPre;
 

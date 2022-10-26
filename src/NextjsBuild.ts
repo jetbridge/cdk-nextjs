@@ -13,9 +13,6 @@ const NEXTJS_PUBLIC_DIR = 'public';
 const NEXTJS_BUILD_STANDALONE_DIR = 'standalone';
 const NEXTJS_BUILD_STANDALONE_ENV = 'NEXT_PRIVATE_STANDALONE';
 
-// files to rewrite CloudFormation tokens in environment variables
-export const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*.json'];
-
 export interface NextjsBuildProps extends NextjsBaseProps {}
 
 /**

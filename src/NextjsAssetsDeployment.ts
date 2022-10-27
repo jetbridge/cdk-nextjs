@@ -70,7 +70,10 @@ export class NextJsAssetsDeployment extends Construct {
         ...props,
         s3Bucket: this.bucket,
         s3keys: this._getStaticFilesForRewrite(),
-        replacements: getS3ReplaceValues(this.props.environment, true),
+        replacementConfig: {
+          env: getS3ReplaceValues(this.props.environment, true),
+        },
+        debug: true,
       });
       // wait for s3 assets to be uploaded first
       rewriter.node.addDependency(...this.deployments.map((deployment) => deployment.deployedBucket));

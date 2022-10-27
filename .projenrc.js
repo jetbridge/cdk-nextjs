@@ -33,7 +33,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'serverless-http',
     'jszip',
   ] /* Runtime dependencies of this module. */,
-  devDeps: ['aws-sdk'] /* Build dependencies for this module. */,
+  devDeps: ['aws-sdk', 'constructs@10.1.21'] /* Build dependencies for this module. */,
 
   // do not generate sample test files
   sampleCode: false,

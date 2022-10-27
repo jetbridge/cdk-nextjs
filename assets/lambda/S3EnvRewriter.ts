@@ -75,7 +75,6 @@ const doRewrites = async (event: CdkCustomResourceEvent) => {
     } else {
       newBody = await doRewritesForTextFile(res, scriptParams, replacementValues);
     }
-    console.log('newBody', newBody);
     if (!newBody) return;
 
     // upload

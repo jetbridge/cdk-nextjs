@@ -75,8 +75,8 @@ export class NextJsAssetsDeployment extends Construct {
         },
         debug: true,
       });
-      // wait for s3 assets to be uploaded first
-      rewriter.node.addDependency(...this.deployments.map((deployment) => deployment.deployedBucket));
+      // wait for s3 assets to be uploaded first before running
+      rewriter.node.addDependency(...this.deployments);
     }
   }
 
@@ -139,6 +139,7 @@ export class NextJsAssetsDeployment extends Construct {
 
     return [deployment];
   }
+
   private _getStaticFilesForRewrite() {
     const staticDir = this.staticTempDir;
     const s3keys: string[] = [];

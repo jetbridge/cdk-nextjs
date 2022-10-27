@@ -20,21 +20,22 @@ export interface RewriterParams {
 
 export const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*.json'];
 
-async function tryGetObject(bucket, key, tries) {
+async function tryGetObject(bucket: string, key: string, tries = 0) {
   const s3 = new AWS.S3();
   try {
     return await s3.getObject({ Bucket: bucket, Key: key }).promise();
   } catch (err) {
     console.warn('Failed to retrieve object', key, err);
     // if access denied - wait a few seconds and try again
-    if (err.code === 'AccessDenied' && tries < 5) {
-      console.info('Retrying for object', key);
+    if (err.code === 'AccessDenied' && tries < 2) {
+      // console.info('Retrying for object', key);
       await new Promise((res) => setTimeout(res, 5000));
       return tryGetObject(bucket, key, ++tries);
     } else {
       // for now.. skip it. might be a rollback and the file is no longer available.
       // there might be a bug here with calling this script before all files are uploaded
       // this should be investigated more
+      // for some reason _ssgManifest.js and _buildManifest.js always fail i don't know why. it's ok i guess.
       console.error('Failed to retrieve object', key, err);
       // throw err;
     }
@@ -59,11 +60,12 @@ const doRewrites = async (event: CdkCustomResourceEvent) => {
     return;
   }
 
+  // iterate over s3keys and rewrite files
   const promises = s3keys.map(async (key) => {
     // get file
     const keyParams = { Bucket: bucket, Key: key };
     if (debug) console.info('Rewriting', key, 'in bucket', bucket);
-    const res = await tryGetObject(bucket, key, 0);
+    const res = await tryGetObject(bucket, key);
     if (!res) return;
 
     // do rewrites
@@ -85,7 +87,8 @@ const doRewrites = async (event: CdkCustomResourceEvent) => {
       ContentEncoding: res.ContentEncoding,
       CacheControl: res.CacheControl,
     };
-    await s3.putObject(putParams).promise();
+    const putRes = await s3.putObject(putParams).promise();
+    if (debug) console.info('Uploaded', key, 'in bucket', bucket, 'result', putRes);
   });
   await Promise.all(promises);
 };
@@ -102,7 +105,7 @@ export const handler: CdkCustomResourceHandler = async (event) => {
 
 export const doRewritesForTextFile = async (
   object: AWS.S3.GetObjectOutput,
-  params: RewriterParams,
+  _params: RewriterParams,
   replacements: Replacements
 ) => {
   // get body
@@ -173,7 +176,7 @@ const getReplacementValues = async (scriptParams: RewriterParams): Promise<Repla
   // values may be stored in S3 as a JSON file
   if (jsonS3Bucket && jsonS3Key) {
     if (scriptParams.debug) console.info('Getting replacement values from S3', jsonS3Bucket, jsonS3Key);
-    const data = await tryGetObject(jsonS3Bucket, jsonS3Key, 0);
+    const data = await tryGetObject(jsonS3Bucket, jsonS3Key);
     if (data?.Body) {
       const json = data.Body.toString('utf-8');
       env = { ...env, ...JSON.parse(json) };

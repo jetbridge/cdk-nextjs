@@ -125,7 +125,7 @@ export class NextJsLambda extends Construct {
     this.configBucket = this.createConfigBucket(props);
 
     // replace env var placeholders in the lambda package with resolved values
-    const rewriter = new NextjsS3EnvRewriter(this, 'NextjsS3EnvRewriter', {
+    const rewriter = new NextjsS3EnvRewriter(this, 'LambdaCodeRewriter', {
       ...props,
       s3Bucket: s3asset.bucket,
       s3keys: [s3asset.s3ObjectKey],

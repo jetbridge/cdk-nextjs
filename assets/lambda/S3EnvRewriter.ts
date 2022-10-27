@@ -64,7 +64,7 @@ const doRewrites = async (event: CdkCustomResourceEvent) => {
   const promises = s3keys.map(async (key) => {
     // get file
     const keyParams = { Bucket: bucket, Key: key };
-    if (debug) console.info('Rewriting', key, 'in bucket', bucket);
+    if (debug) console.info(`Retrieving s3://${bucket}/${key}`);
     const res = await tryGetObject(bucket, key);
     if (!res) return;
 
@@ -72,14 +72,14 @@ const doRewrites = async (event: CdkCustomResourceEvent) => {
     let newBody;
     if (key.endsWith('.zip')) {
       newBody = await doRewritesForZipFile(res, scriptParams, replacementValues);
-      return;
     } else {
       newBody = await doRewritesForTextFile(res, scriptParams, replacementValues);
     }
+    console.log('newBody', newBody);
     if (!newBody) return;
 
     // upload
-    if (debug) console.info('Rewrote', key, 'in bucket', bucket);
+    if (debug) console.info('Rewrote', key);
     const putParams = {
       ...keyParams,
       Body: newBody,
@@ -88,7 +88,7 @@ const doRewrites = async (event: CdkCustomResourceEvent) => {
       CacheControl: res.CacheControl,
     };
     const putRes = await s3.putObject(putParams).promise();
-    if (debug) console.info('Uploaded', key, 'in bucket', bucket, 'result', putRes);
+    if (debug) console.info(`Uploaded s3://${bucket}/${key}`, putRes);
   });
   await Promise.all(promises);
 };
@@ -154,15 +154,20 @@ export const doRewritesForZipFile = async (
     // didn't change?
     if (bodyPost === bodyPre) return;
 
-    console.log('Rewrote', key, 'in zip file, filename=', file.name);
+    console.info('Rewrote', key, 'in zip file, filename=', file.name);
 
     // update
     archive.file(file.name, bodyPost);
+    return true; // rewrote
   });
-  await Promise.all(promises);
+  const rewriteResults = await Promise.all(promises);
+  // didn't rewrite anything? we're done
+  if (!rewriteResults.some(Boolean)) return;
 
   // save
   const zipOutput = await archive.generateAsync({ type: 'nodebuffer' });
+  console.info('Rewrote zip file', Math.round(zipOutput.byteLength / 1024), 'kb');
+
   return zipOutput;
 };
 
@@ -175,7 +180,7 @@ const getReplacementValues = async (scriptParams: RewriterParams): Promise<Repla
 
   // values may be stored in S3 as a JSON file
   if (jsonS3Bucket && jsonS3Key) {
-    if (scriptParams.debug) console.info('Getting replacement values from S3', jsonS3Bucket, jsonS3Key);
+    if (scriptParams.debug) console.info(`Getting replacement values from s3://${jsonS3Bucket}/${jsonS3Key}`);
     const data = await tryGetObject(jsonS3Bucket, jsonS3Key);
     if (data?.Body) {
       const json = data.Body.toString('utf-8');

@@ -45,10 +45,12 @@ const RUNTIME = lambda.Runtime.NODEJS_16_X;
 /**
  * Build a lambda function from a NextJS application to handle server-side rendering, API routes, and image optimization.
  */
-export class NextJsLambda extends Function {
+export class NextJsLambda extends Construct {
   configBucket: Bucket;
+  lambdaFunction: Function;
 
   constructor(scope: Construct, id: string, props: NextjsLambdaProps) {
+    super(scope, id);
     const { nextBuild, function: functionOptions } = props;
 
     // bundle server handler
@@ -106,7 +108,7 @@ export class NextJsLambda extends Function {
 
     // build the lambda function
     const environment = getEnvironment(props);
-    super(scope, id, {
+    const fn = new Function(scope, 'ServerHandler', {
       memorySize: functionOptions?.memorySize || 1024,
       timeout: functionOptions?.timeout ?? Duration.seconds(10),
       runtime: RUNTIME,
@@ -117,6 +119,7 @@ export class NextJsLambda extends Function {
 
       ...functionOptions,
     });
+    this.lambdaFunction = fn;
 
     // put JSON file with env var replacements in S3e
     this.configBucket = this.createConfigBucket(props);
@@ -136,7 +139,9 @@ export class NextJsLambda extends Function {
     });
     rewriter.node.addDependency(s3asset);
 
-    // this.node.addDependency(rewriter); // don't deploy lambda until rewriter is done
+    // in order to create this dependency, the lambda function needs to be a child of the current construct
+    // meaning we can't inherit from Function
+    fn.node.addDependency(rewriter); // don't deploy lambda until rewriter is done
   }
 
   // this can hold our resolved environment vars for the server

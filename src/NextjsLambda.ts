@@ -141,7 +141,7 @@ export class NextJsLambda extends Construct {
 
     // in order to create this dependency, the lambda function needs to be a child of the current construct
     // meaning we can't inherit from Function
-    fn.node.addDependency(rewriter); // don't deploy lambda until rewriter is done
+    fn.node.addDependency(rewriter); // don't deploy lambda until rewriter is done - we are sort of 'intercepting' the deployment package
   }
 
   // this can hold our resolved environment vars for the server

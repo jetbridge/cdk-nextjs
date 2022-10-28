@@ -164,7 +164,11 @@ export const doRewritesForZipFile = async (
   if (!rewriteResults.some(Boolean)) return;
 
   // save
-  const zipOutput = await archive.generateAsync({ type: 'nodebuffer' });
+  const zipOutput = await archive.generateAsync({
+    type: 'nodebuffer',
+    platform: 'UNIX',
+    compression: 'STORE', // skip compressing
+  });
   console.info('Rewrote zip file', Math.round(zipOutput.byteLength / 1024), 'kb');
 
   return zipOutput;

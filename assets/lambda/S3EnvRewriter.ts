@@ -5,20 +5,31 @@ import * as micromatch from 'micromatch';
 
 type Replacements = Record<string, string>;
 
-export interface RewriteReplacementsConfig {
+interface RewriteReplacementsConfig {
   env?: Record<string, string>; // replace keys with values in files
   jsonS3Bucket?: string;
   jsonS3Key?: string;
 }
 
-export interface RewriterParams {
+interface RewriterParams {
   bucket: string;
   s3keys: string[];
   replacementConfig: RewriteReplacementsConfig;
   debug?: boolean;
 }
 
-export const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*.json'];
+const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*.json'];
+
+// script entry point
+// search and replace tokenized values of designated objects in s3
+export const handler: CdkCustomResourceHandler = async (event) => {
+  const requestType = event.RequestType;
+  if (requestType === 'Create' || requestType === 'Update') {
+    await doRewrites(event);
+  }
+
+  return event;
+};
 
 async function tryGetObject(bucket: string, key: string, tries = 0) {
   const s3 = new AWS.S3();
@@ -92,17 +103,7 @@ const doRewrites = async (event: CdkCustomResourceEvent) => {
   await Promise.all(promises);
 };
 
-// search and replace tokenized values of designated objects in s3
-export const handler: CdkCustomResourceHandler = async (event) => {
-  const requestType = event.RequestType;
-  if (requestType === 'Create' || requestType === 'Update') {
-    await doRewrites(event);
-  }
-
-  return event;
-};
-
-export const doRewritesForTextFile = async (
+const doRewritesForTextFile = async (
   object: AWS.S3.GetObjectOutput,
   _params: RewriterParams,
   replacements: Replacements
@@ -123,7 +124,7 @@ export const doRewritesForTextFile = async (
   return bodyPost;
 };
 
-export const doRewritesForZipFile = async (
+const doRewritesForZipFile = async (
   object: AWS.S3.GetObjectOutput,
   params: RewriterParams,
   replacements: Replacements

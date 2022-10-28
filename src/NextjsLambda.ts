@@ -60,9 +60,6 @@ export class NextJsLambda extends Construct {
       fs.unlinkSync(defaultServerPath);
     }
 
-    // rewrite env var placeholders
-    // if (props.environment) rewriteEnvVars(props.environment, nextBuild.nextStandaloneDir);
-
     // build our server handler in build.nextStandaloneDir
     const serverHandler = path.resolve(__dirname, '../assets/lambda/NextJsHandler.ts');
     // server should live in the same dir as the nextjs app to access deps properly
@@ -185,39 +182,3 @@ export class NextJsLambda extends Construct {
     return bucket;
   }
 }
-
-// // replace env vars in the built NextJS server source
-// function rewriteEnvVars(environment: EnvironmentVars, nextStandaloneDir: string) {
-//   // undo inlining of NEXT_PUBLIC_ env vars for server code
-//   // https://github.com/vercel/next.js/issues/40827
-//   const replaceValues = getNextPublicEnvReplaceValues(environment);
-
-//   // traverse server dirs
-//   const searchDir = nextStandaloneDir;
-//   if (!fs.existsSync(searchDir)) return;
-
-//   listDirectory(searchDir).forEach((file) => {
-//     const relativePath = path.relative(searchDir, file);
-//     if (!micromatch.isMatch(relativePath, replaceTokenGlobs, { dot: true })) {
-//       return;
-//     }
-
-//     // matches file search pattern
-//     // do replacements
-//     let fileContent = fs.readFileSync(file, 'utf8');
-//     Object.entries(replaceValues).forEach(([key, value]) => {
-//       // console.log(`Replacing ${key} with ${value} in ${file}`);
-//       fileContent = fileContent.replace(key, value);
-//     });
-//     fs.writeFileSync(file, fileContent);
-//   });
-// }
-
-// // replace inlined public env vars with calls to process.env
-// export function getNextPublicEnvReplaceValues(environment: EnvironmentVars): EnvironmentVars {
-//   return Object.fromEntries(
-//     Object.entries(environment || {})
-//       .filter(([key]) => key.startsWith('NEXT_PUBLIC_'))
-//       .map(([key]) => [makeTokenPlaceholder(key), `process.env.${key}`]) // will need to replace with actual value for edge functions
-//   );
-// }

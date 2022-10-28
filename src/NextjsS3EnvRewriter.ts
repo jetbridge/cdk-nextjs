@@ -124,23 +124,3 @@ export function getS3ReplaceValues(environment: Record<string, string>, publicOn
 
   return replacements;
 }
-
-// // nextjs inlines public env vars at build time
-// // we should replace them with placeholders that are replaced later at deploy time
-// // more details: https://github.com/vercel/next.js/pull/41396
-// export function getBuildTimeEnvValues(
-//   environment: Record<string, string>,
-//   publicOnly: boolean
-// ): Record<string, string> {
-//   const replacements: Record<string, string> = {};
-
-//   Object.entries(environment || {})
-//     .filter(([, value]) => Token.isUnresolved(value))
-//     .filter(([key]) => !publicOnly || key.startsWith('NEXT_PUBLIC_')) // don't replace server-only env vars
-//     .forEach(([key]) => {
-//       const token = makeTokenPlaceholder(key);
-//       replacements[key] = token;
-//     });
-
-//   return replacements;
-// }

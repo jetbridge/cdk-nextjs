@@ -55,6 +55,7 @@
     "jsii-docgen": "^7.0.117",
     "jsii-pacmak": "^1.69.0",
     "json-schema": "^0.4.0",
+    "next": "12.3.1",
     "npm-check-updates": "^16",
     "prettier": "^2.7.1",
     "projen": "^0.63.24",

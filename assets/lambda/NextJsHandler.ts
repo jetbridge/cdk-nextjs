@@ -35,7 +35,6 @@ const config: Options = {
   dir: __dirname,
   minimalMode: true,
 };
-// console.debug('Environment:', JSON.stringify(process.env, null, 2));
 
 // next request handler
 const nextHandler = new NextNodeServer(config).getRequestHandler();
@@ -51,8 +50,6 @@ const server = slsHttp(
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify(getErrMessage(e), null, 3));
     });
-    // console.log('req headers: ', req);
-    // console.log('res headers: ', res.getHeaders());
   },
   {
     binary: false,

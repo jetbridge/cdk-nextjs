@@ -153,6 +153,10 @@
       "type": "bundled"
     },
     {
+      "name": "jszip",
+      "type": "bundled"
+    },
+    {
       "name": "micromatch",
       "type": "bundled"
     },

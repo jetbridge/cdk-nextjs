@@ -2,6 +2,8 @@ import { ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { DistributionProps, ErrorResponse } from 'aws-cdk-lib/aws-cloudfront';
 import { IHostedZone } from 'aws-cdk-lib/aws-route53';
 
+export type CompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+
 /**
  * Common props shared across NextJS-related CDK constructs.
  */
@@ -25,7 +27,7 @@ export interface NextjsBaseProps {
 
   /**
    * Directory to store temporary build files in.
-   * Defaults to os.mkdtempSync().
+   * Defaults to os.tmpdir().
    */
   readonly tempBuildDir?: string; // move to NextjsBuildProps?
 
@@ -33,6 +35,18 @@ export interface NextjsBaseProps {
    * Optional value for NODE_ENV during build and runtime.
    */
   readonly nodeEnv?: string;
+
+  /**
+   * 0 - no compression, fatest
+   * 9 - maximum compression, slowest
+   * @default 1
+   */
+  readonly compressionLevel?: CompressionLevel;
+
+  /**
+   * Less build output.
+   */
+  readonly quiet?: boolean;
 }
 
 ///// stuff below taken from https://github.com/serverless-stack/sst/blob/8d377e941467ced81d8cc31ee67d5a06550f04d4/packages/resources/src/BaseSite.ts

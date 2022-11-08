@@ -1,10 +1,12 @@
 import * as os from 'os';
 import * as path from 'path';
-import { Duration, Fn } from 'aws-cdk-lib';
+import { dirname } from 'path';
+import { App, Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53Patterns from 'aws-cdk-lib/aws-route53-patterns';
@@ -12,6 +14,7 @@ import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
+import { bundleFunction } from './BundleFunction';
 import { NextJsAssetsDeployment, NextjsAssetsDeploymentProps } from './NextjsAssetsDeployment';
 import {
   BaseSiteCdkDistributionProps,
@@ -23,7 +26,7 @@ import { NextjsBuild } from './NextjsBuild';
 import { NextJsLambda, NextjsLambdaProps } from './NextjsLambda';
 
 // contains server-side resolved environment vars in config bucket
-// const CONFIG_ENV_JSON_PATH = 'next-env.json';
+export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
 export interface NextjsDomainProps extends BaseSiteDomainProps {}
 export interface NextjsCdkDistributionProps extends BaseSiteCdkDistributionProps {}
@@ -98,6 +101,8 @@ export interface NextjsProps extends NextjsBaseProps {
    * While deploying, waits for the CloudFront cache invalidation process to finish. This ensures that the new content will be served once the deploy command finishes. However, this process can sometimes take more than 5 mins. For non-prod environments it might make sense to pass in `false`. That'll skip waiting for the cache to invalidate and speed up the deploy process.
    */
   readonly waitForInvalidation?: boolean;
+
+  readonly stageName?: string;
 }
 
 /**
@@ -166,7 +171,7 @@ export class Nextjs extends Construct {
   public static lambdaOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
     cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(),
     queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-    headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
+    headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(), // can't include host
     comment: 'Nextjs Lambda Origin Request Policy',
   };
 
@@ -208,23 +213,32 @@ export class Nextjs extends Construct {
   public originAccessIdentity: cloudfront.IOriginAccessIdentity;
   public tempBuildDir: string;
   public configBucket?: s3.Bucket;
+  public lambdaFunctionUrl!: lambda.FunctionUrl;
 
   constructor(scope: Construct, id: string, props: NextjsProps) {
     super(scope, id);
 
+    console.debug('┌ Building Next.js app ▼ ...');
+
     // get dir to store temp build files in
     this.tempBuildDir = props.tempBuildDir
-      ? path.resolve(path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr}`))
+      ? path.resolve(
+          path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
+        )
       : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
 
-    this.props = props;
-    // this.configBucket = this.createConfigBucket();
+    // save props
+    this.props = { ...props, tempBuildDir: this.tempBuildDir };
 
     // build nextjs app
-    this.nextBuild = new NextjsBuild(this, id, props);
-    this.serverFunction = new NextJsLambda(this, 'Fn', { ...props, nextBuild: this.nextBuild, ...props.cdk?.lambda });
+    this.nextBuild = new NextjsBuild(this, id, this.props);
+    this.serverFunction = new NextJsLambda(this, 'Fn', {
+      ...this.props,
+      nextBuild: this.nextBuild,
+      ...props.cdk?.lambda,
+    });
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
-      ...props,
+      ...this.props,
       ...props.cdk?.deployment,
       nextBuild: this.nextBuild,
     });
@@ -263,6 +277,8 @@ export class Nextjs extends Construct {
 
     // Connect Custom Domain to CloudFront Distribution
     this.createRoute53Records();
+
+    console.debug('└ Finished preparing NextJS app for deployment');
   }
 
   /////////////////////
@@ -360,16 +376,39 @@ export class Nextjs extends Construct {
       });
     }
 
+    // cache policies
     const staticCachePolicy = cdk?.cachePolicies?.staticCachePolicy ?? this.createCloudFrontStaticCachePolicy();
     const imageCachePolicy = cdk?.cachePolicies?.imageCachePolicy ?? this.createCloudFrontImageCachePolicy();
 
+    // origin request policies
     const lambdaOriginRequestPolicy = cdk?.lambdaOriginRequestPolicy ?? this.createLambdaOriginRequestPolicy();
 
     // main server function origin (lambda URL HTTP origin)
     const fnUrl = this.serverFunction.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,
     });
-    const serverFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url));
+    this.lambdaFunctionUrl = fnUrl;
+    const serverFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), {
+      customHeaders: {
+        // provide config to edge lambda function
+        'x-origin-url': fnUrl.url,
+      },
+    });
+
+    // lambda behavior edge function
+    const lambdaOriginRequestEdgeFn = this.buildLambdaOriginRequestEdgeFunction();
+    const lambdaOriginRequestEdgeFnVersion = lambda.Version.fromVersionArn(
+      this,
+      'Version',
+      lambdaOriginRequestEdgeFn.currentVersion.functionArn
+    );
+    const lambdaOriginEdgeFns: cloudfront.EdgeLambda[] = [
+      {
+        eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
+        functionVersion: lambdaOriginRequestEdgeFnVersion,
+        includeBody: false,
+      },
+    ];
 
     // default handler for requests that don't match any other path:
     //   - try S3 first
@@ -381,7 +420,6 @@ export class Nextjs extends Construct {
       fallbackStatusCodes: [403, 404],
     });
 
-    // TODO: how to apply to fallbackOrigin?
     const lambdaCachePolicy = cdk?.cachePolicies?.lambdaCachePolicy ?? this.createCloudFrontLambdaCachePolicy();
 
     // requests for static objects
@@ -394,7 +432,7 @@ export class Nextjs extends Construct {
       cachePolicy: staticCachePolicy,
     };
 
-    // requests going to lambda
+    // requests going to lambda (api, etc)
     const lambdaBehavior: cloudfront.BehaviorOptions = {
       viewerProtocolPolicy,
       origin: serverFunctionOrigin,
@@ -403,9 +441,26 @@ export class Nextjs extends Construct {
       // cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
       originRequestPolicy: lambdaOriginRequestPolicy,
       compress: true,
-      cachePolicy: lambdaCachePolicy,
-      // cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+      // cachePolicy: lambdaCachePolicy,
+      cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+      edgeLambdas: lambdaOriginEdgeFns,
     };
+
+    // requests to fallback origin group (default behavior)
+    // used for S3 and lambda. would prefer to forward all headers to lambda but need to strip out host
+    // TODO: try to do this with headers whitelist or edge lambda
+    const fallbackOriginRequestPolicy = new cloudfront.OriginRequestPolicy(this, 'FallbackOriginRequestPolicy', {
+      cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(), // pretty much disables caching - maybe can be changed
+      queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
+      // we cannot forward the host header to a lambda URL
+      headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList(
+        'Accept',
+        'Referer',
+        'User-Agent',
+        'Content-Type'
+      ),
+      comment: 'Nextjs Fallback Origin Request Policy',
+    });
 
     // if we don't have a static file called index.html then we should
     // redirect to the lambda handler
@@ -430,7 +485,9 @@ export class Nextjs extends Construct {
 
         // what goes here? static or lambda?
         cachePolicy: lambdaCachePolicy,
-        originRequestPolicy: lambdaOriginRequestPolicy,
+        originRequestPolicy: fallbackOriginRequestPolicy,
+
+        // edgeLambdas: lambdaOriginEdgeFns,
       },
 
       additionalBehaviors: {
@@ -505,6 +562,50 @@ export class Nextjs extends Construct {
       domainNames.push(customDomain.domainName);
     }
     return domainNames;
+  }
+
+  /**
+   * Create an edge function to handle requests to the lambda server handler origin.
+   * It overrides the host header in the request to be the lambda URL's host.
+   * It's needed because we forward all headers to the origin, but the origin is itself an
+   *  HTTP server so it needs the host header to be the address of the lambda and not
+   *  the distribution.
+   *
+   */
+  private buildLambdaOriginRequestEdgeFunction() {
+    const app = App.of(this) as App;
+
+    // bundle the edge function
+    const inputPath = path.join(__dirname, '..', 'assets', 'lambda@edge', 'LambdaOriginRequest');
+    const outputPath = path.join(this.tempBuildDir, 'lambda@edge', 'LambdaOriginRequest.js');
+    bundleFunction({
+      inputPath,
+      outputPath,
+      bundleOptions: {
+        bundle: true,
+        external: ['aws-sdk', 'url'],
+        minify: true,
+        target: 'node16',
+        platform: 'node',
+      },
+    });
+
+    const fn = new cloudfront.experimental.EdgeFunction(this, 'DefaultOriginRequestEdgeFn', {
+      runtime: lambda.Runtime.NODEJS_16_X,
+      // role,
+      handler: 'LambdaOriginRequest.handler',
+      code: lambda.Code.fromAsset(dirname(outputPath)),
+      currentVersionOptions: {
+        removalPolicy: RemovalPolicy.DESTROY, // destroy old versions
+        retryAttempts: 1, // async retry attempts
+      },
+      stackId:
+        `Nextjs-${this.props.stageName || app.stageName || 'default'}-EdgeFunctions-` + this.node.addr.substring(0, 5),
+    });
+    fn.currentVersion.grantInvoke(new ServicePrincipal('edgelambda.amazonaws.com'));
+    fn.currentVersion.grantInvoke(new ServicePrincipal('lambda.amazonaws.com'));
+
+    return fn;
   }
 
   /* handled by BucketDeployment supposedly?

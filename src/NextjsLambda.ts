@@ -1,19 +1,41 @@
 import * as os from 'os';
 import * as path from 'path';
-import { Duration } from 'aws-cdk-lib';
+import { Duration, RemovalPolicy, Token } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
+import { Bucket } from 'aws-cdk-lib/aws-s3';
 import * as s3Assets from 'aws-cdk-lib/aws-s3-assets';
+import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
-import * as esbuild from 'esbuild';
 import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
+import { bundleFunction } from './BundleFunction';
+import { CONFIG_ENV_JSON_PATH } from './Nextjs';
 import { listDirectory } from './NextjsAssetsDeployment';
 import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, makeTokenPlaceholder, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
 import { NextjsLayer } from './NextjsLayer';
 
 export type EnvironmentVars = Record<string, string>;
+
+function getEnvironment(props: NextjsLambdaProps): { [name: string]: string } {
+  const environmentVariables: { [name: string]: string } = {
+    ...props.environment,
+    ...props.function?.environment,
+
+    ...(props.nodeEnv ? { NODE_ENV: props.nodeEnv } : {}),
+    // TODO: shove env config into S3
+    // ...(this.configBucket
+    //   ? {
+    //       NEXTJS_SITE_CONFIG_BUCKET_NAME: this.configBucket.bucketName,
+    //       NEXTJS_SITE_CONFIG_ENV_JSON_PATH: CONFIG_ENV_JSON_PATH,
+    //     }
+    //   : {}),
+  };
+
+  return environmentVariables;
+}
 
 export interface NextjsLambdaProps extends NextjsBaseProps {
   /**
@@ -33,7 +55,7 @@ const RUNTIME = lambda.Runtime.NODEJS_16_X;
  * Build a lambda function from a NextJS application to handle server-side rendering, API routes, and image optimization.
  */
 export class NextJsLambda extends Function {
-  // protected awsCliLayer: AwsCliLayer;
+  configBucket: Bucket;
 
   constructor(scope: Construct, id: string, props: NextjsLambdaProps) {
     const { nextBuild, function: functionOptions } = props;
@@ -52,35 +74,32 @@ export class NextJsLambda extends Function {
     const serverHandler = path.resolve(__dirname, '../assets/lambda/NextJsHandler.ts');
     // server should live in the same dir as the nextjs app to access deps properly
     const serverPath = path.join(props.nextjsPath, 'server.cjs');
-    const esbuildResult = esbuild.buildSync({
-      entryPoints: [serverHandler],
-      bundle: true,
-      minify: false,
-      sourcemap: true,
-      target: 'node16',
-      platform: 'node',
-      external: ['sharp', 'next'],
-      format: 'cjs', // hope one day we can use esm
-      outfile: path.join(nextBuild.nextStandaloneDir, serverPath),
+    bundleFunction({
+      inputPath: serverHandler,
+      outputPath: path.join(nextBuild.nextStandaloneDir, serverPath),
+      bundleOptions: {
+        bundle: true,
+        minify: false,
+        sourcemap: true,
+        target: 'node16',
+        platform: 'node',
+        external: ['sharp', 'next'],
+        format: 'cjs', // hope one day we can use esm
+      },
     });
-    if (esbuildResult.errors.length > 0) {
-      esbuildResult.errors.forEach((error) => console.error(error));
-      throw new Error('There was a problem bundling the server.');
-    }
 
     // zip up the standalone directory
     const zipOutDir = path.resolve(
-      path.join(
-        props.tempBuildDir
-          ? path.resolve(path.join(props.tempBuildDir, `standalone`))
-          : fs.mkdtempSync(path.join(os.tmpdir(), 'standalone-'))
-      )
+      props.tempBuildDir
+        ? path.resolve(path.join(props.tempBuildDir, `standalone`))
+        : fs.mkdtempSync(path.join(os.tmpdir(), 'standalone-'))
     );
     const zipFilePath = createArchive({
       directory: nextBuild.nextStandaloneDir,
       zipFileName: 'standalone.zip',
       zipOutDir,
       fileGlob: '*',
+      quiet: props.quiet,
     });
 
     // build native deps layer
@@ -102,35 +121,48 @@ export class NextJsLambda extends Function {
       handler: path.join(props.nextjsPath, 'server.handler'),
       layers: [nextLayer],
       code,
-      environment: {
-        ...props.environment,
-        ...functionOptions?.environment,
-
-        ...(props.nodeEnv ? { NODE_ENV: props.nodeEnv } : {}),
-        // TODO: shove env config into S3
-        // ...(this.configBucket
-        //   ? {
-        //       NEXTJS_SITE_CONFIG_BUCKET_NAME: this.configBucket.bucketName,
-        //       NEXTJS_SITE_CONFIG_ENV_JSON_PATH: CONFIG_ENV_JSON_PATH,
-        //     }
-        //   : {}),
-      },
+      environment: getEnvironment(props),
 
       ...functionOptions,
     });
+
+    this.configBucket = this.createConfigBucket(props);
   }
 
   // this can hold our resolved environment vars for the server
-  // protected createConfigBucket() {
-  // won't work until this is fixed: https://github.com/aws/aws-cdk/issues/19257
-  // const bucket = new s3.Bucket(this, "ConfigBucket", { removalPolicy: RemovalPolicy.DESTROY, });
-  // upload environment config to s3
-  // new BucketDeployment(this, 'EnvJsonDeployment', {
-  //   sources: [Source.jsonData(CONFIG_ENV_JSON_PATH, this.props.environment)],
-  //   destinationBucket: bucket,
-  // })
-  // return bucket
-  // }
+  protected createConfigBucket(props: NextjsLambdaProps) {
+    // won't work until this is fixed: https://github.com/aws/aws-cdk/issues/19257
+    const bucket = new Bucket(this, 'ConfigBucket', { removalPolicy: RemovalPolicy.DESTROY, autoDeleteObjects: true });
+
+    // convert environment vars to SSM parameters
+    // (workaround for the above issue)
+    const env = getEnvironment(props);
+    Object.entries(env).forEach(([key, value]) => {
+      // is it a token?
+      if (typeof value === 'undefined') return;
+      if (!value || !Token.isUnresolved(value)) {
+        env[key] = value;
+        return;
+      }
+
+      // create param
+      const param = new StringParameter(this, `Config('${key}')`, {
+        stringValue: value,
+      });
+
+      // add to env JSON
+      env[key] = param.stringValue;
+
+      return param;
+    });
+
+    // upload environment config to s3
+    new BucketDeployment(this, 'EnvJsonDeployment', {
+      sources: [Source.jsonData(CONFIG_ENV_JSON_PATH, env)],
+      destinationBucket: bucket,
+    });
+    return bucket;
+  }
 }
 
 // replace env vars in the built NextJS server source
@@ -168,54 +200,3 @@ export function getNextPublicEnvReplaceValues(environment: EnvironmentVars): Env
       .map(([key]) => [makeTokenPlaceholder(key), `process.env.${key}`]) // will need to replace with actual value for edge functions
   );
 }
-
-/////////////////////
-// FOR EDGE FUNCTIONS
-// TO BE CLEANED UP LATER
-/////////////////////
-// TODO: needed for edge function support probably
-// export function _getLambdaContentReplaceValues(): BaseSiteReplaceProps[] {
-//   const replaceValues: BaseSiteReplaceProps[] = [];
-
-//   // The Next.js app can have environment variables like
-//   // `process.env.API_URL` in the JS code. `process.env.API_URL` might or
-//   // might not get resolved on `next build` if it is used in
-//   // server-side functions, ie. getServerSideProps().
-//   // Because Lambda@Edge does not support environment variables, we will
-//   // use the trick of replacing "{{! _SST_NEXTJS_SITE_ENVIRONMENT_ !}}" with
-//   // a JSON encoded string of all environment key-value pairs. This string
-//   // will then get decoded at run time.
-//   const lambdaEnvs: { [key: string]: string } = {};
-
-//   Object.entries(this.props.environment || {}).forEach(([key, value]) => {
-//     const token = `{{ ${key} }}`;
-//     replaceValues.push(
-//       ...this.replaceTokenGlobs.map((glob) => ({
-//         files: glob,
-//         search: token,
-//         replace: value,
-//       }))
-//     );
-//     lambdaEnvs[key] = value;
-//   });
-
-//   replaceValues.push(
-//     {
-//       files: '**/*.mjs',
-//       search: '"{{! _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
-//       replace: JSON.stringify(lambdaEnvs),
-//     },
-//     {
-//       files: '**/*.cjs',
-//       search: '"{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
-//       replace: JSON.stringify(lambdaEnvs),
-//     },
-//     {
-//       files: '**/*.js',
-//       search: '"{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
-//       replace: JSON.stringify(lambdaEnvs),
-//     }
-//   );
-
-//   return replaceValues;
-// }

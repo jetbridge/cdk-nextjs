@@ -384,7 +384,7 @@ export class Nextjs extends Construct {
     const lambdaOriginRequestPolicy = cdk?.lambdaOriginRequestPolicy ?? this.createLambdaOriginRequestPolicy();
 
     // main server function origin (lambda URL HTTP origin)
-    const fnUrl = this.serverFunction.addFunctionUrl({
+    const fnUrl = this.serverFunction.lambdaFunction.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,
     });
     this.lambdaFunctionUrl = fnUrl;

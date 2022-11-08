@@ -1,18 +1,15 @@
 import * as os from 'os';
 import * as path from 'path';
-import { CustomResource, Duration, RemovalPolicy, Token } from 'aws-cdk-lib';
+import { RemovalPolicy } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
-import * as iam from 'aws-cdk-lib/aws-iam';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
-import * as cr from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
-import { bundleFunction } from './BundleFunction';
 import { NextjsBaseProps } from './NextjsBase';
-import { createArchive, makeTokenPlaceholder, NextjsBuild, replaceTokenGlobs } from './NextjsBuild';
+import { createArchive, NextjsBuild } from './NextjsBuild';
+import { getS3ReplaceValues, NextjsS3EnvRewriter, replaceTokenGlobs } from './NextjsS3EnvRewriter';
 
 export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
   /**
@@ -37,11 +34,6 @@ export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
    */
   readonly prune?: boolean;
 }
-
-// interface EnvReplaceValues {
-//   files: string[]; // file globs
-//   replacements: Record<string, string>;
-// }
 
 /**
  * Uploads NextJS-built static and public files to S3.
@@ -73,8 +65,19 @@ export class NextJsAssetsDeployment extends Construct {
     this.deployments = this.uploadS3Assets(this.staticTempDir);
 
     // do rewrites of unresolved CDK tokens in static files
-    const rewriter = this.createRewriteResource();
-    rewriter?.node.addDependency(...this.deployments.map((deployment) => deployment.deployedBucket));
+    if (this.props.environment) {
+      const rewriter = new NextjsS3EnvRewriter(this, 'NextjsS3EnvRewriter', {
+        ...props,
+        s3Bucket: this.bucket,
+        s3keys: this._getStaticFilesForRewrite(),
+        replacementConfig: {
+          env: getS3ReplaceValues(this.props.environment, true),
+        },
+        debug: true,
+      });
+      // wait for s3 assets to be uploaded first before running
+      rewriter.node.addDependency(...this.deployments);
+    }
   }
 
   // arrange directory structure for S3 asset deployments
@@ -137,57 +140,6 @@ export class NextJsAssetsDeployment extends Construct {
     return [deployment];
   }
 
-  private createRewriteResource() {
-    const s3keys = this._getStaticFilesForRewrite();
-    if (s3keys.length === 0) return;
-
-    // create a custom resource to find and replace tokenized strings in static files
-    // must happen after deployment when tokens can be resolved
-    // compile function
-    const inputPath = path.resolve(__dirname, '../assets/lambda/S3StaticEnvRewriter.ts');
-    const outputPath = path.join(this.props.nextBuild.tempBuildDir, 'deployment-scripts', 'S3StaticEnvRewriter.cjs');
-    const handlerDir = bundleFunction({
-      inputPath,
-      outputPath,
-      bundleOptions: {
-        bundle: true,
-        sourcemap: true,
-        external: ['aws-sdk'],
-        target: 'node16',
-        platform: 'node',
-        format: 'cjs',
-      },
-    });
-
-    const rewriteFn = new lambda.Function(this, 'RewriteOnEventHandler', {
-      runtime: lambda.Runtime.NODEJS_16_X,
-      memorySize: 1024,
-      timeout: Duration.minutes(5),
-      handler: 'S3StaticEnvRewriter.handler',
-      code: lambda.Code.fromAsset(handlerDir),
-      initialPolicy: [
-        new iam.PolicyStatement({
-          actions: ['s3:GetObject', 's3:PutObject'],
-          resources: [this.bucket.arnForObjects('*')],
-        }),
-      ],
-    });
-
-    // custom resource to run the rewriter after files are copied and we can resolve token values
-    const provider = new cr.Provider(this, 'RewriteStaticProvider', {
-      onEventHandler: rewriteFn,
-    });
-    const replacements = this._getS3ContentReplaceValues();
-    return new CustomResource(this, 'RewriteStatic', {
-      serviceToken: provider.serviceToken,
-      properties: {
-        bucket: this.bucket.bucketName,
-        s3keys,
-        replacements,
-      },
-    });
-  }
-
   private _getStaticFilesForRewrite() {
     const staticDir = this.staticTempDir;
     const s3keys: string[] = [];
@@ -209,54 +161,6 @@ export class NextJsAssetsDeployment extends Construct {
     return s3keys;
   }
 
-  /*
-  private createLambdaCodeReplacer(name: string, asset: s3Assets.Asset): CustomResource {
-    // Note: Source code for the Lambda functions have "{{! ENV_KEY !}}" in them.
-    //       They need to be replaced with real values before the Lambda
-    //       functions get deployed.
-
-    const providerId = 'LambdaCodeReplacerProvider';
-    const resId = `${name}LambdaCodeReplacer`;
-    const stack = Stack.of(this);
-    let provider = stack.node.tryFindChild(providerId) as lambda.Function;
-
-    // Create provider if not already created
-    if (!provider) {
-      provider = new lambda.Function(stack, providerId, {
-        code: lambda.Code.fromAsset(path.join(__dirname, '../assets/NextjsSite/custom-resource')),
-        layers: [this.awsCliLayer],
-        runtime: lambda.Runtime.PYTHON_3_7,
-        handler: 'lambda-code-updater.handler',
-        timeout: Duration.minutes(15),
-        memorySize: 1024,
-      });
-    }
-
-    // Allow provider to perform search/replace on the asset
-    provider.role?.addToPrincipalPolicy(
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: ['s3:*'],
-        resources: [`arn:aws:s3:::${asset.s3BucketName}/${asset.s3ObjectKey}`],
-      })
-    );
-
-    // Create custom resource
-    const resource = new CustomResource(this, resId, {
-      serviceToken: provider.functionArn,
-      resourceType: 'Custom::SSTLambdaCodeUpdater',
-      properties: {
-        Source: {
-          BucketName: asset.s3BucketName,
-          ObjectKey: asset.s3ObjectKey,
-        },
-        ReplaceValues: this._getLambdaContentReplaceValues(),
-      },
-    });
-
-    return resource;
-  }*/
-
   private createAssetBucket(): s3.Bucket {
     const { bucket } = this.props;
 
@@ -274,21 +178,6 @@ export class NextJsAssetsDeployment extends Construct {
         ...bucketProps,
       });
     }
-  }
-
-  // inline env vars for client code
-  private _getS3ContentReplaceValues(): Record<string, string> {
-    const replacements: Record<string, string> = {};
-
-    Object.entries(this.props.environment || {})
-      .filter(([, value]) => Token.isUnresolved(value))
-      .filter(([key]) => key.startsWith('NEXT_PUBLIC_')) // don't replace server-only env vars
-      .forEach(([key, value]) => {
-        const token = makeTokenPlaceholder(key);
-        replacements[token] = value.toString();
-      });
-
-    return replacements;
   }
 }
 

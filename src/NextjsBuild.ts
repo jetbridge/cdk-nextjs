@@ -13,9 +13,6 @@ const NEXTJS_PUBLIC_DIR = 'public';
 const NEXTJS_BUILD_STANDALONE_DIR = 'standalone';
 const NEXTJS_BUILD_STANDALONE_ENV = 'NEXT_PRIVATE_STANDALONE';
 
-// files to rewrite CloudFormation tokens in environment variables
-export const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*.json'];
-
 export interface NextjsBuildProps extends NextjsBaseProps {}
 
 /**
@@ -217,7 +214,7 @@ export function createArchive({
 export function getBuildCmdEnvironment(siteEnvironment?: { [key: string]: string }): Record<string, string> {
   // Generate environment placeholders to be replaced
   // ie. environment => { API_URL: api.url }
-  //     environment => API_URL="{{ API_URL }}"
+  //     environment => API_URL="{NEXT{! API_URL !}}"
   //
   const buildCmdEnvironment: Record<string, string> = {};
   Object.entries(siteEnvironment || {}).forEach(([key, value]) => {
@@ -227,7 +224,7 @@ export function getBuildCmdEnvironment(siteEnvironment?: { [key: string]: string
   return buildCmdEnvironment;
 }
 
-export const TOKEN_PLACEHOLDER_BEGIN = '{{! ';
+export const TOKEN_PLACEHOLDER_BEGIN = '{NEXT{! ';
 export const TOKEN_PLACEHOLDER_END = ' !}}';
 export const makeTokenPlaceholder = (value: string): string =>
   TOKEN_PLACEHOLDER_BEGIN + value.toString() + TOKEN_PLACEHOLDER_END;

@@ -5,7 +5,7 @@ import { Construct } from 'constructs';
 import * as spawn from 'cross-spawn';
 import * as fs from 'fs-extra';
 import { listDirectory } from './NextjsAssetsDeployment';
-import { NextjsBaseProps } from './NextjsBase';
+import { CompressionLevel, NextjsBaseProps } from './NextjsBase';
 
 const NEXTJS_BUILD_DIR = '.next';
 const NEXTJS_STATIC_DIR = 'static';
@@ -87,9 +87,8 @@ export class NextjsBuild extends Construct {
 
     // validate site path exists
     if (!fs.existsSync(nextjsPath)) {
-      throw new Error(`No path found at "${path.resolve(nextjsPath)}"`);
+      throw new Error(`Invalid nextjsPath ${nextjsPath} - directory does not exist at "${path.resolve(nextjsPath)}"`);
     }
-
     // Ensure that the site has a build script defined
     if (!fs.existsSync(path.join(nextjsPath, 'package.json'))) {
       throw new Error(`No package.json found at "${nextjsPath}".`);
@@ -104,8 +103,8 @@ export class NextjsBuild extends Construct {
     const buildEnv = {
       ...process.env,
       [NEXTJS_BUILD_STANDALONE_ENV]: 'true',
-      ...(this.props.nodeEnv ? { NODE_ENV: this.props.nodeEnv } : {}),
       ...getBuildCmdEnvironment(this.props.environment),
+      ...(this.props.nodeEnv ? { NODE_ENV: this.props.nodeEnv } : {}),
     };
     const buildResult = spawn.sync('npm', ['run', 'build'], {
       cwd: nextjsPath,
@@ -116,53 +115,6 @@ export class NextjsBuild extends Construct {
       throw new Error('The app "build" script failed.');
     }
   }
-
-  // TODO: needed for edge function support probably
-  // private _getLambdaContentReplaceValues(): BaseSiteReplaceProps[] {
-  //   const replaceValues: BaseSiteReplaceProps[] = [];
-
-  //   // The Next.js app can have environment variables like
-  //   // `process.env.API_URL` in the JS code. `process.env.API_URL` might or
-  //   // might not get resolved on `next build` if it is used in
-  //   // server-side functions, ie. getServerSideProps().
-  //   // Because Lambda@Edge does not support environment variables, we will
-  //   // use the trick of replacing "{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}" with
-  //   // a JSON encoded string of all environment key-value pairs. This string
-  //   // will then get decoded at run time.
-  //   const lambdaEnvs: { [key: string]: string } = {};
-
-  //   Object.entries(this.props.environment || {}).forEach(([key, value]) => {
-  //     const token = `{{ ${key} }}`;
-  //     replaceValues.push(
-  //       ...this.replaceTokenGlobs.map((glob) => ({
-  //         files: glob,
-  //         search: token,
-  //         replace: value,
-  //       }))
-  //     );
-  //     lambdaEnvs[key] = value;
-  //   });
-
-  //   replaceValues.push(
-  //     {
-  //       files: '**/*.mjs',
-  //       search: '"{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
-  //       replace: JSON.stringify(lambdaEnvs),
-  //     },
-  //     {
-  //       files: '**/*.cjs',
-  //       search: '"{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
-  //       replace: JSON.stringify(lambdaEnvs),
-  //     },
-  //     {
-  //       files: '**/*.js',
-  //       search: '"{{ _SST_NEXTJS_SITE_ENVIRONMENT_ }}"',
-  //       replace: JSON.stringify(lambdaEnvs),
-  //     }
-  //   );
-
-  //   return replaceValues;
-  // }
 
   // getNextBuildId() {
   //   return fs.readFileSync(path.join(this._getNextStandaloneBuildDir(), 'BUILD_ID'), 'utf-8');
@@ -216,6 +168,7 @@ export class NextjsBuild extends Construct {
 }
 
 export interface CreateArchiveArgs {
+  readonly compressionLevel?: CompressionLevel;
   readonly directory: string;
   readonly zipFileName: string;
   readonly zipOutDir: string;
@@ -223,7 +176,13 @@ export interface CreateArchiveArgs {
 }
 
 // zip up a directory and return path to zip file
-export function createArchive({ directory, zipFileName, zipOutDir, fileGlob = '*' }: CreateArchiveArgs): string {
+export function createArchive({
+  directory,
+  zipFileName,
+  zipOutDir,
+  fileGlob = '*',
+  compressionLevel = 1,
+}: CreateArchiveArgs): string {
   zipOutDir = path.resolve(zipOutDir);
   // get output path
   fs.removeSync(zipOutDir);
@@ -233,7 +192,7 @@ export function createArchive({ directory, zipFileName, zipOutDir, fileGlob = '*
   // run script to create zipfile, preserving symlinks for node_modules (e.g. pnpm structure)
   const result = spawn.sync(
     'bash', // getting ENOENT when specifying 'node' here for some reason
-    ['-xc', [`cd '${directory}'`, `zip -ryq2 '${zipFilePath}' ${fileGlob}`].join('&&')],
+    ['-xc', [`cd '${directory}'`, `zip -ryq${compressionLevel} '${zipFilePath}' ${fileGlob}`].join('&&')],
     { stdio: 'inherit' }
   );
   if (result.status !== 0) {

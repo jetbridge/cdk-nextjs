@@ -23,6 +23,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@types/micromatch',
     'esbuild',
     'aws-lambda',
+    'serverless-http',
   ] /* Runtime dependencies of this module. */,
   // devDeps: ['constructs@10.0.57'] /* Build dependencies for this module. */,
 

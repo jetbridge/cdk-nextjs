@@ -74,7 +74,8 @@
     "esbuild": "^0.15.12",
     "fs-extra": "^10.1.0",
     "indent-string": "*",
-    "micromatch": "^4.0.5"
+    "micromatch": "^4.0.5",
+    "serverless-http": "^3.0.3"
   },
   "bundledDependencies": [
     "@types/cross-spawn",
@@ -85,7 +86,8 @@
     "esbuild",
     "fs-extra",
     "indent-string",
-    "micromatch"
+    "micromatch",
+    "serverless-http"
   ],
   "keywords": [
     "aws",

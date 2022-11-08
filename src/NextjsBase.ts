@@ -27,7 +27,7 @@ export interface NextjsBaseProps {
 
   /**
    * Directory to store temporary build files in.
-   * Defaults to os.mkdtempSync().
+   * Defaults to os.tmpdir().
    */
   readonly tempBuildDir?: string; // move to NextjsBuildProps?
 
@@ -42,6 +42,11 @@ export interface NextjsBaseProps {
    * @default 1
    */
   readonly compressionLevel?: CompressionLevel;
+
+  /**
+   * Less build output.
+   */
+  readonly quiet?: boolean;
 }
 
 ///// stuff below taken from https://github.com/serverless-stack/sst/blob/8d377e941467ced81d8cc31ee67d5a06550f04d4/packages/resources/src/BaseSite.ts

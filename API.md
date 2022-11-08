@@ -2298,6 +2298,7 @@ const createArchiveArgs: CreateArchiveArgs = { ... }
 | <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.zipOutDir">zipOutDir</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.fileGlob">fileGlob</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -2351,6 +2352,16 @@ public readonly fileGlob: string;
 
 ---
 
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.CreateArchiveArgs.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+---
+
 ### NextjsAssetsDeploymentProps <a name="NextjsAssetsDeploymentProps" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps"></a>
 
 #### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.Initializer"></a>
@@ -2370,6 +2381,7 @@ const nextjsAssetsDeploymentProps: NextjsAssetsDeploymentProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket \| aws-cdk-lib.aws_s3.BucketProps</code> | Properties for the S3 bucket containing the NextJS assets. |
@@ -2443,6 +2455,18 @@ Optional value for NODE_ENV during build and runtime.
 
 ---
 
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+Less build output.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -2453,7 +2477,7 @@ public readonly tempBuildDir: string;
 
 Directory to store temporary build files in.
 
-Defaults to os.mkdtempSync().
+Defaults to os.tmpdir().
 
 ---
 
@@ -2530,6 +2554,7 @@ const nextjsBaseProps: NextjsBaseProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 
 ---
@@ -2599,6 +2624,18 @@ Optional value for NODE_ENV during build and runtime.
 
 ---
 
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsBaseProps.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+Less build output.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsBaseProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -2609,7 +2646,7 @@ public readonly tempBuildDir: string;
 
 Directory to store temporary build files in.
 
-Defaults to os.mkdtempSync().
+Defaults to os.tmpdir().
 
 ---
 
@@ -2632,6 +2669,7 @@ const nextjsBuildProps: NextjsBuildProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 
 ---
@@ -2701,6 +2739,18 @@ Optional value for NODE_ENV during build and runtime.
 
 ---
 
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsBuildProps.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+Less build output.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsBuildProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -2711,7 +2761,7 @@ public readonly tempBuildDir: string;
 
 Directory to store temporary build files in.
 
-Defaults to os.mkdtempSync().
+Defaults to os.tmpdir().
 
 ---
 
@@ -3293,6 +3343,7 @@ const nextjsLambdaProps: NextjsLambdaProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built nextJS application. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.function">function</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
@@ -3364,6 +3415,18 @@ Optional value for NODE_ENV during build and runtime.
 
 ---
 
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsLambdaProps.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+Less build output.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsLambdaProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -3374,7 +3437,7 @@ public readonly tempBuildDir: string;
 
 Directory to store temporary build files in.
 
-Defaults to os.mkdtempSync().
+Defaults to os.tmpdir().
 
 ---
 
@@ -3432,6 +3495,7 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.cdk">cdk</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCdkProps">NextjsCdkProps</a></code> | Allows you to override default settings this construct uses internally to create the cloudfront distribution. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.customDomain">customDomain</a></code> | <code>string \| <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | The customDomain for this website. Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally. |
@@ -3505,6 +3569,18 @@ Optional value for NODE_ENV during build and runtime.
 
 ---
 
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsProps.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+Less build output.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -3515,7 +3591,7 @@ public readonly tempBuildDir: string;
 
 Directory to store temporary build files in.
 
-Defaults to os.mkdtempSync().
+Defaults to os.tmpdir().
 
 ---
 

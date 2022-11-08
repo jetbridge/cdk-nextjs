@@ -1,5 +1,6 @@
 import * as os from 'os';
 import * as path from 'path';
+import { dirname } from 'path';
 import { App, Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
@@ -13,6 +14,7 @@ import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
+import { bundleFunction } from './BundleFunction';
 import { NextJsAssetsDeployment, NextjsAssetsDeploymentProps } from './NextjsAssetsDeployment';
 import {
   BaseSiteCdkDistributionProps,
@@ -216,19 +218,27 @@ export class Nextjs extends Construct {
   constructor(scope: Construct, id: string, props: NextjsProps) {
     super(scope, id);
 
+    console.debug('┌ Building Next.js app ▼ ...');
+
     // get dir to store temp build files in
     this.tempBuildDir = props.tempBuildDir
-      ? path.resolve(path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr}`))
+      ? path.resolve(
+          path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
+        )
       : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
 
-    this.props = props;
-    // this.configBucket = this.createConfigBucket();
+    // save props
+    this.props = { ...props, tempBuildDir: this.tempBuildDir };
 
     // build nextjs app
-    this.nextBuild = new NextjsBuild(this, id, props);
-    this.serverFunction = new NextJsLambda(this, 'Fn', { ...props, nextBuild: this.nextBuild, ...props.cdk?.lambda });
+    this.nextBuild = new NextjsBuild(this, id, this.props);
+    this.serverFunction = new NextJsLambda(this, 'Fn', {
+      ...this.props,
+      nextBuild: this.nextBuild,
+      ...props.cdk?.lambda,
+    });
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
-      ...props,
+      ...this.props,
       ...props.cdk?.deployment,
       nextBuild: this.nextBuild,
     });
@@ -267,6 +277,8 @@ export class Nextjs extends Construct {
 
     // Connect Custom Domain to CloudFront Distribution
     this.createRoute53Records();
+
+    console.debug('└ Finished preparing NextJS app for deployment');
   }
 
   /////////////////////
@@ -559,52 +571,30 @@ export class Nextjs extends Construct {
    *  HTTP server so it needs the host header to be the address of the lambda and not
    *  the distribution.
    *
-   * It also sets
    */
   private buildLambdaOriginRequestEdgeFunction() {
     const app = App.of(this) as App;
 
-    // ridiculous error: The function execution role must be assumable with edgelambda.amazonaws.com as well as lambda.amazonaws.com principals.
-    // const role = new Role(this, 'NextEdgeLambdaRole', {
-    //   assumedBy: new CompositePrincipal(
-    //     new ServicePrincipal('lambda.amazonaws.com'),
-    //     new ServicePrincipal('edgelambda.amazonaws.com')
-    //   ),
-    //   managedPolicies: [
-    //     ManagedPolicy.fromManagedPolicyArn(
-    //       this,
-    //       'NextApiLambdaPolicy',
-    //       'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-    //     ),
-    //   ],
-    // });
+    // bundle the edge function
+    const inputPath = path.join(__dirname, '..', 'assets', 'lambda@edge', 'LambdaOriginRequest');
+    const outputPath = path.join(this.tempBuildDir, 'lambda@edge', 'LambdaOriginRequest.js');
+    bundleFunction({
+      inputPath,
+      outputPath,
+      bundleOptions: {
+        bundle: true,
+        external: ['aws-sdk', 'url'],
+        minify: true,
+        target: 'node16',
+        platform: 'node',
+      },
+    });
 
     const fn = new cloudfront.experimental.EdgeFunction(this, 'DefaultOriginRequestEdgeFn', {
       runtime: lambda.Runtime.NODEJS_16_X,
       // role,
-      handler: 'index.handler',
-      // code: lambda.Code.fromAsset(path.join(__dirname, '..', 'assets', 'lambda@edge', 'DefaultOriginRequest')),
-      code: lambda.Code.fromInline(`
-        const url = require('url');
-
-        exports.handler = (event, context, callback) => {
-          const request = event.Records[0].cf.request;
-          // console.log(JSON.stringify(request, null, 2))
-
-          // get origin url from header
-          const originUrlHeader = request.origin.custom.customHeaders['x-origin-url']
-          if (!originUrlHeader || !originUrlHeader[0]) {
-            console.error('Origin header wasn"t set correctly, cannot get origin url')
-            return callback(null, request)
-          }
-          const urlHeader = originUrlHeader[0].value
-          const originUrl = url.parse(urlHeader, true);
-
-          request.headers['x-forwarded-host'] = [ { key: 'x-forwarded-host', value: request.headers.host[0].value } ]
-          request.headers['host'] = [ { key: 'host', value: originUrl.host } ]
-          callback(null, request);
-        };
-      `),
+      handler: 'LambdaOriginRequest.handler',
+      code: lambda.Code.fromAsset(dirname(outputPath)),
       currentVersionOptions: {
         removalPolicy: RemovalPolicy.DESTROY, // destroy old versions
         retryAttempts: 1, // async retry attempts
@@ -612,8 +602,6 @@ export class Nextjs extends Construct {
       stackId:
         `Nextjs-${this.props.stageName || app.stageName || 'default'}-EdgeFunctions-` + this.node.addr.substring(0, 5),
     });
-    // fn.grantInvoke(new ServicePrincipal('lambda.amazonaws.com'));
-    // fn.grantInvoke(new ServicePrincipal('edgelambda.amazonaws.com'));
     fn.currentVersion.grantInvoke(new ServicePrincipal('edgelambda.amazonaws.com'));
     fn.currentVersion.grantInvoke(new ServicePrincipal('lambda.amazonaws.com'));
 

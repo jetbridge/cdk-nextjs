@@ -2,13 +2,13 @@
 // - https://github.com/iiroj/iiro.fi/commit/bd43222032d0dbb765e1111825f64dbb5db851d9
 // - https://github.com/sladg/nextjs-lambda/blob/master/lib/standalone/server-handler.ts
 
+import fs from 'node:fs';
+import { ServerResponse } from 'node:http';
+import path from 'node:path';
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import type { NextConfig } from 'next';
 import type { Options } from 'next/dist/server/next-server';
 import * as nss from 'next/dist/server/next-server';
-import fs from 'node:fs';
-import path from 'node:path';
-import { ServerResponse } from 'node:http';
 import slsHttp from 'serverless-http';
 
 const getErrMessage = (e: any) => ({ message: 'Server failed to respond.', details: e });
@@ -35,6 +35,7 @@ const config: Options = {
   dir: __dirname,
   minimalMode: true,
 };
+// console.debug('Environment:', JSON.stringify(process.env, null, 2));
 
 // next request handler
 const nextHandler = new NextNodeServer(config).getRequestHandler();
@@ -50,8 +51,8 @@ const server = slsHttp(
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify(getErrMessage(e), null, 3));
     });
-    console.log('req headers: ', req);
-    console.log('res headers: ', res.getHeaders());
+    // console.log('req headers: ', req);
+    // console.log('res headers: ', res.getHeaders());
   },
   {
     binary: false,

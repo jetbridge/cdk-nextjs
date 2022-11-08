@@ -90,17 +90,16 @@ export class NextJsLambda extends Function {
 
     // zip up the standalone directory
     const zipOutDir = path.resolve(
-      path.join(
-        props.tempBuildDir
-          ? path.resolve(path.join(props.tempBuildDir, `standalone`))
-          : fs.mkdtempSync(path.join(os.tmpdir(), 'standalone-'))
-      )
+      props.tempBuildDir
+        ? path.resolve(path.join(props.tempBuildDir, `standalone`))
+        : fs.mkdtempSync(path.join(os.tmpdir(), 'standalone-'))
     );
     const zipFilePath = createArchive({
       directory: nextBuild.nextStandaloneDir,
       zipFileName: 'standalone.zip',
       zipOutDir,
       fileGlob: '*',
+      quiet: props.quiet,
     });
 
     // build native deps layer
@@ -133,7 +132,7 @@ export class NextJsLambda extends Function {
   // this can hold our resolved environment vars for the server
   protected createConfigBucket(props: NextjsLambdaProps) {
     // won't work until this is fixed: https://github.com/aws/aws-cdk/issues/19257
-    const bucket = new Bucket(this, 'ConfigBucket', { removalPolicy: RemovalPolicy.DESTROY });
+    const bucket = new Bucket(this, 'ConfigBucket', { removalPolicy: RemovalPolicy.DESTROY, autoDeleteObjects: true });
 
     // convert environment vars to SSM parameters
     // (workaround for the above issue)

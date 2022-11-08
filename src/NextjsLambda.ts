@@ -1,6 +1,6 @@
 import * as os from 'os';
 import * as path from 'path';
-import { Duration, RemovalPolicy, Token } from 'aws-cdk-lib';
+import { Duration, Fn, RemovalPolicy, Token } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
@@ -174,8 +174,8 @@ export class NextJsLambda extends Construct {
     // upload environment config to s3
     new BucketDeployment(this, 'EnvJsonDeployment', {
       sources: [
-        // warning: this doesn't escape quotes in unresolved tokens
-        Source.jsonData(CONFIG_ENV_JSON_PATH, replacementParams),
+        // serialize as JSON to S3 object
+        Source.data(CONFIG_ENV_JSON_PATH, Fn.toJsonString(replacementParams)),
       ],
       destinationBucket: bucket,
     });

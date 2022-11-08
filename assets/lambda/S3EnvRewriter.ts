@@ -188,6 +188,8 @@ const getReplacementValues = async (scriptParams: RewriterParams): Promise<Repla
     const data = await tryGetObject(jsonS3Bucket, jsonS3Key);
     if (data?.Body) {
       const json = data.Body.toString('utf-8');
+      console.log('JSON', json);
+
       env = { ...env, ...JSON.parse(json) };
     } else {
       // throw new Error('Failed to get replacement values from S3 - empty file');

@@ -267,9 +267,7 @@ export class Nextjs extends Construct {
       ? this.createCloudFrontDistributionForStub()
       : this.createCloudFrontDistribution();
     // wait for asset deployments to finish
-    this.assetsDeployment.deployments.forEach((s3Deployment) =>
-      this.distribution.node.addDependency(s3Deployment.deployedBucket)
-    );
+    this.assetsDeployment.deployments.forEach((s3Deployment) => this.distribution.node.addDependency(s3Deployment));
 
     // // Invalidate CloudFront (might already be handled by deployments?)
     // const invalidationCR = this.createCloudFrontInvalidation();

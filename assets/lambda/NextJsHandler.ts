@@ -12,7 +12,7 @@ import { NodeNextRequest, NodeNextResponse } from 'next/dist/server/base-http/no
 import type { Options } from 'next/dist/server/next-server';
 import * as nss from 'next/dist/server/next-server';
 import slsHttp from 'serverless-http';
-import { httpCompat, lambdaRequestAdaptor } from './LambdaRequestAdapter';
+import { httpCompat } from './LambdaRequestAdapter';
 
 const getErrMessage = (e: any) => ({ message: 'Server failed to respond.', details: e });
 

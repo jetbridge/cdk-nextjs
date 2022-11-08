@@ -118,8 +118,9 @@ export class NextJsLambda extends Construct {
     });
     this.lambdaFunction = fn;
 
-    // put JSON file with env var replacements in S3e
-    this.configBucket = this.createConfigBucket(props);
+    // put JSON file with env var replacements in S3
+    const [configBucket, configDeployment] = this.createConfigBucket(props);
+    this.configBucket = configBucket;
 
     // replace env var placeholders in the lambda package with resolved values
     const rewriter = new NextjsS3EnvRewriter(this, 'LambdaCodeRewriter', {
@@ -129,7 +130,7 @@ export class NextJsLambda extends Construct {
       replacementConfig: {
         // use json file in S3 for replacement values
         // this can contain backend secrets so better to not have them in custom resource logs
-        jsonS3Bucket: this.configBucket,
+        jsonS3Bucket: configDeployment.deployedBucket,
         jsonS3Key: CONFIG_ENV_JSON_PATH,
       },
       debug: true, // enable for more verbose output from the rewriter function
@@ -172,13 +173,13 @@ export class NextJsLambda extends Construct {
     });
 
     // upload environment config to s3
-    new BucketDeployment(this, 'EnvJsonDeployment', {
+    const deployment = new BucketDeployment(this, 'EnvJsonDeployment', {
       sources: [
-        // warning: this doesn't escape quotes in unresolved tokens
+        // serialize as JSON to S3 object
         Source.jsonData(CONFIG_ENV_JSON_PATH, replacementParams),
       ],
       destinationBucket: bucket,
     });
-    return bucket;
+    return [bucket, deployment] as const;
   }
 }

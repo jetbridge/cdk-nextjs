@@ -56,7 +56,7 @@ This is _experimental_ and a work in progress. I hope others can benefit from it
 
 I have managed to get the server bundling working even under the most finicky of circumstances (pnpm monorepo). Server-side rendering works. Static files and public files work.
 
-## Depdendencies
+## Dependencies
 
 NextJs requires the `sharp` native library. It is provided in a zip file from [lambda-layer-sharp](https://github.com/Umkus/lambda-layer-sharp/releases).
 

@@ -128,6 +128,7 @@ export class NextJsAssetsDeployment extends Construct {
       compressionLevel: this.props.compressionLevel,
       quiet: this.props.quiet,
     });
+    if (!archiveZipFilePath) return [];
 
     const deployment = new BucketDeployment(this, 'NextStaticAssetsS3Deployment', {
       destinationBucket: this.bucket,

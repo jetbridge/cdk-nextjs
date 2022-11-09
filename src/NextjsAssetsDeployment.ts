@@ -132,7 +132,6 @@ export class NextJsAssetsDeployment extends Construct {
 
     const deployment = new BucketDeployment(this, 'NextStaticAssetsS3Deployment', {
       destinationBucket: this.bucket,
-      destinationKeyPrefix: this.props.isPlaceholder ? '/placeholder' : '/',
       sources: [Source.asset(archiveZipFilePath)],
       distribution: this.props.distribution,
       prune: this.props.prune,

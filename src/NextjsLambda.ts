@@ -91,6 +91,7 @@ export class NextJsLambda extends Construct {
       fileGlob: '*',
       quiet: props.quiet,
     });
+    if (!zipFilePath) throw new Error('Failed to create archive for lambda function code');
 
     // build native deps layer
     const nextLayer = new NextjsLayer(scope, 'NextjsLayer', {});

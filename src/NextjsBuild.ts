@@ -183,7 +183,10 @@ export function createArchive({
   fileGlob = '*',
   compressionLevel = 1,
   quiet,
-}: CreateArchiveArgs): string {
+}: CreateArchiveArgs): string | null {
+  // if directory is empty, can skip
+  if (!fs.existsSync(directory) || fs.readdirSync(directory).length === 0) return null;
+
   zipOutDir = path.resolve(zipOutDir);
   fs.mkdirpSync(zipOutDir);
   // get output path

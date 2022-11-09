@@ -142,9 +142,5 @@ class NextjsSst extends Nextjs {
 
 ## To-do
 
-- [ ] Support deployment as a Lambda@Edge function if this is even desirable (see caveats)
+- [ ] Support deployment as a Lambda@Edge function if this is even desirable
 - [ ] [Serverless stack integration](https://github.com/serverless-stack/sst/pull/2049)
-
-### Edge functions
-
-It should be possible to build the lambda handler as a Lambda@Edge function, the main blocker is resolving the CDK tokens in env vars on the server side because edge functions cannot have environment variables. These tokens are not present at build-time. One of these issues needs to be fixed for that to work most likely: <https://github.com/vercel/next.js/issues/40827> <https://github.com/aws/aws-cdk/issues/19257>

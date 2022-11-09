@@ -3,7 +3,7 @@
 // - https://github.com/sladg/nextjs-lambda/blob/master/lib/standalone/server-handler.ts
 
 import fs from 'node:fs';
-import { ServerResponse } from 'node:http';
+import { IncomingMessage, ServerResponse } from 'node:http';
 import path from 'node:path';
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import type { NextConfig } from 'next';
@@ -42,7 +42,7 @@ const nextHandler = new NextNodeServer(config).getRequestHandler();
 // wrap next request handler with serverless-http
 // to translate from API Gateway v2 to next request/response
 const server = slsHttp(
-  async (req, res: ServerResponse) => {
+  async (req: IncomingMessage, res: ServerResponse) => {
     await nextHandler(req, res).catch((e) => {
       console.error(`NextJS request failed due to:`);
       console.error(e);
@@ -52,7 +52,12 @@ const server = slsHttp(
     });
   },
   {
-    binary: false,
+    binary: ['*/*'],
+    request: (request: any) => {
+      // nextjs doesn't parse body if the property exists
+      // https://github.com/dougmoscrop/serverless-http/issues/227
+      delete request.body;
+    },
     provider: 'aws',
   }
 );

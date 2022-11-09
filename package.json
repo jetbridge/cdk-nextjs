@@ -40,7 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "aws-cdk-lib": "2.50.0",
-    "aws-sdk": "^2.1240.0",
+    "aws-sdk": "^2.1250.0",
     "constructs": "10.0.5",
     "eslint": "^8",
     "eslint-config-prettier": "^8.5.0",
@@ -52,12 +52,12 @@
     "jest-junit": "^13",
     "jsii": "^1.70.0",
     "jsii-diff": "^1.70.0",
-    "jsii-docgen": "^7.0.141",
+    "jsii-docgen": "^7.0.142",
     "jsii-pacmak": "^1.70.0",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^16",
     "prettier": "^2.7.1",
-    "projen": "^0.65.16",
+    "projen": "^0.65.17",
     "standard-version": "^9",
     "ts-jest": "^27",
     "typescript": "^4.8.4"
@@ -67,7 +67,7 @@
     "constructs": "^10.0.5"
   },
   "dependencies": {
-    "@types/aws-lambda": "^8.10.107",
+    "@types/aws-lambda": "^8.10.108",
     "@types/cross-spawn": "^6.0.2",
     "@types/fs-extra": "^9.0.13",
     "@types/micromatch": "^4.0.2",
@@ -78,7 +78,7 @@
     "indent-string": "*",
     "jszip": "^3.10.1",
     "micromatch": "^4.0.5",
-    "serverless-http": "^3.0.3"
+    "serverless-http": "^3.1.0"
   },
   "bundledDependencies": [
     "@types/aws-lambda",

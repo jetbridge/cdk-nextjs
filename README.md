@@ -96,7 +96,11 @@ This module is largely made up of code from the above projects.
 
 ## Serverless-stack (SST) wrapper
 
+(TODO: will be moved to SST at some point)
+
 ```ts
+import { BaseSiteEnvironmentOutputsInfo, Nextjs, NextjsProps } from 'cdk-nextjs-standalone';
+
 export interface NextjsSstProps extends NextjsProps {
   app: App;
 }
@@ -131,7 +135,7 @@ class NextjsSst extends Nextjs {
       path: this.props.nextjsPath,
       stack: Stack.of(this).node.id,
       environmentOutputs,
-    });
+    } as BaseSiteEnvironmentOutputsInfo);
   }
 }
 ```

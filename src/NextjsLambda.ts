@@ -46,12 +46,12 @@ const RUNTIME = lambda.Runtime.NODEJS_16_X;
  * Build a lambda function from a NextJS application to handle server-side rendering, API routes, and image optimization.
  */
 export class NextJsLambda extends Construct {
-  configBucket: Bucket;
+  configBucket?: Bucket;
   lambdaFunction: Function;
 
   constructor(scope: Construct, id: string, props: NextjsLambdaProps) {
     super(scope, id);
-    const { nextBuild, function: functionOptions } = props;
+    const { nextBuild, function: functionOptions, isPlaceholder } = props;
 
     // bundle server handler
     // delete default nextjs handler if it exists
@@ -98,7 +98,7 @@ export class NextJsLambda extends Construct {
 
     // upload the lambda package to S3
     const s3asset = new s3Assets.Asset(scope, 'MainFnAsset', { path: zipFilePath });
-    const code = props.isPlaceholder
+    const code = isPlaceholder
       ? lambda.Code.fromInline(
           "module.exports.handler = async () => { return { statusCode: 200, body: 'SST placeholder site' } }"
         )
@@ -119,28 +119,31 @@ export class NextJsLambda extends Construct {
     });
     this.lambdaFunction = fn;
 
-    // put JSON file with env var replacements in S3
-    const [configBucket, configDeployment] = this.createConfigBucket(props);
-    this.configBucket = configBucket;
+    // rewrite env var placeholders in server code
+    if (!isPlaceholder) {
+      // put JSON file with env var replacements in S3
+      const [configBucket, configDeployment] = this.createConfigBucket(props);
+      this.configBucket = configBucket;
 
-    // replace env var placeholders in the lambda package with resolved values
-    const rewriter = new NextjsS3EnvRewriter(this, 'LambdaCodeRewriter', {
-      ...props,
-      s3Bucket: s3asset.bucket,
-      s3keys: [s3asset.s3ObjectKey],
-      replacementConfig: {
-        // use json file in S3 for replacement values
-        // this can contain backend secrets so better to not have them in custom resource logs
-        jsonS3Bucket: configDeployment.deployedBucket,
-        jsonS3Key: CONFIG_ENV_JSON_PATH,
-      },
-      debug: true, // enable for more verbose output from the rewriter function
-    });
-    rewriter.node.addDependency(s3asset);
+      // replace env var placeholders in the lambda package with resolved values
+      const rewriter = new NextjsS3EnvRewriter(this, 'LambdaCodeRewriter', {
+        ...props,
+        s3Bucket: s3asset.bucket,
+        s3keys: [s3asset.s3ObjectKey],
+        replacementConfig: {
+          // use json file in S3 for replacement values
+          // this can contain backend secrets so better to not have them in custom resource logs
+          jsonS3Bucket: configDeployment.deployedBucket,
+          jsonS3Key: CONFIG_ENV_JSON_PATH,
+        },
+        debug: true, // enable for more verbose output from the rewriter function
+      });
+      rewriter.node.addDependency(s3asset);
 
-    // in order to create this dependency, the lambda function needs to be a child of the current construct
-    // meaning we can't inherit from Function
-    fn.node.addDependency(rewriter); // don't deploy lambda until rewriter is done - we are sort of 'intercepting' the deployment package
+      // in order to create this dependency, the lambda function needs to be a child of the current construct
+      // meaning we can't inherit from Function
+      fn.node.addDependency(rewriter); // don't deploy lambda until rewriter is done - we are sort of 'intercepting' the deployment package
+    }
   }
 
   // this can hold our resolved environment vars for the server

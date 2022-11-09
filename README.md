@@ -114,12 +114,12 @@ class NextjsSst extends Nextjs {
       nextjsPath: path.isAbsolute(props.nextjsPath) ? path.relative(app.appPath, props.nextjsPath) : props.nextjsPath,
     });
 
-    this.registerSiteEnvironment();
+    if (props.environment) this.registerSiteEnvironment(props.environment);
   }
 
-  protected registerSiteEnvironment() {
+  protected registerSiteEnvironment(environment: Record<string, string>) {
     const environmentOutputs: Record<string, string> = {};
-    for (const [key, value] of Object.entries(this.props.environment || {})) {
+    for (const [key, value] of Object.entries(environment)) {
       const outputId = `SstSiteEnv_${key}`;
       const output = new CfnOutput(this, outputId, { value });
       environmentOutputs[key] = Stack.of(this).getLogicalId(output);
@@ -131,7 +131,7 @@ class NextjsSst extends Nextjs {
       path: this.props.nextjsPath,
       stack: Stack.of(this).node.id,
       environmentOutputs,
-    } as BaseSiteEnvironmentOutputsInfo);
+    });
   }
 }
 ```

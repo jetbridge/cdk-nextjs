@@ -812,8 +812,8 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextJsLambda.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextJsLambda.property.configBucket">configBucket</a></code> | <code>aws-cdk-lib.aws_s3.Bucket</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextJsLambda.property.lambdaFunction">lambdaFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextJsLambda.property.configBucket">configBucket</a></code> | <code>aws-cdk-lib.aws_s3.Bucket</code> | *No description.* |
 
 ---
 
@@ -829,16 +829,6 @@ The tree node.
 
 ---
 
-##### `configBucket`<sup>Required</sup> <a name="configBucket" id="cdk-nextjs-standalone.NextJsLambda.property.configBucket"></a>
-
-```typescript
-public readonly configBucket: Bucket;
-```
-
-- *Type:* aws-cdk-lib.aws_s3.Bucket
-
----
-
 ##### `lambdaFunction`<sup>Required</sup> <a name="lambdaFunction" id="cdk-nextjs-standalone.NextJsLambda.property.lambdaFunction"></a>
 
 ```typescript
@@ -846,6 +836,16 @@ public readonly lambdaFunction: Function;
 ```
 
 - *Type:* aws-cdk-lib.aws_lambda.Function
+
+---
+
+##### `configBucket`<sup>Optional</sup> <a name="configBucket" id="cdk-nextjs-standalone.NextJsLambda.property.configBucket"></a>
+
+```typescript
+public readonly configBucket: Bucket;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.Bucket
 
 ---
 

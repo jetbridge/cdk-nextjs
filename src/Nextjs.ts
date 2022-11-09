@@ -363,8 +363,8 @@ export class Nextjs extends Construct {
     // handle placeholder
     if (this.props.isPlaceholder) {
       return new cloudfront.Distribution(this, 'Distribution', {
-        defaultRootObject: 'placeholder/index.html',
-        errorResponses: buildErrorResponsesForRedirectToIndex('placeholder/index.html'),
+        defaultRootObject: 'index.html',
+        errorResponses: buildErrorResponsesForRedirectToIndex('index.html'),
         domainNames,
         certificate: this.certificate,
         defaultBehavior: {
@@ -545,7 +545,7 @@ export class Nextjs extends Construct {
         }),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
-      ...this.props.cdk?.distribution,
+      ...this.props.cdk?.distribution, // not sure if needed
     });
   }
 

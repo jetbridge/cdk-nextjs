@@ -80,7 +80,12 @@ export class NextjsBuild extends Construct {
   }
 
   private runNpmBuild() {
-    const { nextjsPath } = this.props;
+    const { nextjsPath, isPlaceholder, quiet } = this.props;
+
+    if (isPlaceholder) {
+      if (!quiet) console.debug(`Skipping build for placeholder NextjsBuild at ${nextjsPath}`);
+      return;
+    }
 
     // validate site path exists
     if (!fs.existsSync(nextjsPath)) {
@@ -145,7 +150,7 @@ export class NextjsBuild extends Construct {
     const nextDir = this._getNextBuildDir();
     const standaloneDir = path.join(nextDir, NEXTJS_BUILD_STANDALONE_DIR);
 
-    if (!fs.existsSync(standaloneDir)) {
+    if (!fs.existsSync(standaloneDir) && !this.props.isPlaceholder) {
       throw new Error(`Could not find ${standaloneDir} directory.`);
     }
     return standaloneDir;

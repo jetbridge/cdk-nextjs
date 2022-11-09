@@ -64,11 +64,14 @@ export class NextjsBuild extends Construct {
     // validate paths
     const baseOutputDir = path.resolve(this.props.nextjsPath);
     if (!fs.existsSync(baseOutputDir)) throw new Error(`NextJS application not found at "${baseOutputDir}"`);
-    const serverBuildDir = path.join(baseOutputDir, NEXTJS_BUILD_DIR);
-    if (!fs.existsSync(serverBuildDir)) throw new Error(`No server build output found at "${serverBuildDir}"`);
 
     // build app
     this.runNpmBuild();
+
+    // check for output
+    const serverBuildDir = path.join(baseOutputDir, NEXTJS_BUILD_DIR);
+    if (!props.isPlaceholder && !fs.existsSync(serverBuildDir))
+      throw new Error(`No server build output found at "${serverBuildDir}"`);
 
     // our outputs
     this.nextStandaloneDir = this._getNextStandaloneDir();

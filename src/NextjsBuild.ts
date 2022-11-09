@@ -80,7 +80,12 @@ export class NextjsBuild extends Construct {
   }
 
   private runNpmBuild() {
-    const { nextjsPath } = this.props;
+    const { nextjsPath, isPlaceholder, quiet } = this.props;
+
+    if (isPlaceholder) {
+      if (!quiet) console.debug(`Skipping build for placeholder NextjsBuild at ${nextjsPath}`);
+      return;
+    }
 
     // validate site path exists
     if (!fs.existsSync(nextjsPath)) {

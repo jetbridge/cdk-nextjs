@@ -65,7 +65,7 @@ export class NextJsAssetsDeployment extends Construct {
     this.deployments = this.uploadS3Assets(this.staticTempDir);
 
     // do rewrites of unresolved CDK tokens in static files
-    if (this.props.environment) {
+    if (this.props.environment && !this.props.isPlaceholder) {
       const rewriter = new NextjsS3EnvRewriter(this, 'NextjsS3EnvRewriter', {
         ...props,
         s3Bucket: this.bucket,
@@ -93,7 +93,7 @@ export class NextJsAssetsDeployment extends Construct {
     // path to public folder; root static assets
     const staticDir = this.props.nextBuild.nextStaticDir;
     let publicDir = this.props.isPlaceholder
-      ? path.resolve(__dirname, '../assets/placeholder-site')
+      ? path.resolve(__dirname, '../assets/PlaceholderSite')
       : this.props.nextBuild.nextPublicDir;
 
     if (!this.props.isPlaceholder && fs.existsSync(staticDir)) {

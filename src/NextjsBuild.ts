@@ -1,4 +1,3 @@
-import { kMaxLength } from 'buffer';
 import * as os from 'os';
 import * as path from 'path';
 import { Token } from 'aws-cdk-lib';

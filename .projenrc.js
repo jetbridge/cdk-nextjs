@@ -28,12 +28,13 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@types/fs-extra',
     '@types/micromatch',
     '@types/aws-lambda',
+    'esbuild',
     'aws-lambda',
     'serverless-http',
     'jszip',
+    'glob',
   ] /* Runtime dependencies of this module. */,
   devDeps: ['aws-sdk', 'constructs@10.1.21'] /* Build dependencies for this module. */,
-  peerDeps: ['esbuild'],
 
   // do not generate sample test files
   sampleCode: false,

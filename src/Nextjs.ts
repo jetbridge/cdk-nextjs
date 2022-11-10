@@ -690,12 +690,12 @@ export class Nextjs extends Construct {
       hostedZone = route53.HostedZone.fromLookup(this, 'HostedZone', {
         domainName: customDomain,
       });
-    } else if (customDomain.hostedZone) {
-      hostedZone = customDomain.hostedZone;
     } else if (typeof customDomain.hostedZone === 'string') {
       hostedZone = route53.HostedZone.fromLookup(this, 'HostedZone', {
         domainName: customDomain.hostedZone,
       });
+    } else if (customDomain.hostedZone) {
+      hostedZone = customDomain.hostedZone;
     } else if (typeof customDomain.domainName === 'string') {
       // Skip if domain is not a Route53 domain
       if (customDomain.isExternalDomain === true) {

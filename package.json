@@ -42,7 +42,6 @@
     "aws-cdk-lib": "2.50.0",
     "aws-sdk": "^2.1250.0",
     "constructs": "10.0.5",
-    "esbuild": "0.15.13",
     "eslint": "^8",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-node": "^0.3.6",
@@ -65,8 +64,7 @@
   },
   "peerDependencies": {
     "aws-cdk-lib": "^2.50.0",
-    "constructs": "^10.0.5",
-    "esbuild": "^0.15.13"
+    "constructs": "^10.0.5"
   },
   "dependencies": {
     "@types/aws-lambda": "^8.10.108",
@@ -75,7 +73,9 @@
     "@types/micromatch": "^4.0.2",
     "aws-lambda": "^1.0.7",
     "cross-spawn": "^7.0.3",
+    "esbuild": "^0.15.13",
     "fs-extra": "^10.1.0",
+    "glob": "^8.0.3",
     "indent-string": "*",
     "jszip": "^3.10.1",
     "micromatch": "^4.0.5",
@@ -88,7 +88,9 @@
     "@types/micromatch",
     "aws-lambda",
     "cross-spawn",
+    "esbuild",
     "fs-extra",
+    "glob",
     "indent-string",
     "jszip",
     "micromatch",

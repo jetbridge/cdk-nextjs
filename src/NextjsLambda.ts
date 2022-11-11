@@ -73,7 +73,7 @@ export class NextJsLambda extends Construct {
         sourcemap: true,
         target: 'node16',
         platform: 'node',
-        external: ['sharp', 'next'],
+        external: ['sharp', 'next', 'aws-sdk'],
         format: 'cjs', // hope one day we can use esm
       },
     });

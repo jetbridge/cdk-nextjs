@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { CustomResource, Duration, Token } from 'aws-cdk-lib';
+import { App, CustomResource, Duration, Token } from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
@@ -43,6 +43,8 @@ export class NextjsS3EnvRewriter extends Construct {
 
     if (s3keys.length === 0) return;
 
+    const app = App.of(this) as App;
+
     // create a custom resource to find and replace tokenized strings in static files
     // must happen after deployment when tokens can be resolved
     // compile function
@@ -73,6 +75,14 @@ export class NextjsS3EnvRewriter extends Construct {
           actions: ['s3:GetObject', 's3:PutObject'],
           resources: [s3Bucket.arnForObjects('*')],
         }),
+        ...(cloudfrontDistributionId
+          ? [
+              new iam.PolicyStatement({
+                actions: ['cloudfront:CreateInvalidation'],
+                resources: [`arn:aws:cloudfront::${app.account}:distribution/${cloudfrontDistributionId}`],
+              }),
+            ]
+          : []),
       ],
     });
     // grant permission to read env var config if provided

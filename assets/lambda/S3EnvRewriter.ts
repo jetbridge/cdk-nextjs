@@ -111,7 +111,7 @@ const doRewrites = async (event: CdkCustomResourceEvent) => {
     const cloudfront = new AWS.CloudFront();
     const invalidationRes = await cloudfront
       .createInvalidation({
-        DistributionId: process.env.CLOUDFRONT_DISTRIBUTION_ID!,
+        DistributionId: cloudfrontDistributionId,
         InvalidationBatch: {
           CallerReference: Date.now().toString(),
           Paths: {

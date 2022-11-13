@@ -230,6 +230,9 @@ export class Nextjs extends Construct {
     // save props
     this.props = { ...props, tempBuildDir: this.tempBuildDir };
 
+    // create bucket for static assets
+    this.bucket = new s3.Bucket(this, 'StaticPublicBucket', {});
+
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, this.props);
     this.serverFunction = new NextJsLambda(this, 'Fn', {
@@ -237,12 +240,6 @@ export class Nextjs extends Construct {
       nextBuild: this.nextBuild,
       ...props.cdk?.lambda,
     });
-    this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
-      ...this.props,
-      ...props.cdk?.deployment,
-      nextBuild: this.nextBuild,
-    });
-    this.bucket = this.assetsDeployment.bucket;
 
     this.originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
       comment: 'Allows CloudFront to access S3 bucket with assets',
@@ -266,12 +263,18 @@ export class Nextjs extends Construct {
     this.distribution = this.props.isPlaceholder
       ? this.createCloudFrontDistributionForStub()
       : this.createCloudFrontDistribution();
+
+    // deploy nextjs static assets to s3
+    this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
+      ...this.props,
+      ...props.cdk?.deployment,
+      bucket: this.bucket,
+      nextBuild: this.nextBuild,
+      distribution: this.distribution,
+    });
+
     // wait for asset deployments to finish
     this.assetsDeployment.deployments.forEach((s3Deployment) => this.distribution.node.addDependency(s3Deployment));
-
-    // // Invalidate CloudFront (might already be handled by deployments?)
-    // const invalidationCR = this.createCloudFrontInvalidation();
-    // invalidationCR.node.addDependency(this.distribution);
 
     // Connect Custom Domain to CloudFront Distribution
     this.createRoute53Records();
@@ -605,44 +608,6 @@ export class Nextjs extends Construct {
 
     return fn;
   }
-
-  /* handled by BucketDeployment supposedly?
-
-  private createCloudFrontInvalidation(): CustomResource {
-    // Create a Lambda function that will be doing the invalidation
-    const invalidator = new lambda.Function(this, 'CloudFrontInvalidator', {
-      code: lambda.Code.fromAsset(path.join(__dirname, '../assets/BaseSite/custom-resource')),
-      // layers: [this.awsCliLayer], // needed?
-      runtime: lambda.Runtime.PYTHON_3_7,
-      handler: 'cf-invalidate.handler',
-      timeout: Duration.minutes(15),
-      memorySize: 1024,
-    });
-
-    // Grant permissions to invalidate CF Distribution
-    invalidator.addToRolePolicy(
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: ['cloudfront:GetInvalidation', 'cloudfront:CreateInvalidation'],
-        resources: ['*'],
-      })
-    );
-
-    const waitForInvalidation = this.props.waitForInvalidation === false ? false : true;
-
-    return new CustomResource(this, 'CloudFrontInvalidation', {
-      serviceToken: invalidator.functionArn,
-      resourceType: 'Custom::SSTCloudFrontInvalidation',
-      properties: {
-        BuildId: this.isPlaceholder ? 'live' : this._getNextBuildId(),
-        DistributionId: this.distribution.distributionId,
-        // TODO: Ignore the browser build path as it may speed up invalidation
-        DistributionPaths: ['/*'],
-        WaitForInvalidation: waitForInvalidation,
-      },
-    });
-  }
-  */
 
   /////////////////////
   // Custom Domain

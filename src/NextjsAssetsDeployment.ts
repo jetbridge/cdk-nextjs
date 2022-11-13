@@ -74,6 +74,7 @@ export class NextJsAssetsDeployment extends Construct {
           env: getS3ReplaceValues(this.props.environment, true),
         },
         debug: true,
+        cloudfrontDistributionId: this.props.distribution?.distributionId,
       });
       // wait for s3 assets to be uploaded first before running
       rewriter.node.addDependency(...this.deployments);

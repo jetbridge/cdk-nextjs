@@ -22,6 +22,7 @@ export interface RewriterParams {
   readonly s3keys: string[]; // files to rewrite
   readonly replacementConfig: RewriteReplacementsConfig;
   readonly debug?: boolean;
+  readonly cloudfrontDistributionId?: string;
 }
 
 export interface NextjsS3EnvRewriterProps extends NextjsBaseProps, RewriterParams {
@@ -38,7 +39,7 @@ export class NextjsS3EnvRewriter extends Construct {
   constructor(scope: Construct, id: string, props: NextjsS3EnvRewriterProps) {
     super(scope, id);
 
-    const { s3Bucket, s3keys, replacementConfig, nextBuild, debug } = props;
+    const { s3Bucket, s3keys, replacementConfig, nextBuild, debug, cloudfrontDistributionId } = props;
 
     if (s3keys.length === 0) return;
 
@@ -101,6 +102,7 @@ export class NextjsS3EnvRewriter extends Construct {
         jsonS3Bucket: replacementConfig.jsonS3Bucket?.bucketName,
       },
       debug,
+      cloudfrontDistributionId,
     };
     new CustomResource(this, 'RewriteStatic', {
       serviceToken: provider.serviceToken,

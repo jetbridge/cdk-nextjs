@@ -16,6 +16,7 @@ interface RewriterParams {
   s3keys: string[];
   replacementConfig: RewriteReplacementsConfig;
   debug?: boolean;
+  cloudfrontDistributionId?: string;
 }
 
 const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*.json'];
@@ -65,13 +66,14 @@ const doRewrites = async (event: CdkCustomResourceEvent) => {
 
   // rewrite static files
   const s3 = new AWS.S3();
-  const { s3keys, bucket, debug } = scriptParams;
+  const { s3keys, bucket, debug, cloudfrontDistributionId } = scriptParams;
   if (!s3keys || !bucket) {
     console.error('Missing required properties');
     return;
   }
 
   // iterate over s3keys and rewrite files
+  const rewrittenPaths: string[] = [];
   const promises = s3keys.map(async (key) => {
     // get file
     const keyParams = { Bucket: bucket, Key: key };
@@ -99,8 +101,27 @@ const doRewrites = async (event: CdkCustomResourceEvent) => {
     };
     const putRes = await s3.putObject(putParams).promise();
     if (debug) console.info(`Uploaded s3://${bucket}/${key}`, putRes);
+    rewrittenPaths.push('/' + key);
   });
   await Promise.all(promises);
+
+  // invalidate items that were just rewritten in cloudfront
+  if (cloudfrontDistributionId && rewrittenPaths.length) {
+    console.info('Invalidating rewritten files in cache', rewrittenPaths);
+    const cloudfront = new AWS.CloudFront();
+    const invalidationRes = await cloudfront
+      .createInvalidation({
+        DistributionId: process.env.CLOUDFRONT_DISTRIBUTION_ID!,
+        InvalidationBatch: {
+          CallerReference: Date.now().toString(),
+          Paths: {
+            Quantity: rewrittenPaths.length,
+            Items: rewrittenPaths,
+          },
+        },
+      })
+      .promise();
+  }
 };
 
 const doRewritesForTextFile = async (

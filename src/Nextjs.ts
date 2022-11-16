@@ -30,7 +30,7 @@ export interface NextjsCdkProps {
   /**
    * Override static file deployment settings.
    */
-  readonly deployment?: NextjsAssetsDeploymentProps;
+  readonly assetDeployment?: NextjsAssetsDeploymentProps;
 
   /**
    * Override server lambda function settings.
@@ -126,7 +126,7 @@ export class Nextjs extends Construct {
     // deploy nextjs static assets to s3
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
       ...props,
-      ...props.cdk?.deployment,
+      ...props.cdk?.assetDeployment,
       tempBuildDir,
       bucket: this.bucket,
       nextBuild: this.nextBuild,

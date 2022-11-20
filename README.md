@@ -99,7 +99,13 @@ This module is largely made up of code from the above projects.
 (TODO: will be moved to SST at some point)
 
 ```ts
-import { BaseSiteEnvironmentOutputsInfo, Nextjs, NextjsProps } from 'cdk-nextjs-standalone';
+import {
+  BaseSiteEnvironmentOutputsInfo,
+  Nextjs,
+  NextjsProps,
+} from "cdk-nextjs-standalone";
+import { Construct } from "constructs";
+import { App } from "@serverless-stack/resources";
 
 export interface NextjsSstProps extends NextjsProps {
   app: App;

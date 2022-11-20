@@ -105,7 +105,9 @@ import {
   NextjsProps,
 } from "cdk-nextjs-standalone";
 import { Construct } from "constructs";
-import { App } from "@serverless-stack/resources";
+import { App, Stack } from "@serverless-stack/resources";
+import path from "path";
+import { CfnOutput } from "aws-cdk-lib";
 
 export interface NextjsSstProps extends NextjsProps {
   app: App;

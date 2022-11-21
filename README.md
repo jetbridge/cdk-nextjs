@@ -38,6 +38,10 @@ module.exports = nextConfig;
 
 Available on [Construct Hub](https://constructs.dev/packages/cdk-nextjs-standalone/).
 
+### Discord Chat
+
+We're in the #nextjs channel on the [Serverless Stack Discord](https://discord.gg/sst).
+
 ## About
 
 Deploys a NextJs static site with server-side rendering and API support. Uses AWS lambda and CloudFront.

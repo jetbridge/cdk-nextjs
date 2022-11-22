@@ -2243,7 +2243,7 @@ const nextjsCdkProps: NextjsCdkProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps">NextjsCachePolicyProps</a></code> | Override the default CloudFront cache policies created internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.deployment">deployment</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps">NextjsAssetsDeploymentProps</a></code> | Override static file deployment settings. |
 | <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.distribution">distribution</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCdkDistributionProps">NextjsCdkDistributionProps</a></code> | Pass in a value to override the default settings this construct uses to create the CDK `Distribution` internally. |
-| <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.lambda">lambda</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps">NextjsLambdaProps</a></code> | Override server lambda function settings. |
+| <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override server lambda function settings. |
 | <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.lambdaOriginRequestPolicy">lambdaOriginRequestPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy</code> | Override the default CloudFront lambda origin request policy created internally. |
 
 ---
@@ -2287,10 +2287,10 @@ Pass in a value to override the default settings this construct uses to create t
 ##### `lambda`<sup>Optional</sup> <a name="lambda" id="cdk-nextjs-standalone.NextjsCdkProps.property.lambda"></a>
 
 ```typescript
-public readonly lambda: NextjsLambdaProps;
+public readonly lambda: FunctionOptions;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsLambdaProps">NextjsLambdaProps</a>
+- *Type:* aws-cdk-lib.aws_lambda.FunctionOptions
 
 Override server lambda function settings.
 

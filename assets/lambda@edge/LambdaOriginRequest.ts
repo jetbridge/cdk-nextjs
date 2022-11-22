@@ -10,6 +10,11 @@ export const handler: CloudFrontRequestHandler = (event, _context, callback) => 
   const request = event.Records[0].cf.request;
   // console.log('request', JSON.stringify(request, null, 2));
 
+  // remove cookies from requests to S3
+  if (request.origin?.s3) {
+    request.headers.cookie = [];
+  }
+
   // get config (only for custom lambda HTTP origin)
   const originUrlHeader = getCustomHeaderValue(request, 'x-origin-url');
   if (!originUrlHeader) return callback(null, request);

@@ -28,7 +28,7 @@ export const handler: CloudFrontRequestHandler = (event, _context, callback) => 
  * We have to use custom headers for passing configuration to the lambda@edge function.
  */
 function getCustomHeaderValue(request: CloudFrontRequest, headerName: string): string | undefined {
-  const originUrlHeader = request.origin?.custom?.customHeaders[headerName];
+  const originUrlHeader = request.origin?.custom?.customHeaders?.[headerName];
 
   if (!originUrlHeader || !originUrlHeader[0]) {
     if (request.origin?.custom) {

@@ -8,6 +8,7 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53Patterns from 'aws-cdk-lib/aws-route53-patterns';
 import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
@@ -23,7 +24,7 @@ import {
   NextjsBaseProps,
 } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
-import { NextJsLambda, NextjsLambdaProps } from './NextjsLambda';
+import { NextJsLambda } from './NextjsLambda';
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -65,7 +66,7 @@ export interface NextjsCdkProps {
   /**
    * Override server lambda function settings.
    */
-  readonly lambda?: NextjsLambdaProps;
+  readonly lambda?: FunctionOptions;
 }
 
 export interface NextjsProps extends NextjsBaseProps {
@@ -235,7 +236,7 @@ export class Nextjs extends Construct {
     this.serverFunction = new NextJsLambda(this, 'Fn', {
       ...this.props,
       nextBuild: this.nextBuild,
-      ...props.cdk?.lambda,
+      function: props.cdk?.lambda,
     });
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
       ...this.props,

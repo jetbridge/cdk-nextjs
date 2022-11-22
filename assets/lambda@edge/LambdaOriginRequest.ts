@@ -1,5 +1,5 @@
 import url from 'url';
-import type { CloudFrontRequestHandler } from 'aws-lambda';
+import type { CloudFrontRequest, CloudFrontRequestHandler } from 'aws-lambda';
 
 /**
  * This fixes the "host" header to be the host of the origin.
@@ -8,19 +8,35 @@ import type { CloudFrontRequestHandler } from 'aws-lambda';
  */
 export const handler: CloudFrontRequestHandler = (event, _context, callback) => {
   const request = event.Records[0].cf.request;
-  // console.log(JSON.stringify(request, null, 2))
+  // console.log('request', JSON.stringify(request, null, 2));
 
-  // get origin url from header
-  const originUrlHeader = request.origin?.custom?.customHeaders['x-origin-url'];
-  if (!originUrlHeader || !originUrlHeader[0]) {
-    console.error('Origin header wasn"t set correctly, cannot get origin url');
-    return callback(null, request);
-  }
-  const urlHeader = originUrlHeader[0].value;
-  const originUrl = url.parse(urlHeader, true);
+  // get config (only for custom lambda HTTP origin)
+  const originUrlHeader = getCustomHeaderValue(request, 'x-origin-url');
+  if (!originUrlHeader) return callback(null, request);
+  const originUrl = url.parse(originUrlHeader, true);
   if (!originUrl.host) throw new Error('Origin url host is missing');
 
-  request.headers['x-forwarded-host'] = [{ key: 'x-forwarded-host', value: request.headers.host[0].value }];
+  // fix host header and pass along the original host header
+  const originalHost = request.headers.host[0].value;
+  request.headers['x-forwarded-host'] = [{ key: 'x-forwarded-host', value: originalHost }];
   request.headers.host = [{ key: 'host', value: originUrl.host }];
   callback(null, request);
 };
+
+/**
+ * We can't use environment variables in the lambda@edge function.
+ * We have to use custom headers for passing configuration to the lambda@edge function.
+ */
+function getCustomHeaderValue(request: CloudFrontRequest, headerName: string): string | undefined {
+  const originUrlHeader = request.origin?.custom?.customHeaders[headerName];
+
+  if (!originUrlHeader || !originUrlHeader[0]) {
+    if (request.origin?.custom) {
+      // we should have an origin url header for custom lambda HTTP origin
+      console.error('Origin header wasn"t set correctly, cannot get origin url');
+    }
+    return undefined;
+  }
+
+  return originUrlHeader[0].value;
+}

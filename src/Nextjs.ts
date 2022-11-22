@@ -450,13 +450,7 @@ export class Nextjs extends Construct {
     const fallbackOriginRequestPolicy = new cloudfront.OriginRequestPolicy(this, 'FallbackOriginRequestPolicy', {
       cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(), // pretty much disables caching - maybe can be changed
       queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-      // we cannot forward the host header to a lambda URL
-      headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList(
-        'Accept',
-        'Referer',
-        'User-Agent',
-        'Content-Type'
-      ),
+      headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
       comment: 'Nextjs Fallback Origin Request Policy',
     });
 
@@ -485,7 +479,7 @@ export class Nextjs extends Construct {
         cachePolicy: lambdaCachePolicy,
         originRequestPolicy: fallbackOriginRequestPolicy,
 
-        // edgeLambdas: lambdaOriginEdgeFns,
+        edgeLambdas: lambdaOriginEdgeFns,
       },
 
       additionalBehaviors: {

@@ -19,7 +19,7 @@ new Nextjs(this, 'Web', {
 });
 ```
 
-If using a **monorepo**, you will [need](https://nextjs.org/docs/advanced-features/output-file-tracing#caveats) to point your `next.config.js` at the project root:
+If your NextJS app is not at the root, you will [need](https://nextjs.org/docs/advanced-features/output-file-tracing#caveats) to point your `next.config.js` at the project root:
 
 ```ts
 const path = require("path");

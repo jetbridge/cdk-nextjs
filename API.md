@@ -117,7 +117,6 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | The internally created CDK `Distribution` instance. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.lambdaFunctionUrl">lambdaFunctionUrl</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrl</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built NextJS project output. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.originAccessIdentity">originAccessIdentity</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginAccessIdentity</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextJsLambda">NextJsLambda</a></code> | The main NextJS server handler lambda function. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | The AWS Certificate Manager certificate for the custom domain. |
@@ -313,16 +312,6 @@ public readonly nextBuild: NextjsBuild;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 Built NextJS project output.
-
----
-
-##### `originAccessIdentity`<sup>Required</sup> <a name="originAccessIdentity" id="cdk-nextjs-standalone.Nextjs.property.originAccessIdentity"></a>
-
-```typescript
-public readonly originAccessIdentity: IOriginAccessIdentity;
-```
-
-- *Type:* aws-cdk-lib.aws_cloudfront.IOriginAccessIdentity
 
 ---
 

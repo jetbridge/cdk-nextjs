@@ -2,6 +2,7 @@ import * as os from 'os';
 import * as path from 'path';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
@@ -35,7 +36,7 @@ export interface NextjsCdkProps {
   /**
    * Override server lambda function settings.
    */
-  readonly lambda?: NextjsLambdaProps;
+  readonly lambda?: FunctionOptions;
 
   /**
    * Override CloudFront distribution settings.
@@ -121,7 +122,7 @@ export class Nextjs extends Construct {
       ...props,
       tempBuildDir,
       nextBuild: this.nextBuild,
-      ...props.cdk?.lambda,
+      function: props.cdk?.lambda,
     });
     // deploy nextjs static assets to s3
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {

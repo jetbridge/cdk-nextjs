@@ -19,20 +19,28 @@ new Nextjs(this, 'Web', {
 });
 ```
 
-If using a **monorepo**, you will [need](https://nextjs.org/docs/advanced-features/output-file-tracing#caveats) to point your `next.config.js` at the project root:
+If your NextJS app is not at the root, you will [need](https://nextjs.org/docs/advanced-features/output-file-tracing#caveats) to point your `next.config.js` at the project root:
 
 ```ts
-{
+const path = require("path");
+
+const nextConfig = {
   ...
   experimental: {
     outputFileTracingRoot: path.join(__dirname, '..'), // if your nextjs app lives one level deep
   },
 }
+
+module.exports = nextConfig;
 ```
 
 ## Documentation
 
 Available on [Construct Hub](https://constructs.dev/packages/cdk-nextjs-standalone/).
+
+### Discord Chat
+
+We're in the #nextjs channel on the [Serverless Stack Discord](https://discord.gg/sst).
 
 ## About
 
@@ -100,6 +108,10 @@ This module is largely made up of code from the above projects.
 
 ```ts
 import { BaseSiteEnvironmentOutputsInfo, Nextjs, NextjsProps } from 'cdk-nextjs-standalone';
+import { Construct } from 'constructs';
+import { App, Stack } from '@serverless-stack/resources';
+import path from 'path';
+import { CfnOutput } from 'aws-cdk-lib';
 
 export interface NextjsSstProps extends NextjsProps {
   app: App;
@@ -113,6 +125,7 @@ class NextjsSst extends Nextjs {
       ...props,
       isPlaceholder: app.local,
       tempBuildDir: app.buildDir,
+      stageName: app.stage,
 
       // make path relative to the app root
       nextjsPath: path.isAbsolute(props.nextjsPath) ? path.relative(app.appPath, props.nextjsPath) : props.nextjsPath,

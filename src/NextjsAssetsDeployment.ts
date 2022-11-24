@@ -168,12 +168,10 @@ export class NextJsAssetsDeployment extends Construct {
     // cdk.bucket is an imported construct
     if (bucket && isCDKConstruct(bucket)) {
       return bucket as s3.Bucket;
-    }
-    // cdk.bucket is a prop
-    else {
+    } else {
+      // cdk.bucket is props
       const bucketProps = bucket as s3.BucketProps;
       return new s3.Bucket(this, 'S3Bucket', {
-        publicReadAccess: true,
         autoDeleteObjects: true,
         removalPolicy: RemovalPolicy.DESTROY,
         ...bucketProps,

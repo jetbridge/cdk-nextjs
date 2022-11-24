@@ -454,11 +454,6 @@ export class NextjsDistribution extends Construct {
         'api/*': lambdaBehavior,
         '_next/data/*': lambdaBehavior,
 
-        // known static routes
-        // it would be nice to create routes for all the static files we know of
-        // but we run into the limit of CacheBehaviors per distribution
-        '_next/*': staticBehavior,
-
         // dynamic images go to lambda
         '_next/image*': {
           viewerProtocolPolicy,
@@ -469,6 +464,11 @@ export class NextjsDistribution extends Construct {
           cachePolicy: imageCachePolicy,
           originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER, // not sure what goes here
         },
+
+        // known static routes
+        // it would be nice to create routes for all the static files we know of
+        // but we run into the limit of CacheBehaviors per distribution
+        '_next/*': staticBehavior,
       },
     });
   }

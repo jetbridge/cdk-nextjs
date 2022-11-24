@@ -10,7 +10,7 @@ import { NextJsAssetsDeployment, NextjsAssetsDeploymentProps } from './NextjsAss
 import { BaseSiteCdkDistributionProps, BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution } from './NextjsDistribution';
-import { NextJsLambda, NextjsLambdaProps } from './NextjsLambda';
+import { NextJsLambda } from './NextjsLambda';
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -40,6 +40,8 @@ export interface NextjsCdkProps {
 
   /**
    * Override CloudFront distribution settings.
+   *
+   * These properties should all be optional but cannot be due to a limitation in jsii.
    */
   readonly distribution?: NextjsCdkDistributionProps;
 }

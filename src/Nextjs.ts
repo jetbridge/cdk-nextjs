@@ -5,7 +5,6 @@ import { App, Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
-import * as iam from 'aws-cdk-lib/aws-iam';
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
@@ -211,7 +210,6 @@ export class Nextjs extends Construct {
 
   protected props: NextjsProps;
 
-  public originAccessIdentity: cloudfront.IOriginAccessIdentity;
   public tempBuildDir: string;
   public configBucket?: s3.Bucket;
   public lambdaFunctionUrl!: lambda.FunctionUrl;
@@ -245,19 +243,6 @@ export class Nextjs extends Construct {
     });
     this.bucket = this.assetsDeployment.bucket;
 
-    this.originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
-      comment: 'Allows CloudFront to access S3 bucket with assets',
-    });
-
-    // allow cloudfront to access assets bucket
-    this.bucket.addToResourcePolicy(
-      new iam.PolicyStatement({
-        // only allow getting of files - not listing
-        actions: ['s3:GetObject'],
-        resources: [this.bucket.arnForObjects('*')],
-        principals: [this.originAccessIdentity.grantPrincipal],
-      })
-    );
     // Create Custom Domain
     this.validateCustomDomainSettings();
     this.hostedZone = this.lookupHostedZone();
@@ -355,9 +340,7 @@ export class Nextjs extends Construct {
     }
 
     // S3 origin
-    const s3Origin = new origins.S3Origin(this.bucket, {
-      originAccessIdentity: this.originAccessIdentity,
-    });
+    const s3Origin = new origins.S3Origin(this.bucket);
 
     const viewerProtocolPolicy = cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS;
 
@@ -534,9 +517,7 @@ export class Nextjs extends Construct {
       domainNames: this.buildDistributionDomainNames(),
       certificate: this.certificate,
       defaultBehavior: {
-        origin: new origins.S3Origin(this.bucket, {
-          originAccessIdentity: this.originAccessIdentity,
-        }),
+        origin: new origins.S3Origin(this.bucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
       ...this.props.cdk?.distribution, // not sure if needed

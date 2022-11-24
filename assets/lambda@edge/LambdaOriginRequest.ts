@@ -13,6 +13,12 @@ export const handler: CloudFrontRequestHandler = (event, _context, callback) => 
   // remove cookies from requests to S3
   if (request.origin?.s3) {
     request.headers.cookie = [];
+    request.headers.host = [
+      {
+        key: 'host',
+        value: request.origin.s3.domainName,
+      },
+    ]; // sending the wrong host header to S3 will cause a 403
   }
 
   // get config (only for custom lambda HTTP origin)

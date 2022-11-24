@@ -11,13 +11,13 @@ export { NextJsAssetsDeployment, NextjsAssetsDeploymentProps } from './NextjsAss
 export { NextjsBuild, NextjsBuildProps, CreateArchiveArgs } from './NextjsBuild';
 export { EnvironmentVars, NextJsLambda, NextjsLambdaProps } from './NextjsLambda';
 export { NextjsLayer, NextjsLayerProps } from './NextjsLayer';
+export {
+  NextjsDistribution,
+  NextjsCdkDistributionProps,
+  NextjsDistributionProps,
+  NextjsDomainProps,
+  NextjsCachePolicyProps,
+} from './NextjsDistribution';
 
 // L3 constructs
-export {
-  Nextjs,
-  NextjsCachePolicyProps,
-  NextjsCdkDistributionProps,
-  NextjsDomainProps,
-  NextjsProps,
-  NextjsCdkProps,
-} from './Nextjs';
+export { Nextjs, NextjsProps, NextjsCdkProps } from './Nextjs';

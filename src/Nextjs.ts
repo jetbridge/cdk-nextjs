@@ -16,7 +16,6 @@ import { NextJsLambda } from './NextjsLambda';
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
 export interface NextjsDomainProps extends BaseSiteDomainProps {}
-export interface NextjsCdkDistributionProps extends BaseSiteCdkDistributionProps {}
 
 export interface NextjsCachePolicyProps {
   readonly staticCachePolicy?: cloudfront.ICachePolicy;
@@ -43,7 +42,7 @@ export interface NextjsCdkProps {
    *
    * These properties should all be optional but cannot be due to a limitation in jsii.
    */
-  readonly distribution?: NextjsCdkDistributionProps;
+  readonly distribution?: BaseSiteCdkDistributionProps;
 }
 
 export interface NextjsProps extends NextjsBaseProps {

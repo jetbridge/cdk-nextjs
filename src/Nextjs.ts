@@ -412,22 +412,23 @@ export class Nextjs extends Construct {
 
     // requests for static objects
     const defaultStaticMaxAge = cdk?.cachePolicies?.staticClientMaxAgeDefault;
-    const staticResponseHeadersPolicy = defaultStaticMaxAge
-      ? new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
-          // add default header for static assets
-          customHeadersBehavior: {
-            customHeaders: [
-              {
-                header: 'cache-control',
-                override: false,
-                // by default tell browser to cache static files for this long
-                // this is separate from the origin cache policy
-                value: `public, max-age=${defaultStaticMaxAge}, immutable`,
-              },
-            ],
-          },
-        })
-      : undefined;
+    const staticResponseHeadersPolicy =
+      typeof defaultStaticMaxAge !== 'undefined'
+        ? new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
+            // add default header for static assets
+            customHeadersBehavior: {
+              customHeaders: [
+                {
+                  header: 'cache-control',
+                  override: false,
+                  // by default tell browser to cache static files for this long
+                  // this is separate from the origin cache policy
+                  value: `public, max-age=${defaultStaticMaxAge}, immutable`,
+                },
+              ],
+            },
+          })
+        : undefined;
     const staticBehavior: cloudfront.BehaviorOptions = {
       viewerProtocolPolicy,
       origin: s3Origin,

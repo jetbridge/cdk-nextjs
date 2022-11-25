@@ -28,7 +28,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@types/fs-extra',
     '@types/micromatch',
     '@types/aws-lambda',
-    'esbuild',
     'aws-lambda',
     'serverless-http',
     'jszip',
@@ -43,4 +42,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
 //   rules: {},
 // });
 // project.tsconfig.addInclude('assets/**/*.ts');
+
+project.tryFindObjectFile('package.json')?.addOverride('optionalDependencies', {
+  ['esbuild']: '^0.15.13',
+});
+
 project.synth();

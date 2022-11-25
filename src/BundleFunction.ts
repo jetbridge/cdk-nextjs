@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import { dirname } from 'path';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as esbuild from 'esbuild';
 
 interface BundleFunctionArgs {

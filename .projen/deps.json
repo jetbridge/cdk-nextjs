@@ -141,10 +141,6 @@
       "type": "bundled"
     },
     {
-      "name": "esbuild",
-      "type": "bundled"
-    },
-    {
       "name": "fs-extra",
       "type": "bundled"
     },

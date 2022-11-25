@@ -2,6 +2,10 @@
 // - https://github.com/iiroj/iiro.fi/commit/bd43222032d0dbb765e1111825f64dbb5db851d9
 // - https://github.com/sladg/nextjs-lambda/blob/master/lib/standalone/server-handler.ts
 
+// This change dir to current directory is a precaution, as nextjs may have
+// issues regarding file/folder locations.
+process.chdir(__dirname)
+
 import fs from 'node:fs';
 import { IncomingMessage, ServerResponse } from 'node:http';
 import path from 'node:path';
@@ -26,6 +30,9 @@ const requiredServerFilesPath = path.join(nextDir, 'required-server-files.json')
 const json = fs.readFileSync(requiredServerFilesPath, 'utf-8');
 const requiredServerFiles = JSON.parse(json) as { version: number; config: NextConfig };
 const config: Options = {
+  // hostname and port must be defined for proxying to work (middleware)
+  hostname: 'localhost',
+  port: Number(process.env.PORT) || 3000,
   // Next.js compression should be disabled because of a bug
   // in the bundled `compression` package. See:
   // https://github.com/vercel/next.js/issues/11669
@@ -33,7 +40,7 @@ const config: Options = {
   customServer: false,
   dev: false,
   dir: __dirname,
-  minimalMode: true,
+  minimalMode: false, // turning this on breaks middleware
 };
 
 // next request handler
@@ -52,7 +59,7 @@ const server = slsHttp(
     });
   },
   {
-    binary: ['*/*'],
+    binary: true,
     request: (request: any) => {
       // nextjs doesn't parse body if the property exists
       // https://github.com/dougmoscrop/serverless-http/issues/227

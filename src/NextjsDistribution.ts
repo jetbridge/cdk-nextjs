@@ -4,7 +4,7 @@ import { dirname } from 'path';
 import { App, Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
-import { Distribution, IDistribution } from 'aws-cdk-lib/aws-cloudfront';
+import { Distribution, IDistribution, ResponseHeadersPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
@@ -34,6 +34,11 @@ export interface NextjsCachePolicyProps {
   readonly staticCachePolicy?: cloudfront.ICachePolicy;
   readonly lambdaCachePolicy?: cloudfront.ICachePolicy;
   readonly imageCachePolicy?: cloudfront.ICachePolicy;
+
+  /**
+   * Cache-control max-age default for static assets (/_next/*) in seconds.
+   */
+  readonly staticClientMaxAgeDefault?: number;
 }
 
 export interface NextjsDistributionProps extends NextjsBaseProps {
@@ -379,6 +384,24 @@ export class NextjsDistribution extends Construct {
     const lambdaCachePolicy = cachePolicies?.lambdaCachePolicy ?? this.createCloudFrontLambdaCachePolicy();
 
     // requests for static objects
+    const defaultStaticMaxAge = cachePolicies?.staticClientMaxAgeDefault;
+    const staticResponseHeadersPolicy =
+      typeof defaultStaticMaxAge !== 'undefined'
+        ? new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
+            // add default header for static assets
+            customHeadersBehavior: {
+              customHeaders: [
+                {
+                  header: 'cache-control',
+                  override: false,
+                  // by default tell browser to cache static files for this long
+                  // this is separate from the origin cache policy
+                  value: `public, max-age=${defaultStaticMaxAge}, immutable`,
+                },
+              ],
+            },
+          })
+        : undefined;
     const staticBehavior: cloudfront.BehaviorOptions = {
       viewerProtocolPolicy,
       origin: s3Origin,
@@ -386,6 +409,7 @@ export class NextjsDistribution extends Construct {
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
       compress: true,
       cachePolicy: staticCachePolicy,
+      responseHeadersPolicy: staticResponseHeadersPolicy,
     };
 
     // requests going to lambda (api, etc)

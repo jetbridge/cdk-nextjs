@@ -1,6 +1,5 @@
 import * as os from 'os';
 import * as path from 'path';
-import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
@@ -16,12 +15,6 @@ import { NextJsLambda } from './NextjsLambda';
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
 export interface NextjsDomainProps extends BaseSiteDomainProps {}
-
-export interface NextjsCachePolicyProps {
-  readonly staticCachePolicy?: cloudfront.ICachePolicy;
-  readonly lambdaCachePolicy?: cloudfront.ICachePolicy;
-  readonly imageCachePolicy?: cloudfront.ICachePolicy;
-}
 
 /**
  * Resources that will be created automatically if not supplied.

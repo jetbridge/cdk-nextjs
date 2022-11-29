@@ -148,6 +148,7 @@ export class NextjsBuild extends Construct {
 
   readPublicFileList() {
     const publicDir = this._getNextPublicDir();
+    if (!fs.existsSync(publicDir)) return [];
     return listDirectory(publicDir).map((file) => path.join('/', path.relative(publicDir, file)));
   }
 

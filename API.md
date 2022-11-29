@@ -4,9 +4,9 @@
 
 ### Nextjs <a name="Nextjs" id="cdk-nextjs-standalone.Nextjs"></a>
 
-The `Nextjs` construct is a higher level CDK construct that makes it easy to create a NextJS app.
+The `Nextjs` construct is a higher level construct that makes it easy to create a NextJS app.
 
-Your standalone server application will be bundled using output tracing and will be deployed to a Lambda function.
+Your standalone server application will be bundled using o(utput tracing and will be deployed to a Lambda function.
 Static assets will be deployed to an S3 bucket and served via CloudFront.
 You must use Next.js 10.3.0 or newer.
 
@@ -102,6 +102,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-nextjs-standalone.Nextjs.property.url">url</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.assetsDeployment">assetsDeployment</a></code> | <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment">NextJsAssetsDeployment</a></code> | Asset deployment to S3. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing NextJS static assets. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.distribution">distribution</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistribution">NextjsDistribution</a></code> | CloudFront distribution. |
@@ -122,6 +123,16 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `url`<sup>Required</sup> <a name="url" id="cdk-nextjs-standalone.Nextjs.property.url"></a>
+
+```typescript
+public readonly url: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -2009,47 +2020,49 @@ Cache-control max-age default for static assets (/_next/*) in seconds.
 
 ---
 
-### NextjsCdkProps <a name="NextjsCdkProps" id="cdk-nextjs-standalone.NextjsCdkProps"></a>
+### NextjsDefaultsProps <a name="NextjsDefaultsProps" id="cdk-nextjs-standalone.NextjsDefaultsProps"></a>
 
-Resources that will be created automatically if not supplied.
+Defaults for created resources.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsCdkProps.Initializer"></a>
+Why `any`? see https://github.com/aws/jsii/issues/2901
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsDefaultsProps.Initializer"></a>
 
 ```typescript
-import { NextjsCdkProps } from 'cdk-nextjs-standalone'
+import { NextjsDefaultsProps } from 'cdk-nextjs-standalone'
 
-const nextjsCdkProps: NextjsCdkProps = { ... }
+const nextjsDefaultsProps: NextjsDefaultsProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.assetDeployment">assetDeployment</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps">NextjsAssetsDeploymentProps</a></code> | Override static file deployment settings. |
-| <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.DistributionProps</code> | Override CloudFront distribution settings. |
-| <code><a href="#cdk-nextjs-standalone.NextjsCdkProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override server lambda function settings. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.assetDeployment">assetDeployment</a></code> | <code>any</code> | Override static file deployment settings. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.distribution">distribution</a></code> | <code>any</code> | Override CloudFront distribution settings. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override server lambda function settings. |
 
 ---
 
-##### `assetDeployment`<sup>Optional</sup> <a name="assetDeployment" id="cdk-nextjs-standalone.NextjsCdkProps.property.assetDeployment"></a>
+##### `assetDeployment`<sup>Optional</sup> <a name="assetDeployment" id="cdk-nextjs-standalone.NextjsDefaultsProps.property.assetDeployment"></a>
 
 ```typescript
-public readonly assetDeployment: NextjsAssetsDeploymentProps;
+public readonly assetDeployment: any;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps">NextjsAssetsDeploymentProps</a>
+- *Type:* any
 
 Override static file deployment settings.
 
 ---
 
-##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsCdkProps.property.distribution"></a>
+##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDefaultsProps.property.distribution"></a>
 
 ```typescript
-public readonly distribution: DistributionProps;
+public readonly distribution: any;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.DistributionProps
+- *Type:* any
 
 Override CloudFront distribution settings.
 
@@ -2057,7 +2070,7 @@ These properties should all be optional but cannot be due to a limitation in jsi
 
 ---
 
-##### `lambda`<sup>Optional</sup> <a name="lambda" id="cdk-nextjs-standalone.NextjsCdkProps.property.lambda"></a>
+##### `lambda`<sup>Optional</sup> <a name="lambda" id="cdk-nextjs-standalone.NextjsDefaultsProps.property.lambda"></a>
 
 ```typescript
 public readonly lambda: FunctionOptions;
@@ -2066,6 +2079,36 @@ public readonly lambda: FunctionOptions;
 - *Type:* aws-cdk-lib.aws_lambda.FunctionOptions
 
 Override server lambda function settings.
+
+---
+
+### NextjsDistributionCdkProps <a name="NextjsDistributionCdkProps" id="cdk-nextjs-standalone.NextjsDistributionCdkProps"></a>
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsDistributionCdkProps.Initializer"></a>
+
+```typescript
+import { NextjsDistributionCdkProps } from 'cdk-nextjs-standalone'
+
+const nextjsDistributionCdkProps: NextjsDistributionCdkProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.DistributionProps</code> | Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally. |
+
+---
+
+##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution"></a>
+
+```typescript
+public readonly distribution: DistributionProps;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.DistributionProps
+
+Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally.
 
 ---
 
@@ -2090,12 +2133,12 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built NextJS app. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps">NextjsCachePolicyProps</a></code> | Override the default CloudFront cache policies created internally. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cdk">cdk</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps">NextjsDistributionCdkProps</a></code> | Overrides for created CDK resources. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.customDomain">customDomain</a></code> | <code>string \| <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | The customDomain for this website. Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.DistributionProps</code> | Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.lambdaOriginRequestPolicy">lambdaOriginRequestPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy</code> | Override the default CloudFront lambda origin request policy created internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.stageName">stageName</a></code> | <code>string</code> | Include the name of your deployment stage if present. |
 
@@ -2200,6 +2243,8 @@ public readonly nextBuild: NextjsBuild;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
+Built NextJS app.
+
 ---
 
 ##### `serverFunction`<sup>Required</sup> <a name="serverFunction" id="cdk-nextjs-standalone.NextjsDistributionProps.property.serverFunction"></a>
@@ -2211,6 +2256,8 @@ public readonly serverFunction: IFunction;
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
 Lambda function to route all non-static requests to.
+
+Must be provided if you want to serve dynamic requests.
 
 ---
 
@@ -2224,6 +2271,8 @@ public readonly staticAssetsBucket: IBucket;
 
 Bucket containing static assets.
 
+Must be provided if you want to serve static files.
+
 ---
 
 ##### `cachePolicies`<sup>Optional</sup> <a name="cachePolicies" id="cdk-nextjs-standalone.NextjsDistributionProps.property.cachePolicies"></a>
@@ -2235,6 +2284,18 @@ public readonly cachePolicies: NextjsCachePolicyProps;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsCachePolicyProps">NextjsCachePolicyProps</a>
 
 Override the default CloudFront cache policies created internally.
+
+---
+
+##### `cdk`<sup>Optional</sup> <a name="cdk" id="cdk-nextjs-standalone.NextjsDistributionProps.property.cdk"></a>
+
+```typescript
+public readonly cdk: NextjsDistributionCdkProps;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps">NextjsDistributionCdkProps</a>
+
+Overrides for created CDK resources.
 
 ---
 
@@ -2256,13 +2317,11 @@ Note that you can also migrate externally hosted domains to Route 53 by
 *Example*
 
 ```typescript
-new Nextjs(this, "Web", {
-  nextjsPath: ".",
+new NextjsDistribution(this, "Dist", {
   customDomain: "domain.com",
 });
 
-new Nextjs(this, "Web", {
-  nextjsPath: "packages/web", // monorepo: relative to the root of the CDK project
+new NextjsDistribution(this, "Dist", {
   customDomain: {
     domainName: "domain.com",
     domainAlias: "www.domain.com",
@@ -2271,18 +2330,6 @@ new Nextjs(this, "Web", {
 });
 ```
 
-
-##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDistributionProps.property.distribution"></a>
-
-```typescript
-public readonly distribution: DistributionProps;
-```
-
-- *Type:* aws-cdk-lib.aws_cloudfront.DistributionProps
-
-Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally.
-
----
 
 ##### `lambdaOriginRequestPolicy`<sup>Optional</sup> <a name="lambdaOriginRequestPolicy" id="cdk-nextjs-standalone.NextjsDistributionProps.property.lambdaOriginRequestPolicy"></a>
 
@@ -2591,7 +2638,7 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.cdk">cdk</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCdkProps">NextjsCdkProps</a></code> | Allows you to override defaults for the CDK resources created by this construct. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.defaults">defaults</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps">NextjsDefaultsProps</a></code> | Allows you to override defaults for the resources created by this construct. |
 
 ---
 
@@ -2686,15 +2733,15 @@ Defaults to os.tmpdir().
 
 ---
 
-##### `cdk`<sup>Optional</sup> <a name="cdk" id="cdk-nextjs-standalone.NextjsProps.property.cdk"></a>
+##### `defaults`<sup>Optional</sup> <a name="defaults" id="cdk-nextjs-standalone.NextjsProps.property.defaults"></a>
 
 ```typescript
-public readonly cdk: NextjsCdkProps;
+public readonly defaults: NextjsDefaultsProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsCdkProps">NextjsCdkProps</a>
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDefaultsProps">NextjsDefaultsProps</a>
 
-Allows you to override defaults for the CDK resources created by this construct.
+Allows you to override defaults for the resources created by this construct.
 
 ---
 

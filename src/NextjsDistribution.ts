@@ -183,8 +183,6 @@ export class NextjsDistribution extends Construct {
   constructor(scope: Construct, id: string, props: NextjsDistributionProps) {
     super(scope, id);
 
-    if (!props.quiet) console.debug('┌ Building Next.js app ▼ ...');
-
     // get dir to store temp build files in
     this.tempBuildDir = props.tempBuildDir
       ? path.resolve(
@@ -207,8 +205,6 @@ export class NextjsDistribution extends Construct {
 
     // Connect Custom Domain to CloudFront Distribution
     this.createRoute53Records();
-
-    if (!props.quiet) console.debug('└ Finished preparing NextJS app for deployment');
   }
 
   /**

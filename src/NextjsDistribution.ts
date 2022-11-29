@@ -255,21 +255,13 @@ export class NextjsDistribution extends Construct {
 
   private createCloudFrontDistribution(): cloudfront.Distribution {
     const {
-      customDomain,
       distribution: cfDistributionProps,
       cachePolicies,
       lambdaOriginRequestPolicy: lambdaOriginRequestPolicyOverride,
     } = this.props;
 
     // build domainNames
-    const domainNames = [];
-    if (!customDomain) {
-      // no domain
-    } else if (typeof customDomain === 'string') {
-      domainNames.push(customDomain);
-    } else {
-      domainNames.push(customDomain.domainName);
-    }
+    const domainNames = this.buildDistributionDomainNames();
 
     // S3 origin
     const s3Origin = new origins.S3Origin(this.props.staticAssetsBucket);
@@ -370,11 +362,9 @@ export class NextjsDistribution extends Construct {
       viewerProtocolPolicy,
       origin: serverFunctionOrigin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-      // allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
-      // cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
+      // cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS, // this should be configurable
       originRequestPolicy: lambdaOriginRequestPolicy,
       compress: true,
-      // cachePolicy: lambdaCachePolicy,
       cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
       edgeLambdas: lambdaOriginEdgeFns,
     };
@@ -385,13 +375,7 @@ export class NextjsDistribution extends Construct {
     const fallbackOriginRequestPolicy = new cloudfront.OriginRequestPolicy(this, 'FallbackOriginRequestPolicy', {
       cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(), // pretty much disables caching - maybe can be changed
       queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-      // we cannot forward the host header to a lambda URL
-      headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList(
-        'Accept',
-        'Referer',
-        'User-Agent',
-        'Content-Type'
-      ),
+      headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
       comment: 'Nextjs Fallback Origin Request Policy',
     });
 
@@ -412,15 +396,13 @@ export class NextjsDistribution extends Construct {
       defaultBehavior: {
         origin: fallbackOriginGroup, // try S3 first, then lambda
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        // allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL, // doesn't work with an OriginGroup
-        // cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
         compress: true,
 
         // what goes here? static or lambda?
         cachePolicy: lambdaCachePolicy,
         originRequestPolicy: fallbackOriginRequestPolicy,
 
-        // edgeLambdas: lambdaOriginEdgeFns,
+        edgeLambdas: lambdaOriginEdgeFns,
       },
 
       additionalBehaviors: {

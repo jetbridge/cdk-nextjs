@@ -73,7 +73,7 @@ export class NextJsAssetsDeployment extends Construct {
         replacementConfig: {
           env: getS3ReplaceValues(this.props.environment, true),
         },
-        debug: true,
+        debug: false,
         cloudfrontDistributionId: this.props.distribution?.distributionId,
       });
       // wait for s3 assets to be uploaded first before running

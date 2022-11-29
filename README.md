@@ -15,7 +15,7 @@ import path from 'path';
 import { Nextjs } from 'cdk-nextjs-standalone';
 
 new Nextjs(this, 'Web', {
-  path: './web', // relative path to nextjs project root
+  nextjsPath: './web', // relative path to nextjs project root
 });
 ```
 
@@ -131,12 +131,12 @@ class NextjsSst extends Nextjs {
       nextjsPath: path.isAbsolute(props.nextjsPath) ? path.relative(app.appPath, props.nextjsPath) : props.nextjsPath,
     });
 
-    if (props.environment) this.registerSiteEnvironment(props.environment);
+    if (props.environment) this.registerSiteEnvironment(props);
   }
 
-  protected registerSiteEnvironment(environment: Record<string, string>) {
+  protected registerSiteEnvironment(props: NextjsSstProps) {
     const environmentOutputs: Record<string, string> = {};
-    for (const [key, value] of Object.entries(environment)) {
+    for (const [key, value] of Object.entries(props.environment)) {
       const outputId = `SstSiteEnv_${key}`;
       const output = new CfnOutput(this, outputId, { value });
       environmentOutputs[key] = Stack.of(this).getLogicalId(output);
@@ -145,13 +145,17 @@ class NextjsSst extends Nextjs {
     const app = this.node.root as App;
     app.registerSiteEnvironment({
       id: this.node.id,
-      path: this.props.nextjsPath,
+      path: props.nextjsPath,
       stack: Stack.of(this).node.id,
       environmentOutputs,
     } as BaseSiteEnvironmentOutputsInfo);
   }
 }
 ```
+
+## Breaking changes
+
+- v2.0.0: SST wrapper changed, lambda/assets/distribution defaults now are in the `defaults` prop.
 
 ## To-do
 

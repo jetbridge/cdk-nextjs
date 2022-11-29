@@ -6,9 +6,9 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import { NextJsAssetsDeployment, NextjsAssetsDeploymentProps } from './NextjsAssetsDeployment';
-import { BaseSiteCdkDistributionProps, BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
+import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
-import { NextjsDistribution } from './NextjsDistribution';
+import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
 import { NextJsLambda } from './NextjsLambda';
 
 // contains server-side resolved environment vars in config bucket
@@ -17,13 +17,14 @@ export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 export interface NextjsDomainProps extends BaseSiteDomainProps {}
 
 /**
- * Resources that will be created automatically if not supplied.
+ * Defaults for created resources.
+ * Why `any`? see https://github.com/aws/jsii/issues/2901
  */
-export interface NextjsCdkProps {
+export interface NextjsDefaultsProps {
   /**
    * Override static file deployment settings.
    */
-  readonly assetDeployment?: NextjsAssetsDeploymentProps;
+  readonly assetDeployment?: NextjsAssetsDeploymentProps | any;
 
   /**
    * Override server lambda function settings.
@@ -35,21 +36,21 @@ export interface NextjsCdkProps {
    *
    * These properties should all be optional but cannot be due to a limitation in jsii.
    */
-  readonly distribution?: BaseSiteCdkDistributionProps;
+  readonly distribution?: NextjsDistributionProps | any;
 }
 
 export interface NextjsProps extends NextjsBaseProps {
   /**
-   * Allows you to override defaults for the CDK resources created by this
+   * Allows you to override defaults for the resources created by this
    * construct.
    */
-  readonly cdk?: NextjsCdkProps;
+  readonly defaults?: NextjsDefaultsProps;
 }
 
 /**
- * The `Nextjs` construct is a higher level CDK construct that makes it easy to create a NextJS app.
+ * The `Nextjs` construct is a higher level construct that makes it easy to create a NextJS app.
  *
- * Your standalone server application will be bundled using output tracing and will be deployed to a Lambda function.
+ * Your standalone server application will be bundled using o(utput tracing and will be deployed to a Lambda function.
  * Static assets will be deployed to an S3 bucket and served via CloudFront.
  * You must use Next.js 10.3.0 or newer.
  *
@@ -116,12 +117,12 @@ export class Nextjs extends Construct {
       ...props,
       tempBuildDir,
       nextBuild: this.nextBuild,
-      lambda: props.cdk?.lambda,
+      lambda: props.defaults?.lambda,
     });
     // deploy nextjs static assets to s3
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
       ...props,
-      ...props.cdk?.assetDeployment,
+      ...props.defaults?.assetDeployment,
       tempBuildDir,
       bucket: this.bucket,
       nextBuild: this.nextBuild,
@@ -132,14 +133,17 @@ export class Nextjs extends Construct {
 
     this.distribution = new NextjsDistribution(this, 'Distribution', {
       ...props,
-      ...props.cdk?.distribution,
+      ...props.defaults?.distribution,
       staticAssetsBucket: this.bucket,
       tempBuildDir,
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction.lambdaFunction,
-      distribution: props.cdk?.distribution,
     });
 
     if (!props.quiet) console.debug('└ Finished preparing NextJS app for deployment');
+  }
+
+  public get url(): string {
+    return this.distribution.url;
   }
 }

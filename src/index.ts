@@ -1,5 +1,4 @@
 export {
-  BaseSiteCdkDistributionProps,
   BaseSiteEnvironmentOutputsInfo,
   BaseSiteReplaceProps,
   BaseSiteDomainProps,
@@ -13,11 +12,12 @@ export { EnvironmentVars, NextJsLambda, NextjsLambdaProps } from './NextjsLambda
 export { NextjsLayer, NextjsLayerProps } from './NextjsLayer';
 export {
   NextjsDistribution,
-  NextjsCdkDistributionProps,
+  NextjsDistributionCdkProps,
+  NextjsDistributionCdkOverrideProps,
   NextjsDistributionProps,
   NextjsDomainProps,
   NextjsCachePolicyProps,
 } from './NextjsDistribution';
 
 // L3 constructs
-export { Nextjs, NextjsProps, NextjsCdkProps } from './Nextjs';
+export { Nextjs, NextjsProps, NextjsDefaultsProps } from './Nextjs';

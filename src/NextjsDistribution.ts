@@ -15,19 +15,23 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import { bundleFunction } from './BundleFunction';
-import {
-  BaseSiteCdkDistributionProps,
-  BaseSiteDomainProps,
-  buildErrorResponsesForRedirectToIndex,
-  NextjsBaseProps,
-} from './NextjsBase';
+import { BaseSiteDomainProps, buildErrorResponsesForRedirectToIndex, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
 export interface NextjsDomainProps extends BaseSiteDomainProps {}
-export type NextjsCdkDistributionProps = BaseSiteCdkDistributionProps;
+
+export type NextjsDistributionCdkOverrideProps = cloudfront.DistributionProps;
+
+export interface NextjsDistributionCdkProps {
+  /**
+   * Pass in a value to override the default settings this construct uses to
+   * create the CloudFront `Distribution` internally.
+   */
+  readonly distribution?: NextjsDistributionCdkOverrideProps;
+}
 
 export interface NextjsCachePolicyProps {
   readonly staticCachePolicy?: cloudfront.ICachePolicy;
@@ -43,20 +47,24 @@ export interface NextjsCachePolicyProps {
 export interface NextjsDistributionProps extends NextjsBaseProps {
   /**
    * Bucket containing static assets.
+   * Must be provided if you want to serve static files.
    */
   readonly staticAssetsBucket: s3.IBucket;
 
   /**
-   * Pass in a value to override the default settings this construct uses to
-   * create the CloudFront `Distribution` internally.
-   */
-  readonly distribution?: NextjsCdkDistributionProps;
-
-  /**
    * Lambda function to route all non-static requests to.
+   * Must be provided if you want to serve dynamic requests.
    */
   readonly serverFunction: lambda.IFunction;
 
+  /**
+   * Overrides for created CDK resources.
+   */
+  readonly cdk?: NextjsDistributionCdkProps;
+
+  /**
+   * Built NextJS app.
+   */
   readonly nextBuild: NextjsBuild;
 
   /**
@@ -77,13 +85,11 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
    * [following this guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/MigratingDNS.html).
    *
    * @example
-   * new Nextjs(this, "Web", {
-   *   nextjsPath: ".",
+   * new NextjsDistribution(this, "Dist", {
    *   customDomain: "domain.com",
    * });
    *
-   * new Nextjs(this, "Web", {
-   *   nextjsPath: "packages/web", // monorepo: relative to the root of the CDK project
+   * new NextjsDistribution(this, "Dist", {
    *   customDomain: {
    *     domainName: "domain.com",
    *     domainAlias: "www.domain.com",
@@ -250,11 +256,8 @@ export class NextjsDistribution extends Construct {
   /////////////////////
 
   private createCloudFrontDistribution(): cloudfront.Distribution {
-    const {
-      distribution: cfDistributionProps,
-      cachePolicies,
-      lambdaOriginRequestPolicy: lambdaOriginRequestPolicyOverride,
-    } = this.props;
+    const { cdk: cdkProps, cachePolicies, lambdaOriginRequestPolicy: lambdaOriginRequestPolicyOverride } = this.props;
+    const cfDistributionProps = cdkProps?.distribution;
 
     // build domainNames
     const domainNames = this.buildDistributionDomainNames();
@@ -458,7 +461,7 @@ export class NextjsDistribution extends Construct {
         origin: new origins.S3Origin(this.props.staticAssetsBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
-      ...this.props.distribution, // not sure if needed
+      ...this.props.cdk?.distribution, // not sure if needed
     });
   }
 

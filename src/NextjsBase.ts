@@ -1,5 +1,5 @@
 import { ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { DistributionProps, ErrorResponse } from 'aws-cdk-lib/aws-cloudfront';
+import { ErrorResponse } from 'aws-cdk-lib/aws-cloudfront';
 import { IHostedZone } from 'aws-cdk-lib/aws-route53';
 
 export type CompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
@@ -85,12 +85,6 @@ export interface BaseSiteDomainProps {
   readonly certificate?: ICertificate;
 }
 
-export type BaseSiteCdkDistributionProps = DistributionProps;
-// export interface BaseSiteCdkDistributionProps extends Omit<DistributionProps, 'defaultBehavior'> {
-//   readonly defaultBehavior?: Omit<BehaviorOptions, 'origin'> & {
-//     origin?: IOrigin;
-//   };
-// }
 export interface BaseSiteReplaceProps {
   readonly files: string;
   readonly search: string;

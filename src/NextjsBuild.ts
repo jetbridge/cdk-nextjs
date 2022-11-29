@@ -270,7 +270,7 @@ function getRootTracePath(p: string): string {
   p = p.replace(/^\.\/?/, '');
   return p
     .split('/')
-    .filter((v) => v)
+    .filter((v) => v && v !== '.')
     .map(() => '..')
     .join('/');
 }

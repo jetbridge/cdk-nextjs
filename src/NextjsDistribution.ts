@@ -4,9 +4,8 @@ import { dirname } from 'path';
 import { App, Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
-import { Distribution, IDistribution, ResponseHeadersPolicy } from 'aws-cdk-lib/aws-cloudfront';
+import { Distribution, ResponseHeadersPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
-import * as iam from 'aws-cdk-lib/aws-iam';
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as route53 from 'aws-cdk-lib/aws-route53';
@@ -28,7 +27,7 @@ import { NextjsBuild } from './NextjsBuild';
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
 export interface NextjsDomainProps extends BaseSiteDomainProps {}
-export type NextjsCdkDistributionProps = BaseSiteCdkDistributionProps | IDistribution;
+export type NextjsCdkDistributionProps = BaseSiteCdkDistributionProps;
 
 export interface NextjsCachePolicyProps {
   readonly staticCachePolicy?: cloudfront.ICachePolicy;
@@ -42,7 +41,10 @@ export interface NextjsCachePolicyProps {
 }
 
 export interface NextjsDistributionProps extends NextjsBaseProps {
-  readonly bucket?: s3.IBucket;
+  /**
+   * Bucket containing static assets.
+   */
+  readonly staticAssetsBucket: s3.IBucket;
 
   /**
    * Pass in a value to override the default settings this construct uses to
@@ -68,10 +70,6 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
   readonly lambdaOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
 
   /**
-   * While deploying, waits for the CloudFront cache invalidation process to finish. This ensures that the new content will be served once the deploy command finishes. However, this process can sometimes take more than 5 mins. For non-prod environments it might make sense to pass in `false`. That'll skip waiting for the cache to invalidate and speed up the deploy process.
-   */
-  // readonly waitForInvalidation?: boolean;
-  /**
    * The customDomain for this website. Supports domains that are hosted
    * either on [Route 53](https://aws.amazon.com/route53/) or externally.
    *
@@ -96,26 +94,15 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
   readonly customDomain?: string | NextjsDomainProps;
 
   /**
-   * While deploying, waits for the CloudFront cache invalidation process to finish. This ensures that the new content will be served once the deploy command finishes. However, this process can sometimes take more than 5 mins. For non-prod environments it might make sense to pass in `false`. That'll skip waiting for the cache to invalidate and speed up the deploy process.
+   * Include the name of your deployment stage if present.
+   * Used to name the edge functions stack.
+   * Required if using SST.
    */
-  // readonly waitForInvalidation?: boolean;
-
   readonly stageName?: string;
 }
 
 /**
- * The `Nextjs` construct is a higher level CDK construct that makes it easy to create a NextJS app.
- *
- * Your standalone server application will be bundled using output tracing and will be deployed to a Lambda function.
- * Static assets will be deployed to an S3 bucket and served via CloudFront.
- * You must use Next.js 10.3.0 or newer.
- *
- * Please provide a `nextjsPath` to the Next.js app inside your project.
- *
- * @example
- * new Nextjs(this, "Web", {
- *   nextjsPath: path.resolve("packages/web"),
- * })
+ * Create a CloudFront distribution to serve a Next.js application.
  */
 export class NextjsDistribution extends Construct {
   /**
@@ -191,9 +178,7 @@ export class NextjsDistribution extends Construct {
    */
   certificate?: acm.ICertificate;
 
-  public originAccessIdentity: cloudfront.IOriginAccessIdentity;
   public tempBuildDir: string;
-  public bucket: s3.IBucket;
 
   constructor(scope: Construct, id: string, props: NextjsDistributionProps) {
     super(scope, id);
@@ -210,22 +195,6 @@ export class NextjsDistribution extends Construct {
     // save props
     this.props = { ...props, tempBuildDir: this.tempBuildDir };
 
-    // create bucket for static assets
-    this.bucket = props.bucket || new s3.Bucket(this, 'StaticPublicBucket', {});
-
-    this.originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
-      comment: 'Allows CloudFront to access S3 bucket with assets',
-    });
-
-    // allow cloudfront to access assets bucket
-    this.bucket.addToResourcePolicy(
-      new iam.PolicyStatement({
-        // only allow getting of files - not listing
-        actions: ['s3:GetObject'],
-        resources: [this.bucket.arnForObjects('*')],
-        principals: [this.originAccessIdentity.grantPrincipal],
-      })
-    );
     // Create Custom Domain
     this.validateCustomDomainSettings();
     this.hostedZone = this.lookupHostedZone();
@@ -267,20 +236,6 @@ export class NextjsDistribution extends Construct {
   }
 
   /**
-   * The ARN of the internally created S3 Bucket.
-   */
-  public get bucketArn(): string {
-    return this.bucket.bucketArn;
-  }
-
-  /**
-   * The name of the internally created S3 Bucket.
-   */
-  public get bucketName(): string {
-    return this.bucket.bucketName;
-  }
-
-  /**
    * The ID of the internally created CloudFront Distribution.
    */
   public get distributionId(): string {
@@ -317,9 +272,7 @@ export class NextjsDistribution extends Construct {
     }
 
     // S3 origin
-    const s3Origin = new origins.S3Origin(this.bucket, {
-      originAccessIdentity: this.originAccessIdentity,
-    });
+    const s3Origin = new origins.S3Origin(this.props.staticAssetsBucket);
 
     const viewerProtocolPolicy = cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS;
 
@@ -524,9 +477,7 @@ export class NextjsDistribution extends Construct {
       domainNames: this.buildDistributionDomainNames(),
       certificate: this.certificate,
       defaultBehavior: {
-        origin: new origins.S3Origin(this.bucket, {
-          originAccessIdentity: this.originAccessIdentity,
-        }),
+        origin: new origins.S3Origin(this.props.staticAssetsBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
       ...this.props.distribution, // not sure if needed

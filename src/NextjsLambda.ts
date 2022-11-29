@@ -21,7 +21,7 @@ export type EnvironmentVars = Record<string, string>;
 function getEnvironment(props: NextjsLambdaProps): { [name: string]: string } {
   const environmentVariables: { [name: string]: string } = {
     ...props.environment,
-    ...props.function?.environment,
+    ...props.lambda?.environment,
     ...(props.nodeEnv ? { NODE_ENV: props.nodeEnv } : {}),
   };
 
@@ -37,7 +37,7 @@ export interface NextjsLambdaProps extends NextjsBaseProps {
   /**
    * Override function properties.
    */
-  readonly function?: FunctionOptions;
+  readonly lambda?: FunctionOptions;
 }
 
 const RUNTIME = lambda.Runtime.NODEJS_16_X;
@@ -51,7 +51,7 @@ export class NextJsLambda extends Construct {
 
   constructor(scope: Construct, id: string, props: NextjsLambdaProps) {
     super(scope, id);
-    const { nextBuild, function: functionOptions, isPlaceholder } = props;
+    const { nextBuild, lambda: functionOptions, isPlaceholder } = props;
 
     // bundle server handler
     // delete default nextjs handler if it exists

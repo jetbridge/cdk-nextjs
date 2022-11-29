@@ -116,7 +116,7 @@ export class Nextjs extends Construct {
       ...props,
       tempBuildDir,
       nextBuild: this.nextBuild,
-      function: props.cdk?.lambda,
+      lambda: props.cdk?.lambda,
     });
     // deploy nextjs static assets to s3
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
@@ -133,7 +133,7 @@ export class Nextjs extends Construct {
     this.distribution = new NextjsDistribution(this, 'Distribution', {
       ...props,
       ...props.cdk?.distribution,
-      bucket: this.bucket,
+      staticAssetsBucket: this.bucket,
       tempBuildDir,
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction.lambdaFunction,

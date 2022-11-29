@@ -125,7 +125,13 @@ class NextjsSst extends Nextjs {
       ...props,
       isPlaceholder: app.local,
       tempBuildDir: app.buildDir,
-      stageName: app.stage,
+      defaults: {
+        ...props.defaults,
+        distribution: {
+          ...props.defaults?.distribution,
+          stageName: app.stage,
+        },
+      },
 
       // make path relative to the app root
       nextjsPath: path.isAbsolute(props.nextjsPath) ? path.relative(app.appPath, props.nextjsPath) : props.nextjsPath,
@@ -135,6 +141,7 @@ class NextjsSst extends Nextjs {
   }
 
   protected registerSiteEnvironment(props: NextjsSstProps) {
+    if (!props.environment) return;
     const environmentOutputs: Record<string, string> = {};
     for (const [key, value] of Object.entries(props.environment)) {
       const outputId = `SstSiteEnv_${key}`;

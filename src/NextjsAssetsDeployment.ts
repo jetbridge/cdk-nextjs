@@ -44,7 +44,7 @@ export class NextJsAssetsDeployment extends Construct {
   /**
    * Bucket containing assets.
    */
-  bucket: s3.IBucket;
+  bucket: s3.Bucket;
 
   /**
    * Asset deployments to S3.

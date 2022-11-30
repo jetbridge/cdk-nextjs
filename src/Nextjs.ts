@@ -73,11 +73,6 @@ export class Nextjs extends Construct {
   public nextBuild: NextjsBuild;
 
   /**
-   * Bucket containing NextJS static assets.
-   */
-  public bucket: s3.IBucket;
-
-  /**
    * Asset deployment to S3.
    */
   public assetsDeployment: NextJsAssetsDeployment;
@@ -108,9 +103,6 @@ export class Nextjs extends Construct {
       : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
     this.tempBuildDir = tempBuildDir;
 
-    // create bucket for static assets
-    this.bucket = new s3.Bucket(this, 'StaticPublicBucket', {});
-
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir });
     this.serverFunction = new NextJsLambda(this, 'Fn', {
@@ -124,7 +116,6 @@ export class Nextjs extends Construct {
       ...props,
       ...props.defaults?.assetDeployment,
       tempBuildDir,
-      bucket: this.bucket,
       nextBuild: this.nextBuild,
     });
     // finish static deployment BEFORE deploying new function code
@@ -134,7 +125,7 @@ export class Nextjs extends Construct {
     this.distribution = new NextjsDistribution(this, 'Distribution', {
       ...props,
       ...props.defaults?.distribution,
-      staticAssetsBucket: this.bucket,
+      staticAssetsBucket: this.assetsDeployment.bucket,
       tempBuildDir,
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction.lambdaFunction,
@@ -145,5 +136,9 @@ export class Nextjs extends Construct {
 
   public get url(): string {
     return this.distribution.url;
+  }
+
+  public get bucket(): s3.Bucket {
+    return this.assetsDeployment.bucket;
   }
 }

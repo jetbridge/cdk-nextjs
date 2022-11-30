@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { CustomResource, Duration, Token } from 'aws-cdk-lib';
+import { App, CustomResource, Duration, Token } from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
@@ -22,6 +22,7 @@ export interface RewriterParams {
   readonly s3keys: string[]; // files to rewrite
   readonly replacementConfig: RewriteReplacementsConfig;
   readonly debug?: boolean;
+  readonly cloudfrontDistributionId?: string;
 }
 
 export interface NextjsS3EnvRewriterProps extends NextjsBaseProps, RewriterParams {
@@ -38,9 +39,11 @@ export class NextjsS3EnvRewriter extends Construct {
   constructor(scope: Construct, id: string, props: NextjsS3EnvRewriterProps) {
     super(scope, id);
 
-    const { s3Bucket, s3keys, replacementConfig, nextBuild, debug } = props;
+    const { s3Bucket, s3keys, replacementConfig, nextBuild, debug, cloudfrontDistributionId } = props;
 
     if (s3keys.length === 0) return;
+
+    const app = App.of(this) as App;
 
     // create a custom resource to find and replace tokenized strings in static files
     // must happen after deployment when tokens can be resolved
@@ -72,6 +75,14 @@ export class NextjsS3EnvRewriter extends Construct {
           actions: ['s3:GetObject', 's3:PutObject'],
           resources: [s3Bucket.arnForObjects('*')],
         }),
+        ...(cloudfrontDistributionId
+          ? [
+              new iam.PolicyStatement({
+                actions: ['cloudfront:CreateInvalidation'],
+                resources: [`arn:aws:cloudfront::${app.account}:distribution/${cloudfrontDistributionId}`],
+              }),
+            ]
+          : []),
       ],
     });
     // grant permission to read env var config if provided
@@ -101,6 +112,7 @@ export class NextjsS3EnvRewriter extends Construct {
         jsonS3Bucket: replacementConfig.jsonS3Bucket?.bucketName,
       },
       debug,
+      cloudfrontDistributionId,
     };
     new CustomResource(this, 'RewriteStatic', {
       serviceToken: provider.serviceToken,

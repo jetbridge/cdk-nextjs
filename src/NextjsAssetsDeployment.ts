@@ -44,7 +44,7 @@ export class NextJsAssetsDeployment extends Construct {
   /**
    * Bucket containing assets.
    */
-  bucket: s3.IBucket;
+  bucket: s3.Bucket;
 
   /**
    * Asset deployments to S3.
@@ -73,7 +73,8 @@ export class NextJsAssetsDeployment extends Construct {
         replacementConfig: {
           env: getS3ReplaceValues(this.props.environment, true),
         },
-        debug: true,
+        debug: false,
+        cloudfrontDistributionId: this.props.distribution?.distributionId,
       });
       // wait for s3 assets to be uploaded first before running
       rewriter.node.addDependency(...this.deployments);

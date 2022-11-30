@@ -1972,7 +1972,7 @@ const nextjsCachePolicyProps: NextjsCachePolicyProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.imageCachePolicy">imageCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.lambdaCachePolicy">lambdaCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticCachePolicy">staticCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticClientMaxAgeDefault">staticClientMaxAgeDefault</a></code> | <code>number</code> | Cache-control max-age default for static assets (/_next/*) in seconds. |
+| <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticClientMaxAgeDefault">staticClientMaxAgeDefault</a></code> | <code>aws-cdk-lib.Duration</code> | Cache-control max-age default for static assets (/_next/*). |
 
 ---
 
@@ -2009,12 +2009,14 @@ public readonly staticCachePolicy: ICachePolicy;
 ##### `staticClientMaxAgeDefault`<sup>Optional</sup> <a name="staticClientMaxAgeDefault" id="cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticClientMaxAgeDefault"></a>
 
 ```typescript
-public readonly staticClientMaxAgeDefault: number;
+public readonly staticClientMaxAgeDefault: Duration;
 ```
 
-- *Type:* number
+- *Type:* aws-cdk-lib.Duration
 
-Cache-control max-age default for static assets (/_next/*) in seconds.
+Cache-control max-age default for static assets (/_next/*).
+
+Default: 30 days.
 
 ---
 

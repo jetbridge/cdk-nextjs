@@ -1,5 +1,6 @@
 import * as os from 'os';
 import * as path from 'path';
+import { RemovalPolicy } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
@@ -90,6 +91,8 @@ export class Nextjs extends Construct {
   public configBucket?: s3.Bucket;
   public lambdaFunctionUrl!: lambda.FunctionUrl;
 
+  protected staticAssetBucket: s3.Bucket;
+
   constructor(scope: Construct, id: string, props: NextjsProps) {
     super(scope, id);
 
@@ -102,6 +105,14 @@ export class Nextjs extends Construct {
         )
       : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
     this.tempBuildDir = tempBuildDir;
+
+    // create static asset bucket
+    this.staticAssetBucket =
+      props.defaults?.assetDeployment?.bucket ??
+      new s3.Bucket(this, 'Bucket', {
+        removalPolicy: RemovalPolicy.DESTROY,
+        autoDeleteObjects: true,
+      });
 
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir });
@@ -117,6 +128,7 @@ export class Nextjs extends Construct {
       ...props.defaults?.assetDeployment,
       tempBuildDir,
       nextBuild: this.nextBuild,
+      bucket: this.staticAssetBucket,
     });
     // finish static deployment BEFORE deploying new function code
     // as there is some time after the new static files are uploaded but before they are rewritten

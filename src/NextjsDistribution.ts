@@ -18,6 +18,8 @@ import { bundleFunction } from './BundleFunction';
 import { BaseSiteDomainProps, buildErrorResponsesForRedirectToIndex, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 
+const DEFAULT_STATIC_MAX_AGE = Duration.days(30);
+
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
@@ -39,9 +41,10 @@ export interface NextjsCachePolicyProps {
   readonly imageCachePolicy?: cloudfront.ICachePolicy;
 
   /**
-   * Cache-control max-age default for static assets (/_next/*) in seconds.
+   * Cache-control max-age default for static assets (/_next/*).
+   * Default: 30 days.
    */
-  readonly staticClientMaxAgeDefault?: number;
+  readonly staticClientMaxAgeDefault?: Duration;
 }
 
 export interface NextjsDistributionProps extends NextjsBaseProps {
@@ -328,24 +331,21 @@ export class NextjsDistribution extends Construct {
     const lambdaCachePolicy = cachePolicies?.lambdaCachePolicy ?? this.createCloudFrontLambdaCachePolicy();
 
     // requests for static objects
-    const defaultStaticMaxAge = cachePolicies?.staticClientMaxAgeDefault;
-    const staticResponseHeadersPolicy =
-      typeof defaultStaticMaxAge !== 'undefined'
-        ? new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
-            // add default header for static assets
-            customHeadersBehavior: {
-              customHeaders: [
-                {
-                  header: 'cache-control',
-                  override: false,
-                  // by default tell browser to cache static files for this long
-                  // this is separate from the origin cache policy
-                  value: `public, max-age=${defaultStaticMaxAge}, immutable`,
-                },
-              ],
-            },
-          })
-        : undefined;
+    const defaultStaticMaxAge = cachePolicies?.staticClientMaxAgeDefault || DEFAULT_STATIC_MAX_AGE;
+    const staticResponseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
+      // add default header for static assets
+      customHeadersBehavior: {
+        customHeaders: [
+          {
+            header: 'cache-control',
+            override: false,
+            // by default tell browser to cache static files for this long
+            // this is separate from the origin cache policy
+            value: `public, max-age=${defaultStaticMaxAge}, immutable`,
+          },
+        ],
+      },
+    });
     const staticBehavior: cloudfront.BehaviorOptions = {
       viewerProtocolPolicy,
       origin: s3Origin,

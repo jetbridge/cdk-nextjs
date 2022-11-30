@@ -162,7 +162,7 @@ class NextjsSst extends Nextjs {
 
 ## Breaking changes
 
-- v2.0.0: SST wrapper changed, lambda/assets/distribution defaults now are in the `defaults` prop.
+- v2.0.0: SST wrapper changed, lambda/assets/distribution defaults now are in the `defaults` prop, refactored distribution settings into the new NextjsDistribution construct.
 
 ## To-do
 

@@ -1,6 +1,6 @@
 import * as os from 'os';
 import * as path from 'path';
-import { Duration, RemovalPolicy } from 'aws-cdk-lib';
+import { RemovalPolicy } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';

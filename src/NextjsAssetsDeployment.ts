@@ -1,9 +1,10 @@
 import * as os from 'os';
 import * as path from 'path';
-import { RemovalPolicy } from 'aws-cdk-lib';
+import { Duration, RemovalPolicy } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
+import { CacheControl } from 'aws-cdk-lib/aws-s3-deployment/lib/bucket-deployment';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
@@ -132,6 +133,7 @@ export class NextJsAssetsDeployment extends Construct {
 
     const deployment = new BucketDeployment(this, 'NextStaticAssetsS3Deployment', {
       destinationBucket: this.bucket,
+      cacheControl: [CacheControl.fromString('public,max-age=31536000,immutable')],
       sources: [Source.asset(archiveZipFilePath)],
       distribution: this.props.distribution,
       prune: this.props.prune,

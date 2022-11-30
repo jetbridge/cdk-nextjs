@@ -179,7 +179,8 @@
       "description": "Prepare a release from \"main\" branch",
       "env": {
         "RELEASE": "true",
-        "MAJOR": "1"
+        "MAJOR": "2",
+        "PRERELEASE": "pre"
       },
       "steps": [
         {

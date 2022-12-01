@@ -1721,7 +1721,6 @@ const imageOptimizationProps: ImageOptimizationProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The internal S3 bucket for application images. |
-| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built nextJS application. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
 
 ---
@@ -1826,18 +1825,6 @@ public readonly bucket: IBucket;
 - *Type:* aws-cdk-lib.aws_s3.IBucket
 
 The internal S3 bucket for application images.
-
----
-
-##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.ImageOptimizationProps.property.nextBuild"></a>
-
-```typescript
-public readonly nextBuild: NextjsBuild;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
-
-Built nextJS application.
 
 ---
 

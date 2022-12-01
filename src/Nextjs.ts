@@ -134,7 +134,6 @@ export class Nextjs extends Construct {
     // build image optimization
     this.imageOptimizationFunction = new ImageOptimizationLambda(this, 'ImgOptFn', {
       ...props,
-      nextBuild: this.nextBuild,
       lambdaOptions: props.defaults?.lambda,
       bucket: props.imageOptimizationBucket || this.bucket,
     });

@@ -67,7 +67,6 @@
     "constructs": "^10.0.5"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.218.0",
     "@types/aws-lambda": "^8.10.109",
     "@types/cross-spawn": "^6.0.2",
     "@types/fs-extra": "^9.0.13",
@@ -80,11 +79,9 @@
     "indent-string": "*",
     "jszip": "^3.10.1",
     "micromatch": "^4.0.5",
-    "next": "^13.0.4",
     "serverless-http": "^3.1.0"
   },
   "bundledDependencies": [
-    "@aws-sdk/client-s3",
     "@types/aws-lambda",
     "@types/cross-spawn",
     "@types/fs-extra",
@@ -97,7 +94,6 @@
     "indent-string",
     "jszip",
     "micromatch",
-    "next",
     "serverless-http"
   ],
   "keywords": [

@@ -311,11 +311,7 @@ export class NextjsDistribution extends Construct {
     const imageOptFnUrl = this.props.imageOptFunction.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,
     });
-    const imageOptFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(imageOptFnUrl.url), {
-      customHeaders: {
-        'x-origin-url': imageOptFnUrl.url,
-      },
-    });
+    const imageOptFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(imageOptFnUrl.url));
     const imageOptORP = new cloudfront.OriginRequestPolicy(this, 'ImageOptPolicy', {
       queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.allowList('q', 'w', 'url'),
       headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList('accept'),

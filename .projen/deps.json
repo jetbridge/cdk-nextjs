@@ -117,6 +117,10 @@
       "type": "build"
     },
     {
+      "name": "@aws-sdk/client-s3",
+      "type": "bundled"
+    },
+    {
       "name": "@types/aws-lambda",
       "type": "bundled"
     },
@@ -162,6 +166,10 @@
     },
     {
       "name": "micromatch",
+      "type": "bundled"
+    },
+    {
+      "name": "next",
       "type": "bundled"
     },
     {

@@ -1,6 +1,6 @@
 import * as os from 'os';
 import * as path from 'path';
-import { Duration, RemovalPolicy } from 'aws-cdk-lib';
+import { Duration } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, CacheControl, Source } from 'aws-cdk-lib/aws-s3-deployment';
@@ -33,9 +33,8 @@ export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
 
   /**
    * Properties for the S3 bucket containing the NextJS assets.
-   * You can also supply your own bucket here.
    */
-  readonly bucket?: s3.IBucket | s3.BucketProps;
+  readonly bucket: s3.IBucket;
 
   /**
    * Distribution to invalidate when assets change.
@@ -63,7 +62,7 @@ export class NextJsAssetsDeployment extends Construct {
   /**
    * Bucket containing assets.
    */
-  bucket: s3.Bucket;
+  bucket: s3.IBucket;
 
   /**
    * Asset deployments to S3.
@@ -79,7 +78,7 @@ export class NextJsAssetsDeployment extends Construct {
 
     this.props = props;
 
-    this.bucket = this.createAssetBucket();
+    this.bucket = props.bucket;
     this.staticTempDir = this.prepareArchiveDirectory();
     this.deployments = this.uploadS3Assets(this.staticTempDir);
 
@@ -187,30 +186,6 @@ export class NextJsAssetsDeployment extends Construct {
     });
     return s3keys;
   }
-
-  private createAssetBucket(): s3.Bucket {
-    const { bucket } = this.props;
-
-    // cdk.bucket is an imported construct
-    if (bucket && isCDKConstruct(bucket)) {
-      return bucket as s3.Bucket;
-    } else {
-      // cdk.bucket is props
-      const bucketProps = bucket as s3.BucketProps;
-      return new s3.Bucket(this, 'S3Bucket', {
-        autoDeleteObjects: true,
-        removalPolicy: RemovalPolicy.DESTROY,
-        ...bucketProps,
-      });
-    }
-  }
-}
-
-// taken from https://github.com/serverless-stack/sst/blob/8d377e941467ced81d8cc31ee67d5a06550f04d4/packages/resources/src/Construct.ts
-const JSII_RTTI_SYMBOL_1 = Symbol.for('jsii.rtti');
-function isCDKConstruct(construct: any): construct is Construct {
-  const fqn = construct?.constructor?.[JSII_RTTI_SYMBOL_1]?.fqn;
-  return typeof fqn === 'string' && (fqn.startsWith('@aws-cdk/') || fqn.startsWith('aws-cdk-lib'));
 }
 
 export function listDirectory(dir: string) {

@@ -13,6 +13,7 @@ export {
 } from './NextjsAssetsDeployment';
 export { NextjsBuild, NextjsBuildProps, CreateArchiveArgs } from './NextjsBuild';
 export { EnvironmentVars, NextJsLambda, NextjsLambdaProps } from './NextjsLambda';
+export { ImageOptimizationLambda, ImageOptimizationProps } from './ImageOptimizationLambda';
 export { NextjsLayer, NextjsLayerProps } from './NextjsLayer';
 export {
   NextjsDistribution,

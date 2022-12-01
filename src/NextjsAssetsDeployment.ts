@@ -136,6 +136,19 @@ export class NextJsAssetsDeployment extends Construct {
       });
     }
 
+    // copy static pages to root
+    if (!this.props.isPlaceholder) {
+      const staticPagesPath = this.props.nextBuild.nextStaticPages;
+      const pages = fs.readdirSync(staticPagesPath);
+      // NOTE: pages that have .html extension are static
+      const staticPages = pages.filter((page) => page.endsWith('.html'));
+      for (const p of staticPages) {
+        // NOTE: .html is dropped b/c that is the raw path of the url
+        const trimmedPage = p.replace('.html', '');
+        fs.moveSync(path.join(staticPagesPath, p), path.join(archiveDir, trimmedPage));
+      }
+    }
+
     return archiveDir;
   }
 

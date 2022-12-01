@@ -10,6 +10,7 @@ import { CompressionLevel, NextjsBaseProps } from './NextjsBase';
 
 const NEXTJS_BUILD_DIR = '.next';
 const NEXTJS_STATIC_DIR = 'static';
+const NEXTJS_STATIC_PAGES_DIR = 'server/pages';
 const NEXTJS_PUBLIC_DIR = 'public';
 const NEXTJS_BUILD_STANDALONE_DIR = 'standalone';
 const NEXTJS_BUILD_STANDALONE_ENV = 'NEXT_PRIVATE_STANDALONE';
@@ -43,6 +44,11 @@ export class NextjsBuild extends Construct {
    * Static files containing client-side code.
    */
   public nextStaticDir: string;
+
+  /**
+   * Static Pages containing static pages.
+   */
+  public nextStaticPages: string;
   /**
    * Public static files.
    * E.g. robots.txt, favicon.ico, etc.
@@ -79,6 +85,7 @@ export class NextjsBuild extends Construct {
     this.nextStandaloneBuildDir = this._getNextStandaloneBuildDir();
     this.nextPublicDir = this._getNextPublicDir();
     this.nextStaticDir = this._getNextStaticDir();
+    this.nextStaticPages = this._getNextStaticPages();
 
     this.buildPath = this.nextStandaloneBuildDir;
   }
@@ -188,6 +195,9 @@ export class NextjsBuild extends Construct {
   // contains static files
   private _getNextStaticDir() {
     return path.join(this._getNextBuildDir(), NEXTJS_STATIC_DIR);
+  }
+  private _getNextStaticPages() {
+    return path.join(this._getNextBuildDir(), NEXTJS_STATIC_PAGES_DIR);
   }
   private _getNextPublicDir() {
     return path.join(this._getNextDir(), NEXTJS_PUBLIC_DIR);

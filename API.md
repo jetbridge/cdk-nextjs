@@ -467,6 +467,7 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStandaloneBuildDir">nextStandaloneBuildDir</a></code> | <code>string</code> | NextJS project inside of standalone build. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStandaloneDir">nextStandaloneDir</a></code> | <code>string</code> | Entire NextJS build output directory. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir">nextStaticDir</a></code> | <code>string</code> | Static files containing client-side code. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStaticPages">nextStaticPages</a></code> | <code>string</code> | Static Pages containing static pages. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | *No description.* |
 
@@ -547,6 +548,18 @@ public readonly nextStaticDir: string;
 - *Type:* string
 
 Static files containing client-side code.
+
+---
+
+##### `nextStaticPages`<sup>Required</sup> <a name="nextStaticPages" id="cdk-nextjs-standalone.NextjsBuild.property.nextStaticPages"></a>
+
+```typescript
+public readonly nextStaticPages: string;
+```
+
+- *Type:* string
+
+Static Pages containing static pages.
 
 ---
 

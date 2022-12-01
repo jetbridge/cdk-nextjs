@@ -8,6 +8,7 @@ import { IBucket } from 'aws-cdk-lib/aws-s3';
 
 import { Construct } from 'constructs';
 import { NextjsBaseProps } from './NextjsBase';
+import { NextjsLayer } from './NextjsLayer';
 export interface ImageOptimizationProps extends NextjsBaseProps {
   /**
    * The internal S3 bucket for application images.
@@ -18,6 +19,11 @@ export interface ImageOptimizationProps extends NextjsBaseProps {
    * Override function properties.
    */
   readonly lambdaOptions?: FunctionOptions;
+
+  /**
+   * NextjsLayer
+   */
+  readonly nextLayer: NextjsLayer;
 }
 
 const RUNTIME = lambda.Runtime.NODEJS_16_X;
@@ -38,6 +44,11 @@ export class ImageOptimizationLambda extends Construct {
     this.lambdaFunction = new NodejsFunction(this, 'ImageOptimizationHandler', {
       entry: imageOptHandlerPath,
       runtime: RUNTIME,
+      bundling: {
+        minify: true,
+        target: 'node16',
+      },
+      layers: [props.nextLayer],
       ...lambdaOptions,
       // defaults
       memorySize: lambdaOptions?.memorySize || 1024,

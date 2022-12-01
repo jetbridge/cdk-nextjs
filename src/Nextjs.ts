@@ -12,6 +12,7 @@ import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
 import { NextJsLambda } from './NextjsLambda';
+import { NextjsLayer } from './NextjsLayer';
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -123,10 +124,14 @@ export class Nextjs extends Construct {
         autoDeleteObjects: true,
       });
 
+    // layer
+    const nextLayer = new NextjsLayer(scope, 'NextjsLayer', {});
+
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir });
     this.serverFunction = new NextJsLambda(this, 'Fn', {
       ...props,
+      nextLayer,
       tempBuildDir,
       nextBuild: this.nextBuild,
       lambda: props.defaults?.lambda,
@@ -134,6 +139,7 @@ export class Nextjs extends Construct {
     // build image optimization
     this.imageOptimizationFunction = new ImageOptimizationLambda(this, 'ImgOptFn', {
       ...props,
+      nextLayer,
       lambdaOptions: props.defaults?.lambda,
       bucket: props.imageOptimizationBucket || this.bucket,
     });

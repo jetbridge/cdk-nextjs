@@ -1721,6 +1721,7 @@ const imageOptimizationProps: ImageOptimizationProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The internal S3 bucket for application images. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextLayer">nextLayer</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a></code> | NextjsLayer. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
 
 ---
@@ -1825,6 +1826,18 @@ public readonly bucket: IBucket;
 - *Type:* aws-cdk-lib.aws_s3.IBucket
 
 The internal S3 bucket for application images.
+
+---
+
+##### `nextLayer`<sup>Required</sup> <a name="nextLayer" id="cdk-nextjs-standalone.ImageOptimizationProps.property.nextLayer"></a>
+
+```typescript
+public readonly nextLayer: NextjsLayer;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a>
+
+NextjsLayer.
 
 ---
 
@@ -2848,6 +2861,7 @@ const nextjsLambdaProps: NextjsLambdaProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built nextJS application. |
+| <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nextLayer">nextLayer</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a></code> | NextjsLayer. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
 
 ---
@@ -2952,6 +2966,18 @@ public readonly nextBuild: NextjsBuild;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 Built nextJS application.
+
+---
+
+##### `nextLayer`<sup>Required</sup> <a name="nextLayer" id="cdk-nextjs-standalone.NextjsLambdaProps.property.nextLayer"></a>
+
+```typescript
+public readonly nextLayer: NextjsLayer;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a>
+
+NextjsLayer.
 
 ---
 

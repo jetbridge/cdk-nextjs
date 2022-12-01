@@ -90,6 +90,10 @@
       "type": "build"
     },
     {
+      "name": "next",
+      "type": "build"
+    },
+    {
       "name": "npm-check-updates",
       "version": "^16",
       "type": "build"
@@ -166,10 +170,6 @@
     },
     {
       "name": "micromatch",
-      "type": "bundled"
-    },
-    {
-      "name": "next",
       "type": "bundled"
     },
     {

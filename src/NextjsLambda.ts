@@ -38,6 +38,11 @@ export interface NextjsLambdaProps extends NextjsBaseProps {
    * Override function properties.
    */
   readonly lambda?: FunctionOptions;
+
+  /**
+   * NextjsLayer
+   */
+  readonly nextLayer: NextjsLayer;
 }
 
 const RUNTIME = lambda.Runtime.NODEJS_16_X;
@@ -93,9 +98,6 @@ export class NextJsLambda extends Construct {
     });
     if (!zipFilePath) throw new Error('Failed to create archive for lambda function code');
 
-    // build native deps layer
-    const nextLayer = new NextjsLayer(scope, 'NextjsLayer', {});
-
     // upload the lambda package to S3
     const s3asset = new s3Assets.Asset(scope, 'MainFnAsset', { path: zipFilePath });
     const code = isPlaceholder
@@ -111,7 +113,7 @@ export class NextJsLambda extends Construct {
       timeout: functionOptions?.timeout ?? Duration.seconds(10),
       runtime: RUNTIME,
       handler: path.join(props.nextjsPath, 'server.handler'),
-      layers: [nextLayer],
+      layers: [props.nextLayer],
       code,
       environment,
 

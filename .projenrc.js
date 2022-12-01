@@ -25,7 +25,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'fs-extra',
     'indent-string',
     'micromatch',
-    'next',
     '@aws-sdk/client-s3',
     '@types/cross-spawn',
     '@types/fs-extra',
@@ -37,7 +36,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'jszip',
     'glob',
   ] /* Runtime dependencies of this module. */,
-  devDeps: ['aws-sdk', 'constructs@10.1.21'] /* Build dependencies for this module. */,
+  devDeps: ['aws-sdk', 'constructs@10.1.21', 'next'] /* Build dependencies for this module. */,
 
   // do not generate sample test files
   sampleCode: false,

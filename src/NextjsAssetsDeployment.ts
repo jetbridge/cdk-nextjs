@@ -144,8 +144,7 @@ export class NextJsAssetsDeployment extends Construct {
       const staticPages = pages.filter((page) => page.endsWith('.html'));
       for (const p of staticPages) {
         // NOTE: .html is dropped b/c that is the raw path of the url
-        const trimmedPage = p.replace('.html', '');
-        fs.moveSync(path.join(staticPagesPath, p), path.join(archiveDir, trimmedPage));
+        fs.moveSync(path.join(staticPagesPath, p), path.join(archiveDir, p));
       }
     }
 
@@ -188,7 +187,6 @@ export class NextJsAssetsDeployment extends Construct {
     }
     listDirectory(staticDir).forEach((file) => {
       const relativePath = path.relative(staticDir, file);
-
       // skip bogus system files
       if (relativePath.endsWith('.DS_Store')) return;
 

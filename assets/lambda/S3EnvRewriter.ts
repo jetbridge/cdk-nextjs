@@ -26,14 +26,17 @@ const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*
 export const handler: CdkCustomResourceHandler = async (event) => {
   const requestType = event.RequestType;
   if (requestType === 'Create' || requestType === 'Update') {
-    await doRewrites(event);
+    await Promise.all([
+      doStaticPageRename(event),
+      doRewrites(event)
+    ]);
   }
 
   return event;
 };
-
+const s3 = new AWS.S3();
 async function tryGetObject(bucket: string, key: string, tries = 0) {
-  const s3 = new AWS.S3();
+  
   try {
     return await s3.getObject({ Bucket: bucket, Key: key }).promise();
   } catch (err) {
@@ -51,6 +54,34 @@ async function tryGetObject(bucket: string, key: string, tries = 0) {
       console.error('Failed to retrieve object', key, err);
       // throw err;
     }
+  }
+}
+
+const doStaticPageRename = async (event: CdkCustomResourceEvent) => {
+  const scriptParams = event.ResourceProperties as unknown as RewriterParams;
+  const { s3keys, bucket, debug, cloudfrontDistributionId } = scriptParams;
+  const staticPages = s3keys.filter(key => key.endsWith('.html'))
+  const promises = staticPages.map(async (key) => {
+    return doRenameHtmlFile(bucket, key); 
+  });
+  const results = await Promise.all(promises);
+
+  // invalidate items that were just rewritten in cloudfront
+  if (cloudfrontDistributionId && staticPages.length) {
+    console.info('Invalidating rewritten files in cache', staticPages);
+    const cloudfront = new AWS.CloudFront();
+    const invalidationRes = await cloudfront
+      .createInvalidation({
+        DistributionId: cloudfrontDistributionId,
+        InvalidationBatch: {
+          CallerReference: Date.now().toString(),
+          Paths: {
+            Quantity: results.length,
+            Items: results,
+          },
+        },
+      })
+      .promise();
   }
 }
 
@@ -144,6 +175,40 @@ const doRewritesForTextFile = async (
 
   return bodyPost;
 };
+
+/**
+ * The static html pages are saved as <page>.html to the Bucket so that S3
+ * can properly set its content type (we can't set it on individual files).
+ * This rewriter will copy <page>.html => <page> and delete the old <page>.html file.
+ * The extensionless html <page> will now have the correct content-type and conform
+ * to the NextJS routes.
+ * 
+ * @return returns the "/<key>""
+ */
+const doRenameHtmlFile = async (
+  bucket: string,
+  key: string
+) => {
+  const newKey = key.replace('.html', '')
+  // Copy file w/ removed extension
+  const r = await s3.copyObject({
+    Bucket: bucket,
+    CopySource: `/${bucket}/${key}`,
+    Key: newKey
+  }).promise()
+  if (r.$response.error) {
+    console.error('Failed to rename file: ', {key, error: r.$response.error})
+  }
+  // Delete file
+  const dr = await s3.deleteObject({
+    Bucket: bucket,
+    Key: key
+  }).promise()
+  if (dr.$response.error) {
+    console.error('Failed to delete .html file: ', {key, error: dr.$response.error})
+  }
+  return `/${newKey}`
+}
 
 const doRewritesForZipFile = async (
   object: AWS.S3.GetObjectOutput,

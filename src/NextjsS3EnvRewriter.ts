@@ -72,7 +72,7 @@ export class NextjsS3EnvRewriter extends Construct {
       code: lambda.Code.fromAsset(handlerDir),
       initialPolicy: [
         new iam.PolicyStatement({
-          actions: ['s3:GetObject', 's3:PutObject'],
+          actions: ['s3:GetObject', 's3:PutObject', 's3:DeleteObject'],
           resources: [s3Bucket.arnForObjects('*')],
         }),
         ...(cloudfrontDistributionId

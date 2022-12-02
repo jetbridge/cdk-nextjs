@@ -18,7 +18,7 @@ import { bundleFunction } from './BundleFunction';
 import { BaseSiteDomainProps, buildErrorResponsesForRedirectToIndex, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 
-const DEFAULT_STATIC_MAX_AGE = Duration.days(30);
+const DEFAULT_STATIC_MAX_AGE = Duration.days(30).toSeconds();
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -341,7 +341,7 @@ export class NextjsDistribution extends Construct {
             override: false,
             // by default tell browser to cache static files for this long
             // this is separate from the origin cache policy
-            value: `public, max-age=${defaultStaticMaxAge}, immutable`,
+            value: `public,max-age=${defaultStaticMaxAge},immutable`,
           },
         ],
       },
@@ -400,6 +400,7 @@ export class NextjsDistribution extends Construct {
         // what goes here? static or lambda?
         cachePolicy: lambdaCachePolicy,
         originRequestPolicy: fallbackOriginRequestPolicy,
+        responseHeadersPolicy: staticResponseHeadersPolicy,
 
         edgeLambdas: lambdaOriginEdgeFns,
       },

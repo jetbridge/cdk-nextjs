@@ -330,7 +330,7 @@ export class NextjsDistribution extends Construct {
     const lambdaCachePolicy = cachePolicies?.lambdaCachePolicy ?? this.createCloudFrontLambdaCachePolicy();
 
     // requests for static objects
-    const defaultStaticMaxAge = cachePolicies?.staticClientMaxAgeDefault || DEFAULT_STATIC_MAX_AGE;
+    const defaultStaticMaxAge = cachePolicies?.staticClientMaxAgeDefault?.toSeconds() || DEFAULT_STATIC_MAX_AGE;
     const staticResponseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
       // add default header for static assets
       customHeadersBehavior: {

@@ -152,7 +152,7 @@ export class NextJsAssetsDeployment extends Construct {
 
     const maxAge = this.props.cachePolicies?.staticMaxAgeDefault?.toSeconds() ?? DEFAULT_STATIC_MAX_AGE;
     const staleWhileRevalidate =
-      this.props.cachePolicies?.staticMaxAgeDefault?.toSeconds() ?? DEFAULT_STATIC_STALE_WHILE_REVALIDATE;
+      this.props.cachePolicies?.staticStaleWhileRevalidateDefault?.toSeconds() ?? DEFAULT_STATIC_STALE_WHILE_REVALIDATE;
     const cacheControl = CacheControl.fromString(
       `public,max-age=${maxAge},stale-while-revalidate=${staleWhileRevalidate},immutable`
     );

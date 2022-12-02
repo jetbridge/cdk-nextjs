@@ -1,8 +1,8 @@
-const { awscdk } = require('projen');
+const { awscdk, build } = require('projen');
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'JetBridge',
   authorAddress: 'mischa@jetbridge.com',
-  cdkVersion: '2.50.0',
+  cdkVersion: '2.53.0',
   defaultReleaseBranch: 'main',
   name: 'cdk-nextjs-standalone',
   repositoryUrl: 'https://github.com/jetbridge/cdk-nextjs.git',
@@ -36,7 +36,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'jszip',
     'glob',
   ] /* Runtime dependencies of this module. */,
-  devDeps: ['aws-sdk', 'constructs@10.1.21', 'next'] /* Build dependencies for this module. */,
+  devDeps: ['aws-sdk', 'constructs@10.1.21'] /* Build dependencies for this module. */,
 
   // do not generate sample test files
   sampleCode: false,

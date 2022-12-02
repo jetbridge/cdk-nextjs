@@ -45,6 +45,24 @@ new ImageOptimizationLambda(scope: Construct, id: string, props: ImageOptimizati
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.addEventSource">addEventSource</a></code> | Adds an event source to this function. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.addEventSourceMapping">addEventSourceMapping</a></code> | Adds an event source that maps to this AWS Lambda function. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.addFunctionUrl">addFunctionUrl</a></code> | Adds a url to this lambda function. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.addPermission">addPermission</a></code> | Adds a permission to the Lambda resource policy. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.addToRolePolicy">addToRolePolicy</a></code> | Adds a statement to the IAM role assumed by the instance. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.configureAsyncInvoke">configureAsyncInvoke</a></code> | Configures options for asynchronous invocation. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.considerWarningOnInvokeFunctionPermissions">considerWarningOnInvokeFunctionPermissions</a></code> | A warning will be added to functions under the following conditions: - permissions that include `lambda:InvokeFunction` are added to the unqualified function. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.grantInvoke">grantInvoke</a></code> | Grant the given identity permissions to invoke this Lambda. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.grantInvokeUrl">grantInvokeUrl</a></code> | Grant the given identity permissions to invoke this Lambda Function URL. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.metric">metric</a></code> | Return the given named metric for this Function. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.metricDuration">metricDuration</a></code> | How long execution of this Lambda takes. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.metricErrors">metricErrors</a></code> | How many invocations of this Lambda fail. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.metricInvocations">metricInvocations</a></code> | How often this Lambda is invoked. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.metricThrottles">metricThrottles</a></code> | How often this Lambda is throttled. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.addAlias">addAlias</a></code> | Defines an alias for this function. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.addEnvironment">addEnvironment</a></code> | Adds an environment variable to this Lambda function. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.addLayers">addLayers</a></code> | Adds one or more Lambda Layers to this Lambda function. |
 
 ---
 
@@ -56,11 +74,383 @@ public toString(): string
 
 Returns a string representation of this construct.
 
+##### `applyRemovalPolicy` <a name="applyRemovalPolicy" id="cdk-nextjs-standalone.ImageOptimizationLambda.applyRemovalPolicy"></a>
+
+```typescript
+public applyRemovalPolicy(policy: RemovalPolicy): void
+```
+
+Apply the given removal policy to this resource.
+
+The Removal Policy controls what happens to this resource when it stops
+being managed by CloudFormation, either because you've removed it from the
+CDK application or because you've made a change that requires the resource
+to be replaced.
+
+The resource can be deleted (`RemovalPolicy.DESTROY`), or left in your AWS
+account for data recovery and cleanup later (`RemovalPolicy.RETAIN`).
+
+###### `policy`<sup>Required</sup> <a name="policy" id="cdk-nextjs-standalone.ImageOptimizationLambda.applyRemovalPolicy.parameter.policy"></a>
+
+- *Type:* aws-cdk-lib.RemovalPolicy
+
+---
+
+##### `addEventSource` <a name="addEventSource" id="cdk-nextjs-standalone.ImageOptimizationLambda.addEventSource"></a>
+
+```typescript
+public addEventSource(source: IEventSource): void
+```
+
+Adds an event source to this function.
+
+Event sources are implemented in the @aws-cdk/aws-lambda-event-sources module.
+
+The following example adds an SQS Queue as an event source:
+```
+import { SqsEventSource } from '@aws-cdk/aws-lambda-event-sources';
+myFunction.addEventSource(new SqsEventSource(myQueue));
+```
+
+###### `source`<sup>Required</sup> <a name="source" id="cdk-nextjs-standalone.ImageOptimizationLambda.addEventSource.parameter.source"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.IEventSource
+
+---
+
+##### `addEventSourceMapping` <a name="addEventSourceMapping" id="cdk-nextjs-standalone.ImageOptimizationLambda.addEventSourceMapping"></a>
+
+```typescript
+public addEventSourceMapping(id: string, options: EventSourceMappingOptions): EventSourceMapping
+```
+
+Adds an event source that maps to this AWS Lambda function.
+
+###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.ImageOptimizationLambda.addEventSourceMapping.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `options`<sup>Required</sup> <a name="options" id="cdk-nextjs-standalone.ImageOptimizationLambda.addEventSourceMapping.parameter.options"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.EventSourceMappingOptions
+
+---
+
+##### `addFunctionUrl` <a name="addFunctionUrl" id="cdk-nextjs-standalone.ImageOptimizationLambda.addFunctionUrl"></a>
+
+```typescript
+public addFunctionUrl(options?: FunctionUrlOptions): FunctionUrl
+```
+
+Adds a url to this lambda function.
+
+###### `options`<sup>Optional</sup> <a name="options" id="cdk-nextjs-standalone.ImageOptimizationLambda.addFunctionUrl.parameter.options"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.FunctionUrlOptions
+
+---
+
+##### `addPermission` <a name="addPermission" id="cdk-nextjs-standalone.ImageOptimizationLambda.addPermission"></a>
+
+```typescript
+public addPermission(id: string, permission: Permission): void
+```
+
+Adds a permission to the Lambda resource policy.
+
+> [Permission for details.](Permission for details.)
+
+###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.ImageOptimizationLambda.addPermission.parameter.id"></a>
+
+- *Type:* string
+
+The id for the permission construct.
+
+---
+
+###### `permission`<sup>Required</sup> <a name="permission" id="cdk-nextjs-standalone.ImageOptimizationLambda.addPermission.parameter.permission"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.Permission
+
+The permission to grant to this Lambda function.
+
+---
+
+##### `addToRolePolicy` <a name="addToRolePolicy" id="cdk-nextjs-standalone.ImageOptimizationLambda.addToRolePolicy"></a>
+
+```typescript
+public addToRolePolicy(statement: PolicyStatement): void
+```
+
+Adds a statement to the IAM role assumed by the instance.
+
+###### `statement`<sup>Required</sup> <a name="statement" id="cdk-nextjs-standalone.ImageOptimizationLambda.addToRolePolicy.parameter.statement"></a>
+
+- *Type:* aws-cdk-lib.aws_iam.PolicyStatement
+
+---
+
+##### `configureAsyncInvoke` <a name="configureAsyncInvoke" id="cdk-nextjs-standalone.ImageOptimizationLambda.configureAsyncInvoke"></a>
+
+```typescript
+public configureAsyncInvoke(options: EventInvokeConfigOptions): void
+```
+
+Configures options for asynchronous invocation.
+
+###### `options`<sup>Required</sup> <a name="options" id="cdk-nextjs-standalone.ImageOptimizationLambda.configureAsyncInvoke.parameter.options"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.EventInvokeConfigOptions
+
+---
+
+##### `considerWarningOnInvokeFunctionPermissions` <a name="considerWarningOnInvokeFunctionPermissions" id="cdk-nextjs-standalone.ImageOptimizationLambda.considerWarningOnInvokeFunctionPermissions"></a>
+
+```typescript
+public considerWarningOnInvokeFunctionPermissions(scope: Construct, action: string): void
+```
+
+A warning will be added to functions under the following conditions: - permissions that include `lambda:InvokeFunction` are added to the unqualified function.
+
+function.currentVersion is invoked before or after the permission is created.
+
+This applies only to permissions on Lambda functions, not versions or aliases.
+This function is overridden as a noOp for QualifiedFunctionBase.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.ImageOptimizationLambda.considerWarningOnInvokeFunctionPermissions.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `action`<sup>Required</sup> <a name="action" id="cdk-nextjs-standalone.ImageOptimizationLambda.considerWarningOnInvokeFunctionPermissions.parameter.action"></a>
+
+- *Type:* string
+
+---
+
+##### `grantInvoke` <a name="grantInvoke" id="cdk-nextjs-standalone.ImageOptimizationLambda.grantInvoke"></a>
+
+```typescript
+public grantInvoke(grantee: IGrantable): Grant
+```
+
+Grant the given identity permissions to invoke this Lambda.
+
+###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-nextjs-standalone.ImageOptimizationLambda.grantInvoke.parameter.grantee"></a>
+
+- *Type:* aws-cdk-lib.aws_iam.IGrantable
+
+---
+
+##### `grantInvokeUrl` <a name="grantInvokeUrl" id="cdk-nextjs-standalone.ImageOptimizationLambda.grantInvokeUrl"></a>
+
+```typescript
+public grantInvokeUrl(grantee: IGrantable): Grant
+```
+
+Grant the given identity permissions to invoke this Lambda Function URL.
+
+###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-nextjs-standalone.ImageOptimizationLambda.grantInvokeUrl.parameter.grantee"></a>
+
+- *Type:* aws-cdk-lib.aws_iam.IGrantable
+
+---
+
+##### `metric` <a name="metric" id="cdk-nextjs-standalone.ImageOptimizationLambda.metric"></a>
+
+```typescript
+public metric(metricName: string, props?: MetricOptions): Metric
+```
+
+Return the given named metric for this Function.
+
+###### `metricName`<sup>Required</sup> <a name="metricName" id="cdk-nextjs-standalone.ImageOptimizationLambda.metric.parameter.metricName"></a>
+
+- *Type:* string
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.ImageOptimizationLambda.metric.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
+
+---
+
+##### `metricDuration` <a name="metricDuration" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricDuration"></a>
+
+```typescript
+public metricDuration(props?: MetricOptions): Metric
+```
+
+How long execution of this Lambda takes.
+
+Average over 5 minutes
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricDuration.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
+
+---
+
+##### `metricErrors` <a name="metricErrors" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricErrors"></a>
+
+```typescript
+public metricErrors(props?: MetricOptions): Metric
+```
+
+How many invocations of this Lambda fail.
+
+Sum over 5 minutes
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricErrors.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
+
+---
+
+##### `metricInvocations` <a name="metricInvocations" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricInvocations"></a>
+
+```typescript
+public metricInvocations(props?: MetricOptions): Metric
+```
+
+How often this Lambda is invoked.
+
+Sum over 5 minutes
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricInvocations.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
+
+---
+
+##### `metricThrottles` <a name="metricThrottles" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricThrottles"></a>
+
+```typescript
+public metricThrottles(props?: MetricOptions): Metric
+```
+
+How often this Lambda is throttled.
+
+Sum over 5 minutes
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricThrottles.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
+
+---
+
+##### `addAlias` <a name="addAlias" id="cdk-nextjs-standalone.ImageOptimizationLambda.addAlias"></a>
+
+```typescript
+public addAlias(aliasName: string, options?: AliasOptions): Alias
+```
+
+Defines an alias for this function.
+
+The alias will automatically be updated to point to the latest version of
+the function as it is being updated during a deployment.
+
+```ts
+declare const fn: lambda.Function;
+
+fn.addAlias('Live');
+
+// Is equivalent to
+
+new lambda.Alias(this, 'AliasLive', {
+   aliasName: 'Live',
+   version: fn.currentVersion,
+});
+```
+
+###### `aliasName`<sup>Required</sup> <a name="aliasName" id="cdk-nextjs-standalone.ImageOptimizationLambda.addAlias.parameter.aliasName"></a>
+
+- *Type:* string
+
+The name of the alias.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="cdk-nextjs-standalone.ImageOptimizationLambda.addAlias.parameter.options"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.AliasOptions
+
+Alias options.
+
+---
+
+##### `addEnvironment` <a name="addEnvironment" id="cdk-nextjs-standalone.ImageOptimizationLambda.addEnvironment"></a>
+
+```typescript
+public addEnvironment(key: string, value: string, options?: EnvironmentOptions): Function
+```
+
+Adds an environment variable to this Lambda function.
+
+If this is a ref to a Lambda function, this operation results in a no-op.
+
+###### `key`<sup>Required</sup> <a name="key" id="cdk-nextjs-standalone.ImageOptimizationLambda.addEnvironment.parameter.key"></a>
+
+- *Type:* string
+
+The environment variable key.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="cdk-nextjs-standalone.ImageOptimizationLambda.addEnvironment.parameter.value"></a>
+
+- *Type:* string
+
+The environment variable's value.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="cdk-nextjs-standalone.ImageOptimizationLambda.addEnvironment.parameter.options"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.EnvironmentOptions
+
+Environment variable options.
+
+---
+
+##### `addLayers` <a name="addLayers" id="cdk-nextjs-standalone.ImageOptimizationLambda.addLayers"></a>
+
+```typescript
+public addLayers(layers: ILayerVersion): void
+```
+
+Adds one or more Lambda Layers to this Lambda function.
+
+###### `layers`<sup>Required</sup> <a name="layers" id="cdk-nextjs-standalone.ImageOptimizationLambda.addLayers.parameter.layers"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.ILayerVersion
+
+the layers to be added.
+
+---
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.isOwnedResource">isOwnedResource</a></code> | Returns true if the construct was created by CDK, and false otherwise. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.isResource">isResource</a></code> | Check whether the given construct is a Resource. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.classifyVersionProperty">classifyVersionProperty</a></code> | Record whether specific properties in the `AWS::Lambda::Function` resource should also be associated to the Version resource. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionArn">fromFunctionArn</a></code> | Import a lambda function into the CDK using its ARN. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionAttributes">fromFunctionAttributes</a></code> | Creates a Lambda function object which represents a function not defined within this stack. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionName">fromFunctionName</a></code> | Import a lambda function into the CDK using its name. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.metricAll">metricAll</a></code> | Return the given named metric for this Lambda. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.metricAllConcurrentExecutions">metricAllConcurrentExecutions</a></code> | Metric for the number of concurrent executions across all Lambdas. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.metricAllDuration">metricAllDuration</a></code> | Metric for the Duration executing all Lambdas. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.metricAllErrors">metricAllErrors</a></code> | Metric for the number of Errors executing all Lambdas. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.metricAllInvocations">metricAllInvocations</a></code> | Metric for the number of invocations of all Lambdas. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.metricAllThrottles">metricAllThrottles</a></code> | Metric for the number of throttled invocations of all Lambdas. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.metricAllUnreservedConcurrentExecutions">metricAllUnreservedConcurrentExecutions</a></code> | Metric for the number of unreserved concurrent executions across all Lambdas. |
 
 ---
 
@@ -82,13 +472,298 @@ Any object.
 
 ---
 
+##### `isOwnedResource` <a name="isOwnedResource" id="cdk-nextjs-standalone.ImageOptimizationLambda.isOwnedResource"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.isOwnedResource(construct: IConstruct)
+```
+
+Returns true if the construct was created by CDK, and false otherwise.
+
+###### `construct`<sup>Required</sup> <a name="construct" id="cdk-nextjs-standalone.ImageOptimizationLambda.isOwnedResource.parameter.construct"></a>
+
+- *Type:* constructs.IConstruct
+
+---
+
+##### `isResource` <a name="isResource" id="cdk-nextjs-standalone.ImageOptimizationLambda.isResource"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.isResource(construct: IConstruct)
+```
+
+Check whether the given construct is a Resource.
+
+###### `construct`<sup>Required</sup> <a name="construct" id="cdk-nextjs-standalone.ImageOptimizationLambda.isResource.parameter.construct"></a>
+
+- *Type:* constructs.IConstruct
+
+---
+
+##### `classifyVersionProperty` <a name="classifyVersionProperty" id="cdk-nextjs-standalone.ImageOptimizationLambda.classifyVersionProperty"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.classifyVersionProperty(propertyName: string, locked: boolean)
+```
+
+Record whether specific properties in the `AWS::Lambda::Function` resource should also be associated to the Version resource.
+
+See 'currentVersion' section in the module README for more details.
+
+###### `propertyName`<sup>Required</sup> <a name="propertyName" id="cdk-nextjs-standalone.ImageOptimizationLambda.classifyVersionProperty.parameter.propertyName"></a>
+
+- *Type:* string
+
+The property to classify.
+
+---
+
+###### `locked`<sup>Required</sup> <a name="locked" id="cdk-nextjs-standalone.ImageOptimizationLambda.classifyVersionProperty.parameter.locked"></a>
+
+- *Type:* boolean
+
+whether the property should be associated to the version or not.
+
+---
+
+##### `fromFunctionArn` <a name="fromFunctionArn" id="cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionArn"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.fromFunctionArn(scope: Construct, id: string, functionArn: string)
+```
+
+Import a lambda function into the CDK using its ARN.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionArn.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionArn.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `functionArn`<sup>Required</sup> <a name="functionArn" id="cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionArn.parameter.functionArn"></a>
+
+- *Type:* string
+
+---
+
+##### `fromFunctionAttributes` <a name="fromFunctionAttributes" id="cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionAttributes"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.fromFunctionAttributes(scope: Construct, id: string, attrs: FunctionAttributes)
+```
+
+Creates a Lambda function object which represents a function not defined within this stack.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionAttributes.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+The parent construct.
+
+---
+
+###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionAttributes.parameter.id"></a>
+
+- *Type:* string
+
+The name of the lambda construct.
+
+---
+
+###### `attrs`<sup>Required</sup> <a name="attrs" id="cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionAttributes.parameter.attrs"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.FunctionAttributes
+
+the attributes of the function to import.
+
+---
+
+##### `fromFunctionName` <a name="fromFunctionName" id="cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionName"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.fromFunctionName(scope: Construct, id: string, functionName: string)
+```
+
+Import a lambda function into the CDK using its name.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionName.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionName.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `functionName`<sup>Required</sup> <a name="functionName" id="cdk-nextjs-standalone.ImageOptimizationLambda.fromFunctionName.parameter.functionName"></a>
+
+- *Type:* string
+
+---
+
+##### `metricAll` <a name="metricAll" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAll"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.metricAll(metricName: string, props?: MetricOptions)
+```
+
+Return the given named metric for this Lambda.
+
+###### `metricName`<sup>Required</sup> <a name="metricName" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAll.parameter.metricName"></a>
+
+- *Type:* string
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAll.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
+
+---
+
+##### `metricAllConcurrentExecutions` <a name="metricAllConcurrentExecutions" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAllConcurrentExecutions"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.metricAllConcurrentExecutions(props?: MetricOptions)
+```
+
+Metric for the number of concurrent executions across all Lambdas.
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAllConcurrentExecutions.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
+
+---
+
+##### `metricAllDuration` <a name="metricAllDuration" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAllDuration"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.metricAllDuration(props?: MetricOptions)
+```
+
+Metric for the Duration executing all Lambdas.
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAllDuration.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
+
+---
+
+##### `metricAllErrors` <a name="metricAllErrors" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAllErrors"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.metricAllErrors(props?: MetricOptions)
+```
+
+Metric for the number of Errors executing all Lambdas.
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAllErrors.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
+
+---
+
+##### `metricAllInvocations` <a name="metricAllInvocations" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAllInvocations"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.metricAllInvocations(props?: MetricOptions)
+```
+
+Metric for the number of invocations of all Lambdas.
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAllInvocations.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
+
+---
+
+##### `metricAllThrottles` <a name="metricAllThrottles" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAllThrottles"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.metricAllThrottles(props?: MetricOptions)
+```
+
+Metric for the number of throttled invocations of all Lambdas.
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAllThrottles.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
+
+---
+
+##### `metricAllUnreservedConcurrentExecutions` <a name="metricAllUnreservedConcurrentExecutions" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAllUnreservedConcurrentExecutions"></a>
+
+```typescript
+import { ImageOptimizationLambda } from 'cdk-nextjs-standalone'
+
+ImageOptimizationLambda.metricAllUnreservedConcurrentExecutions(props?: MetricOptions)
+```
+
+Metric for the number of unreserved concurrent executions across all Lambdas.
+
+###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.ImageOptimizationLambda.metricAllUnreservedConcurrentExecutions.parameter.props"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
+
+---
+
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The architecture of this Lambda Function (this is an optional attribute and defaults to X86_64). |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.connections">connections</a></code> | <code>aws-cdk-lib.aws_ec2.Connections</code> | Access the Connections object. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.functionArn">functionArn</a></code> | <code>string</code> | ARN of this function. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.functionName">functionName</a></code> | <code>string</code> | Name of this function. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.grantPrincipal">grantPrincipal</a></code> | <code>aws-cdk-lib.aws_iam.IPrincipal</code> | The principal this Lambda Function is running as. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.isBoundToVpc">isBoundToVpc</a></code> | <code>boolean</code> | Whether or not this Lambda function was bound to a VPC. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.latestVersion">latestVersion</a></code> | <code>aws-cdk-lib.aws_lambda.IVersion</code> | The `$LATEST` version of this function. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.permissionsNode">permissionsNode</a></code> | <code>constructs.Node</code> | The construct node where permissions are attached. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.resourceArnsForGrantInvoke">resourceArnsForGrantInvoke</a></code> | <code>string[]</code> | The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke(). |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | Execution role associated with this function. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.currentVersion">currentVersion</a></code> | <code>aws-cdk-lib.aws_lambda.Version</code> | Returns a `lambda.Version` which represents the current version of this Lambda function. A new version will be created every time the function's configuration changes. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The LogGroup where the Lambda function's logs are made available. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime</code> | The runtime configured for this lambda. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.deadLetterQueue">deadLetterQueue</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | The DLQ (as queue) associated with this Lambda Function (this is an optional attribute). |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.deadLetterTopic">deadLetterTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | The DLQ (as topic) associated with this Lambda Function (this is an optional attribute). |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.timeout">timeout</a></code> | <code>aws-cdk-lib.Duration</code> | The timeout configured for this lambda. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.property.lambdaFunction">lambdaFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
 
 ---
 
@@ -104,6 +779,250 @@ The tree node.
 
 ---
 
+##### `env`<sup>Required</sup> <a name="env" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.env"></a>
+
+```typescript
+public readonly env: ResourceEnvironment;
+```
+
+- *Type:* aws-cdk-lib.ResourceEnvironment
+
+The environment this resource belongs to.
+
+For resources that are created and managed by the CDK
+(generally, those created by creating new class instances like Role, Bucket, etc.),
+this is always the same as the environment of the stack they belong to;
+however, for imported resources
+(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
+that might be different than the stack they were imported into.
+
+---
+
+##### `stack`<sup>Required</sup> <a name="stack" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.stack"></a>
+
+```typescript
+public readonly stack: Stack;
+```
+
+- *Type:* aws-cdk-lib.Stack
+
+The stack in which this resource is defined.
+
+---
+
+##### `architecture`<sup>Required</sup> <a name="architecture" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.architecture"></a>
+
+```typescript
+public readonly architecture: Architecture;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Architecture
+
+The architecture of this Lambda Function (this is an optional attribute and defaults to X86_64).
+
+---
+
+##### `connections`<sup>Required</sup> <a name="connections" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.connections"></a>
+
+```typescript
+public readonly connections: Connections;
+```
+
+- *Type:* aws-cdk-lib.aws_ec2.Connections
+
+Access the Connections object.
+
+Will fail if not a VPC-enabled Lambda Function
+
+---
+
+##### `functionArn`<sup>Required</sup> <a name="functionArn" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.functionArn"></a>
+
+```typescript
+public readonly functionArn: string;
+```
+
+- *Type:* string
+
+ARN of this function.
+
+---
+
+##### `functionName`<sup>Required</sup> <a name="functionName" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.functionName"></a>
+
+```typescript
+public readonly functionName: string;
+```
+
+- *Type:* string
+
+Name of this function.
+
+---
+
+##### `grantPrincipal`<sup>Required</sup> <a name="grantPrincipal" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.grantPrincipal"></a>
+
+```typescript
+public readonly grantPrincipal: IPrincipal;
+```
+
+- *Type:* aws-cdk-lib.aws_iam.IPrincipal
+
+The principal this Lambda Function is running as.
+
+---
+
+##### `isBoundToVpc`<sup>Required</sup> <a name="isBoundToVpc" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.isBoundToVpc"></a>
+
+```typescript
+public readonly isBoundToVpc: boolean;
+```
+
+- *Type:* boolean
+
+Whether or not this Lambda function was bound to a VPC.
+
+If this is is `false`, trying to access the `connections` object will fail.
+
+---
+
+##### `latestVersion`<sup>Required</sup> <a name="latestVersion" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.latestVersion"></a>
+
+```typescript
+public readonly latestVersion: IVersion;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IVersion
+
+The `$LATEST` version of this function.
+
+Note that this is reference to a non-specific AWS Lambda version, which
+means the function this version refers to can return different results in
+different invocations.
+
+To obtain a reference to an explicit version which references the current
+function configuration, use `lambdaFunction.currentVersion` instead.
+
+---
+
+##### `permissionsNode`<sup>Required</sup> <a name="permissionsNode" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.permissionsNode"></a>
+
+```typescript
+public readonly permissionsNode: Node;
+```
+
+- *Type:* constructs.Node
+
+The construct node where permissions are attached.
+
+---
+
+##### `resourceArnsForGrantInvoke`<sup>Required</sup> <a name="resourceArnsForGrantInvoke" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.resourceArnsForGrantInvoke"></a>
+
+```typescript
+public readonly resourceArnsForGrantInvoke: string[];
+```
+
+- *Type:* string[]
+
+The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke().
+
+---
+
+##### `role`<sup>Optional</sup> <a name="role" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.role"></a>
+
+```typescript
+public readonly role: IRole;
+```
+
+- *Type:* aws-cdk-lib.aws_iam.IRole
+
+Execution role associated with this function.
+
+---
+
+##### `currentVersion`<sup>Required</sup> <a name="currentVersion" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.currentVersion"></a>
+
+```typescript
+public readonly currentVersion: Version;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Version
+
+Returns a `lambda.Version` which represents the current version of this Lambda function. A new version will be created every time the function's configuration changes.
+
+You can specify options for this version using the `currentVersionOptions`
+prop when initializing the `lambda.Function`.
+
+---
+
+##### `logGroup`<sup>Required</sup> <a name="logGroup" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.logGroup"></a>
+
+```typescript
+public readonly logGroup: ILogGroup;
+```
+
+- *Type:* aws-cdk-lib.aws_logs.ILogGroup
+
+The LogGroup where the Lambda function's logs are made available.
+
+If either `logRetention` is set or this property is called, a CloudFormation custom resource is added to the stack that
+pre-creates the log group as part of the stack deployment, if it already doesn't exist, and sets the correct log retention
+period (never expire, by default).
+
+Further, if the log group already exists and the `logRetention` is not set, the custom resource will reset the log retention
+to never expire even if it was configured with a different value.
+
+---
+
+##### `runtime`<sup>Required</sup> <a name="runtime" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.runtime"></a>
+
+```typescript
+public readonly runtime: Runtime;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Runtime
+
+The runtime configured for this lambda.
+
+---
+
+##### `deadLetterQueue`<sup>Optional</sup> <a name="deadLetterQueue" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.deadLetterQueue"></a>
+
+```typescript
+public readonly deadLetterQueue: IQueue;
+```
+
+- *Type:* aws-cdk-lib.aws_sqs.IQueue
+
+The DLQ (as queue) associated with this Lambda Function (this is an optional attribute).
+
+---
+
+##### `deadLetterTopic`<sup>Optional</sup> <a name="deadLetterTopic" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.deadLetterTopic"></a>
+
+```typescript
+public readonly deadLetterTopic: ITopic;
+```
+
+- *Type:* aws-cdk-lib.aws_sns.ITopic
+
+The DLQ (as topic) associated with this Lambda Function (this is an optional attribute).
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.timeout"></a>
+
+```typescript
+public readonly timeout: Duration;
+```
+
+- *Type:* aws-cdk-lib.Duration
+
+The timeout configured for this lambda.
+
+---
+
 ##### `bucket`<sup>Required</sup> <a name="bucket" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.bucket"></a>
 
 ```typescript
@@ -111,16 +1030,6 @@ public readonly bucket: IBucket;
 ```
 
 - *Type:* aws-cdk-lib.aws_s3.IBucket
-
----
-
-##### `lambdaFunction`<sup>Required</sup> <a name="lambdaFunction" id="cdk-nextjs-standalone.ImageOptimizationLambda.property.lambdaFunction"></a>
-
-```typescript
-public readonly lambdaFunction: Function;
-```
-
-- *Type:* aws-cdk-lib.aws_lambda.Function
 
 ---
 
@@ -610,6 +1519,8 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.buildPath">buildPath</a></code> | <code>string</code> | The path to the directory where the server build artifacts are stored. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.imagesManifestPath">imagesManifestPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextDir">nextDir</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextPublicDir">nextPublicDir</a></code> | <code>string</code> | Public static files. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStandaloneBuildDir">nextStandaloneBuildDir</a></code> | <code>string</code> | NextJS project inside of standalone build. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStandaloneDir">nextStandaloneDir</a></code> | <code>string</code> | Entire NextJS build output directory. |
@@ -640,6 +1551,26 @@ public readonly buildPath: string;
 - *Type:* string
 
 The path to the directory where the server build artifacts are stored.
+
+---
+
+##### `imagesManifestPath`<sup>Required</sup> <a name="imagesManifestPath" id="cdk-nextjs-standalone.NextjsBuild.property.imagesManifestPath"></a>
+
+```typescript
+public readonly imagesManifestPath: string;
+```
+
+- *Type:* string
+
+---
+
+##### `nextDir`<sup>Required</sup> <a name="nextDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextDir"></a>
+
+```typescript
+public readonly nextDir: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -1721,7 +2652,8 @@ const imageOptimizationProps: ImageOptimizationProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The internal S3 bucket for application images. |
-| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextLayer">nextLayer</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a></code> | NextjsLayer. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextLayer">nextLayer</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a></code> | NextjsLayer - sharp runtime. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
 
 ---
@@ -1829,6 +2761,18 @@ The internal S3 bucket for application images.
 
 ---
 
+##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.ImageOptimizationProps.property.nextBuild"></a>
+
+```typescript
+public readonly nextBuild: NextjsBuild;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+
+The `NextjsBuild` instance representing the built Nextjs application.
+
+---
+
 ##### `nextLayer`<sup>Required</sup> <a name="nextLayer" id="cdk-nextjs-standalone.ImageOptimizationProps.property.nextLayer"></a>
 
 ```typescript
@@ -1837,7 +2781,7 @@ public readonly nextLayer: NextjsLayer;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a>
 
-NextjsLayer.
+NextjsLayer - sharp runtime.
 
 ---
 
@@ -2861,7 +3805,6 @@ const nextjsLambdaProps: NextjsLambdaProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built nextJS application. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nextLayer">nextLayer</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a></code> | NextjsLayer. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
 
 ---
@@ -2969,18 +3912,6 @@ Built nextJS application.
 
 ---
 
-##### `nextLayer`<sup>Required</sup> <a name="nextLayer" id="cdk-nextjs-standalone.NextjsLambdaProps.property.nextLayer"></a>
-
-```typescript
-public readonly nextLayer: NextjsLayer;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a>
-
-NextjsLayer.
-
----
-
 ##### `lambda`<sup>Optional</sup> <a name="lambda" id="cdk-nextjs-standalone.NextjsLambdaProps.property.lambda"></a>
 
 ```typescript
@@ -3025,8 +3956,8 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.defaults">defaults</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps">NextjsDefaultsProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket">imageOptimizationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Allows you to override defaults for the resources created by this construct. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.defaults">defaults</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps">NextjsDefaultsProps</a></code> | Allows you to override defaults for the resources created by this construct. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket">imageOptimizationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Optional S3 Bucket to use, defaults to assets bucket. |
 
 ---
 
@@ -3129,6 +4060,8 @@ public readonly defaults: NextjsDefaultsProps;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsDefaultsProps">NextjsDefaultsProps</a>
 
+Allows you to override defaults for the resources created by this construct.
+
 ---
 
 ##### `imageOptimizationBucket`<sup>Optional</sup> <a name="imageOptimizationBucket" id="cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket"></a>
@@ -3139,7 +4072,7 @@ public readonly imageOptimizationBucket: IBucket;
 
 - *Type:* aws-cdk-lib.aws_s3.IBucket
 
-Allows you to override defaults for the resources created by this construct.
+Optional S3 Bucket to use, defaults to assets bucket.
 
 ---
 

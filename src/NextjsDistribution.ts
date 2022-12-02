@@ -436,6 +436,7 @@ export class NextjsDistribution extends Construct {
           compress: true,
           cachePolicy: imageCachePolicy,
           originRequestPolicy: imageOptORP,
+          responseHeadersPolicy: staticResponseHeadersPolicy,
         },
 
         // known static routes

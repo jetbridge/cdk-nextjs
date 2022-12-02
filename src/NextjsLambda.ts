@@ -13,7 +13,6 @@ import { bundleFunction } from './BundleFunction';
 import { CONFIG_ENV_JSON_PATH } from './Nextjs';
 import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, NextjsBuild } from './NextjsBuild';
-import { NextjsLayer } from './NextjsLayer';
 import { getS3ReplaceValues, NextjsS3EnvRewriter } from './NextjsS3EnvRewriter';
 
 export type EnvironmentVars = Record<string, string>;
@@ -38,11 +37,6 @@ export interface NextjsLambdaProps extends NextjsBaseProps {
    * Override function properties.
    */
   readonly lambda?: FunctionOptions;
-
-  /**
-   * NextjsLayer
-   */
-  readonly nextLayer: NextjsLayer;
 }
 
 const RUNTIME = lambda.Runtime.NODEJS_16_X;
@@ -78,7 +72,7 @@ export class NextJsLambda extends Construct {
         sourcemap: true,
         target: 'node16',
         platform: 'node',
-        external: ['sharp', 'next', 'aws-sdk'],
+        external: ['next', 'aws-sdk'],
         format: 'cjs', // hope one day we can use esm
       },
     });
@@ -113,7 +107,6 @@ export class NextJsLambda extends Construct {
       timeout: functionOptions?.timeout ?? Duration.seconds(10),
       runtime: RUNTIME,
       handler: path.join(props.nextjsPath, 'server.handler'),
-      layers: [props.nextLayer],
       code,
       environment,
 

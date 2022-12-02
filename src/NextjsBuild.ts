@@ -54,6 +54,9 @@ export class NextjsBuild extends Construct {
 
   public tempBuildDir: string;
 
+  public nextDir: string;
+  public imagesManifestPath: string;
+
   constructor(scope: Construct, id: string, props: NextjsBuildProps) {
     super(scope, id);
 
@@ -82,6 +85,10 @@ export class NextjsBuild extends Construct {
     this.nextStaticDir = this._getNextStaticDir();
 
     this.buildPath = this.nextStandaloneBuildDir;
+
+    this.nextDir = this._getNextDir();
+    // image manifest
+    this.imagesManifestPath = this._getImagesManifestPath();
   }
 
   private runNpmBuild() {
@@ -193,6 +200,9 @@ export class NextjsBuild extends Construct {
   }
   private _getNextPublicDir() {
     return path.join(this._getNextDir(), NEXTJS_PUBLIC_DIR);
+  }
+  private _getImagesManifestPath() {
+    return path.join(this._getNextDir(), IMAGE_MANIFEST_FILE);
   }
 }
 

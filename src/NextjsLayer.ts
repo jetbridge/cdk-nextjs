@@ -16,8 +16,8 @@ export class NextjsLayer extends LayerVersion {
     const layerDir = path.resolve(__dirname, '../assets');
     super(scope, id, {
       code: new lambda.AssetCode(path.join(layerDir, 'sharp-0.30.0.zip')),
-      compatibleRuntimes: [lambda.Runtime.NODEJS_16_X],
-      description: 'Sharp for NextJS',
+      compatibleRuntimes: [lambda.Runtime.NODEJS_16_X, lambda.Runtime.NODEJS_18_X],
+      description: 'Sharp for Lambdas',
       ...props,
     });
 

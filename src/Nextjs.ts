@@ -44,10 +44,13 @@ export interface NextjsDefaultsProps {
 
 export interface NextjsProps extends NextjsBaseProps {
   /**
+   * Optional S3 Bucket to use, defaults to assets bucket
+   */
+  readonly imageOptimizationBucket?: s3.IBucket;
+  /**
    * Allows you to override defaults for the resources created by this
    * construct.
    */
-  readonly imageOptimizationBucket?: s3.IBucket;
   readonly defaults?: NextjsDefaultsProps;
 }
 
@@ -125,13 +128,12 @@ export class Nextjs extends Construct {
       });
 
     // layer
-    const nextLayer = new NextjsLayer(scope, 'NextjsLayer', {});
+    const nextLayer = new NextjsLayer(scope, 'NextjsLayer3', {});
 
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir });
     this.serverFunction = new NextJsLambda(this, 'Fn', {
       ...props,
-      nextLayer,
       tempBuildDir,
       nextBuild: this.nextBuild,
       lambda: props.defaults?.lambda,
@@ -140,8 +142,9 @@ export class Nextjs extends Construct {
     this.imageOptimizationFunction = new ImageOptimizationLambda(this, 'ImgOptFn', {
       ...props,
       nextLayer,
-      lambdaOptions: props.defaults?.lambda,
+      nextBuild: this.nextBuild,
       bucket: props.imageOptimizationBucket || this.bucket,
+      lambdaOptions: props.defaults?.lambda,
     });
     // deploy nextjs static assets to s3
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
@@ -162,7 +165,7 @@ export class Nextjs extends Construct {
       tempBuildDir,
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction.lambdaFunction,
-      imageOptFunction: this.imageOptimizationFunction.lambdaFunction,
+      imageOptFunction: this.imageOptimizationFunction,
     });
 
     if (!props.quiet) console.debug('└ Finished preparing NextJS app for deployment');

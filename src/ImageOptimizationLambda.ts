@@ -1,14 +1,23 @@
+import * as fs from 'fs';
 import * as path from 'path';
 import { Duration } from 'aws-cdk-lib';
 import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
+import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
-
 import { Construct } from 'constructs';
 import { NextjsBaseProps } from './NextjsBase';
+import type { NextjsBuild } from './NextjsBuild';
 import { NextjsLayer } from './NextjsLayer';
+
+export type RemotePattern = {
+  protocol: string;
+  hostname: string;
+  port?: string;
+  pathname?: string;
+};
+
 export interface ImageOptimizationProps extends NextjsBaseProps {
   /**
    * The internal S3 bucket for application images.
@@ -21,32 +30,49 @@ export interface ImageOptimizationProps extends NextjsBaseProps {
   readonly lambdaOptions?: FunctionOptions;
 
   /**
-   * NextjsLayer
+   * NextjsLayer - sharp runtime
    */
   readonly nextLayer: NextjsLayer;
+  /**
+   * The `NextjsBuild` instance representing the built Nextjs application.
+   */
+  readonly nextBuild: NextjsBuild;
 }
 
-const RUNTIME = lambda.Runtime.NODEJS_16_X;
+const RUNTIME = lambda.Runtime.NODEJS_18_X;
 
 /**
  * This lambda handles image optimization.
  */
-export class ImageOptimizationLambda extends Construct {
+export class ImageOptimizationLambda extends NodejsFunction {
   bucket: IBucket;
-  lambdaFunction: Function;
 
   constructor(scope: Construct, id: string, props: ImageOptimizationProps) {
-    super(scope, id);
     const { lambdaOptions, bucket } = props;
-    this.bucket = bucket;
+    const lambdaPath = path.resolve(__dirname, '../assets/lambda');
+    const imageOptHandlerPath = path.resolve(lambdaPath, 'ImageOptimization.ts');
 
-    const imageOptHandlerPath = path.resolve(__dirname, '../assets/lambda/ImageOptimization.ts');
-    this.lambdaFunction = new NodejsFunction(this, 'ImageOptimizationHandler', {
+    /**
+     * NOTE: This needs to be configured before calling super(), otherwise the build
+     * will fail about missing modules.
+     * Creates a symlink from the user's nextjs node_modules/next =>
+     * assets/lambda/node_modules/next.
+     * When NextjsFunction executes, it will use esbuild to bundle the required modules
+     * in `imageOptimization.ts` to minimize the function size.
+     */
+    const source = path.join(props.nextBuild.nextDir, 'node_modules/next');
+    const modules = path.join(lambdaPath, 'node_modules');
+    const target = path.join(modules, 'next');
+    if (!fs.existsSync(modules)) fs.mkdirSync(modules);
+    if (!fs.existsSync(target)) fs.symlinkSync(source, target, 'dir');
+
+    super(scope, id, {
       entry: imageOptHandlerPath,
       runtime: RUNTIME,
       bundling: {
         minify: true,
-        target: 'node16',
+        target: 'node18',
+        externalModules: ['@aws-sdk/client-s3'],
       },
       layers: [props.nextLayer],
       ...lambdaOptions,
@@ -55,13 +81,21 @@ export class ImageOptimizationLambda extends Construct {
       timeout: lambdaOptions?.timeout ?? Duration.seconds(10),
       environment: {
         ...lambdaOptions?.environment,
-        S3_SOURCE_BUCKET: this.bucket.bucketName,
+        S3_SOURCE_BUCKET: bucket.bucketName,
       },
     });
 
+    this.bucket = bucket;
+    this.loadNextNextConfig(props.nextBuild.imagesManifestPath).catch((err) => {
+      console.error('Error: ', { err });
+    });
     this.addPolicy();
   }
 
+  private async loadNextNextConfig(p: string) {
+    const nextConfig = await import(p);
+    this.addEnvironment('NEXT_IMAGE_CONFIG', JSON.stringify(nextConfig.images));
+  }
   /**
    * Adds policy statement to give GetObject permission Image Optimization lambda.
    */
@@ -71,7 +105,7 @@ export class ImageOptimizationLambda extends Construct {
       resources: [this.bucket.arnForObjects('*')],
     });
 
-    this.lambdaFunction.role?.attachInlinePolicy(
+    this.role?.attachInlinePolicy(
       new Policy(this, 'get-image-policy', {
         statements: [policyStatement],
       })

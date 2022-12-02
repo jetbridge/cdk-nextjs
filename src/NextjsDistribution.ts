@@ -15,9 +15,9 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import { bundleFunction } from './BundleFunction';
+import { DEFAULT_STATIC_MAX_AGE } from './constants';
 import { BaseSiteDomainProps, buildErrorResponsesForRedirectToIndex, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
-import { DEFAULT_STATIC_MAX_AGE } from './constants'
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';

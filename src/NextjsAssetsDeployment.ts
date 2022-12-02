@@ -3,13 +3,14 @@ import * as path from 'path';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as s3 from 'aws-cdk-lib/aws-s3';
-import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
+import { BucketDeployment, CacheControl, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, NextjsBuild } from './NextjsBuild';
 import { getS3ReplaceValues, NextjsS3EnvRewriter, replaceTokenGlobs } from './NextjsS3EnvRewriter';
+import { DEFAULT_STATIC_MAX_AGE, DEFAULT_STATIC_STALE_WHILE_REVALIDATE } from './constants'
 
 export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
   /**
@@ -131,8 +132,10 @@ export class NextJsAssetsDeployment extends Construct {
     });
     if (!archiveZipFilePath) return [];
 
+    const cacheControl = CacheControl.fromString(`public,max-age=${DEFAULT_STATIC_MAX_AGE},stale-while-revalidate=${DEFAULT_STATIC_STALE_WHILE_REVALIDATE},immutable`)
     const deployment = new BucketDeployment(this, 'NextStaticAssetsS3Deployment', {
       destinationBucket: this.bucket,
+      cacheControl: [cacheControl],
       sources: [Source.asset(archiveZipFilePath)],
       distribution: this.props.distribution,
       prune: this.props.prune,

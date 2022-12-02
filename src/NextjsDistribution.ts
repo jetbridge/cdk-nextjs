@@ -17,8 +17,7 @@ import * as fs from 'fs-extra';
 import { bundleFunction } from './BundleFunction';
 import { BaseSiteDomainProps, buildErrorResponsesForRedirectToIndex, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
-
-const DEFAULT_STATIC_MAX_AGE = Duration.days(30).toSeconds();
+import { DEFAULT_STATIC_MAX_AGE } from './constants'
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -400,7 +399,6 @@ export class NextjsDistribution extends Construct {
         // what goes here? static or lambda?
         cachePolicy: lambdaCachePolicy,
         originRequestPolicy: fallbackOriginRequestPolicy,
-        responseHeadersPolicy: staticResponseHeadersPolicy,
 
         edgeLambdas: lambdaOriginEdgeFns,
       },

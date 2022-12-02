@@ -12,7 +12,7 @@ import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, NextjsBuild } from './NextjsBuild';
 import { getS3ReplaceValues, NextjsS3EnvRewriter, replaceTokenGlobs } from './NextjsS3EnvRewriter';
 
-export interface NextjsAssetCachePolicyProps {
+export interface NextjsAssetsCachePolicyProps {
   /**
    * Cache-control max-age default for S3 static assets.
    * Default: 30 days.
@@ -45,7 +45,7 @@ export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
   /**
    * Override the default S3 cache policies created internally.
    */
-  readonly cachePolicies?: NextjsAssetCachePolicyProps;
+  readonly cachePolicies?: NextjsAssetsCachePolicyProps;
 
   /**
    * Set to true to delete old assets (defaults to false).

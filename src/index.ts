@@ -9,7 +9,7 @@ export {
 export {
   NextJsAssetsDeployment,
   NextjsAssetsDeploymentProps,
-  NextjsAssetCachePolicyProps,
+  NextjsAssetsCachePolicyProps,
 } from './NextjsAssetsDeployment';
 export { NextjsBuild, NextjsBuildProps, CreateArchiveArgs } from './NextjsBuild';
 export { EnvironmentVars, NextJsLambda, NextjsLambdaProps } from './NextjsLambda';

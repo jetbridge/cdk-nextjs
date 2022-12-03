@@ -15,10 +15,9 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import { bundleFunction } from './BundleFunction';
+import { DEFAULT_STATIC_MAX_AGE } from './constants';
 import { BaseSiteDomainProps, buildErrorResponsesForRedirectToIndex, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
-
-const DEFAULT_STATIC_MAX_AGE = Duration.days(30);
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -331,7 +330,7 @@ export class NextjsDistribution extends Construct {
     const lambdaCachePolicy = cachePolicies?.lambdaCachePolicy ?? this.createCloudFrontLambdaCachePolicy();
 
     // requests for static objects
-    const defaultStaticMaxAge = cachePolicies?.staticClientMaxAgeDefault || DEFAULT_STATIC_MAX_AGE;
+    const defaultStaticMaxAge = cachePolicies?.staticClientMaxAgeDefault?.toSeconds() || DEFAULT_STATIC_MAX_AGE;
     const staticResponseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
       // add default header for static assets
       customHeadersBehavior: {
@@ -341,7 +340,7 @@ export class NextjsDistribution extends Construct {
             override: false,
             // by default tell browser to cache static files for this long
             // this is separate from the origin cache policy
-            value: `public, max-age=${defaultStaticMaxAge}, immutable`,
+            value: `public,max-age=${defaultStaticMaxAge},immutable`,
           },
         ],
       },

@@ -1552,6 +1552,53 @@ public readonly quiet: boolean;
 
 ---
 
+### NextjsAssetsCachePolicyProps <a name="NextjsAssetsCachePolicyProps" id="cdk-nextjs-standalone.NextjsAssetsCachePolicyProps"></a>
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsAssetsCachePolicyProps.Initializer"></a>
+
+```typescript
+import { NextjsAssetsCachePolicyProps } from 'cdk-nextjs-standalone'
+
+const nextjsAssetsCachePolicyProps: NextjsAssetsCachePolicyProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsCachePolicyProps.property.staticMaxAgeDefault">staticMaxAgeDefault</a></code> | <code>aws-cdk-lib.Duration</code> | Cache-control max-age default for S3 static assets. |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsCachePolicyProps.property.staticStaleWhileRevalidateDefault">staticStaleWhileRevalidateDefault</a></code> | <code>aws-cdk-lib.Duration</code> | Cache-control stale-while-revalidate default for S3 static assets. |
+
+---
+
+##### `staticMaxAgeDefault`<sup>Optional</sup> <a name="staticMaxAgeDefault" id="cdk-nextjs-standalone.NextjsAssetsCachePolicyProps.property.staticMaxAgeDefault"></a>
+
+```typescript
+public readonly staticMaxAgeDefault: Duration;
+```
+
+- *Type:* aws-cdk-lib.Duration
+
+Cache-control max-age default for S3 static assets.
+
+Default: 30 days.
+
+---
+
+##### `staticStaleWhileRevalidateDefault`<sup>Optional</sup> <a name="staticStaleWhileRevalidateDefault" id="cdk-nextjs-standalone.NextjsAssetsCachePolicyProps.property.staticStaleWhileRevalidateDefault"></a>
+
+```typescript
+public readonly staticStaleWhileRevalidateDefault: Duration;
+```
+
+- *Type:* aws-cdk-lib.Duration
+
+Cache-control stale-while-revalidate default for S3 static assets.
+
+Default: 1 day.
+
+---
+
 ### NextjsAssetsDeploymentProps <a name="NextjsAssetsDeploymentProps" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps"></a>
 
 #### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.Initializer"></a>
@@ -1575,6 +1622,7 @@ const nextjsAssetsDeploymentProps: NextjsAssetsDeploymentProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket \| aws-cdk-lib.aws_s3.BucketProps</code> | Properties for the S3 bucket containing the NextJS assets. |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsAssetsCachePolicyProps">NextjsAssetsCachePolicyProps</a></code> | Override the default S3 cache policies created internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | Distribution to invalidate when assets change. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | Set to true to delete old assets (defaults to false). |
 
@@ -1694,6 +1742,18 @@ public readonly bucket: IBucket | BucketProps;
 Properties for the S3 bucket containing the NextJS assets.
 
 You can also supply your own bucket here.
+
+---
+
+##### `cachePolicies`<sup>Optional</sup> <a name="cachePolicies" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.cachePolicies"></a>
+
+```typescript
+public readonly cachePolicies: NextjsAssetsCachePolicyProps;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsAssetsCachePolicyProps">NextjsAssetsCachePolicyProps</a>
+
+Override the default S3 cache policies created internally.
 
 ---
 

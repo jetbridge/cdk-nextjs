@@ -8,37 +8,31 @@ import { defaultConfig, NextConfigComplete } from 'next/dist/server/config-share
 import { imageOptimizer as nextImageOptimizer, ImageOptimizerCache } from 'next/dist/server/image-optimizer'
 import { NextUrlWithParsedQuery } from 'next/dist/server/request-meta'
 import { ImageConfigComplete, ImageConfig } from 'next/dist/shared/lib/image-config'
+import { NextConfig } from 'next'
 import { Writable } from 'node:stream'
 import https from 'node:https'
+import path from 'node:path'
+import fs from 'node:fs'
 
 const sourceBucket = process.env.S3_SOURCE_BUCKET ?? undefined
 
-/**
- * The imageConfig object is stringified and passthrough the lambda as an environment variable
- */
-const _loadImageConfig = (): ImageConfig => {
-  let imageConfig: ImageConfig = {}
-  const imageConfigString = process.env.NEXT_IMAGE_CONFIG
-  try {
-    imageConfig = JSON.parse(imageConfigString || '{}') as ImageConfig
-  } catch (err) {
-    console.error('Error parsing image config: ', { err, imageConfigString })
-    throw err
-  }
-  return imageConfig
-}
+// The next config file was bundled and outputted to the root
+// SEE: src/ImageOptimizationLambda.ts, Line 81
+const requiredServerFilesPath = path.join(__dirname, 'required-server-files.json');
+const json = fs.readFileSync(requiredServerFilesPath, 'utf-8');
+const { config } = JSON.parse(json) as { version: number; config: NextConfig };
 
-const pipeRes = (p: Writable, res: ServerResponse) => {
-  p.pipe(res)
-  .once('close', () => {
-    res.statusCode = 200
-    res.end()
-  })
-  .once('error', (err) => {
-    console.error('Failed to get image', { err })
-    res.statusCode = 400
-    res.end()
-  })
+const pipeRes = (w: Writable, res: ServerResponse) => {
+  w.pipe(res)
+    .once('close', () => {
+      res.statusCode = 200
+      res.end()
+    })
+    .once('error', (err) => {
+      console.error('Failed to get image', { err })
+      res.statusCode = 400
+      res.end()
+    })
 }
 
 // Handle fetching of S3 object before optimization happens in nextjs.
@@ -73,6 +67,7 @@ const requestHandler =
       const stream = response.Body as Writable
       pipeRes(stream, res)
       
+      // Respect the bucket file's content-type and cace-control
       if (response.ContentType) {
         res.setHeader('Content-Type', response.ContentType)
       }
@@ -86,15 +81,11 @@ const requestHandler =
 const normalizeHeaders = (headers: Record<string, any>) =>
   Object.entries(headers).reduce((acc, [key, value]) => ({ ...acc, [key.toLowerCase()]: value }), {} as Record<string, string>)
 
-// Load the config from user's app next.config.js passed via env
-const imageConfig = _loadImageConfig()
-
 const nextConfig: NextConfigComplete = {
   ...(defaultConfig as NextConfigComplete),
   images: {
     ...(defaultConfig.images as ImageConfigComplete),
-    domains: imageConfig.domains || [],
-    remotePatterns: imageConfig.remotePatterns || [],
+    ...config.images
   },
 }
 

@@ -10,6 +10,7 @@ import { Construct } from 'constructs';
 import { NextjsBaseProps } from './NextjsBase';
 import type { NextjsBuild } from './NextjsBuild';
 import { NextjsLayer } from './NextjsLayer';
+// import { config } from 'process';
 
 export type RemotePattern = {
   protocol: string;
@@ -49,8 +50,8 @@ export class ImageOptimizationLambda extends NodejsFunction {
 
   constructor(scope: Construct, id: string, props: ImageOptimizationProps) {
     const { lambdaOptions, bucket } = props;
-    const lambdaPath = path.resolve(__dirname, '../assets/lambda');
-    const imageOptHandlerPath = path.resolve(lambdaPath, 'ImageOptimization.ts');
+    const lambdaPath = path.resolve(__dirname, '../assets/lambda/ImageOptimization');
+    const imageOptHandlerPath = path.resolve(lambdaPath, 'index.ts');
 
     /**
      * NOTE: This needs to be configured before calling super(), otherwise the build
@@ -61,15 +62,27 @@ export class ImageOptimizationLambda extends NodejsFunction {
      * in `imageOptimization.ts` to minimize the function size.
      */
     const source = path.join(props.nextBuild.nextDir, 'node_modules/next');
-    const modules = path.join(lambdaPath, 'node_modules');
-    const target = path.join(modules, 'next');
-    if (!fs.existsSync(modules)) fs.mkdirSync(modules);
+    const modulesPath = path.join(lambdaPath, 'node_modules');
+    const target = path.join(modulesPath, 'next');
+    if (!fs.existsSync(modulesPath)) fs.mkdirSync(modulesPath);
     if (!fs.existsSync(target)) fs.symlinkSync(source, target, 'dir');
+
+    // Read the nextjs server config and write contents to bundle output via hooks
+    const configFile = 'required-server-files.json';
+    const requiredServerFilesPath = path.join(props.nextBuild.nextStandaloneBuildDir, configFile);
+    const data = fs.readFileSync(requiredServerFilesPath, 'utf-8');
 
     super(scope, id, {
       entry: imageOptHandlerPath,
       runtime: RUNTIME,
       bundling: {
+        commandHooks: {
+          beforeBundling(inputDir: string, outputDir: string): string[] {
+            return [`echo '${data}' > ${inputDir}/${configFile}`, `cp ${inputDir}/${configFile} ${outputDir}`];
+          },
+          afterBundling() { return [] },
+          beforeInstall() { return [] },
+        },
         minify: true,
         target: 'node18',
         externalModules: ['@aws-sdk/client-s3'],
@@ -80,22 +93,14 @@ export class ImageOptimizationLambda extends NodejsFunction {
       memorySize: lambdaOptions?.memorySize || 1024,
       timeout: lambdaOptions?.timeout ?? Duration.seconds(10),
       environment: {
-        ...lambdaOptions?.environment,
         S3_SOURCE_BUCKET: bucket.bucketName,
       },
     });
 
     this.bucket = bucket;
-    this.loadNextNextConfig(props.nextBuild.imagesManifestPath).catch((err) => {
-      console.error('Error: ', { err });
-    });
     this.addPolicy();
   }
 
-  private async loadNextNextConfig(p: string) {
-    const nextConfig = await import(p);
-    this.addEnvironment('NEXT_IMAGE_CONFIG', JSON.stringify(nextConfig.images));
-  }
   /**
    * Adds policy statement to give GetObject permission Image Optimization lambda.
    */

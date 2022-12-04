@@ -21,7 +21,7 @@ export type RemotePattern = {
 
 export interface ImageOptimizationProps extends NextjsBaseProps {
   /**
-   * The internal S3 bucket for application images.
+   * The S3 bucket holding application images.
    */
   readonly bucket: IBucket;
 

@@ -128,7 +128,7 @@ export class Nextjs extends Construct {
       });
 
     // layer
-    const nextLayer = new NextjsLayer(scope, 'NextjsLayer3', {});
+    const nextLayer = new NextjsLayer(scope, 'NextjsLayer', {});
 
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir });

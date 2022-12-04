@@ -1,4 +1,4 @@
-const { awscdk, build } = require('projen');
+const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'JetBridge',
   authorAddress: 'mischa@jetbridge.com',

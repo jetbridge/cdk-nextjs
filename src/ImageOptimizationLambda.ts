@@ -80,8 +80,12 @@ export class ImageOptimizationLambda extends NodejsFunction {
           beforeBundling(inputDir: string, outputDir: string): string[] {
             return [`echo '${data}' > ${inputDir}/${configFile}`, `cp ${inputDir}/${configFile} ${outputDir}`];
           },
-          afterBundling() { return [] },
-          beforeInstall() { return [] },
+          afterBundling() {
+            return [];
+          },
+          beforeInstall() {
+            return [];
+          },
         },
         minify: true,
         target: 'node18',

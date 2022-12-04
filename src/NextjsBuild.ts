@@ -196,7 +196,6 @@ export class NextjsBuild extends Construct {
   private _getNextPublicDir() {
     return path.join(this._getNextDir(), NEXTJS_PUBLIC_DIR);
   }
-
 }
 
 export interface CreateArchiveArgs {

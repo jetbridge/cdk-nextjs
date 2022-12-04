@@ -1519,7 +1519,6 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.buildPath">buildPath</a></code> | <code>string</code> | The path to the directory where the server build artifacts are stored. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.imagesManifestPath">imagesManifestPath</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextDir">nextDir</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextPublicDir">nextPublicDir</a></code> | <code>string</code> | Public static files. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStandaloneBuildDir">nextStandaloneBuildDir</a></code> | <code>string</code> | NextJS project inside of standalone build. |
@@ -1551,16 +1550,6 @@ public readonly buildPath: string;
 - *Type:* string
 
 The path to the directory where the server build artifacts are stored.
-
----
-
-##### `imagesManifestPath`<sup>Required</sup> <a name="imagesManifestPath" id="cdk-nextjs-standalone.NextjsBuild.property.imagesManifestPath"></a>
-
-```typescript
-public readonly imagesManifestPath: string;
-```
-
-- *Type:* string
 
 ---
 
@@ -2651,7 +2640,7 @@ const imageOptimizationProps: ImageOptimizationProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The internal S3 bucket for application images. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextLayer">nextLayer</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a></code> | NextjsLayer - sharp runtime. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
@@ -2757,7 +2746,7 @@ public readonly bucket: IBucket;
 
 - *Type:* aws-cdk-lib.aws_s3.IBucket
 
-The internal S3 bucket for application images.
+The S3 bucket holding application images.
 
 ---
 

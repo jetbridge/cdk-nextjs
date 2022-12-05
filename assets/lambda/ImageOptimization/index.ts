@@ -61,7 +61,14 @@ const requestHandler =
         throw new Error(`Could not fetch image ${trimmedKey} from bucket.`)
       }
       pipeRes(response.Body, res)
-
+      // Respect the bucket file's content-type and cache-control
+      // nextImageOptimizer will use this to set the results.maxAge
+      if (response.ContentType) {
+        res.setHeader('Content-Type', response.ContentType)
+      }
+      if (response.CacheControl) {
+        res.setHeader('Cache-Control', response.CacheControl)
+      }
     }
   }
 

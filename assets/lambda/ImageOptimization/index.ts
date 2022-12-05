@@ -91,7 +91,7 @@ const nextConfig: NextConfigComplete = {
 
 // We don't need serverless-http neither basePath configuration as endpoint works as single route API.
 // Images are handled via header and query param information.
-const optimizer = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyStructuredResultV2> => {
+const optimizer: APIGatewayProxyHandlerV2 = async (event) => {
   try {
     if (!sourceBucket) {
       throw new Error('Bucket name must be defined!')

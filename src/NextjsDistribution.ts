@@ -60,6 +60,12 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
   readonly serverFunction: lambda.IFunction;
 
   /**
+   * Lambda function to optimize images.
+   * Must be provided if you want to serve dynamic requests.
+   */
+  readonly imageOptFunction: lambda.IFunction;
+
+  /**
    * Overrides for created CDK resources.
    */
   readonly cdk?: NextjsDistributionCdkProps;
@@ -294,12 +300,22 @@ export class NextjsDistribution extends Construct {
     const fnUrl = this.props.serverFunction.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,
     });
-    // this.lambdaFunctionUrl = fnUrl;
     const serverFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), {
       customHeaders: {
         // provide config to edge lambda function
         'x-origin-url': fnUrl.url,
       },
+    });
+
+    // Image Optimization
+    const imageOptFnUrl = this.props.imageOptFunction.addFunctionUrl({
+      authType: lambda.FunctionUrlAuthType.NONE,
+    });
+    const imageOptFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(imageOptFnUrl.url));
+    const imageOptORP = new cloudfront.OriginRequestPolicy(this, 'ImageOptPolicy', {
+      queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.allowList('q', 'w', 'url'),
+      headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList('accept'),
+      cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
     });
 
     // lambda behavior edge function
@@ -414,12 +430,12 @@ export class NextjsDistribution extends Construct {
         // dynamic images go to lambda
         '_next/image*': {
           viewerProtocolPolicy,
-          origin: serverFunctionOrigin,
+          origin: imageOptFunctionOrigin,
           allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
           cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
           compress: true,
           cachePolicy: imageCachePolicy,
-          originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER, // not sure what goes here
+          originRequestPolicy: imageOptORP,
         },
 
         // known static routes

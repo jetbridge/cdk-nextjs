@@ -16,7 +16,48 @@ import { Nextjs } from 'cdk-nextjs-standalone';
 
 new Nextjs(this, 'Web', {
   nextjsPath: './web', // relative path to nextjs project root
+
+  // Bucket that contains your app's images for optimizations.
+  // If not provided, internal assets bucket will be used.
+  imageOptimizationBucket: myImageBucket,
 });
+```
+
+### Image Optimization
+
+All requests to `"/_next/image?url=..." ` will be routed to a separate image optimization lambda. To take advantage of this feature, use the `<Image />` component as:
+
+```ts
+// MyPage.tsx
+import Image from 'next/image'
+
+function MyPage() {
+   return (
+      <>
+         <Image src="/path/to/image/in/bucket/hello.png" alt={...} width={...} />
+         <Image src="https://images.unsplash.com/photo-1600804340584-c7db2eacf0bf" alt={...} width={...} />
+      </>
+   )
+}
+```
+
+Note: the `<Image />` component handles the URL encoding and prefixes the `src` with `"/_next/image?url=..."`
+
+If you need to optimize external images, configure `next.config.js`:
+(Please see [doc](https://nextjs.org/docs/api-reference/next/image#remote-patterns) on domain patterns.)
+
+```ts
+// next.config.js
+const nextConfig = {
+  ...
+  images: {
+    remotePatterns: [
+     {
+       hostname: "**.unsplash.com",
+     },
+    ],
+  },
+};
 ```
 
 ## Documentation
@@ -147,7 +188,7 @@ class NextjsSst extends Nextjs {
 
 ## Breaking changes
 
-- v2.0.0: SST wrapper changed, lambda/assets/distribution defaults now are in the `defaults` prop, refactored distribution settings into the new NextjsDistribution construct. If you are upgrading, you must temporarily remove the `customDomain` on your existing 1.x.x app before upgrading to >=2.x.x because the CloudFront distribution will get recreated due to refactoring, and the custom domain must be globally unique across all CloudFront distibutions. Prepare for downtime.
+- v2.0.0: SST wrapper changed, lambda/assets/distribution defaults now are in the `defaults` prop, refactored distribution settings into the new NextjsDistribution construct. If you are upgrading, you must temporarily remove the `customDomain` on your existing 1.x.x app before upgrading to >=2.x.x because the CloudFront distribution will get recreated due to refactoring, and the custom domain must be globally unique across all CloudFront distributions. Prepare for downtime.
 
 ## To-do
 

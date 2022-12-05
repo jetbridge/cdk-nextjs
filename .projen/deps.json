@@ -22,7 +22,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "2.50.0",
+      "version": "2.53.0",
       "type": "build"
     },
     {
@@ -117,6 +117,10 @@
       "type": "build"
     },
     {
+      "name": "@aws-sdk/client-s3",
+      "type": "bundled"
+    },
+    {
       "name": "@types/aws-lambda",
       "type": "bundled"
     },
@@ -180,7 +184,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "^2.50.0",
+      "version": "^2.53.0",
       "type": "peer"
     },
     {

@@ -6,11 +6,13 @@ import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
+import { ImageOptimizationLambda } from './ImageOptimizationLambda';
 import { NextJsAssetsDeployment, NextjsAssetsDeploymentProps } from './NextjsAssetsDeployment';
 import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
 import { NextJsLambda } from './NextjsLambda';
+import { NextjsLayer } from './NextjsLayer';
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -42,6 +44,10 @@ export interface NextjsDefaultsProps {
 
 export interface NextjsProps extends NextjsBaseProps {
   /**
+   * Optional S3 Bucket to use, defaults to assets bucket
+   */
+  readonly imageOptimizationBucket?: s3.IBucket;
+  /**
    * Allows you to override defaults for the resources created by this
    * construct.
    */
@@ -69,6 +75,11 @@ export class Nextjs extends Construct {
   public serverFunction: NextJsLambda;
 
   /**
+   * The image optimization handler lambda function.
+   */
+  public imageOptimizationFunction: ImageOptimizationLambda;
+
+  /**
    * Built NextJS project output.
    */
   public nextBuild: NextjsBuild;
@@ -90,8 +101,9 @@ export class Nextjs extends Construct {
 
   public configBucket?: s3.Bucket;
   public lambdaFunctionUrl!: lambda.FunctionUrl;
+  public imageOptimizationLambdaFunctionUrl!: lambda.FunctionUrl;
 
-  protected staticAssetBucket: s3.Bucket;
+  protected staticAssetBucket: s3.IBucket;
 
   constructor(scope: Construct, id: string, props: NextjsProps) {
     super(scope, id);
@@ -104,6 +116,7 @@ export class Nextjs extends Construct {
           path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
         )
       : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
+
     this.tempBuildDir = tempBuildDir;
 
     // create static asset bucket
@@ -114,6 +127,9 @@ export class Nextjs extends Construct {
         autoDeleteObjects: true,
       });
 
+    // layer
+    const nextLayer = new NextjsLayer(scope, 'NextjsLayer', {});
+
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir });
     this.serverFunction = new NextJsLambda(this, 'Fn', {
@@ -121,6 +137,14 @@ export class Nextjs extends Construct {
       tempBuildDir,
       nextBuild: this.nextBuild,
       lambda: props.defaults?.lambda,
+    });
+    // build image optimization
+    this.imageOptimizationFunction = new ImageOptimizationLambda(this, 'ImgOptFn', {
+      ...props,
+      nextLayer,
+      nextBuild: this.nextBuild,
+      bucket: props.imageOptimizationBucket || this.bucket,
+      lambdaOptions: props.defaults?.lambda,
     });
     // deploy nextjs static assets to s3
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
@@ -141,6 +165,7 @@ export class Nextjs extends Construct {
       tempBuildDir,
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction.lambdaFunction,
+      imageOptFunction: this.imageOptimizationFunction,
     });
 
     if (!props.quiet) console.debug('└ Finished preparing NextJS app for deployment');
@@ -150,7 +175,7 @@ export class Nextjs extends Construct {
     return this.distribution.url;
   }
 
-  public get bucket(): s3.Bucket {
-    return this.assetsDeployment.bucket;
+  public get bucket(): s3.IBucket {
+    return this.staticAssetBucket;
   }
 }

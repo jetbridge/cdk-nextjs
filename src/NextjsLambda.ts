@@ -13,7 +13,6 @@ import { bundleFunction } from './BundleFunction';
 import { CONFIG_ENV_JSON_PATH } from './Nextjs';
 import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, NextjsBuild } from './NextjsBuild';
-import { NextjsLayer } from './NextjsLayer';
 import { getS3ReplaceValues, NextjsS3EnvRewriter } from './NextjsS3EnvRewriter';
 
 export type EnvironmentVars = Record<string, string>;
@@ -73,7 +72,7 @@ export class NextJsLambda extends Construct {
         sourcemap: true,
         target: 'node16',
         platform: 'node',
-        external: ['sharp', 'next', 'aws-sdk'],
+        external: ['next', 'aws-sdk'],
         format: 'cjs', // hope one day we can use esm
       },
     });
@@ -93,9 +92,6 @@ export class NextJsLambda extends Construct {
     });
     if (!zipFilePath) throw new Error('Failed to create archive for lambda function code');
 
-    // build native deps layer
-    const nextLayer = new NextjsLayer(scope, 'NextjsLayer', {});
-
     // upload the lambda package to S3
     const s3asset = new s3Assets.Asset(scope, 'MainFnAsset', { path: zipFilePath });
     const code = isPlaceholder
@@ -111,7 +107,6 @@ export class NextJsLambda extends Construct {
       timeout: functionOptions?.timeout ?? Duration.seconds(10),
       runtime: RUNTIME,
       handler: path.join(props.nextjsPath, 'server.handler'),
-      layers: [nextLayer],
       code,
       environment,
 

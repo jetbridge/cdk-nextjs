@@ -2,7 +2,7 @@ const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'JetBridge',
   authorAddress: 'mischa@jetbridge.com',
-  cdkVersion: '2.50.0',
+  cdkVersion: '2.53.0',
   defaultReleaseBranch: 'main',
   name: 'cdk-nextjs-standalone',
   repositoryUrl: 'https://github.com/jetbridge/cdk-nextjs.git',
@@ -25,6 +25,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'fs-extra',
     'indent-string',
     'micromatch',
+    '@aws-sdk/client-s3',
     '@types/cross-spawn',
     '@types/fs-extra',
     '@types/micromatch',

@@ -13,6 +13,7 @@ const NEXTJS_STATIC_DIR = 'static';
 const NEXTJS_PUBLIC_DIR = 'public';
 const NEXTJS_BUILD_STANDALONE_DIR = 'standalone';
 const NEXTJS_BUILD_STANDALONE_ENV = 'NEXT_PRIVATE_STANDALONE';
+const NEXTJS_BUILD_OUTPUTTRACEROOT_ENV = 'NEXT_PRIVATE_OUTPUT_TRACE_ROOT';
 
 export interface NextjsBuildProps extends NextjsBaseProps {}
 
@@ -108,6 +109,7 @@ export class NextjsBuild extends Construct {
     const buildEnv = {
       ...process.env,
       [NEXTJS_BUILD_STANDALONE_ENV]: 'true',
+      [NEXTJS_BUILD_OUTPUTTRACEROOT_ENV]: getRootTracePath(nextjsPath),
       ...getBuildCmdEnvironment(this.props.environment),
       ...(this.props.nodeEnv ? { NODE_ENV: this.props.nodeEnv } : {}),
     };
@@ -259,3 +261,16 @@ export const TOKEN_PLACEHOLDER_BEGIN = '{NEXT{! ';
 export const TOKEN_PLACEHOLDER_END = ' !}}';
 export const makeTokenPlaceholder = (value: string): string =>
   TOKEN_PLACEHOLDER_BEGIN + value.toString() + TOKEN_PLACEHOLDER_END;
+
+/**
+ * Replaces each path with "../"
+ * @param path
+ */
+function getRootTracePath(p: string): string {
+  p = p.replace(/^\.\/?/, '');
+  return p
+    .split('/')
+    .filter((v) => v && v !== '.')
+    .map(() => '..')
+    .join('/');
+}

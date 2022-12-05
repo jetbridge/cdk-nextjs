@@ -108,6 +108,8 @@ export class ImageOptimizationLambda extends NodejsFunction {
 
     this.bucket = bucket;
     this.addPolicy();
+
+    fs.rmSync(modulesPath, { recursive: true, force: true });
   }
 
   /**

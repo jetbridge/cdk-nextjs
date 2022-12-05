@@ -103,7 +103,7 @@ export class Nextjs extends Construct {
   public lambdaFunctionUrl!: lambda.FunctionUrl;
   public imageOptimizationLambdaFunctionUrl!: lambda.FunctionUrl;
 
-  protected staticAssetBucket: s3.Bucket;
+  protected staticAssetBucket: s3.IBucket;
 
   constructor(scope: Construct, id: string, props: NextjsProps) {
     super(scope, id);

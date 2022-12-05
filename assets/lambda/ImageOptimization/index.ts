@@ -46,7 +46,7 @@ const requestHandler =
     let response: any
     let data: Buffer
     // External url, try to fetch image
-    if ( !!url.href?.startsWith('http')) {
+    if ( !!url.href?.toLowerCase().startsWith('http')) {
       try {
         pipeRes(https.get(url), res)
       } catch (err) {

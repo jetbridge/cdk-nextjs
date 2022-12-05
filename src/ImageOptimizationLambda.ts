@@ -78,7 +78,12 @@ export class ImageOptimizationLambda extends NodejsFunction {
       bundling: {
         commandHooks: {
           beforeBundling(inputDir: string, outputDir: string): string[] {
-            return [`echo '${data}' > ${inputDir}/${configFile}`, `cp ${inputDir}/${configFile} ${outputDir}`];
+            // Saves the required-server-files.json to the .next folder
+            return [
+              `echo '${data}' > ${inputDir}/${configFile}`,
+              `mkdir ${outputDir}/.next`,
+              `cp ${inputDir}/${configFile} ${outputDir}/.next`,
+            ];
           },
           afterBundling() {
             return [];

@@ -4,7 +4,6 @@ import { Token } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as spawn from 'cross-spawn';
 import * as fs from 'fs-extra';
-import * as glob from 'glob';
 import { listDirectory } from './NextjsAssetsDeployment';
 import { CompressionLevel, NextjsBaseProps } from './NextjsBase';
 
@@ -125,24 +124,6 @@ export class NextjsBuild extends Construct {
     });
     if (buildResult.status !== 0) {
       throw new Error('The app "build" script failed.');
-    }
-
-    // cleanup
-    // delete the `sharp` module since it's provided by the lambda layer
-    const sharpPathNpm = path.join(this._getNextStandaloneDir(), 'node_modules', 'sharp'); // npm/yarn
-    if (fs.existsSync(sharpPathNpm)) {
-      // delete the sharp folder
-      if (!this.props.quiet) console.debug('├ Deleting sharp module from', sharpPathNpm);
-      fs.removeSync(sharpPathNpm);
-    }
-    // is there a `sharp@x.y.z` folder in the `node_modules/.pnpm` folder?
-    const pnpmModulesDir = path.join(this._getNextStandaloneDir(), 'node_modules', '.pnpm'); // pnpm
-    // get glob pattern for sharp version
-    const matches = glob.sync(path.join(pnpmModulesDir, 'sharp@*'));
-    if (matches.length > 0) {
-      // delete the sharp folder
-      if (!this.props.quiet) console.debug('├ Deleting sharp module from', matches[0]);
-      fs.removeSync(matches[0]);
     }
   }
 

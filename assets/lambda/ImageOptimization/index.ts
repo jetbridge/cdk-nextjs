@@ -2,25 +2,21 @@
 // There are other open source MIT libraries we can pick, but this seems the most straightforward
 
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import type { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2 } from 'aws-lambda'
+import type { APIGatewayProxyHandlerV2 } from 'aws-lambda'
 import { IncomingMessage, ServerResponse } from 'http'
 import { defaultConfig, NextConfigComplete } from 'next/dist/server/config-shared'
 import { imageOptimizer as nextImageOptimizer, ImageOptimizerCache } from 'next/dist/server/image-optimizer'
 import { NextUrlWithParsedQuery } from 'next/dist/server/request-meta'
 import { ImageConfigComplete, ImageConfig } from 'next/dist/shared/lib/image-config'
-import { NextConfig } from 'next'
 import { Writable } from 'node:stream'
 import https from 'node:https'
-import path from 'node:path'
-import fs from 'node:fs'
+import { getNextServerConfig } from '../utils'
 
 const sourceBucket = process.env.S3_SOURCE_BUCKET ?? undefined
 
 // The next config file was bundled and outputted to the root
 // SEE: src/ImageOptimizationLambda.ts, Line 81
-const requiredServerFilesPath = path.join(__dirname, 'required-server-files.json');
-const json = fs.readFileSync(requiredServerFilesPath, 'utf-8');
-const { config } = JSON.parse(json) as { version: number; config: NextConfig };
+const { config } = getNextServerConfig()
 
 const pipeRes = (w: Writable, res: ServerResponse) => {
   w.pipe(res)
@@ -46,14 +42,13 @@ const requestHandler =
     let response: any
     let data: Buffer
     // External url, try to fetch image
-    if ( !!url.href?.toLowerCase().startsWith('http')) {
+    if (url.href?.toLowerCase().startsWith('http')) {
       try {
         pipeRes(https.get(url), res)
       } catch (err) {
         console.error('Failed to get image', err)
         res.statusCode = 400
         res.end()
-        return
       }
     } else {
       // S3 expects keys without leading `/`
@@ -62,18 +57,11 @@ const requestHandler =
       const client = new S3Client({})
       response = await client.send(new GetObjectCommand({ Bucket: bucketName, Key: trimmedKey }))
       if (!response.Body) {
+        res.setHeader('Cache-Control', 'no-store,no-cache,must-revalidate,proxy-revalidate')
         throw new Error(`Could not fetch image ${trimmedKey} from bucket.`)
       }
-      const stream = response.Body as Writable
-      pipeRes(stream, res)
-      
-      // Respect the bucket file's content-type and cace-control
-      if (response.ContentType) {
-        res.setHeader('Content-Type', response.ContentType)
-      }
-      if (response.CacheControl) {
-        res.setHeader('Cache-Control', response.CacheControl)
-      }
+      pipeRes(response.Body, res)
+
     }
   }
 
@@ -89,8 +77,6 @@ const nextConfig: NextConfigComplete = {
   },
 }
 
-// We don't need serverless-http neither basePath configuration as endpoint works as single route API.
-// Images are handled via header and query param information.
 const optimizer: APIGatewayProxyHandlerV2 = async (event) => {
   try {
     if (!sourceBucket) {
@@ -116,12 +102,22 @@ const optimizer: APIGatewayProxyHandlerV2 = async (event) => {
       statusCode: 200,
       body: optimizedResult.buffer.toString('base64'),
       isBase64Encoded: true,
-      headers: { Vary: 'Accept', 'Content-Type': optimizedResult.contentType },
+      headers: { 
+        Vary: 'Accept', 
+        'Cache-Control': `public,max-age=${optimizedResult.maxAge},immutable`,
+        'Content-Type': optimizedResult.contentType 
+      },
     }
   } catch (error: any) {
     console.error(error)
     return {
       statusCode: 500,
+      headers: {
+        Vary: 'Accept',
+        // For failed images, allow client to retry after 1 hour. 
+        'Cache-Control': `public,max-age=3600,immutable`,
+        'Content-Type': 'application/json'
+      },
       body: error?.message || error?.toString() || error,
     }
   }

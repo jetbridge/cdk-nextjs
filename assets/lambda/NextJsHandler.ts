@@ -10,10 +10,10 @@ import fs from 'node:fs';
 import { IncomingMessage, ServerResponse } from 'node:http';
 import path from 'node:path';
 import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
-import type { NextConfig } from 'next';
 import type { Options } from 'next/dist/server/next-server';
 import * as nss from 'next/dist/server/next-server';
 import slsHttp from 'serverless-http';
+import { getNextServerConfig } from './utils'
 
 const getErrMessage = (e: any) => ({ message: 'Server failed to respond.', details: e });
 
@@ -28,7 +28,8 @@ const NextNodeServer: typeof nss.default = (nss.default as any)?.default ?? nss.
 const nextDir = path.join(__dirname, '.next');
 const requiredServerFilesPath = path.join(nextDir, 'required-server-files.json');
 const json = fs.readFileSync(requiredServerFilesPath, 'utf-8');
-const requiredServerFiles = JSON.parse(json) as { version: number; config: NextConfig };
+const { config: nextConfig } = getNextServerConfig()
+
 const config: Options = {
   // hostname and port must be defined for proxying to work (middleware)
   hostname: 'localhost',
@@ -36,7 +37,7 @@ const config: Options = {
   // Next.js compression should be disabled because of a bug
   // in the bundled `compression` package. See:
   // https://github.com/vercel/next.js/issues/11669
-  conf: { ...requiredServerFiles.config, compress: false },
+  conf: { ...nextConfig, compress: false },
   customServer: false,
   dev: false,
   dir: __dirname,

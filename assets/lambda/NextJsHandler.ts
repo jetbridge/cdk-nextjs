@@ -13,7 +13,7 @@ import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import type { Options } from 'next/dist/server/next-server';
 import * as nss from 'next/dist/server/next-server';
 import slsHttp from 'serverless-http';
-import { getNextServerConfig } from './utils'
+import { getNextServerConfig, getStaticPages } from './utils'
 
 const getErrMessage = (e: any) => ({ message: 'Server failed to respond.', details: e });
 
@@ -25,10 +25,8 @@ type LambdaUrlFunctionHandler = APIGatewayProxyHandlerV2;
 const NextNodeServer: typeof nss.default = (nss.default as any)?.default ?? nss.default;
 
 // load config
-const nextDir = path.join(__dirname, '.next');
-const requiredServerFilesPath = path.join(nextDir, 'required-server-files.json');
-const json = fs.readFileSync(requiredServerFilesPath, 'utf-8');
 const { config: nextConfig } = getNextServerConfig()
+const staticPages = getStaticPages()
 
 const config: Options = {
   // hostname and port must be defined for proxying to work (middleware)
@@ -51,6 +49,10 @@ const nextHandler = new NextNodeServer(config).getRequestHandler();
 // to translate from API Gateway v2 to next request/response
 const server = slsHttp(
   async (req: IncomingMessage, res: ServerResponse) => {
+    // Add cache-control to static pages
+    if (req.url && staticPages.has(req.url) && !res.hasHeader('Cache-Control')) {
+      res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=31536000, must-revalidate')
+    }
     await nextHandler(req, res).catch((e) => {
       console.error(`NextJS request failed due to:`);
       console.error(e);

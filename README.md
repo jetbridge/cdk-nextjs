@@ -4,7 +4,8 @@
 
 ## What is this?
 
-A CDK construct to deploy a NextJS 12.3.0+ app using AWS CDK.
+A CDK construct to deploy a NextJS app using AWS CDK.
+Supported NextJs versions: 12.3.0+ (includes 13.0.0+)
 
 Uses the [standalone output](https://nextjs.org/docs/advanced-features/output-file-tracing) build mode.
 

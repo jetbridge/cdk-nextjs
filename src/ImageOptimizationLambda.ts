@@ -10,7 +10,6 @@ import { Construct } from 'constructs';
 import { NextjsBaseProps } from './NextjsBase';
 import type { NextjsBuild } from './NextjsBuild';
 import { NextjsLayer } from './NextjsLayer';
-// import { config } from 'process';
 
 export type RemotePattern = {
   protocol: string;

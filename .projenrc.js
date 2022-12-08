@@ -26,6 +26,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'indent-string',
     'micromatch',
     '@aws-sdk/client-s3',
+    '@aws-sdk/client-cloudfront',
     '@types/cross-spawn',
     '@types/fs-extra',
     '@types/micromatch',

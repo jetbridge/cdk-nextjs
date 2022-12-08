@@ -13,7 +13,6 @@ import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
 import { NextJsLambda } from './NextjsLambda';
 import { NextjsLayer } from './NextjsLayer';
-
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 

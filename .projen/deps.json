@@ -117,6 +117,10 @@
       "type": "build"
     },
     {
+      "name": "@aws-sdk/client-cloudfront",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/client-s3",
       "type": "bundled"
     },

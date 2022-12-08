@@ -18,6 +18,7 @@ import { bundleFunction } from './BundleFunction';
 import { DEFAULT_STATIC_MAX_AGE } from './constants';
 import { BaseSiteDomainProps, buildErrorResponsesForRedirectToIndex, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
+import { InvalidatorLambda } from './NextjsStaticInvalidator';
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -217,6 +218,9 @@ export class NextjsDistribution extends Construct {
       ? this.createCloudFrontDistributionForStub()
       : this.createCloudFrontDistribution();
 
+    // Invalidate static pages
+    this.createCloudFrontInvalidation();
+
     // Connect Custom Domain to CloudFront Distribution
     this.createRoute53Records();
   }
@@ -338,8 +342,8 @@ export class NextjsDistribution extends Construct {
     //   - if 403, fall back to lambda handler (mostly for /)
     //   - if 404, fall back to lambda handler
     const fallbackOriginGroup = new origins.OriginGroup({
-      primaryOrigin: s3Origin,
-      fallbackOrigin: serverFunctionOrigin,
+      primaryOrigin: serverFunctionOrigin,
+      fallbackOrigin: s3Origin,
       fallbackStatusCodes: [403, 404],
     });
 
@@ -675,5 +679,18 @@ export class NextjsDistribution extends Construct {
         targetDomain: recordName,
       });
     }
+  }
+
+  /**
+   * Invalidates the static pages
+   */
+  private createCloudFrontInvalidation() {
+    if (!this.props.quiet) console.debug('├ Invalidating static paths...');
+
+    new InvalidatorLambda(this, 'StaticPageInvalidator', {
+      ...this.props,
+      nextBuild: this.props.nextBuild,
+      distribution: this.distribution,
+    });
   }
 }

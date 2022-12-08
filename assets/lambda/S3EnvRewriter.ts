@@ -2,7 +2,6 @@ import type { CdkCustomResourceEvent, CdkCustomResourceHandler } from 'aws-lambd
 import * as AWS from 'aws-sdk';
 import * as JSZip from 'jszip';
 import * as micromatch from 'micromatch';
-import { getStaticPages } from './utils'
 
 type Replacements = Record<string, string>;
 
@@ -105,10 +104,6 @@ const doRewrites = async (event: CdkCustomResourceEvent) => {
     rewrittenPaths.push('/' + key);
   });
   await Promise.all(promises);
-
-  // Collect static pages for invalidation
-  const staticPages = getStaticPages()
-  rewrittenPaths.push(...Array.from(staticPages))
 
   // invalidate items that were just rewritten in cloudfront
   if (cloudfrontDistributionId && rewrittenPaths.length) {

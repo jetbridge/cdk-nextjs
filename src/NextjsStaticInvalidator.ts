@@ -11,10 +11,12 @@ import { NextjsBuild } from './NextjsBuild';
 
 export interface InvalidatorLambdaProps extends NextjsBaseProps {
   /**
-   * The S3 bucket holding application images.
+   * The main CloudFront distribution
    */
   readonly distribution: Distribution;
-
+  /**
+   * Built NextJS app.
+   */
   readonly nextBuild: NextjsBuild;
 }
 
@@ -37,7 +39,7 @@ export class InvalidatorLambda extends NodejsFunction {
   }
 
   /**
-   * Adds policy statement to give GetObject permission Image Optimization lambda.
+   * Adds policy statement to create invalidation and wait for status
    */
   private addPolicy(): void {
     const policyStatement = new PolicyStatement({

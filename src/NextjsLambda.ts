@@ -115,9 +115,10 @@ export class NextJsLambda extends Construct {
     this.lambdaFunction = fn;
 
     // rewrite env var placeholders in server code
-    if (!isPlaceholder) {
+    const replacementParams = this._getReplacementParams(environment);
+    if (!isPlaceholder && Object.keys(replacementParams).length) {
       // put JSON file with env var replacements in S3
-      const [configBucket, configDeployment] = this.createConfigBucket(props);
+      const [configBucket, configDeployment] = this.createConfigBucket(replacementParams);
       this.configBucket = configBucket;
 
       // replace env var placeholders in the lambda package with resolved values
@@ -141,17 +142,7 @@ export class NextJsLambda extends Construct {
     }
   }
 
-  // this can hold our resolved environment vars for the server
-  protected createConfigBucket(props: NextjsLambdaProps) {
-    // won't work until this is fixed: https://github.com/aws/aws-cdk/issues/19257
-    const bucket = new Bucket(this, 'NextjsConfigBucket', {
-      removalPolicy: RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
-    });
-
-    // convert environment vars to SSM parameters
-    // (workaround for the above issue)
-    const env = getEnvironment(props); // env vars
+  private _getReplacementParams(env: Record<string, string>) {
     const replacements = getS3ReplaceValues(env, false); // get placeholder => replacement values
     const replacementParams: EnvironmentVars = {}; // JSON file with replacements to be uploaded to S3
     Object.entries(replacements).forEach(([key, value]) => {
@@ -169,6 +160,16 @@ export class NextJsLambda extends Construct {
 
       // add to env JSON
       replacementParams[key] = param.stringValue;
+    });
+    return replacementParams;
+  }
+
+  // this can hold our resolved environment vars for the server
+  protected createConfigBucket(replacementParams: Record<string, string>) {
+    // won't work until this is fixed: https://github.com/aws/aws-cdk/issues/19257
+    const bucket = new Bucket(this, 'NextjsConfigBucket', {
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
     });
 
     // upload environment config to s3

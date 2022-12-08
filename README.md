@@ -5,7 +5,7 @@
 ## What is this?
 
 A CDK construct to deploy a NextJS app using AWS CDK.
-Supported NextJs versions: 12.3.0+ (includes 13.0.0+)
+Supported NextJs versions: >=12.3.0+ (includes 13.0.0+)
 
 Uses the [standalone output](https://nextjs.org/docs/advanced-features/output-file-tracing) build mode.
 
@@ -74,7 +74,7 @@ We're in the #nextjs channel on the [Serverless Stack Discord](https://discord.g
 Deploys a NextJs static site with server-side rendering and API support. Uses AWS lambda and CloudFront.
 
 There is a new (since Next 12) [standalone output mode which uses output tracing](https://nextjs.org/docs/advanced-features/output-file-tracing) to generate a minimal server and static files.
-This standalone server can be converted into a CloudFront distribution and a lambda handler that translates between a APIGatewayProxyV2 request/response and Next request/response.
+This standalone server can be converted into a CloudFront distribution and a lambda handler that handles SSR, API, and routing.
 
 The CloudFront default origin first checks S3 for static files and falls back to an HTTP origin using a lambda function URL.
 
@@ -82,14 +82,8 @@ The CloudFront default origin first checks S3 for static files and falls back to
 
 This approach is most compatible with new NextJs features such as ESM configuration and [middleware](https://nextjs.org/docs/advanced-features/middleware).
 
-The [@serverless-nextjs project](https://github.com/serverless-nextjs/serverless-next.js) uses the deprecated `serverless` NextJs build target which [prevents the use of new features](https://github.com/serverless-nextjs/serverless-next.js/pull/2478).
+The unmaintained [@serverless-nextjs project](https://github.com/serverless-nextjs/serverless-next.js) uses the deprecated `serverless` NextJs build target which [prevents the use of new features](https://github.com/serverless-nextjs/serverless-next.js/pull/2478).
 This construct was created to use the new `standalone` output build and newer AWS features like lambda function URLs and fallback origins.
-
-## Status
-
-This is _experimental_ and a work in progress. I hope others can benefit from it and contribute to make it more stable and featureful.
-
-I have managed to get the server bundling working even under the most finicky of circumstances (pnpm monorepo). Server-side rendering works. Static files and public files work.
 
 ## Dependencies
 
@@ -117,17 +111,6 @@ All other required dependencies should be bundled by NextJs [output tracing](htt
 - [Serverless Stack](https://github.com/serverless-stack/sst)
   - [RemixSite](https://github.com/serverless-stack/sst/blob/master/packages/resources/src/NextjsSite.ts) construct
   - [NextjsSite](https://github.com/serverless-stack/sst/blob/master/packages/resources/src/RemixSite.ts) construct
-
-This module is largely made up of code from the above projects.
-
-## Open questions
-
-- Do we need to manually handle CloudFront invalidation? It looks like `BucketDeployment` takes care of that for us
-- How is the `public` dir supposed to be handled? (Right now using an OriginGroup to look in the S3 origin first and if 403/404 then try lambda origin)
-- Is there anything we should be doing with the various manifests nextjs spits out? (e.g., not sure what the purpose of [this](https://github.com/serverless-stack/sst/blob/master/packages/resources/src/NextjsSite.ts#L1357) is)
-  - Do we need to create static routes? Or anything else?
-- Do we need to handle ISR?
-- How should images be handled?
 
 ## Serverless-stack (SST) wrapper
 
@@ -190,8 +173,3 @@ class NextjsSst extends Nextjs {
 ## Breaking changes
 
 - v2.0.0: SST wrapper changed, lambda/assets/distribution defaults now are in the `defaults` prop, refactored distribution settings into the new NextjsDistribution construct. If you are upgrading, you must temporarily remove the `customDomain` on your existing 1.x.x app before upgrading to >=2.x.x because the CloudFront distribution will get recreated due to refactoring, and the custom domain must be globally unique across all CloudFront distributions. Prepare for downtime.
-
-## To-do
-
-- [ ] Support deployment as a Lambda@Edge function if this is even desirable
-- [ ] [Serverless stack integration](https://github.com/serverless-stack/sst/pull/2049)

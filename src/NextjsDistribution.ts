@@ -338,8 +338,8 @@ export class NextjsDistribution extends Construct {
     //   - if 403, fall back to lambda handler (mostly for /)
     //   - if 404, fall back to lambda handler
     const fallbackOriginGroup = new origins.OriginGroup({
-      primaryOrigin: s3Origin,
-      fallbackOrigin: serverFunctionOrigin,
+      primaryOrigin: serverFunctionOrigin,
+      fallbackOrigin: s3Origin,
       fallbackStatusCodes: [403, 404],
     });
 

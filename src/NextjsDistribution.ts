@@ -334,12 +334,12 @@ export class NextjsDistribution extends Construct {
     ];
 
     // default handler for requests that don't match any other path:
-    //   - try S3 first
-    //   - if 403, fall back to lambda handler (mostly for /)
+    //   - try lambda handler first (/some-page, etc...)
+    //   - if 403, fall back to S3
     //   - if 404, fall back to lambda handler
     const fallbackOriginGroup = new origins.OriginGroup({
-      primaryOrigin: s3Origin,
-      fallbackOrigin: serverFunctionOrigin,
+      primaryOrigin: serverFunctionOrigin,
+      fallbackOrigin: s3Origin,
       fallbackStatusCodes: [403, 404],
     });
 

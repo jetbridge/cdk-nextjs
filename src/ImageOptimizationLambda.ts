@@ -75,7 +75,7 @@ export class ImageOptimizationLambda extends NodejsFunction {
           beforeBundling(_: string, outputDir: string): string[] {
             // Saves the required-server-files.json to the .next folder
             const filePath = path.join(props.nextBuild.nextStandaloneBuildDir, 'required-server-files.json');
-            return [`mkdir ${outputDir}/.next`, `cp ${filePath} ${outputDir}/.next`];
+            return [`mkdir -p "${outputDir}/.next"`, `cp "${filePath}" "${outputDir}/.next"`];
           },
           afterBundling() {
             return [];

@@ -34,6 +34,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'glob',
   ] /* Runtime dependencies of this module. */,
   devDeps: ['aws-sdk', 'constructs@10.1.21'] /* Build dependencies for this module. */,
+  peerDeps: ['esbuild@^0.15.13'],
+  // peerDeps: ['esbuild@^0.15.13', 'next@>=12.3.0'],
 
   // do not generate sample test files
   sampleCode: false,
@@ -42,9 +44,5 @@ const project = new awscdk.AwsCdkConstructLibrary({
 //   rules: {},
 // });
 // project.tsconfig.addInclude('assets/**/*.ts');
-
-project.tryFindObjectFile('package.json')?.addOverride('optionalDependencies', {
-  ['esbuild']: '^0.15.13',
-});
 
 project.synth();

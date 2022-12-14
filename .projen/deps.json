@@ -35,6 +35,11 @@
       "type": "build"
     },
     {
+      "name": "esbuild",
+      "version": "0.15.13",
+      "type": "build"
+    },
+    {
       "name": "eslint-config-prettier",
       "type": "build"
     },
@@ -177,6 +182,11 @@
     {
       "name": "constructs",
       "version": "^10.0.5",
+      "type": "peer"
+    },
+    {
+      "name": "esbuild",
+      "version": "^0.15.13",
       "type": "peer"
     }
   ],

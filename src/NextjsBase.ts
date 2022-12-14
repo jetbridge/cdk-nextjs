@@ -15,7 +15,7 @@ export interface NextjsBaseProps {
   readonly nextjsPath: string;
 
   /**
-   * The path to execute `npm run build`. By default, it uses `nextjsPath`.
+   * The directory to execute `npm run build` from. By default, it uses `nextjsPath`.
    * Can be overridden, particularly useful for monorepos where `build` is expected to run
    * at the root of the project.
    */

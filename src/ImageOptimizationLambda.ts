@@ -67,23 +67,15 @@ export class ImageOptimizationLambda extends NodejsFunction {
     if (!fs.existsSync(modulesPath)) fs.mkdirSync(modulesPath);
     if (!fs.existsSync(target)) fs.symlinkSync(source, target, 'dir');
 
-    // Read the nextjs server config and write contents to bundle output via hooks
-    const configFile = 'required-server-files.json';
-    const requiredServerFilesPath = path.join(props.nextBuild.nextStandaloneBuildDir, configFile);
-    const data = fs.readFileSync(requiredServerFilesPath, 'utf-8');
-
     super(scope, id, {
       entry: imageOptHandlerPath,
       runtime: RUNTIME,
       bundling: {
         commandHooks: {
-          beforeBundling(inputDir: string, outputDir: string): string[] {
+          beforeBundling(_: string, outputDir: string): string[] {
             // Saves the required-server-files.json to the .next folder
-            return [
-              `echo '${data}' > ${inputDir}/${configFile}`,
-              `mkdir ${outputDir}/.next`,
-              `cp ${inputDir}/${configFile} ${outputDir}/.next`,
-            ];
+            const filePath = path.join(props.nextBuild.nextStandaloneBuildDir, 'required-server-files.json');
+            return [`mkdir -p "${outputDir}/.next"`, `cp "${filePath}" "${outputDir}/.next"`];
           },
           afterBundling() {
             return [];

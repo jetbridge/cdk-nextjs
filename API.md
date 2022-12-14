@@ -2673,7 +2673,7 @@ public readonly buildPath: string;
 The path to execute `npm run build`.
 
 By default, it uses `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run 
+Can be overridden, particularly useful for monorepos where `build` is expected to run
 at the root of the project.
 
 ---
@@ -2905,7 +2905,7 @@ public readonly buildPath: string;
 The path to execute `npm run build`.
 
 By default, it uses `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run 
+Can be overridden, particularly useful for monorepos where `build` is expected to run
 at the root of the project.
 
 ---
@@ -3101,7 +3101,7 @@ public readonly buildPath: string;
 The path to execute `npm run build`.
 
 By default, it uses `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run 
+Can be overridden, particularly useful for monorepos where `build` is expected to run
 at the root of the project.
 
 ---
@@ -3233,7 +3233,7 @@ public readonly buildPath: string;
 The path to execute `npm run build`.
 
 By default, it uses `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run 
+Can be overridden, particularly useful for monorepos where `build` is expected to run
 at the root of the project.
 
 ---
@@ -3531,7 +3531,7 @@ public readonly buildPath: string;
 The path to execute `npm run build`.
 
 By default, it uses `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run 
+Can be overridden, particularly useful for monorepos where `build` is expected to run
 at the root of the project.
 
 ---
@@ -3909,7 +3909,7 @@ public readonly buildPath: string;
 The path to execute `npm run build`.
 
 By default, it uses `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run 
+Can be overridden, particularly useful for monorepos where `build` is expected to run
 at the root of the project.
 
 ---
@@ -4078,7 +4078,7 @@ public readonly buildPath: string;
 The path to execute `npm run build`.
 
 By default, it uses `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run 
+Can be overridden, particularly useful for monorepos where `build` is expected to run
 at the root of the project.
 
 ---

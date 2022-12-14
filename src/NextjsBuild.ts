@@ -115,7 +115,7 @@ export class NextjsBuild extends Construct {
       ...(this.props.nodeEnv ? { NODE_ENV: this.props.nodeEnv } : {}),
     };
 
-    const buildPath = this.props.buildPath ?? nextjsPath
+    const buildPath = this.props.buildPath ?? nextjsPath;
     // run build
     console.debug('├ Running "npm build" in', buildPath);
     const buildResult = spawn.sync('npm', ['run', 'build'], {

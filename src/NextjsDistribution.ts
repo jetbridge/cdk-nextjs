@@ -15,7 +15,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import { bundleFunction } from './BundleFunction';
-import { DEFAULT_STATIC_MAX_AGE } from './constants';
+import { DEFAULT_STATIC_MAX_AGE, LAMBDA_RUNTIME } from './constants';
 import { BaseSiteDomainProps, buildErrorResponsesForRedirectToIndex, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 
@@ -520,7 +520,7 @@ export class NextjsDistribution extends Construct {
     });
 
     const fn = new cloudfront.experimental.EdgeFunction(this, 'DefaultOriginRequestEdgeFn', {
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: LAMBDA_RUNTIME,
       // role,
       handler: 'LambdaOriginRequest.handler',
       code: lambda.Code.fromAsset(dirname(outputPath)),

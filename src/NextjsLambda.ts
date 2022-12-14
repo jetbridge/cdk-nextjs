@@ -10,6 +10,7 @@ import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import { bundleFunction } from './BundleFunction';
+import { LAMBDA_RUNTIME } from './constants';
 import { CONFIG_ENV_JSON_PATH } from './Nextjs';
 import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, NextjsBuild } from './NextjsBuild';
@@ -38,8 +39,6 @@ export interface NextjsLambdaProps extends NextjsBaseProps {
    */
   readonly lambda?: FunctionOptions;
 }
-
-const RUNTIME = lambda.Runtime.NODEJS_16_X;
 
 /**
  * Build a lambda function from a NextJS application to handle server-side rendering, API routes, and image optimization.
@@ -105,7 +104,7 @@ export class NextJsLambda extends Construct {
     const fn = new Function(scope, 'ServerHandler', {
       memorySize: functionOptions?.memorySize || 1024,
       timeout: functionOptions?.timeout ?? Duration.seconds(10),
-      runtime: RUNTIME,
+      runtime: LAMBDA_RUNTIME,
       handler: path.join(props.nextjsPath, 'server.handler'),
       code,
       environment,

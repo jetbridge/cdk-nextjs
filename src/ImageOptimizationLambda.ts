@@ -2,11 +2,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Duration } from 'aws-cdk-lib';
 import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
+import { LAMBDA_RUNTIME } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
 import type { NextjsBuild } from './NextjsBuild';
 import { NextjsLayer } from './NextjsLayer';
@@ -40,8 +40,6 @@ export interface ImageOptimizationProps extends NextjsBaseProps {
   readonly nextBuild: NextjsBuild;
 }
 
-const RUNTIME = lambda.Runtime.NODEJS_18_X;
-
 /**
  * This lambda handles image optimization.
  */
@@ -69,7 +67,7 @@ export class ImageOptimizationLambda extends NodejsFunction {
 
     super(scope, id, {
       entry: imageOptHandlerPath,
-      runtime: RUNTIME,
+      runtime: LAMBDA_RUNTIME,
       bundling: {
         commandHooks: {
           beforeBundling(_: string, outputDir: string): string[] {

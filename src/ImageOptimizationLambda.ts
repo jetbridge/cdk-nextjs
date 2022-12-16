@@ -87,7 +87,7 @@ export class ImageOptimizationLambda extends NodejsFunction {
               },
             },
             minify: true,
-            target: 'node18',
+            target: 'node16',
             externalModules: ['@aws-sdk/client-s3'],
           },
       layers: [props.nextLayer],

@@ -66,10 +66,13 @@ export class ImageOptimizationLambda extends NodejsFunction {
     if (!fs.existsSync(target)) fs.symlinkSync(source, target, 'dir');
 
     super(scope, id, {
-      entry: imageOptHandlerPath,
+      entry: isPlaceholder
+        ? path.join(__dirname, '../assets/lambda/ImageOptimization/placeholder.ts')
+        : imageOptHandlerPath,
       runtime: LAMBDA_RUNTIME,
       bundling: isPlaceholder
-        ? {
+        ? undefined
+        : {
             commandHooks: {
               beforeBundling(_: string, outputDir: string): string[] {
                 // Saves the required-server-files.json to the .next folder
@@ -86,8 +89,7 @@ export class ImageOptimizationLambda extends NodejsFunction {
             minify: true,
             target: 'node18',
             externalModules: ['@aws-sdk/client-s3'],
-          }
-        : undefined,
+          },
       layers: [props.nextLayer],
       ...lambdaOptions,
       // defaults

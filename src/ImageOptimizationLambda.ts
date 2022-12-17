@@ -47,7 +47,7 @@ export class ImageOptimizationLambda extends NodejsFunction {
   bucket: IBucket;
 
   constructor(scope: Construct, id: string, props: ImageOptimizationProps) {
-    const { lambdaOptions, bucket } = props;
+    const { lambdaOptions, bucket, isPlaceholder } = props;
     const lambdaPath = path.resolve(__dirname, '../assets/lambda/ImageOptimization');
     const imageOptHandlerPath = path.resolve(lambdaPath, 'index.ts');
 
@@ -66,26 +66,30 @@ export class ImageOptimizationLambda extends NodejsFunction {
     if (!fs.existsSync(target)) fs.symlinkSync(source, target, 'dir');
 
     super(scope, id, {
-      entry: imageOptHandlerPath,
+      entry: isPlaceholder
+        ? path.join(__dirname, '../assets/lambda/ImageOptimization/placeholder.ts')
+        : imageOptHandlerPath,
       runtime: LAMBDA_RUNTIME,
-      bundling: {
-        commandHooks: {
-          beforeBundling(_: string, outputDir: string): string[] {
-            // Saves the required-server-files.json to the .next folder
-            const filePath = path.join(props.nextBuild.nextStandaloneBuildDir, 'required-server-files.json');
-            return [`mkdir -p "${outputDir}/.next"`, `cp "${filePath}" "${outputDir}/.next"`];
+      bundling: isPlaceholder
+        ? undefined
+        : {
+            commandHooks: {
+              beforeBundling(_: string, outputDir: string): string[] {
+                // Saves the required-server-files.json to the .next folder
+                const filePath = path.join(props.nextBuild.nextStandaloneBuildDir, 'required-server-files.json');
+                return [`mkdir -p "${outputDir}/.next"`, `cp "${filePath}" "${outputDir}/.next"`];
+              },
+              afterBundling() {
+                return [];
+              },
+              beforeInstall() {
+                return [];
+              },
+            },
+            minify: true,
+            target: 'node16',
+            externalModules: ['@aws-sdk/client-s3'],
           },
-          afterBundling() {
-            return [];
-          },
-          beforeInstall() {
-            return [];
-          },
-        },
-        minify: true,
-        target: 'node18',
-        externalModules: ['@aws-sdk/client-s3'],
-      },
       layers: [props.nextLayer],
       ...lambdaOptions,
       // defaults

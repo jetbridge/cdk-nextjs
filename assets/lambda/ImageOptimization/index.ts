@@ -9,7 +9,7 @@ import { imageOptimizer as nextImageOptimizer, ImageOptimizerCache } from 'next/
 import { NextUrlWithParsedQuery } from 'next/dist/server/request-meta'
 import { ImageConfigComplete, ImageConfig } from 'next/dist/shared/lib/image-config'
 import { Writable } from 'node:stream'
-import https from 'node:https'
+import https from 'https'
 import { getNextServerConfig } from '../utils'
 
 const sourceBucket = process.env.S3_SOURCE_BUCKET ?? undefined
@@ -110,9 +110,9 @@ const optimizer: APIGatewayProxyHandlerV2 = async (event) => {
       body: optimizedResult.buffer.toString('base64'),
       isBase64Encoded: true,
       headers: { 
-        Vary: 'Accept', 
+        Vary: 'Accept',
         'Cache-Control': `public,max-age=${optimizedResult.maxAge},immutable`,
-        'Content-Type': optimizedResult.contentType 
+        'Content-Type': optimizedResult.contentType,
       },
     }
   } catch (error: any) {

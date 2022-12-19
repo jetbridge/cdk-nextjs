@@ -106,11 +106,12 @@ export class NextjsBuild extends Construct {
       throw new Error(`No "build" script found within package.json in "${nextjsPath}".`);
     }
 
+    const outputTraceRoot = getRootTracePath(this._getNextDir(), nextjsPath);
     // build environment vars
     const buildEnv = {
       ...process.env,
       [NEXTJS_BUILD_STANDALONE_ENV]: 'true',
-      [NEXTJS_BUILD_OUTPUTTRACEROOT_ENV]: getRootTracePath(nextjsPath),
+      [NEXTJS_BUILD_OUTPUTTRACEROOT_ENV]: outputTraceRoot,
       ...getBuildCmdEnvironment(this.props.environment),
       ...(this.props.nodeEnv ? { NODE_ENV: this.props.nodeEnv } : {}),
     };
@@ -250,11 +251,13 @@ export const makeTokenPlaceholder = (value: string): string =>
  * Replaces each path with "../"
  * @param path
  */
-function getRootTracePath(p: string): string {
+function getRootTracePath(nextjsPath: string, p: string): string {
   p = p.replace(/^\.\/?/, '');
-  return p
+  p = p
     .split('/')
     .filter((v) => v && v !== '.')
     .map(() => '..')
     .join('/');
+
+  return path.join(nextjsPath, p);
 }

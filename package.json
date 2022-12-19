@@ -80,6 +80,7 @@
     "indent-string": "*",
     "jszip": "^3.10.1",
     "micromatch": "^4.0.5",
+    "node-fetch": "^3.3.0",
     "serverless-http": "^3.1.0"
   },
   "bundledDependencies": [
@@ -96,6 +97,7 @@
     "indent-string",
     "jszip",
     "micromatch",
+    "node-fetch",
     "serverless-http"
   ],
   "keywords": [

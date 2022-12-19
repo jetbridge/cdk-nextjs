@@ -9,8 +9,13 @@ import { imageOptimizer as nextImageOptimizer, ImageOptimizerCache } from 'next/
 import { NextUrlWithParsedQuery } from 'next/dist/server/request-meta'
 import { ImageConfigComplete, ImageConfig } from 'next/dist/shared/lib/image-config'
 import { Writable } from 'node:stream'
-import https from 'https'
+import https from 'node:https'
 import { getNextServerConfig } from '../utils'
+import fetch from 'node-fetch'
+
+// TODO: Remove this once we use Node18.x
+// imageOptimizer uses fetch in its preprocessing logic
+global.fetch = fetch
 
 const sourceBucket = process.env.S3_SOURCE_BUCKET ?? undefined
 

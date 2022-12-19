@@ -169,6 +169,10 @@
       "type": "bundled"
     },
     {
+      "name": "node-fetch",
+      "type": "bundled"
+    },
+    {
       "name": "serverless-http",
       "type": "bundled"
     },

@@ -55,6 +55,12 @@ export class NextjsBuild extends Construct {
 
   public nextDir: string;
   public projectRoot: string;
+  /**
+   * The pure nextjs path, eg excluding "../" from "../../web"
+   * This is required when building Lambda handler paths, since its context
+   * is isolated to only its nextjs directory
+   */
+  public pureNextJsPath: string;
 
   constructor(scope: Construct, id: string, props: NextjsBuildProps) {
     super(scope, id);
@@ -87,6 +93,7 @@ export class NextjsBuild extends Construct {
     this.nextStaticDir = this._getNextStaticDir();
     this.buildPath = this.nextStandaloneBuildDir;
     this.nextDir = this._getNextDir();
+    this.pureNextJsPath = props.nextjsPath.replace(/^(\.+\/?)+/, '');
   }
 
   private runNpmBuild() {

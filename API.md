@@ -1519,6 +1519,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.buildPath">buildPath</a></code> | <code>string</code> | The path to the directory where the server build artifacts are stored. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextBuildDir">nextBuildDir</a></code> | <code>string</code> | The path the `.next` directory of the Nextjs application. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextDir">nextDir</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextPublicDir">nextPublicDir</a></code> | <code>string</code> | Public static files. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStandaloneBuildDir">nextStandaloneBuildDir</a></code> | <code>string</code> | NextJS project inside of standalone build. |
@@ -1550,6 +1551,18 @@ public readonly buildPath: string;
 - *Type:* string
 
 The path to the directory where the server build artifacts are stored.
+
+---
+
+##### `nextBuildDir`<sup>Required</sup> <a name="nextBuildDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextBuildDir"></a>
+
+```typescript
+public readonly nextBuildDir: string;
+```
+
+- *Type:* string
+
+The path the `.next` directory of the Nextjs application.
 
 ---
 

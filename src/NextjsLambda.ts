@@ -50,7 +50,7 @@ export class NextJsLambda extends Construct {
   constructor(scope: Construct, id: string, props: NextjsLambdaProps) {
     super(scope, id);
     const { nextBuild, lambda: functionOptions, isPlaceholder } = props;
-    
+
     // bundle server handler
     // delete default nextjs handler if it exists
     const defaultServerPath = path.join(nextBuild.nextStandaloneDir, nextBuild.pureNextJsPath, 'server.js');

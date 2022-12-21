@@ -55,6 +55,11 @@ export class NextjsBuild extends Construct {
 
   public nextDir: string;
 
+  /**
+   * The path the `.next` directory of the Nextjs application.
+   */
+  public nextBuildDir: string;
+
   constructor(scope: Construct, id: string, props: NextjsBuildProps) {
     super(scope, id);
 
@@ -66,15 +71,18 @@ export class NextjsBuild extends Construct {
 
     // validate paths
     const baseOutputDir = path.resolve(this.props.nextjsPath);
-    if (!fs.existsSync(baseOutputDir)) throw new Error(`NextJS application not found at "${baseOutputDir}"`);
+    if (!fs.existsSync(baseOutputDir)) {
+      throw new Error(`NextJS application not found at "${baseOutputDir}"`);
+    }
 
     // build app
     this.runNpmBuild();
 
     // check for output
     const serverBuildDir = path.join(baseOutputDir, NEXTJS_BUILD_DIR);
-    if (!props.isPlaceholder && !fs.existsSync(serverBuildDir))
+    if (!props.isPlaceholder && !fs.existsSync(serverBuildDir)) {
       throw new Error(`No server build output found at "${serverBuildDir}"`);
+    }
 
     // our outputs
     this.nextStandaloneDir = this._getNextStandaloneDir();
@@ -83,13 +91,16 @@ export class NextjsBuild extends Construct {
     this.nextStaticDir = this._getNextStaticDir();
     this.buildPath = this.nextStandaloneBuildDir;
     this.nextDir = this._getNextDir();
+    this.nextBuildDir = this._getNextBuildDir();
   }
 
   private runNpmBuild() {
     const { nextjsPath, isPlaceholder, quiet } = this.props;
 
     if (isPlaceholder) {
-      if (!quiet) console.debug(`Skipping build for placeholder NextjsBuild at ${nextjsPath}`);
+      if (!quiet) {
+        console.debug(`Skipping build for placeholder NextjsBuild at ${nextjsPath}`);
+      }
       return;
     }
 
@@ -199,7 +210,9 @@ export function createArchive({
   quiet,
 }: CreateArchiveArgs): string | null {
   // if directory is empty, can skip
-  if (!fs.existsSync(directory) || fs.readdirSync(directory).length === 0) return null;
+  if (!fs.existsSync(directory) || fs.readdirSync(directory).length === 0) {
+    return null;
+  }
 
   zipOutDir = path.resolve(zipOutDir);
   fs.mkdirpSync(zipOutDir);

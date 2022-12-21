@@ -320,11 +320,7 @@ export class NextjsDistribution extends Construct {
 
     // lambda behavior edge function
     const lambdaOriginRequestEdgeFn = this.buildLambdaOriginRequestEdgeFunction();
-    const lambdaOriginRequestEdgeFnVersion = lambda.Version.fromVersionArn(
-      this,
-      'Version',
-      lambdaOriginRequestEdgeFn.currentVersion.functionArn
-    );
+    const lambdaOriginRequestEdgeFnVersion = lambdaOriginRequestEdgeFn.currentVersion;
     const lambdaOriginEdgeFns: cloudfront.EdgeLambda[] = [
       {
         eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,

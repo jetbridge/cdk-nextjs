@@ -1526,7 +1526,6 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir">nextStaticDir</a></code> | <code>string</code> | Static files containing client-side code. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.projectRoot">projectRoot</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.pureNextJsPath">pureNextJsPath</a></code> | <code>string</code> | The pure nextjs path, eg excluding "../" from "../../web" This is required when building Lambda handler paths, since its context is isolated to only its nextjs directory. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | *No description.* |
 
 ---
@@ -1636,18 +1635,6 @@ public readonly props: NextjsBuildProps;
 ```
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a>
-
----
-
-##### `pureNextJsPath`<sup>Required</sup> <a name="pureNextJsPath" id="cdk-nextjs-standalone.NextjsBuild.property.pureNextJsPath"></a>
-
-```typescript
-public readonly pureNextJsPath: string;
-```
-
-- *Type:* string
-
-The pure nextjs path, eg excluding "../" from "../../web" This is required when building Lambda handler paths, since its context is isolated to only its nextjs directory.
 
 ---
 

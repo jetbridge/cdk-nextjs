@@ -51,9 +51,12 @@ export class NextJsLambda extends Construct {
     super(scope, id);
     const { nextBuild, lambda: functionOptions, isPlaceholder } = props;
 
+    // trim the leading "../" from the nextjs path
+    const nextjsPath = props.nextjsPath.replace(/^(\.+\/?)+/, '');
+
     // bundle server handler
     // delete default nextjs handler if it exists
-    const defaultServerPath = path.join(nextBuild.nextStandaloneDir, nextBuild.pureNextJsPath, 'server.js');
+    const defaultServerPath = path.join(nextBuild.nextStandaloneDir, nextjsPath, 'server.js');
     if (fs.existsSync(defaultServerPath)) {
       fs.unlinkSync(defaultServerPath);
     }
@@ -61,7 +64,7 @@ export class NextJsLambda extends Construct {
     // build our server handler in build.nextStandaloneDir
     const serverHandler = path.resolve(__dirname, '../assets/lambda/NextJsHandler.ts');
     // server should live in the same dir as the nextjs app to access deps properly
-    const serverPath = path.join(nextBuild.pureNextJsPath, 'server.cjs');
+    const serverPath = path.join(nextjsPath, 'server.cjs');
     bundleFunction({
       inputPath: serverHandler,
       outputPath: path.join(nextBuild.nextStandaloneDir, serverPath),
@@ -106,7 +109,7 @@ export class NextJsLambda extends Construct {
       memorySize: functionOptions?.memorySize || 1024,
       timeout: functionOptions?.timeout ?? Duration.seconds(10),
       runtime: LAMBDA_RUNTIME,
-      handler: path.join(nextBuild.pureNextJsPath, 'server.handler'),
+      handler: path.join(nextjsPath, 'server.handler'),
       code,
       environment,
 

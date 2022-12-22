@@ -41,7 +41,7 @@ export function bundleFunction({ inputPath, outputPath, outputFilename, bundleOp
     throw new Error('There was a problem bundling the function.');
   }
 
-  console.debug('Bundled ', inputPath, 'to', outputPath);
+  // console.debug('Bundled ', inputPath, 'to', outputPath);
 
   return dirname(outputPath);
 }

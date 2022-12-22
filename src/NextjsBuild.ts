@@ -244,6 +244,11 @@ export function createArchive({
   // get output path
   const zipFilePath = path.join(zipOutDir, zipFileName);
 
+  // delete existing zip file
+  if (fs.existsSync(zipFilePath)) {
+    fs.unlinkSync(zipFilePath);
+  }
+
   // run script to create zipfile, preserving symlinks for node_modules (e.g. pnpm structure)
   const result = spawn.sync(
     'bash', // getting ENOENT when specifying 'node' here for some reason

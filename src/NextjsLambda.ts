@@ -60,7 +60,7 @@ export class NextJsLambda extends Construct {
     // build our server handler in build.nextStandaloneDir
     const serverHandler = path.resolve(__dirname, '../assets/lambda/NextJsHandler.ts');
     // server should live in the same dir as the nextjs app to access deps properly
-    const serverPath = path.join(nextBuild.nextStandaloneDir, 'server.cjs');
+    const serverPath = path.join(nextBuild.nextStandaloneDir, 'server.js');
     bundleFunction({
       inputPath: serverHandler,
       outputPath: serverPath,
@@ -104,7 +104,7 @@ export class NextJsLambda extends Construct {
       memorySize: functionOptions?.memorySize || 1024,
       timeout: functionOptions?.timeout ?? Duration.seconds(10),
       runtime: LAMBDA_RUNTIME,
-      handler: path.join(props.nextjsPath, 'server.handler'),
+      handler: path.join(nextBuild.nextDirRelative, 'server.handler'),
       code,
       environment,
 

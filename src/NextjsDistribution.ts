@@ -31,7 +31,7 @@ export interface NextjsDistributionCdkProps {
    * Pass in a value to override the default settings this construct uses to
    * create the CloudFront `Distribution` internally.
    */
-  readonly distribution?: NextjsDistributionCdkOverrideProps;
+  readonly distribution?: NextjsDistributionCdkOverrideProps | any;
 }
 
 export interface NextjsCachePolicyProps {

@@ -74,7 +74,7 @@
     "@types/micromatch": "^4.0.2",
     "aws-lambda": "^1.0.7",
     "cross-spawn": "^7.0.3",
-    "esbuild": "^0.15.16",
+    "esbuild": "0.15.18",
     "fs-extra": "^10.1.0",
     "glob": "^8.0.3",
     "indent-string": "*",

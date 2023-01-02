@@ -146,6 +146,7 @@
     },
     {
       "name": "esbuild",
+      "version": "0.15.18",
       "type": "bundled"
     },
     {

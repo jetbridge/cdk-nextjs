@@ -30,7 +30,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@types/fs-extra',
     '@types/micromatch',
     '@types/aws-lambda',
-    'esbuild',
+    'esbuild@0.15.18',
     'aws-lambda',
     'serverless-http',
     'jszip',

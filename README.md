@@ -11,6 +11,8 @@ Uses the [standalone output](https://nextjs.org/docs/advanced-features/output-fi
 
 ## Quickstart
 
+Add the dependency `esbuild@0.15.18` to your project along with `cdk-nextjs-standalone`.
+
 ```ts
 import path from 'path';
 import { Nextjs } from 'cdk-nextjs-standalone';

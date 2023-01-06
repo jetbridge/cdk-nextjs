@@ -25,9 +25,6 @@ type LambdaUrlFunctionHandler = APIGatewayProxyHandlerV2;
 const NextNodeServer: typeof nss.default = (nss.default as any)?.default ?? nss.default;
 
 // load config
-const nextDir = path.join(__dirname, '.next');
-const requiredServerFilesPath = path.join(nextDir, 'required-server-files.json');
-const json = fs.readFileSync(requiredServerFilesPath, 'utf-8');
 const { config: nextConfig } = getNextServerConfig()
 
 const config: Options = {

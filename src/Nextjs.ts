@@ -105,7 +105,7 @@ export class Nextjs extends Construct {
 
   protected staticAssetBucket: s3.IBucket;
 
-  constructor(scope: Construct, id: string, props: NextjsProps) {
+  constructor(scope: Construct, id: string, protected props: NextjsProps) {
     super(scope, id);
 
     if (!props.quiet) console.debug('┌ Building Next.js app ▼ ...');
@@ -172,7 +172,8 @@ export class Nextjs extends Construct {
   }
 
   public get url(): string {
-    return this.distribution.url;
+    const customDomain = this.distribution.customDomainName;
+    return customDomain ? `https://${customDomain}` : this.distribution.url;
   }
 
   public get bucket(): s3.IBucket {

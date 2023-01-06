@@ -228,21 +228,27 @@ export class NextjsDistribution extends Construct {
     return `https://${this.distribution.distributionDomainName}`;
   }
 
-  /**
-   * If the custom domain is enabled, this is the URL of the website with the
-   * custom domain.
-   */
-  public get customDomainUrl(): string | undefined {
+  get customDomainName(): string | undefined {
     const { customDomain } = this.props;
+
     if (!customDomain) {
       return;
     }
 
     if (typeof customDomain === 'string') {
-      return `https://${customDomain}`;
-    } else {
-      return `https://${customDomain.domainName}`;
+      return customDomain;
     }
+
+    return customDomain.domainName;
+  }
+
+  /**
+   * If the custom domain is enabled, this is the URL of the website with the
+   * custom domain.
+   */
+  public get customDomainUrl(): string | undefined {
+    const customDomainName = this.customDomainName;
+    return customDomainName ? `https://${customDomainName}` : undefined;
   }
 
   /**

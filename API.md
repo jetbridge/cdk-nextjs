@@ -1771,6 +1771,7 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.distributionDomain">distributionDomain</a></code> | <code>string</code> | The domain name of the internally created CloudFront Distribution. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.distributionId">distributionId</a></code> | <code>string</code> | The ID of the internally created CloudFront Distribution. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.url">url</a></code> | <code>string</code> | The CloudFront URL of the website. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.customDomainName">customDomainName</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.customDomainUrl">customDomainUrl</a></code> | <code>string</code> | If the custom domain is enabled, this is the URL of the website with the custom domain. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | The internally created CloudFront `Distribution` instance. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | *No description.* |
@@ -1872,6 +1873,16 @@ public readonly url: string;
 - *Type:* string
 
 The CloudFront URL of the website.
+
+---
+
+##### `customDomainName`<sup>Optional</sup> <a name="customDomainName" id="cdk-nextjs-standalone.NextjsDistribution.property.customDomainName"></a>
+
+```typescript
+public readonly customDomainName: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -3500,7 +3511,7 @@ const nextjsDefaultsProps: NextjsDefaultsProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.assetDeployment">assetDeployment</a></code> | <code>any</code> | Override static file deployment settings. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.distribution">distribution</a></code> | <code>any</code> | Override CloudFront distribution settings. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.distribution">distribution</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps">NextjsDistributionProps</a></code> | Override CloudFront distribution settings. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override server lambda function settings. |
 
 ---
@@ -3520,10 +3531,10 @@ Override static file deployment settings.
 ##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDefaultsProps.property.distribution"></a>
 
 ```typescript
-public readonly distribution: any;
+public readonly distribution: NextjsDistributionProps;
 ```
 
-- *Type:* any
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionProps">NextjsDistributionProps</a>
 
 Override CloudFront distribution settings.
 
@@ -3557,17 +3568,17 @@ const nextjsDistributionCdkProps: NextjsDistributionCdkProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.DistributionProps</code> | Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution">distribution</a></code> | <code>any</code> | Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally. |
 
 ---
 
 ##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution"></a>
 
 ```typescript
-public readonly distribution: DistributionProps;
+public readonly distribution: any;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.DistributionProps
+- *Type:* any
 
 Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally.
 

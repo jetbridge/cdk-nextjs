@@ -232,7 +232,7 @@ export function createArchive({
   directory,
   zipFileName,
   zipOutDir,
-  fileGlob = '*',
+  fileGlob = '.',
   compressionLevel = 1,
   quiet,
 }: CreateArchiveArgs): string | null {

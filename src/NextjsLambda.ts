@@ -81,11 +81,11 @@ export class NextJsLambda extends Construct {
         ? path.resolve(path.join(props.tempBuildDir, `standalone`))
         : fs.mkdtempSync(path.join(os.tmpdir(), 'standalone-'))
     );
+
     const zipFilePath = createArchive({
       directory: nextBuild.standaloneDir,
       zipFileName: 'standalone.zip',
       zipOutDir,
-      fileGlob: '*',
       quiet: props.quiet,
     });
     if (!zipFilePath) throw new Error('Failed to create archive for lambda function code');

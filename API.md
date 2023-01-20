@@ -3511,7 +3511,7 @@ const nextjsDefaultsProps: NextjsDefaultsProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.assetDeployment">assetDeployment</a></code> | <code>any</code> | Override static file deployment settings. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.distribution">distribution</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps">NextjsDistributionProps</a></code> | Override CloudFront distribution settings. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.distribution">distribution</a></code> | <code>any</code> | Override CloudFront distribution settings. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override server lambda function settings. |
 
 ---
@@ -3531,10 +3531,10 @@ Override static file deployment settings.
 ##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDefaultsProps.property.distribution"></a>
 
 ```typescript
-public readonly distribution: NextjsDistributionProps;
+public readonly distribution: any;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionProps">NextjsDistributionProps</a>
+- *Type:* any
 
 Override CloudFront distribution settings.
 
@@ -3568,17 +3568,17 @@ const nextjsDistributionCdkProps: NextjsDistributionCdkProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution">distribution</a></code> | <code>any</code> | Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.DistributionProps</code> | Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally. |
 
 ---
 
 ##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution"></a>
 
 ```typescript
-public readonly distribution: any;
+public readonly distribution: DistributionProps;
 ```
 
-- *Type:* any
+- *Type:* aws-cdk-lib.aws_cloudfront.DistributionProps
 
 Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally.
 

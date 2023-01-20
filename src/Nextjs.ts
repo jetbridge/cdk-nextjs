@@ -39,7 +39,7 @@ export interface NextjsDefaultsProps {
    *
    * These properties should all be optional but cannot be due to a limitation in jsii.
    */
-  readonly distribution?: NextjsDistributionProps;
+  readonly distribution?: NextjsDistributionProps | any;
 }
 
 export interface NextjsProps extends NextjsBaseProps {

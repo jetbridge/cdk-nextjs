@@ -133,9 +133,11 @@ export class NextjsBuild extends Construct {
     };
 
     const buildPath = this.props.buildPath ?? nextjsPath;
+    const packageManager = this.props.packageManager ?? "npm";
+    const buildCommand = packageManager === "yarn" ? ['build'] : ['run', 'build'];
     // run build
-    console.debug('├ Running "npm build" in', buildPath);
-    const buildResult = spawn.sync('npm', ['run', 'build'], {
+    console.debug(`├ Running "${packageManager} build" in`, buildPath);
+    const buildResult = spawn.sync(packageManager, buildCommand, {
       cwd: buildPath,
       stdio: this.props.quiet ? 'ignore' : 'inherit',
       env: buildEnv,

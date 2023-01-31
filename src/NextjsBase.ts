@@ -51,9 +51,9 @@ export interface NextjsBaseProps {
 
   /**
    * Optional value used to install NextJS node dependencies.
-   * It default to "npm"
+   * It defaults to "npm"
    */
-  readonly packageManager?: "npm" | "yarn";
+  readonly packageManager?: "npm" | "yarn" | "pnpm";
 
   /**
    * 0 - no compression, fatest

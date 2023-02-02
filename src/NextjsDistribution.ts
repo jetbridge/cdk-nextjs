@@ -113,6 +113,12 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
    * Required if using SST.
    */
   readonly stageName?: string;
+
+  /**
+   * Optional value to prefix the edge function stack
+   * It defaults to "Nextjs"
+   */
+  readonly stackPrefix?: string;
 }
 
 /**
@@ -487,16 +493,10 @@ export class NextjsDistribution extends Construct {
   }
 
   private buildDistributionDomainNames(): string[] {
-    const { customDomain } = this.props;
-    const domainNames = [];
-    if (!customDomain) {
-      // no domain
-    } else if (typeof customDomain === 'string') {
-      domainNames.push(customDomain);
-    } else {
-      domainNames.push(customDomain.domainName);
-    }
-    return domainNames;
+    const customDomain =
+      typeof this.props.customDomain === 'string' ? this.props.customDomain : this.props.customDomain?.domainName;
+
+    return customDomain ? [customDomain] : [];
   }
 
   /**
@@ -535,7 +535,8 @@ export class NextjsDistribution extends Construct {
         retryAttempts: 1, // async retry attempts
       },
       stackId:
-        `Nextjs-${this.props.stageName || app.stageName || 'default'}-EdgeFunctions-` + this.node.addr.substring(0, 5),
+        `${this.props.stackPrefix ?? 'Nextjs'}-${this.props.stageName || app.stageName || 'default'}-EdgeFunctions-` +
+        this.node.addr.substring(0, 5),
     });
     fn.currentVersion.grantInvoke(new ServicePrincipal('edgelambda.amazonaws.com'));
     fn.currentVersion.grantInvoke(new ServicePrincipal('lambda.amazonaws.com'));

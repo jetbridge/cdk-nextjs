@@ -2687,10 +2687,11 @@ const imageOptimizationProps: ImageOptimizationProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fatest 9 - maximum compression, slowest. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
@@ -2740,7 +2741,7 @@ public readonly compressionLevel: number;
 - *Type:* number
 - *Default:* 1
 
-0 - no compression, fatest 9 - maximum compression, slowest.
+0 - no compression, fastest 9 - maximum compression, slowest.
 
 ---
 
@@ -2779,6 +2780,20 @@ public readonly nodeEnv: string;
 - *Type:* string
 
 Optional value for NODE_ENV during build and runtime.
+
+---
+
+##### `packageManager`<sup>Optional</sup> <a name="packageManager" id="cdk-nextjs-standalone.ImageOptimizationProps.property.packageManager"></a>
+
+```typescript
+public readonly packageManager: string;
+```
+
+- *Type:* string
+
+Optional value used to install NextJS node dependencies.
+
+It defaults to "npm"
 
 ---
 
@@ -2933,10 +2948,11 @@ const nextjsAssetsDeploymentProps: NextjsAssetsDeploymentProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fatest 9 - maximum compression, slowest. |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
@@ -2987,7 +3003,7 @@ public readonly compressionLevel: number;
 - *Type:* number
 - *Default:* 1
 
-0 - no compression, fatest 9 - maximum compression, slowest.
+0 - no compression, fastest 9 - maximum compression, slowest.
 
 ---
 
@@ -3026,6 +3042,20 @@ public readonly nodeEnv: string;
 - *Type:* string
 
 Optional value for NODE_ENV during build and runtime.
+
+---
+
+##### `packageManager`<sup>Optional</sup> <a name="packageManager" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.packageManager"></a>
+
+```typescript
+public readonly packageManager: string;
+```
+
+- *Type:* string
+
+Optional value used to install NextJS node dependencies.
+
+It defaults to "npm"
 
 ---
 
@@ -3149,10 +3179,11 @@ const nextjsBaseProps: NextjsBaseProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fatest 9 - maximum compression, slowest. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
@@ -3198,7 +3229,7 @@ public readonly compressionLevel: number;
 - *Type:* number
 - *Default:* 1
 
-0 - no compression, fatest 9 - maximum compression, slowest.
+0 - no compression, fastest 9 - maximum compression, slowest.
 
 ---
 
@@ -3237,6 +3268,20 @@ public readonly nodeEnv: string;
 - *Type:* string
 
 Optional value for NODE_ENV during build and runtime.
+
+---
+
+##### `packageManager`<sup>Optional</sup> <a name="packageManager" id="cdk-nextjs-standalone.NextjsBaseProps.property.packageManager"></a>
+
+```typescript
+public readonly packageManager: string;
+```
+
+- *Type:* string
+
+Optional value used to install NextJS node dependencies.
+
+It defaults to "npm"
 
 ---
 
@@ -3296,10 +3341,11 @@ const nextjsBuildProps: NextjsBuildProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fatest 9 - maximum compression, slowest. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
@@ -3345,7 +3391,7 @@ public readonly compressionLevel: number;
 - *Type:* number
 - *Default:* 1
 
-0 - no compression, fatest 9 - maximum compression, slowest.
+0 - no compression, fastest 9 - maximum compression, slowest.
 
 ---
 
@@ -3384,6 +3430,20 @@ public readonly nodeEnv: string;
 - *Type:* string
 
 Optional value for NODE_ENV during build and runtime.
+
+---
+
+##### `packageManager`<sup>Optional</sup> <a name="packageManager" id="cdk-nextjs-standalone.NextjsBuildProps.property.packageManager"></a>
+
+```typescript
+public readonly packageManager: string;
+```
+
+- *Type:* string
+
+Optional value used to install NextJS node dependencies.
+
+It defaults to "npm"
 
 ---
 
@@ -3600,10 +3660,11 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fatest 9 - maximum compression, slowest. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
@@ -3615,6 +3676,7 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cdk">cdk</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps">NextjsDistributionCdkProps</a></code> | Overrides for created CDK resources. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.customDomain">customDomain</a></code> | <code>string \| <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | The customDomain for this website. Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.lambdaOriginRequestPolicy">lambdaOriginRequestPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy</code> | Override the default CloudFront lambda origin request policy created internally. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.stackPrefix">stackPrefix</a></code> | <code>string</code> | Optional value to prefix the edge function stack It defaults to "Nextjs". |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.stageName">stageName</a></code> | <code>string</code> | Include the name of your deployment stage if present. |
 
 ---
@@ -3658,7 +3720,7 @@ public readonly compressionLevel: number;
 - *Type:* number
 - *Default:* 1
 
-0 - no compression, fatest 9 - maximum compression, slowest.
+0 - no compression, fastest 9 - maximum compression, slowest.
 
 ---
 
@@ -3697,6 +3759,20 @@ public readonly nodeEnv: string;
 - *Type:* string
 
 Optional value for NODE_ENV during build and runtime.
+
+---
+
+##### `packageManager`<sup>Optional</sup> <a name="packageManager" id="cdk-nextjs-standalone.NextjsDistributionProps.property.packageManager"></a>
+
+```typescript
+public readonly packageManager: string;
+```
+
+- *Type:* string
+
+Optional value used to install NextJS node dependencies.
+
+It defaults to "npm"
 
 ---
 
@@ -3862,6 +3938,18 @@ Override the default CloudFront lambda origin request policy created internally.
 
 ---
 
+##### `stackPrefix`<sup>Optional</sup> <a name="stackPrefix" id="cdk-nextjs-standalone.NextjsDistributionProps.property.stackPrefix"></a>
+
+```typescript
+public readonly stackPrefix: string;
+```
+
+- *Type:* string
+
+Optional value to prefix the edge function stack It defaults to "Nextjs".
+
+---
+
 ##### `stageName`<sup>Optional</sup> <a name="stageName" id="cdk-nextjs-standalone.NextjsDistributionProps.property.stageName"></a>
 
 ```typescript
@@ -4000,10 +4088,11 @@ const nextjsLambdaProps: NextjsLambdaProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fatest 9 - maximum compression, slowest. |
+| <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
@@ -4051,7 +4140,7 @@ public readonly compressionLevel: number;
 - *Type:* number
 - *Default:* 1
 
-0 - no compression, fatest 9 - maximum compression, slowest.
+0 - no compression, fastest 9 - maximum compression, slowest.
 
 ---
 
@@ -4090,6 +4179,20 @@ public readonly nodeEnv: string;
 - *Type:* string
 
 Optional value for NODE_ENV during build and runtime.
+
+---
+
+##### `packageManager`<sup>Optional</sup> <a name="packageManager" id="cdk-nextjs-standalone.NextjsLambdaProps.property.packageManager"></a>
+
+```typescript
+public readonly packageManager: string;
+```
+
+- *Type:* string
+
+Optional value used to install NextJS node dependencies.
+
+It defaults to "npm"
 
 ---
 
@@ -4184,10 +4287,11 @@ const nextjsProps: NextjsProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fatest 9 - maximum compression, slowest. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
@@ -4235,7 +4339,7 @@ public readonly compressionLevel: number;
 - *Type:* number
 - *Default:* 1
 
-0 - no compression, fatest 9 - maximum compression, slowest.
+0 - no compression, fastest 9 - maximum compression, slowest.
 
 ---
 
@@ -4274,6 +4378,20 @@ public readonly nodeEnv: string;
 - *Type:* string
 
 Optional value for NODE_ENV during build and runtime.
+
+---
+
+##### `packageManager`<sup>Optional</sup> <a name="packageManager" id="cdk-nextjs-standalone.NextjsProps.property.packageManager"></a>
+
+```typescript
+public readonly packageManager: string;
+```
+
+- *Type:* string
+
+Optional value used to install NextJS node dependencies.
+
+It defaults to "npm"
 
 ---
 

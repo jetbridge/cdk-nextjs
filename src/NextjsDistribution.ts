@@ -535,7 +535,7 @@ export class NextjsDistribution extends Construct {
         retryAttempts: 1, // async retry attempts
       },
       stackId:
-        `${this.props.stackPrefix ?? 'Nextjs'}-${this.props.stageName || app.stageName || 'default'}-EdgeFunctions-` +
+        `${this.props.stackPrefix ?? 'Nextjs'}-${this.props.stageName || app.stageName || 'default'}-EdgeFn-` +
         this.node.addr.substring(0, 5),
     });
     fn.currentVersion.grantInvoke(new ServicePrincipal('edgelambda.amazonaws.com'));

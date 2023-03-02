@@ -156,7 +156,8 @@ export class Nextjs extends Construct {
     });
     // finish static deployment BEFORE deploying new function code
     // as there is some time after the new static files are uploaded but before they are rewritten
-    this.assetsDeployment.node.addDependency(this.serverFunction);
+    if (this.assetsDeployment.rewriter?.rewriteNode?.node)
+      this.serverFunction.lambdaFunction.node.addDependency(this.assetsDeployment.rewriter?.rewriteNode?.node);
 
     this.distribution = new NextjsDistribution(this, 'Distribution', {
       ...props,

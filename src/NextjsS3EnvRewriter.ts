@@ -4,7 +4,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import * as cr from 'aws-cdk-lib/custom-resources';
-import { Construct } from 'constructs';
+import { Construct, IDependable } from 'constructs';
 import { bundleFunction } from './BundleFunction';
 import { LAMBDA_RUNTIME } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
@@ -37,6 +37,8 @@ export interface NextjsS3EnvRewriterProps extends NextjsBaseProps, RewriterParam
  * only known at deploy time.
  */
 export class NextjsS3EnvRewriter extends Construct {
+  public rewriteNode?: IDependable & Construct;
+
   constructor(scope: Construct, id: string, props: NextjsS3EnvRewriterProps) {
     super(scope, id);
 
@@ -119,6 +121,7 @@ export class NextjsS3EnvRewriter extends Construct {
       serviceToken: provider.serviceToken,
       properties,
     });
+    this.rewriteNode = rewriteFn;
   }
 }
 

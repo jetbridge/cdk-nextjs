@@ -37,6 +37,8 @@ export interface NextjsS3EnvRewriterProps extends NextjsBaseProps, RewriterParam
  * only known at deploy time.
  */
 export class NextjsS3EnvRewriter extends Construct {
+  public rewriteNode?: Construct;
+
   constructor(scope: Construct, id: string, props: NextjsS3EnvRewriterProps) {
     super(scope, id);
 
@@ -115,7 +117,7 @@ export class NextjsS3EnvRewriter extends Construct {
       debug,
       cloudfrontDistributionId,
     };
-    new CustomResource(this, 'RewriteStatic', {
+    this.rewriteNode = new CustomResource(this, 'RewriteStatic', {
       serviceToken: provider.serviceToken,
       properties,
     });

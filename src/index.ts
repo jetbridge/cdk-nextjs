@@ -14,6 +14,12 @@ export {
 export { NextjsBuild, NextjsBuildProps, CreateArchiveArgs } from './NextjsBuild';
 export { EnvironmentVars, NextJsLambda, NextjsLambdaProps } from './NextjsLambda';
 export { ImageOptimizationLambda, ImageOptimizationProps } from './ImageOptimizationLambda';
+export {
+  NextjsS3EnvRewriter,
+  NextjsS3EnvRewriterProps,
+  RewriterParams,
+  RewriteReplacementsConfig,
+} from './NextjsS3EnvRewriter';
 export { NextjsLayer, NextjsLayerProps } from './NextjsLayer';
 export {
   NextjsDistribution,

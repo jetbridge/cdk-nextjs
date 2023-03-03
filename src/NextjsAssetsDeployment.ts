@@ -68,6 +68,7 @@ export class NextJsAssetsDeployment extends Construct {
    * Asset deployments to S3.
    */
   public deployments: BucketDeployment[];
+  public rewriter?: NextjsS3EnvRewriter;
 
   public staticTempDir: string;
 
@@ -84,7 +85,7 @@ export class NextJsAssetsDeployment extends Construct {
 
     // do rewrites of unresolved CDK tokens in static files
     if (this.props.environment && !this.props.isPlaceholder) {
-      const rewriter = new NextjsS3EnvRewriter(this, 'NextjsS3EnvRewriter', {
+      this.rewriter = new NextjsS3EnvRewriter(this, 'NextjsS3EnvRewriter', {
         ...props,
         s3Bucket: this.bucket,
         s3keys: this._getStaticFilesForRewrite(),
@@ -95,7 +96,7 @@ export class NextJsAssetsDeployment extends Construct {
         cloudfrontDistributionId: this.props.distribution?.distributionId,
       });
       // wait for s3 assets to be uploaded first before running
-      rewriter.node.addDependency(...this.deployments);
+      this.rewriter.node.addDependency(...this.deployments);
     }
   }
 

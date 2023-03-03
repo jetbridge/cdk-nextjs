@@ -63,6 +63,7 @@ new ImageOptimizationLambda(scope: Construct, id: string, props: ImageOptimizati
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.addAlias">addAlias</a></code> | Defines an alias for this function. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.addEnvironment">addEnvironment</a></code> | Adds an environment variable to this Lambda function. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.addLayers">addLayers</a></code> | Adds one or more Lambda Layers to this Lambda function. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationLambda.invalidateVersionBasedOn">invalidateVersionBasedOn</a></code> | Mix additional information into the hash of the Version object. |
 
 ---
 
@@ -430,6 +431,35 @@ Adds one or more Lambda Layers to this Lambda function.
 - *Type:* aws-cdk-lib.aws_lambda.ILayerVersion
 
 the layers to be added.
+
+---
+
+##### `invalidateVersionBasedOn` <a name="invalidateVersionBasedOn" id="cdk-nextjs-standalone.ImageOptimizationLambda.invalidateVersionBasedOn"></a>
+
+```typescript
+public invalidateVersionBasedOn(x: string): void
+```
+
+Mix additional information into the hash of the Version object.
+
+The Lambda Function construct does its best to automatically create a new
+Version when anything about the Function changes (its code, its layers,
+any of the other properties).
+
+However, you can sometimes source information from places that the CDK cannot
+look into, like the deploy-time values of SSM parameters. In those cases,
+the CDK would not force the creation of a new Version object when it actually
+should.
+
+This method can be used to invalidate the current Version object. Pass in
+any string into this method, and make sure the string changes when you know
+a new Version needs to be created.
+
+This method may be called more than once.
+
+###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.ImageOptimizationLambda.invalidateVersionBasedOn.parameter.x"></a>
+
+- *Type:* string
 
 ---
 

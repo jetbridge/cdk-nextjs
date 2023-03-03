@@ -1373,6 +1373,7 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing assets. |
 | <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.property.deployments">deployments</a></code> | <code>aws-cdk-lib.aws_s3_deployment.BucketDeployment[]</code> | Asset deployments to S3. |
 | <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.property.staticTempDir">staticTempDir</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.property.rewriter">rewriter</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter">NextjsS3EnvRewriter</a></code> | *No description.* |
 
 ---
 
@@ -1419,6 +1420,16 @@ public readonly staticTempDir: string;
 ```
 
 - *Type:* string
+
+---
+
+##### `rewriter`<sup>Optional</sup> <a name="rewriter" id="cdk-nextjs-standalone.NextJsAssetsDeployment.property.rewriter"></a>
+
+```typescript
+public readonly rewriter: NextjsS3EnvRewriter;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter">NextjsS3EnvRewriter</a>
 
 ---
 
@@ -2375,6 +2386,121 @@ public readonly compatibleRuntimes: Runtime[];
 - *Type:* aws-cdk-lib.aws_lambda.Runtime[]
 
 The runtimes compatible with this Layer.
+
+---
+
+
+### NextjsS3EnvRewriter <a name="NextjsS3EnvRewriter" id="cdk-nextjs-standalone.NextjsS3EnvRewriter"></a>
+
+Rewrites variables in S3 objects after a deployment happens to replace CloudFormation tokens with their values.
+
+These values are not resolved at build time because they are
+only known at deploy time.
+
+#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer"></a>
+
+```typescript
+import { NextjsS3EnvRewriter } from 'cdk-nextjs-standalone'
+
+new NextjsS3EnvRewriter(scope: Construct, id: string, props: NextjsS3EnvRewriterProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps">NextjsS3EnvRewriterProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps">NextjsS3EnvRewriterProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.isConstruct"></a>
+
+```typescript
+import { NextjsS3EnvRewriter } from 'cdk-nextjs-standalone'
+
+NextjsS3EnvRewriter.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.property.rewriteNode">rewriteNode</a></code> | <code>constructs.Construct</code> | *No description.* |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `rewriteNode`<sup>Optional</sup> <a name="rewriteNode" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.property.rewriteNode"></a>
+
+```typescript
+public readonly rewriteNode: Construct;
+```
+
+- *Type:* constructs.Construct
 
 ---
 
@@ -4456,6 +4582,356 @@ public readonly imageOptimizationBucket: IBucket;
 - *Type:* aws-cdk-lib.aws_s3.IBucket
 
 Optional S3 Bucket to use, defaults to assets bucket.
+
+---
+
+### NextjsS3EnvRewriterProps <a name="NextjsS3EnvRewriterProps" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps"></a>
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.Initializer"></a>
+
+```typescript
+import { NextjsS3EnvRewriterProps } from 'cdk-nextjs-standalone'
+
+const nextjsS3EnvRewriterProps: NextjsS3EnvRewriterProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.replacementConfig">replacementConfig</a></code> | <code><a href="#cdk-nextjs-standalone.RewriteReplacementsConfig">RewriteReplacementsConfig</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.s3Bucket">s3Bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.s3keys">s3keys</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.cloudfrontDistributionId">cloudfrontDistributionId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.debug">debug</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+
+---
+
+##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.nextjsPath"></a>
+
+```typescript
+public readonly nextjsPath: string;
+```
+
+- *Type:* string
+
+Relative path to the directory where the NextJS project is located.
+
+Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+
+---
+
+##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.buildPath"></a>
+
+```typescript
+public readonly buildPath: string;
+```
+
+- *Type:* string
+
+The directory to execute `npm run build` from.
+
+By default, it is `nextjsPath`.
+Can be overridden, particularly useful for monorepos where `build` is expected to run
+at the root of the project.
+
+---
+
+##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.compressionLevel"></a>
+
+```typescript
+public readonly compressionLevel: number;
+```
+
+- *Type:* number
+- *Default:* 1
+
+0 - no compression, fastest 9 - maximum compression, slowest.
+
+---
+
+##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.environment"></a>
+
+```typescript
+public readonly environment: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+Custom environment variables to pass to the NextJS build and runtime.
+
+---
+
+##### `isPlaceholder`<sup>Optional</sup> <a name="isPlaceholder" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.isPlaceholder"></a>
+
+```typescript
+public readonly isPlaceholder: boolean;
+```
+
+- *Type:* boolean
+
+Skip building app and deploy a placeholder.
+
+Useful when using `next dev` for local development.
+
+---
+
+##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.nodeEnv"></a>
+
+```typescript
+public readonly nodeEnv: string;
+```
+
+- *Type:* string
+
+Optional value for NODE_ENV during build and runtime.
+
+---
+
+##### `packageManager`<sup>Optional</sup> <a name="packageManager" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.packageManager"></a>
+
+```typescript
+public readonly packageManager: string;
+```
+
+- *Type:* string
+
+Optional value used to install NextJS node dependencies.
+
+It defaults to "npm"
+
+---
+
+##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.projectRoot"></a>
+
+```typescript
+public readonly projectRoot: string;
+```
+
+- *Type:* string
+
+Root of your project, if different from `nextjsPath`.
+
+Defaults to current working directory.
+
+---
+
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+Less build output.
+
+---
+
+##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.tempBuildDir"></a>
+
+```typescript
+public readonly tempBuildDir: string;
+```
+
+- *Type:* string
+
+Directory to store temporary build files in.
+
+Defaults to os.tmpdir().
+
+---
+
+##### `replacementConfig`<sup>Required</sup> <a name="replacementConfig" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.replacementConfig"></a>
+
+```typescript
+public readonly replacementConfig: RewriteReplacementsConfig;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.RewriteReplacementsConfig">RewriteReplacementsConfig</a>
+
+---
+
+##### `s3Bucket`<sup>Required</sup> <a name="s3Bucket" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.s3Bucket"></a>
+
+```typescript
+public readonly s3Bucket: IBucket;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.IBucket
+
+---
+
+##### `s3keys`<sup>Required</sup> <a name="s3keys" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.s3keys"></a>
+
+```typescript
+public readonly s3keys: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `cloudfrontDistributionId`<sup>Optional</sup> <a name="cloudfrontDistributionId" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.cloudfrontDistributionId"></a>
+
+```typescript
+public readonly cloudfrontDistributionId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `debug`<sup>Optional</sup> <a name="debug" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.debug"></a>
+
+```typescript
+public readonly debug: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.nextBuild"></a>
+
+```typescript
+public readonly nextBuild: NextjsBuild;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+
+---
+
+### RewriteReplacementsConfig <a name="RewriteReplacementsConfig" id="cdk-nextjs-standalone.RewriteReplacementsConfig"></a>
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.RewriteReplacementsConfig.Initializer"></a>
+
+```typescript
+import { RewriteReplacementsConfig } from 'cdk-nextjs-standalone'
+
+const rewriteReplacementsConfig: RewriteReplacementsConfig = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.RewriteReplacementsConfig.property.env">env</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.RewriteReplacementsConfig.property.jsonS3Bucket">jsonS3Bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.RewriteReplacementsConfig.property.jsonS3Key">jsonS3Key</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="cdk-nextjs-standalone.RewriteReplacementsConfig.property.env"></a>
+
+```typescript
+public readonly env: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+---
+
+##### `jsonS3Bucket`<sup>Optional</sup> <a name="jsonS3Bucket" id="cdk-nextjs-standalone.RewriteReplacementsConfig.property.jsonS3Bucket"></a>
+
+```typescript
+public readonly jsonS3Bucket: IBucket;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.IBucket
+
+---
+
+##### `jsonS3Key`<sup>Optional</sup> <a name="jsonS3Key" id="cdk-nextjs-standalone.RewriteReplacementsConfig.property.jsonS3Key"></a>
+
+```typescript
+public readonly jsonS3Key: string;
+```
+
+- *Type:* string
+
+---
+
+### RewriterParams <a name="RewriterParams" id="cdk-nextjs-standalone.RewriterParams"></a>
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.RewriterParams.Initializer"></a>
+
+```typescript
+import { RewriterParams } from 'cdk-nextjs-standalone'
+
+const rewriterParams: RewriterParams = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.RewriterParams.property.replacementConfig">replacementConfig</a></code> | <code><a href="#cdk-nextjs-standalone.RewriteReplacementsConfig">RewriteReplacementsConfig</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.RewriterParams.property.s3Bucket">s3Bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.RewriterParams.property.s3keys">s3keys</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.RewriterParams.property.cloudfrontDistributionId">cloudfrontDistributionId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.RewriterParams.property.debug">debug</a></code> | <code>boolean</code> | *No description.* |
+
+---
+
+##### `replacementConfig`<sup>Required</sup> <a name="replacementConfig" id="cdk-nextjs-standalone.RewriterParams.property.replacementConfig"></a>
+
+```typescript
+public readonly replacementConfig: RewriteReplacementsConfig;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.RewriteReplacementsConfig">RewriteReplacementsConfig</a>
+
+---
+
+##### `s3Bucket`<sup>Required</sup> <a name="s3Bucket" id="cdk-nextjs-standalone.RewriterParams.property.s3Bucket"></a>
+
+```typescript
+public readonly s3Bucket: IBucket;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.IBucket
+
+---
+
+##### `s3keys`<sup>Required</sup> <a name="s3keys" id="cdk-nextjs-standalone.RewriterParams.property.s3keys"></a>
+
+```typescript
+public readonly s3keys: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `cloudfrontDistributionId`<sup>Optional</sup> <a name="cloudfrontDistributionId" id="cdk-nextjs-standalone.RewriterParams.property.cloudfrontDistributionId"></a>
+
+```typescript
+public readonly cloudfrontDistributionId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `debug`<sup>Optional</sup> <a name="debug" id="cdk-nextjs-standalone.RewriterParams.property.debug"></a>
+
+```typescript
+public readonly debug: boolean;
+```
+
+- *Type:* boolean
 
 ---
 

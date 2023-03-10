@@ -28,6 +28,7 @@ export {
   NextjsDistributionProps,
   NextjsDomainProps,
   NextjsCachePolicyProps,
+  NextjsOriginRequestPolicyProps,
 } from './NextjsDistribution';
 
 // L3 constructs

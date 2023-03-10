@@ -1805,7 +1805,9 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.fallbackOriginRequestPolicyProps">fallbackOriginRequestPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.OriginRequestPolicyProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.imageCachePolicyProps">imageCachePolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.CachePolicyProps</code> | The default CloudFront cache policy properties for images. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.imageOptimizationOriginRequestPolicyProps">imageOptimizationOriginRequestPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.OriginRequestPolicyProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.lambdaCachePolicyProps">lambdaCachePolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.CachePolicyProps</code> | The default CloudFront cache policy properties for the Lambda server handler. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.lambdaOriginRequestPolicyProps">lambdaOriginRequestPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.OriginRequestPolicyProps</code> | The default CloudFront lambda origin request policy. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.staticCachePolicyProps">staticCachePolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.CachePolicyProps</code> | The default CloudFront cache policy properties for static pages. |
@@ -1833,6 +1835,16 @@ The tree node.
 
 ---
 
+##### `fallbackOriginRequestPolicyProps`<sup>Required</sup> <a name="fallbackOriginRequestPolicyProps" id="cdk-nextjs-standalone.NextjsDistribution.property.fallbackOriginRequestPolicyProps"></a>
+
+```typescript
+public readonly fallbackOriginRequestPolicyProps: OriginRequestPolicyProps;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.OriginRequestPolicyProps
+
+---
+
 ##### `imageCachePolicyProps`<sup>Required</sup> <a name="imageCachePolicyProps" id="cdk-nextjs-standalone.NextjsDistribution.property.imageCachePolicyProps"></a>
 
 ```typescript
@@ -1842,6 +1854,16 @@ public readonly imageCachePolicyProps: CachePolicyProps;
 - *Type:* aws-cdk-lib.aws_cloudfront.CachePolicyProps
 
 The default CloudFront cache policy properties for images.
+
+---
+
+##### `imageOptimizationOriginRequestPolicyProps`<sup>Required</sup> <a name="imageOptimizationOriginRequestPolicyProps" id="cdk-nextjs-standalone.NextjsDistribution.property.imageOptimizationOriginRequestPolicyProps"></a>
+
+```typescript
+public readonly imageOptimizationOriginRequestPolicyProps: OriginRequestPolicyProps;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.OriginRequestPolicyProps
 
 ---
 
@@ -3831,7 +3853,7 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps">NextjsCachePolicyProps</a></code> | Override the default CloudFront cache policies created internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cdk">cdk</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps">NextjsDistributionCdkProps</a></code> | Overrides for created CDK resources. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.customDomain">customDomain</a></code> | <code>string \| <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | The customDomain for this website. Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.lambdaOriginRequestPolicy">lambdaOriginRequestPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy</code> | Override the default CloudFront lambda origin request policy created internally. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.originRequestPolicies">originRequestPolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps">NextjsOriginRequestPolicyProps</a></code> | Override the default CloudFront origin request policies created internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.stackPrefix">stackPrefix</a></code> | <code>string</code> | Optional value to prefix the edge function stack It defaults to "Nextjs". |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.stageName">stageName</a></code> | <code>string</code> | Include the name of your deployment stage if present. |
 
@@ -4082,15 +4104,15 @@ new NextjsDistribution(this, "Dist", {
 ```
 
 
-##### `lambdaOriginRequestPolicy`<sup>Optional</sup> <a name="lambdaOriginRequestPolicy" id="cdk-nextjs-standalone.NextjsDistributionProps.property.lambdaOriginRequestPolicy"></a>
+##### `originRequestPolicies`<sup>Optional</sup> <a name="originRequestPolicies" id="cdk-nextjs-standalone.NextjsDistributionProps.property.originRequestPolicies"></a>
 
 ```typescript
-public readonly lambdaOriginRequestPolicy: IOriginRequestPolicy;
+public readonly originRequestPolicies: NextjsOriginRequestPolicyProps;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps">NextjsOriginRequestPolicyProps</a>
 
-Override the default CloudFront lambda origin request policy created internally.
+Override the default CloudFront origin request policies created internally.
 
 ---
 
@@ -4426,6 +4448,56 @@ import { NextjsLayerProps } from 'cdk-nextjs-standalone'
 const nextjsLayerProps: NextjsLayerProps = { ... }
 ```
 
+
+### NextjsOriginRequestPolicyProps <a name="NextjsOriginRequestPolicyProps" id="cdk-nextjs-standalone.NextjsOriginRequestPolicyProps"></a>
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsOriginRequestPolicyProps.Initializer"></a>
+
+```typescript
+import { NextjsOriginRequestPolicyProps } from 'cdk-nextjs-standalone'
+
+const nextjsOriginRequestPolicyProps: NextjsOriginRequestPolicyProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps.property.fallbackOriginRequestPolicy">fallbackOriginRequestPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps.property.imageOptimizationOriginRequestPolicy">imageOptimizationOriginRequestPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps.property.lambdaOriginRequestPolicy">lambdaOriginRequestPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy</code> | *No description.* |
+
+---
+
+##### `fallbackOriginRequestPolicy`<sup>Optional</sup> <a name="fallbackOriginRequestPolicy" id="cdk-nextjs-standalone.NextjsOriginRequestPolicyProps.property.fallbackOriginRequestPolicy"></a>
+
+```typescript
+public readonly fallbackOriginRequestPolicy: IOriginRequestPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy
+
+---
+
+##### `imageOptimizationOriginRequestPolicy`<sup>Optional</sup> <a name="imageOptimizationOriginRequestPolicy" id="cdk-nextjs-standalone.NextjsOriginRequestPolicyProps.property.imageOptimizationOriginRequestPolicy"></a>
+
+```typescript
+public readonly imageOptimizationOriginRequestPolicy: IOriginRequestPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy
+
+---
+
+##### `lambdaOriginRequestPolicy`<sup>Optional</sup> <a name="lambdaOriginRequestPolicy" id="cdk-nextjs-standalone.NextjsOriginRequestPolicyProps.property.lambdaOriginRequestPolicy"></a>
+
+```typescript
+public readonly lambdaOriginRequestPolicy: IOriginRequestPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy
+
+---
 
 ### NextjsProps <a name="NextjsProps" id="cdk-nextjs-standalone.NextjsProps"></a>
 

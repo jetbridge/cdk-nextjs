@@ -46,6 +46,12 @@ export interface NextjsCachePolicyProps {
   readonly staticClientMaxAgeDefault?: Duration;
 }
 
+export interface NextjsOriginRequestPolicyProps {
+  readonly lambdaOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
+  readonly fallbackOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
+  readonly imageOptimizationOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
+}
+
 export interface NextjsDistributionProps extends NextjsBaseProps {
   /**
    * Bucket containing static assets.
@@ -81,9 +87,9 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
   readonly cachePolicies?: NextjsCachePolicyProps;
 
   /**
-   * Override the default CloudFront lambda origin request policy created internally
+   * Override the default CloudFront origin request policies created internally.
    */
-  readonly lambdaOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
+  readonly originRequestPolicies?: NextjsOriginRequestPolicyProps;
 
   /**
    * The customDomain for this website. Supports domains that are hosted
@@ -178,6 +184,20 @@ export class NextjsDistribution extends Construct {
     queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
     headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(), // can't include host
     comment: 'Nextjs Lambda Origin Request Policy',
+  };
+
+  public static fallbackOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
+    cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(), // pretty much disables caching - maybe can be changed
+    queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
+    headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
+    comment: 'Nextjs Fallback Origin Request Policy',
+  };
+
+  public static imageOptimizationOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
+    queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.allowList('q', 'w', 'url'),
+    headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList('accept'),
+    cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
+    comment: 'Nextjs Image Optimization Origin Request Policy',
   };
 
   protected props: NextjsDistributionProps;
@@ -276,7 +296,7 @@ export class NextjsDistribution extends Construct {
   /////////////////////
 
   private createCloudFrontDistribution(): cloudfront.Distribution {
-    const { cdk: cdkProps, cachePolicies, lambdaOriginRequestPolicy: lambdaOriginRequestPolicyOverride } = this.props;
+    const { cdk: cdkProps, cachePolicies, originRequestPolicies } = this.props;
     const cfDistributionProps = cdkProps?.distribution;
 
     // build domainNames
@@ -306,7 +326,8 @@ export class NextjsDistribution extends Construct {
     const imageCachePolicy = cachePolicies?.imageCachePolicy ?? this.createCloudFrontImageCachePolicy();
 
     // origin request policies
-    const lambdaOriginRequestPolicy = lambdaOriginRequestPolicyOverride ?? this.createLambdaOriginRequestPolicy();
+    const lambdaOriginRequestPolicy =
+      originRequestPolicies?.lambdaOriginRequestPolicy ?? this.createLambdaOriginRequestPolicy();
 
     // main server function origin (lambda URL HTTP origin)
     const fnUrl = this.props.serverFunction.addFunctionUrl({
@@ -324,11 +345,8 @@ export class NextjsDistribution extends Construct {
       authType: lambda.FunctionUrlAuthType.NONE,
     });
     const imageOptFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(imageOptFnUrl.url));
-    const imageOptORP = new cloudfront.OriginRequestPolicy(this, 'ImageOptPolicy', {
-      queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.allowList('q', 'w', 'url'),
-      headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList('accept'),
-      cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
-    });
+    const imageOptORP =
+      originRequestPolicies?.imageOptimizationOriginRequestPolicy ?? this.createImageOptimizationOriginRequestPolicy();
 
     // lambda behavior edge function
     const lambdaOriginRequestEdgeFn = this.buildLambdaOriginRequestEdgeFunction();
@@ -398,12 +416,8 @@ export class NextjsDistribution extends Construct {
     // requests to fallback origin group (default behavior)
     // used for S3 and lambda. would prefer to forward all headers to lambda but need to strip out host
     // TODO: try to do this with headers whitelist or edge lambda
-    const fallbackOriginRequestPolicy = new cloudfront.OriginRequestPolicy(this, 'FallbackOriginRequestPolicy', {
-      cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(), // pretty much disables caching - maybe can be changed
-      queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-      headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
-      comment: 'Nextjs Fallback Origin Request Policy',
-    });
+    const fallbackOriginRequestPolicy =
+      originRequestPolicies?.fallbackOriginRequestPolicy ?? this.createFallbackOriginRequestPolicy();
 
     // if we don't have a static file called index.html then we should
     // redirect to the lambda handler
@@ -471,6 +485,22 @@ export class NextjsDistribution extends Construct {
       this,
       'LambdaOriginPolicy',
       NextjsDistribution.lambdaOriginRequestPolicyProps
+    );
+  }
+
+  private createFallbackOriginRequestPolicy(): cloudfront.OriginRequestPolicy {
+    return new cloudfront.OriginRequestPolicy(
+      this,
+      'FallbackOriginRequestPolicy',
+      NextjsDistribution.fallbackOriginRequestPolicyProps
+    );
+  }
+
+  private createImageOptimizationOriginRequestPolicy(): cloudfront.OriginRequestPolicy {
+    return new cloudfront.OriginRequestPolicy(
+      this,
+      'ImageOptPolicy',
+      NextjsDistribution.imageOptimizationOriginRequestPolicyProps
     );
   }
 

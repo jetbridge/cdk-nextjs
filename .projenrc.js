@@ -2,7 +2,7 @@ const { awscdk } = require('projen');
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'JetBridge',
   authorAddress: 'mischa@jetbridge.com',
-  cdkVersion: '2.62.2',
+  cdkVersion: '2.64.0',
   defaultReleaseBranch: 'main',
   name: 'cdk-nextjs-standalone',
   repositoryUrl: 'https://github.com/jetbridge/cdk-nextjs.git',

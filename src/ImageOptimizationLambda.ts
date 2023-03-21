@@ -39,8 +39,6 @@ export class ImageOptimizationLambda extends Function {
 
   constructor(scope: Construct, id: string, props: ImageOptimizationProps) {
     const { lambdaOptions, bucket, isPlaceholder } = props;
-    // const assetDir = path.resolve(__dirname, '../assets/lambda/ImageOptimization');
-    // const placeHolderFnPath = path.resolve(assetDir, 'index.ts');
 
     const code = isPlaceholder
       ? Code.fromInline(

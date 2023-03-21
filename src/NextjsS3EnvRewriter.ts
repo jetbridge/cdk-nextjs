@@ -8,9 +8,9 @@ import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import * as cr from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import { bundleFunction } from './BundleFunction';
-import { LAMBDA_RUNTIME } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
 import { makeTokenPlaceholder } from './NextjsBuild';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
 
 // files to rewrite CloudFormation tokens in environment variables
 export const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*.json'];
@@ -72,7 +72,7 @@ export class NextjsS3EnvRewriter extends Construct {
 
     // rewriter lambda function
     const rewriteFn = new lambda.Function(this, 'RewriteOnEventHandler', {
-      runtime: LAMBDA_RUNTIME,
+      runtime: Runtime.NODEJS_16_X,
       memorySize: 1024,
       timeout: Duration.minutes(5),
       handler: 'S3EnvRewriter.handler',

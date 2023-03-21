@@ -3139,6 +3139,8 @@ const nextjsAssetsDeploymentProps: NextjsAssetsDeploymentProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsAssetsCachePolicyProps">NextjsAssetsCachePolicyProps</a></code> | Override the default S3 cache policies created internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | Distribution to invalidate when assets change. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | Set to true to delete old assets (defaults to false). |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.useEfs">useEfs</a></code> | <code>boolean</code> | In case of useEfs, vpc is required. |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | In case of useEfs, vpc is required. |
 
 ---
 
@@ -3336,6 +3338,30 @@ public readonly prune: boolean;
 Set to true to delete old assets (defaults to false).
 
 Recommended to only set to true if you don't need the ability to roll back deployments.
+
+---
+
+##### `useEfs`<sup>Optional</sup> <a name="useEfs" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.useEfs"></a>
+
+```typescript
+public readonly useEfs: boolean;
+```
+
+- *Type:* boolean
+
+In case of useEfs, vpc is required.
+
+---
+
+##### `vpc`<sup>Optional</sup> <a name="vpc" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.vpc"></a>
+
+```typescript
+public readonly vpc: IVpc;
+```
+
+- *Type:* aws-cdk-lib.aws_ec2.IVpc
+
+In case of useEfs, vpc is required.
 
 ---
 

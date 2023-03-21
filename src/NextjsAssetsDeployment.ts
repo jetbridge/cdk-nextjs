@@ -1,6 +1,6 @@
 import * as os from 'os';
 import * as path from 'path';
-import { Duration } from 'aws-cdk-lib';
+import { Duration, Size } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import { IVpc } from 'aws-cdk-lib/aws-ec2';
 import * as s3 from 'aws-cdk-lib/aws-s3';
@@ -62,6 +62,16 @@ export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
    * In case of useEfs, vpc is required
    */
   readonly useEfs?: boolean;
+
+  /**
+   * memoryLimit for lambda function which been run by BucketDeployment
+   */
+  readonly memoryLimit?: number;
+
+  /**
+   * ephemeralStorageSize for lambda function which been run by BucketDeployment
+   */
+  readonly ephemeralStorageSize?: Size;
 }
 
 /**
@@ -175,6 +185,9 @@ export class NextJsAssetsDeployment extends Construct {
       prune: this.props.prune,
       useEfs: this.props.useEfs,
       vpc: this.props.vpc,
+      memoryLimit: this.props.memoryLimit,
+      ephemeralStorageSize: this.props.ephemeralStorageSize,
+      distributionPaths: this.props?.distribution?.distributionId ? ['/*'] : undefined,
     });
 
     return [deployment];

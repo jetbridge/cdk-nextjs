@@ -146,10 +146,22 @@ export class Nextjs extends Construct {
       bucket: props.imageOptimizationBucket || this.bucket,
       lambdaOptions: props.defaults?.lambda,
     });
+
+    this.distribution = new NextjsDistribution(this, 'Distribution', {
+      ...props,
+      ...props.defaults?.distribution,
+      staticAssetsBucket: this.staticAssetBucket,
+      tempBuildDir,
+      nextBuild: this.nextBuild,
+      serverFunction: this.serverFunction.lambdaFunction,
+      imageOptFunction: this.imageOptimizationFunction,
+    });
+
     // deploy nextjs static assets to s3
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
       ...props,
       ...props.defaults?.assetDeployment,
+      distribution: this.distribution.distribution,
       tempBuildDir,
       nextBuild: this.nextBuild,
       bucket: this.staticAssetBucket,
@@ -162,16 +174,6 @@ export class Nextjs extends Construct {
     } else {
       this.serverFunction.lambdaFunction.node.addDependency(...this.assetsDeployment.deployments);
     }
-
-    this.distribution = new NextjsDistribution(this, 'Distribution', {
-      ...props,
-      ...props.defaults?.distribution,
-      staticAssetsBucket: this.assetsDeployment.bucket,
-      tempBuildDir,
-      nextBuild: this.nextBuild,
-      serverFunction: this.serverFunction.lambdaFunction,
-      imageOptFunction: this.imageOptimizationFunction,
-    });
 
     if (!props.quiet) console.debug('└ Finished preparing NextJS app for deployment');
   }

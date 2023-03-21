@@ -167,7 +167,7 @@ export class Nextjs extends Construct {
     this.distribution = new NextjsDistribution(this, 'Distribution', {
       ...props,
       ...props.defaults?.distribution,
-      staticAssetsBucket: this.staticAssetBucket,
+      staticAssetsBucket: this.assetsDeployment.bucket,
       tempBuildDir,
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction.lambdaFunction,

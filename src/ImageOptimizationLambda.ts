@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Duration } from 'aws-cdk-lib';
 import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
+import { Architecture, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
@@ -59,7 +59,7 @@ export class ImageOptimizationLambda extends NodejsFunction {
      * When NextjsFunction executes, it will use esbuild to bundle the required modules
      * in `imageOptimization.ts` to minimize the function size.
      */
-    const source = path.join(props.nextBuild.nextDir, 'node_modules/next');
+    const source = props.nextBuild.nextImageFnDir;
     const modulesPath = path.join(lambdaPath, 'node_modules');
     const target = path.join(modulesPath, 'next');
     if (!fs.existsSync(modulesPath)) fs.mkdirSync(modulesPath);
@@ -70,24 +70,12 @@ export class ImageOptimizationLambda extends NodejsFunction {
         ? path.join(__dirname, '../assets/lambda/ImageOptimization/placeholder.ts')
         : imageOptHandlerPath,
       runtime: LAMBDA_RUNTIME,
+      architecture: Architecture.ARM_64,
       bundling: isPlaceholder
         ? undefined
         : {
-            commandHooks: {
-              beforeBundling(_: string, outputDir: string): string[] {
-                // Saves the required-server-files.json to the .next folder
-                const filePath = path.join(props.nextBuild.nextStandaloneBuildDir, 'required-server-files.json');
-                return [`mkdir -p "${outputDir}/.next"`, `cp "${filePath}" "${outputDir}/.next"`];
-              },
-              afterBundling() {
-                return [];
-              },
-              beforeInstall() {
-                return [];
-              },
-            },
             minify: true,
-            target: 'node16',
+            target: 'node18',
             externalModules: [],
           },
       layers: [props.nextLayer],
@@ -96,7 +84,7 @@ export class ImageOptimizationLambda extends NodejsFunction {
       memorySize: lambdaOptions?.memorySize || 1024,
       timeout: lambdaOptions?.timeout ?? Duration.seconds(10),
       environment: {
-        S3_SOURCE_BUCKET: bucket.bucketName,
+        BUCKET_NAME: bucket.bucketName,
       },
     });
 

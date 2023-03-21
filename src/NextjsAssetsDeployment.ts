@@ -112,24 +112,10 @@ export class NextJsAssetsDeployment extends Construct {
 
     // path to public folder; root static assets
     const staticDir = this.props.nextBuild.nextStaticDir;
-    let publicDir = this.props.isPlaceholder
-      ? path.resolve(__dirname, '../assets/PlaceholderSite')
-      : this.props.nextBuild.nextPublicDir;
 
     if (!this.props.isPlaceholder && fs.existsSync(staticDir)) {
-      // copy static files
-      const staticDestinationDir = path.join(archiveDir, '_next', 'static');
-      fs.mkdirpSync(staticDestinationDir);
-      fs.copySync(this.props.nextBuild.nextStaticDir, staticDestinationDir, {
-        recursive: true,
-        dereference: true,
-        preserveTimestamps: true,
-      });
-    }
-
-    // copy public files to root
-    if (fs.existsSync(publicDir)) {
-      fs.copySync(publicDir, archiveDir, {
+      // copy public+static files to root
+      fs.copySync(this.props.nextBuild.nextStaticDir, archiveDir, {
         recursive: true,
         dereference: true,
         preserveTimestamps: true,
@@ -144,7 +130,7 @@ export class NextJsAssetsDeployment extends Construct {
     const archiveZipFilePath = createArchive({
       directory: archiveDir,
       zipFileName: 'assets.zip',
-      zipOutDir: path.join(this.props.nextBuild.tempBuildDir, 'assets'),
+      zipOutDir: path.join(this.staticTempDir, 'assets'),
       compressionLevel: this.props.compressionLevel,
       quiet: this.props.quiet,
     });

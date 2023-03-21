@@ -37,7 +37,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     'glob',
     'node-fetch',
   ] /* Runtime dependencies of this module. */,
-  devDeps: ['aws-sdk', 'constructs@10.1.21'] /* Build dependencies for this module. */,
+  devDeps: ['open-next', 'aws-sdk', 'constructs@10.1.21'] /* Build dependencies for this module. */,
 
   // do not generate sample test files
   sampleCode: false,

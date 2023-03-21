@@ -8,7 +8,9 @@ import { Construct } from 'constructs';
 import { bundleFunction } from './BundleFunction';
 import { LAMBDA_RUNTIME } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
-import { makeTokenPlaceholder, NextjsBuild } from './NextjsBuild';
+import { makeTokenPlaceholder } from './NextjsBuild';
+import * as fs from 'fs';
+import * as os from 'os';
 
 // files to rewrite CloudFormation tokens in environment variables
 export const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*.json'];
@@ -26,9 +28,7 @@ export interface RewriterParams {
   readonly cloudfrontDistributionId?: string;
 }
 
-export interface NextjsS3EnvRewriterProps extends NextjsBaseProps, RewriterParams {
-  readonly nextBuild: NextjsBuild;
-}
+export interface NextjsS3EnvRewriterProps extends NextjsBaseProps, RewriterParams {}
 
 /**
  * Rewrites variables in S3 objects after a deployment happens to
@@ -42,17 +42,21 @@ export class NextjsS3EnvRewriter extends Construct {
   constructor(scope: Construct, id: string, props: NextjsS3EnvRewriterProps) {
     super(scope, id);
 
-    const { s3Bucket, s3keys, replacementConfig, nextBuild, debug, cloudfrontDistributionId } = props;
+    const { s3Bucket, s3keys, replacementConfig, debug, cloudfrontDistributionId } = props;
 
     if (s3keys.length === 0) return;
 
     const app = App.of(this) as App;
 
+    const tmpDir = props.tempBuildDir
+      ? path.resolve(path.join(props.tempBuildDir, 'static'))
+      : fs.mkdtempSync(path.join(os.tmpdir(), 'static-'));
+
     // create a custom resource to find and replace tokenized strings in static files
     // must happen after deployment when tokens can be resolved
     // compile function
     const inputPath = path.resolve(__dirname, '../assets/lambda/S3EnvRewriter.ts');
-    const outputPath = path.join(nextBuild.tempBuildDir, 'deployment-scripts', 'S3EnvRewriter.cjs');
+    const outputPath = path.join(tmpDir, 'deployment-scripts', 'S3EnvRewriter.cjs');
     const handlerDir = bundleFunction({
       inputPath,
       outputPath,

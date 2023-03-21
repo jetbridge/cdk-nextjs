@@ -4,7 +4,7 @@
 
 // This change dir to current directory is a precaution, as nextjs may have
 // issues regarding file/folder locations.
-process.chdir(__dirname)
+process.chdir(__dirname);
 
 import fs from 'node:fs';
 import { IncomingMessage, ServerResponse } from 'node:http';
@@ -13,7 +13,7 @@ import type { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import type { Options } from 'next/dist/server/next-server';
 import * as nss from 'next/dist/server/next-server';
 import slsHttp from 'serverless-http';
-import { getNextServerConfig } from './utils'
+import { getNextServerConfig } from './utils';
 
 const getErrMessage = (e: any) => ({ message: 'Server failed to respond.', details: e });
 
@@ -25,7 +25,7 @@ type LambdaUrlFunctionHandler = APIGatewayProxyHandlerV2;
 const NextNodeServer: typeof nss.default = (nss.default as any)?.default ?? nss.default;
 
 // load config
-const { config: nextConfig } = getNextServerConfig()
+const { config: nextConfig } = getNextServerConfig();
 
 const config: Options = {
   // hostname and port must be defined for proxying to work (middleware)
@@ -62,6 +62,19 @@ const server = slsHttp(
       // nextjs doesn't parse body if the property exists
       // https://github.com/dougmoscrop/serverless-http/issues/227
       delete request.body;
+    },
+    response: (response: any) => {
+      // response may be gzipped or base64 encoded
+      if (response.body) {
+        const body = response.body;
+        if (typeof body === 'string') {
+          response.body = Buffer.from(body, 'base64');
+        } else if (Buffer.isBuffer(body)) {
+          response.body = body;
+        } else {
+          response.body = Buffer.from(body);
+        }
+      }
     },
     provider: 'aws',
   }

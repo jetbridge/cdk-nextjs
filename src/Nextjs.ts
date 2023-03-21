@@ -141,6 +141,7 @@ export class Nextjs extends Construct {
       bucket: props.imageOptimizationBucket || this.bucket,
       lambdaOptions: props.defaults?.lambda,
     });
+
     // deploy nextjs static assets to s3
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
       ...props,

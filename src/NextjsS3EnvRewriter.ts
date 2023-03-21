@@ -4,13 +4,13 @@ import * as path from 'path';
 import { App, CustomResource, Duration, Token } from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import * as cr from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import { bundleFunction } from './BundleFunction';
 import { NextjsBaseProps } from './NextjsBase';
 import { makeTokenPlaceholder } from './NextjsBuild';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
 
 // files to rewrite CloudFormation tokens in environment variables
 export const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*.json'];

@@ -3138,6 +3138,8 @@ const nextjsAssetsDeploymentProps: NextjsAssetsDeploymentProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsAssetsCachePolicyProps">NextjsAssetsCachePolicyProps</a></code> | Override the default S3 cache policies created internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | Distribution to invalidate when assets change. |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.ephemeralStorageSize">ephemeralStorageSize</a></code> | <code>aws-cdk-lib.Size</code> | ephemeralStorageSize for lambda function which been run by BucketDeployment. |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.memoryLimit">memoryLimit</a></code> | <code>number</code> | memoryLimit for lambda function which been run by BucketDeployment. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | Set to true to delete old assets (defaults to false). |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.useEfs">useEfs</a></code> | <code>boolean</code> | In case of useEfs, vpc is required. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | In case of useEfs, vpc is required. |
@@ -3324,6 +3326,30 @@ public readonly distribution: IDistribution;
 - *Type:* aws-cdk-lib.aws_cloudfront.IDistribution
 
 Distribution to invalidate when assets change.
+
+---
+
+##### `ephemeralStorageSize`<sup>Optional</sup> <a name="ephemeralStorageSize" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.ephemeralStorageSize"></a>
+
+```typescript
+public readonly ephemeralStorageSize: Size;
+```
+
+- *Type:* aws-cdk-lib.Size
+
+ephemeralStorageSize for lambda function which been run by BucketDeployment.
+
+---
+
+##### `memoryLimit`<sup>Optional</sup> <a name="memoryLimit" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.memoryLimit"></a>
+
+```typescript
+public readonly memoryLimit: number;
+```
+
+- *Type:* number
+
+memoryLimit for lambda function which been run by BucketDeployment.
 
 ---
 

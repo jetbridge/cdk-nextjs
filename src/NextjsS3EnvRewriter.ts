@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+import * as os from 'os';
 import * as path from 'path';
 import { App, CustomResource, Duration, Token } from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
@@ -9,8 +11,6 @@ import { bundleFunction } from './BundleFunction';
 import { LAMBDA_RUNTIME } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
 import { makeTokenPlaceholder } from './NextjsBuild';
-import * as fs from 'fs';
-import * as os from 'os';
 
 // files to rewrite CloudFormation tokens in environment variables
 export const replaceTokenGlobs = ['**/*.html', '**/*.js', '**/*.cjs', '**/*.mjs', '**/*.json'];

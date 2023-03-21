@@ -2808,7 +2808,6 @@ const imageOptimizationProps: ImageOptimizationProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
-| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextLayer">nextLayer</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a></code> | NextjsLayer - sharp runtime. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
 
 ---
@@ -2969,18 +2968,6 @@ public readonly nextBuild: NextjsBuild;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 The `NextjsBuild` instance representing the built Nextjs application.
-
----
-
-##### `nextLayer`<sup>Required</sup> <a name="nextLayer" id="cdk-nextjs-standalone.ImageOptimizationProps.property.nextLayer"></a>
-
-```typescript
-public readonly nextLayer: NextjsLayer;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a>
-
-NextjsLayer - sharp runtime.
 
 ---
 

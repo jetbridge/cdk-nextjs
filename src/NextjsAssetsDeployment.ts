@@ -1,7 +1,8 @@
 import * as os from 'os';
 import * as path from 'path';
-import { Duration } from 'aws-cdk-lib';
+import { Duration, Size } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import { IVpc } from 'aws-cdk-lib/aws-ec2';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, CacheControl, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { Construct } from 'constructs';
@@ -51,6 +52,26 @@ export interface NextjsAssetsDeploymentProps extends NextjsBaseProps {
    * Recommended to only set to true if you don't need the ability to roll back deployments.
    */
   readonly prune?: boolean;
+
+  /**
+   * In case of useEfs, vpc is required
+   */
+  readonly vpc?: IVpc;
+
+  /**
+   * In case of useEfs, vpc is required
+   */
+  readonly useEfs?: boolean;
+
+  /**
+   * memoryLimit for lambda function which been run by BucketDeployment
+   */
+  readonly memoryLimit?: number;
+
+  /**
+   * ephemeralStorageSize for lambda function which been run by BucketDeployment
+   */
+  readonly ephemeralStorageSize?: Size;
 }
 
 /**
@@ -162,6 +183,10 @@ export class NextJsAssetsDeployment extends Construct {
       sources: [Source.asset(archiveZipFilePath)],
       distribution: this.props.distribution,
       prune: this.props.prune,
+      useEfs: this.props.useEfs,
+      vpc: this.props.vpc,
+      memoryLimit: this.props.memoryLimit,
+      ephemeralStorageSize: this.props.ephemeralStorageSize,
     });
 
     return [deployment];

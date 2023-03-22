@@ -135,7 +135,7 @@ class NextjsSst extends Nextjs {
 
 Hey there, we value every new contribution a lot 🙏🏼 thank you.
 
-Short note to get you started, the right way:
+Here is a short HowTo before you get started:
 
 1. Please make sure to create a bug first
 2. Link the bug in your pull request

@@ -2,14 +2,13 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Duration } from 'aws-cdk-lib';
 import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
+import { FunctionOptions, ILayerVersion } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { LAMBDA_RUNTIME } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
 import type { NextjsBuild } from './NextjsBuild';
-import { NextjsLayer } from './NextjsLayer';
 // import { config } from 'process';
 
 export type RemotePattern = {
@@ -33,7 +32,7 @@ export interface ImageOptimizationProps extends NextjsBaseProps {
   /**
    * NextjsLayer - sharp runtime
    */
-  readonly nextLayer: NextjsLayer;
+  readonly nextLayer: ILayerVersion;
   /**
    * The `NextjsBuild` instance representing the built Nextjs application.
    */

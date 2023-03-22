@@ -131,6 +131,16 @@ class NextjsSst extends Nextjs {
 }
 ```
 
+## Contribute
+
+Hey there, we value every new contribution a lot 🙏🏼 thank you.
+
+Short note to get you started, the right way:
+
+1. Please make sure to create a bug first
+2. Link the bug in your pull request
+3. Run `yarn build` after you made your changes and before you open a pull request
+
 ## Breaking changes
 
 - v2.0.0: SST wrapper changed, lambda/assets/distribution defaults now are in the `defaults` prop, refactored distribution settings into the new NextjsDistribution construct. If you are upgrading, you must temporarily remove the `customDomain` on your existing 1.x.x app before upgrading to >=2.x.x because the CloudFront distribution will get recreated due to refactoring, and the custom domain must be globally unique across all CloudFront distributions. Prepare for downtime.

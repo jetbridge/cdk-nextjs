@@ -2872,10 +2872,11 @@ const imageOptimizationProps: ImageOptimizationProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
-| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextLayer">nextLayer</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a></code> | NextjsLayer - sharp runtime. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextLayer">nextLayer</a></code> | <code>aws-cdk-lib.aws_lambda.ILayerVersion</code> | NextjsLayer - sharp runtime. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
 
 ---
@@ -3001,6 +3002,20 @@ Less build output.
 
 ---
 
+##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.ImageOptimizationProps.property.sharpLayerArn"></a>
+
+```typescript
+public readonly sharpLayerArn: string;
+```
+
+- *Type:* string
+
+Optional arn for the sharp lambda layer.
+
+If omitted, the layer will be created.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.ImageOptimizationProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -3042,10 +3057,10 @@ The `NextjsBuild` instance representing the built Nextjs application.
 ##### `nextLayer`<sup>Required</sup> <a name="nextLayer" id="cdk-nextjs-standalone.ImageOptimizationProps.property.nextLayer"></a>
 
 ```typescript
-public readonly nextLayer: NextjsLayer;
+public readonly nextLayer: ILayerVersion;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsLayer">NextjsLayer</a>
+- *Type:* aws-cdk-lib.aws_lambda.ILayerVersion
 
 NextjsLayer - sharp runtime.
 
@@ -3133,6 +3148,7 @@ const nextjsAssetsDeploymentProps: NextjsAssetsDeploymentProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Properties for the S3 bucket containing the NextJS assets. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
@@ -3264,6 +3280,20 @@ public readonly quiet: boolean;
 - *Type:* boolean
 
 Less build output.
+
+---
+
+##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.sharpLayerArn"></a>
+
+```typescript
+public readonly sharpLayerArn: string;
+```
+
+- *Type:* string
+
+Optional arn for the sharp lambda layer.
+
+If omitted, the layer will be created.
 
 ---
 
@@ -3416,6 +3446,7 @@ const nextjsBaseProps: NextjsBaseProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 
 ---
@@ -3541,6 +3572,20 @@ Less build output.
 
 ---
 
+##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsBaseProps.property.sharpLayerArn"></a>
+
+```typescript
+public readonly sharpLayerArn: string;
+```
+
+- *Type:* string
+
+Optional arn for the sharp lambda layer.
+
+If omitted, the layer will be created.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsBaseProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -3578,6 +3623,7 @@ const nextjsBuildProps: NextjsBuildProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 
 ---
@@ -3700,6 +3746,20 @@ public readonly quiet: boolean;
 - *Type:* boolean
 
 Less build output.
+
+---
+
+##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsBuildProps.property.sharpLayerArn"></a>
+
+```typescript
+public readonly sharpLayerArn: string;
+```
+
+- *Type:* string
+
+Optional arn for the sharp lambda layer.
+
+If omitted, the layer will be created.
 
 ---
 
@@ -3897,6 +3957,7 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.imageOptFunction">imageOptFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to optimize images. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built NextJS app. |
@@ -4029,6 +4090,20 @@ public readonly quiet: boolean;
 - *Type:* boolean
 
 Less build output.
+
+---
+
+##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsDistributionProps.property.sharpLayerArn"></a>
+
+```typescript
+public readonly sharpLayerArn: string;
+```
+
+- *Type:* string
+
+Optional arn for the sharp lambda layer.
+
+If omitted, the layer will be created.
 
 ---
 
@@ -4325,6 +4400,7 @@ const nextjsLambdaProps: NextjsLambdaProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built nextJS application. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
@@ -4452,6 +4528,20 @@ Less build output.
 
 ---
 
+##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsLambdaProps.property.sharpLayerArn"></a>
+
+```typescript
+public readonly sharpLayerArn: string;
+```
+
+- *Type:* string
+
+Optional arn for the sharp lambda layer.
+
+If omitted, the layer will be created.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsLambdaProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -4574,6 +4664,7 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.defaults">defaults</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps">NextjsDefaultsProps</a></code> | Allows you to override defaults for the resources created by this construct. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket">imageOptimizationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Optional S3 Bucket to use, defaults to assets bucket. |
@@ -4701,6 +4792,20 @@ Less build output.
 
 ---
 
+##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsProps.property.sharpLayerArn"></a>
+
+```typescript
+public readonly sharpLayerArn: string;
+```
+
+- *Type:* string
+
+Optional arn for the sharp lambda layer.
+
+If omitted, the layer will be created.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -4762,6 +4867,7 @@ const nextjsS3EnvRewriterProps: NextjsS3EnvRewriterProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.packageManager">packageManager</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
 | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.replacementConfig">replacementConfig</a></code> | <code><a href="#cdk-nextjs-standalone.RewriteReplacementsConfig">RewriteReplacementsConfig</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.s3Bucket">s3Bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | *No description.* |
@@ -4890,6 +4996,20 @@ public readonly quiet: boolean;
 - *Type:* boolean
 
 Less build output.
+
+---
+
+##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.sharpLayerArn"></a>
+
+```typescript
+public readonly sharpLayerArn: string;
+```
+
+- *Type:* string
+
+Optional arn for the sharp lambda layer.
+
+If omitted, the layer will be created.
 
 ---
 

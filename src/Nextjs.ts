@@ -2,7 +2,7 @@ import * as os from 'os';
 import * as path from 'path';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
+import { FunctionOptions, LayerVersion } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
@@ -128,7 +128,9 @@ export class Nextjs extends Construct {
       });
 
     // layer
-    const nextLayer = new NextjsLayer(scope, 'NextjsLayer', {});
+    const nextLayer = props.sharpLayerArn?.length
+      ? LayerVersion.fromLayerVersionArn(scope, 'NextjsLayer', props.sharpLayerArn)
+      : new NextjsLayer(scope, 'NextjsLayer', {});
 
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir });

@@ -23,7 +23,7 @@ import { NextjsBuild } from './NextjsBuild';
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
-export interface NextjsDomainProps extends BaseSiteDomainProps {}
+export interface NextjsDomainProps extends BaseSiteDomainProps { }
 
 export type NextjsDistributionCdkOverrideProps = cloudfront.DistributionProps;
 
@@ -227,8 +227,8 @@ export class NextjsDistribution extends Construct {
     // get dir to store temp build files in
     this.tempBuildDir = props.tempBuildDir
       ? path.resolve(
-          path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
-        )
+        path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
+      )
       : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
 
     // save props
@@ -368,10 +368,11 @@ export class NextjsDistribution extends Construct {
     //   - try lambda handler first (/some-page, etc...)
     //   - if 403, fall back to S3
     //   - if 404, fall back to lambda handler
+    //   - if 503, fall back to lambda handler
     const fallbackOriginGroup = new origins.OriginGroup({
       primaryOrigin: serverFunctionOrigin,
       fallbackOrigin: s3Origin,
-      fallbackStatusCodes: [403, 404],
+      fallbackStatusCodes: [403, 404, 503],
     });
 
     const lambdaCachePolicy = cachePolicies?.lambdaCachePolicy ?? this.createCloudFrontLambdaCachePolicy();

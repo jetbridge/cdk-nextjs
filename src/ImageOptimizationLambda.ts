@@ -1,6 +1,7 @@
+/* eslint-disable prettier/prettier */
 import { Duration } from 'aws-cdk-lib';
 import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Architecture, Code, FunctionOptions, Function } from 'aws-cdk-lib/aws-lambda';
+import { Architecture, Code, Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { LAMBDA_RUNTIME } from './constants';
@@ -42,8 +43,8 @@ export class ImageOptimizationLambda extends Function {
 
     const code = isPlaceholder
       ? Code.fromInline(
-          "module.exports.handler = async () => { return { statusCode: 200, body: 'SST placeholder site' } }"
-        )
+        "module.exports.handler = async () => { return { statusCode: 200, body: 'SST placeholder site' } }"
+      )
       : Code.fromAsset(props.nextBuild.nextImageFnDir);
 
     super(scope, id, {

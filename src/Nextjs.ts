@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import * as os from 'os';
 import * as path from 'path';
 import { RemovalPolicy } from 'aws-cdk-lib';
@@ -16,7 +17,7 @@ import { NextJsLambda } from './NextjsLambda';
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
-export interface NextjsDomainProps extends BaseSiteDomainProps {}
+export interface NextjsDomainProps extends BaseSiteDomainProps { }
 
 /**
  * Defaults for created resources.
@@ -112,8 +113,8 @@ export class Nextjs extends Construct {
     // get dir to store temp build files in
     const tempBuildDir = props.tempBuildDir
       ? path.resolve(
-          path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
-        )
+        path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
+      )
       : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
 
     this.tempBuildDir = tempBuildDir;

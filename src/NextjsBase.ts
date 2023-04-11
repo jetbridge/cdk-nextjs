@@ -66,6 +66,12 @@ export interface NextjsBaseProps {
    * Less build output.
    */
   readonly quiet?: boolean;
+
+  /**
+   * Optional arn for the sharp lambda layer.
+   * If omitted, the layer will be created.
+   */
+  readonly sharpLayerArn?: string;
 }
 
 ///// stuff below taken from https://github.com/serverless-stack/sst/blob/8d377e941467ced81d8cc31ee67d5a06550f04d4/packages/resources/src/BaseSite.ts

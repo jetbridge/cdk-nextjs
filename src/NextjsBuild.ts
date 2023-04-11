@@ -12,7 +12,7 @@ const NEXTJS_BUILD_MIDDLEWARE_FN_DIR = 'middleware-function';
 const NEXTJS_BUILD_IMAGE_FN_DIR = 'image-optimization-function';
 const NEXTJS_BUILD_SERVER_FN_DIR = 'server-function';
 
-export interface NextjsBuildProps extends NextjsBaseProps {}
+export interface NextjsBuildProps extends NextjsBaseProps { }
 
 /**
  * Represents a built NextJS application.
@@ -100,7 +100,7 @@ export class NextjsBuild extends Construct {
     };
 
     const buildPath = this.props.buildPath ?? nextjsPath;
-    const buildCommand = this.props.buildCommand ?? 'npx --yes open-next@latest build';
+    const buildCommand = this.props.buildCommand ?? 'npx --yes open-next build';
     // run build
     console.debug(`├ Running "${buildCommand}" in`, buildPath);
     const cmdParts = buildCommand.split(/\s+/);

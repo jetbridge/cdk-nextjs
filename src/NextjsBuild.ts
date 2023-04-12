@@ -24,7 +24,7 @@ export class NextjsBuild extends Construct {
   /**
    * Contains code for middleware. Not currently used.
    */
-  public nextMiddlewareFnDir: string;
+  public nextMiddlewareFnDir?: string;
   /**
    * Contains server code and dependencies.
    */
@@ -67,7 +67,7 @@ export class NextjsBuild extends Construct {
     this.nextStaticDir = this._getNextStaticDir();
     this.nextImageFnDir = this._getOutputDir(NEXTJS_BUILD_IMAGE_FN_DIR);
     this.nextServerFnDir = this._getOutputDir(NEXTJS_BUILD_SERVER_FN_DIR);
-    this.nextMiddlewareFnDir = this._getOutputDir(NEXTJS_BUILD_MIDDLEWARE_FN_DIR);
+    this.nextMiddlewareFnDir = this._getOutputDir(NEXTJS_BUILD_MIDDLEWARE_FN_DIR, true);
     // this.nextDir = this._getNextDir();
   }
 
@@ -140,12 +140,12 @@ export class NextjsBuild extends Construct {
     return path.join(this._getNextDir(), NEXTJS_BUILD_DIR);
   }
 
-  private _getOutputDir(subdir: string) {
+  private _getOutputDir(subdir: string, silent = false) {
     const nextDir = this._getNextBuildDir();
     const standaloneDir = path.join(nextDir, subdir);
 
     if (!fs.existsSync(standaloneDir) && !this.props.isPlaceholder) {
-      throw new Error(`Could not find ${standaloneDir} directory.`);
+      if (!silent) throw new Error(`Could not find ${standaloneDir} directory.`);
     }
     return standaloneDir;
   }

@@ -23,7 +23,7 @@ import { NextjsBuild } from './NextjsBuild';
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
-export interface NextjsDomainProps extends BaseSiteDomainProps { }
+export interface NextjsDomainProps extends BaseSiteDomainProps {}
 
 export type NextjsDistributionCdkOverrideProps = cloudfront.DistributionProps;
 
@@ -227,8 +227,8 @@ export class NextjsDistribution extends Construct {
     // get dir to store temp build files in
     this.tempBuildDir = props.tempBuildDir
       ? path.resolve(
-        path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
-      )
+          path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
+        )
       : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
 
     // save props

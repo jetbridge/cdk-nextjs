@@ -1560,11 +1560,11 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir">nextImageFnDir</a></code> | <code>string</code> | Contains function for processessing image requests. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextMiddlewareFnDir">nextMiddlewareFnDir</a></code> | <code>string</code> | Contains code for middleware. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextServerFnDir">nextServerFnDir</a></code> | <code>string</code> | Contains server code and dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir">nextStaticDir</a></code> | <code>string</code> | Static files containing client-side code. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.projectRoot">projectRoot</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextMiddlewareFnDir">nextMiddlewareFnDir</a></code> | <code>string</code> | Contains code for middleware. |
 
 ---
 
@@ -1591,20 +1591,6 @@ public readonly nextImageFnDir: string;
 Contains function for processessing image requests.
 
 Should be arm64.
-
----
-
-##### `nextMiddlewareFnDir`<sup>Required</sup> <a name="nextMiddlewareFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextMiddlewareFnDir"></a>
-
-```typescript
-public readonly nextMiddlewareFnDir: string;
-```
-
-- *Type:* string
-
-Contains code for middleware.
-
-Not currently used.
 
 ---
 
@@ -1649,6 +1635,20 @@ public readonly props: NextjsBuildProps;
 ```
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a>
+
+---
+
+##### `nextMiddlewareFnDir`<sup>Optional</sup> <a name="nextMiddlewareFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextMiddlewareFnDir"></a>
+
+```typescript
+public readonly nextMiddlewareFnDir: string;
+```
+
+- *Type:* string
+
+Contains code for middleware.
+
+Not currently used.
 
 ---
 

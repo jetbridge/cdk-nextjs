@@ -526,7 +526,9 @@ export class NextjsDistribution extends Construct {
     const customDomain =
       typeof this.props.customDomain === 'string' ? this.props.customDomain : this.props.customDomain?.domainName;
 
-    return customDomain ? [customDomain] : [];
+    const alternateNames = typeof this.props.customDomain === 'string' ? [] : this.props.customDomain?.alternateNames;
+
+    return customDomain ? [customDomain, ...alternateNames] : [];
   }
 
   /**

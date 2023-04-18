@@ -12,7 +12,7 @@ const NEXTJS_BUILD_MIDDLEWARE_FN_DIR = 'middleware-function';
 const NEXTJS_BUILD_IMAGE_FN_DIR = 'image-optimization-function';
 const NEXTJS_BUILD_SERVER_FN_DIR = 'server-function';
 
-export interface NextjsBuildProps extends NextjsBaseProps {}
+export interface NextjsBuildProps extends NextjsBaseProps { }
 
 /**
  * Represents a built NextJS application.
@@ -108,6 +108,7 @@ export class NextjsBuild extends Construct {
       cwd: buildPath,
       stdio: this.props.quiet ? 'ignore' : 'inherit',
       env: buildEnv,
+      shell: true,
     });
     if (buildResult.status !== 0) {
       throw new Error('The app "build" script failed.');

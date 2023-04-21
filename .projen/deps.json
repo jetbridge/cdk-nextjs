@@ -22,7 +22,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "2.62.2",
+      "version": "2.73.0",
       "type": "build"
     },
     {
@@ -92,6 +92,10 @@
       "type": "build"
     },
     {
+      "name": "open-next",
+      "type": "build"
+    },
+    {
       "name": "prettier",
       "type": "build"
     },
@@ -143,7 +147,7 @@
     },
     {
       "name": "esbuild",
-      "version": "0.15.18",
+      "version": "0.17.16",
       "type": "bundled"
     },
     {
@@ -186,7 +190,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "^2.62.2",
+      "version": "^2.73.0",
       "type": "peer"
     },
     {

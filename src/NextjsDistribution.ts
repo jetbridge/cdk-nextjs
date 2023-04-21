@@ -8,6 +8,7 @@ import { Distribution, ResponseHeadersPolicy } from 'aws-cdk-lib/aws-cloudfront'
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53Patterns from 'aws-cdk-lib/aws-route53-patterns';
 import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
@@ -15,7 +16,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import { bundleFunction } from './BundleFunction';
-import { DEFAULT_STATIC_MAX_AGE, LAMBDA_RUNTIME } from './constants';
+import { DEFAULT_STATIC_MAX_AGE } from './constants';
 import { BaseSiteDomainProps, buildErrorResponsesForRedirectToIndex, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 
@@ -367,10 +368,11 @@ export class NextjsDistribution extends Construct {
     //   - try lambda handler first (/some-page, etc...)
     //   - if 403, fall back to S3
     //   - if 404, fall back to lambda handler
+    //   - if 503, fall back to lambda handler
     const fallbackOriginGroup = new origins.OriginGroup({
       primaryOrigin: serverFunctionOrigin,
       fallbackOrigin: s3Origin,
-      fallbackStatusCodes: [403, 404],
+      fallbackStatusCodes: [403, 404, 503],
     });
 
     const lambdaCachePolicy = cachePolicies?.lambdaCachePolicy ?? this.createCloudFrontLambdaCachePolicy();
@@ -556,7 +558,7 @@ export class NextjsDistribution extends Construct {
     });
 
     const fn = new cloudfront.experimental.EdgeFunction(this, 'DefaultOriginRequestEdgeFn', {
-      runtime: LAMBDA_RUNTIME,
+      runtime: Runtime.NODEJS_16_X,
       // role,
       handler: 'LambdaOriginRequest.handler',
       code: lambda.Code.fromAsset(dirname(outputPath)),

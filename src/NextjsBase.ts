@@ -51,9 +51,9 @@ export interface NextjsBaseProps {
 
   /**
    * Optional value used to install NextJS node dependencies.
-   * It defaults to "npm"
+   * It defaults to 'npx --yes open-next@latest build'
    */
-  readonly packageManager?: 'npm' | 'yarn' | 'pnpm';
+  readonly buildCommand?: string;
 
   /**
    * 0 - no compression, fastest
@@ -138,6 +138,11 @@ export function buildErrorResponsesForRedirectToIndex(indexPage: string): ErrorR
       responsePagePath: `/${indexPage}`,
       responseHttpStatus: 200,
     },
+    {
+      httpStatus: 503,
+      responsePagePath: `/${indexPage}`,
+      responseHttpStatus: 200,
+    },
   ];
 }
 
@@ -149,6 +154,10 @@ export function buildErrorResponsesFor404ErrorPage(errorPage: string): ErrorResp
     },
     {
       httpStatus: 404,
+      responsePagePath: `/${errorPage}`,
+    },
+    {
+      httpStatus: 503,
       responsePagePath: `/${errorPage}`,
     },
   ];

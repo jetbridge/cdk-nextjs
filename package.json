@@ -39,7 +39,7 @@
     "@types/node": "^16",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "aws-cdk-lib": "2.62.2",
+    "aws-cdk-lib": "2.73.0",
     "aws-sdk": "^2.1354.0",
     "constructs": "10.0.5",
     "eslint": "^8",
@@ -55,6 +55,7 @@
     "jsii-docgen": "^7.1.46",
     "jsii-pacmak": "^1.80.0",
     "npm-check-updates": "^16",
+    "open-next": "^0.8.2",
     "prettier": "^2.8.7",
     "projen": "^0.71.7",
     "standard-version": "^9",
@@ -62,7 +63,7 @@
     "typescript": "4.9.5"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "^2.62.2",
+    "aws-cdk-lib": "^2.73.0",
     "constructs": "^10.0.5"
   },
   "dependencies": {
@@ -73,7 +74,7 @@
     "@types/micromatch": "^4.0.2",
     "aws-lambda": "^1.0.7",
     "cross-spawn": "^7.0.3",
-    "esbuild": "0.15.18",
+    "esbuild": "0.17.16",
     "fs-extra": "^10.1.0",
     "glob": "^8.1.0",
     "indent-string": "*",

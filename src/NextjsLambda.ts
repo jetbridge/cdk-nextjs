@@ -9,7 +9,6 @@ import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
-import { bundleFunction } from './BundleFunction';
 import { LAMBDA_RUNTIME } from './constants';
 import { CONFIG_ENV_JSON_PATH } from './Nextjs';
 import { NextjsBaseProps } from './NextjsBase';
@@ -50,32 +49,8 @@ export class NextJsLambda extends Construct {
   constructor(scope: Construct, id: string, props: NextjsLambdaProps) {
     super(scope, id);
     const { nextBuild, lambda: functionOptions, isPlaceholder } = props;
-    // bundle server handler
-    // delete default nextjs handler if it exists
-    const defaultServerPath = path.join(nextBuild.nextStandaloneDir, 'server.js');
-    if (fs.existsSync(defaultServerPath)) {
-      fs.unlinkSync(defaultServerPath);
-    }
 
-    // build our server handler in build.nextStandaloneDir
-    const serverHandler = path.resolve(__dirname, '../assets/lambda/NextJsHandler.ts');
-    // server should live in the same dir as the nextjs app to access deps properly
-    const serverPath = path.join(nextBuild.nextStandaloneDir, 'server.js');
-    bundleFunction({
-      inputPath: serverHandler,
-      outputPath: serverPath,
-      bundleOptions: {
-        bundle: true,
-        minify: false,
-        sourcemap: true,
-        target: 'node16',
-        platform: 'node',
-        external: ['next', 'aws-sdk'],
-        format: 'cjs', // hope one day we can use esm
-      },
-    });
-
-    // zip up the standalone directory
+    // zip up build.nextServerFnDir
     const zipOutDir = path.resolve(
       props.tempBuildDir
         ? path.resolve(path.join(props.tempBuildDir, `standalone`))
@@ -83,8 +58,8 @@ export class NextJsLambda extends Construct {
     );
 
     const zipFilePath = createArchive({
-      directory: nextBuild.standaloneDir,
-      zipFileName: 'standalone.zip',
+      directory: nextBuild.nextServerFnDir,
+      zipFileName: 'serverFn.zip',
       zipOutDir,
       quiet: props.quiet,
     });
@@ -104,7 +79,7 @@ export class NextJsLambda extends Construct {
       memorySize: functionOptions?.memorySize || 1024,
       timeout: functionOptions?.timeout ?? Duration.seconds(10),
       runtime: LAMBDA_RUNTIME,
-      handler: path.join(nextBuild.nextDirRelative, 'server.handler'),
+      handler: path.join('index.handler'),
       code,
       environment,
 

@@ -1,4 +1,3 @@
-import * as os from 'os';
 import * as path from 'path';
 import { Token } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
@@ -7,12 +6,11 @@ import * as fs from 'fs-extra';
 import { listDirectory } from './NextjsAssetsDeployment';
 import { CompressionLevel, NextjsBaseProps } from './NextjsBase';
 
-const NEXTJS_BUILD_DIR = '.next';
-const NEXTJS_STATIC_DIR = 'static';
-const NEXTJS_PUBLIC_DIR = 'public';
-const NEXTJS_BUILD_STANDALONE_DIR = 'standalone';
-const NEXTJS_BUILD_STANDALONE_ENV = 'NEXT_PRIVATE_STANDALONE';
-const NEXTJS_BUILD_OUTPUTTRACEROOT_ENV = 'NEXT_PRIVATE_OUTPUT_TRACE_ROOT';
+const NEXTJS_BUILD_DIR = '.open-next';
+const NEXTJS_STATIC_DIR = 'assets';
+const NEXTJS_BUILD_MIDDLEWARE_FN_DIR = 'middleware-function';
+const NEXTJS_BUILD_IMAGE_FN_DIR = 'image-optimization-function';
+const NEXTJS_BUILD_SERVER_FN_DIR = 'server-function';
 
 export interface NextjsBuildProps extends NextjsBaseProps {}
 
@@ -22,57 +20,32 @@ export interface NextjsBuildProps extends NextjsBaseProps {}
  * This construct can be used by higher level constructs or used directly.
  */
 export class NextjsBuild extends Construct {
-  // build outputs
-  /**
-   * The path to the directory where the server build artifacts are stored.
-   */
-  public buildPath: string;
-
   // build output directories
   /**
-   * Entire NextJS build output directory.
-   * Contains server and client code and manifests.
+   * Contains code for middleware. Not currently used.
    */
-  public standaloneDir: string;
+  public nextMiddlewareFnDir?: string;
   /**
-   * NextJS project inside of standalone build.
-   * Contains .next build and server code and traced dependencies.
+   * Contains server code and dependencies.
    */
-  public nextStandaloneDir: string;
+  public nextServerFnDir: string;
   /**
-   * NextJS build inside of standalone build.
-   * Contains server code and manifests.
+   * Contains function for processessing image requests.
+   * Should be arm64.
    */
-  public nextStandaloneBuildDir: string;
+  public nextImageFnDir: string;
   /**
    * Static files containing client-side code.
    */
   public nextStaticDir: string;
-  /**
-   * Public static files.
-   * E.g. robots.txt, favicon.ico, etc.
-   */
-  public nextPublicDir: string;
-  /**
-   * Relative path from project root to nextjs project.
-   * e.g. 'web' or 'packages/web' or '.'
-   */
-  public nextDirRelative: string;
 
   public props: NextjsBuildProps;
 
-  public tempBuildDir: string;
-
-  public nextDir: string;
+  // public nextDir: string;
   public projectRoot: string;
 
   constructor(scope: Construct, id: string, props: NextjsBuildProps) {
     super(scope, id);
-
-    // save config
-    this.tempBuildDir = props.tempBuildDir
-      ? path.resolve(props.tempBuildDir)
-      : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
     this.props = props;
 
     // validate paths
@@ -91,14 +64,11 @@ export class NextjsBuild extends Construct {
       throw new Error(`No server build output found at "${serverBuildDir}"`);
 
     // our outputs
-    this.standaloneDir = this._getStandaloneDir();
-    this.nextStandaloneDir = this._getNextStandaloneDir();
-    this.nextStandaloneBuildDir = this._getNextStandaloneBuildDir();
-    this.nextDirRelative = this._getNextDirRelative();
-    this.nextPublicDir = this._getNextPublicDir();
     this.nextStaticDir = this._getNextStaticDir();
-    this.buildPath = this.nextStandaloneBuildDir;
-    this.nextDir = this._getNextDir();
+    this.nextImageFnDir = this._getOutputDir(NEXTJS_BUILD_IMAGE_FN_DIR);
+    this.nextServerFnDir = this._getOutputDir(NEXTJS_BUILD_SERVER_FN_DIR);
+    this.nextMiddlewareFnDir = this._getOutputDir(NEXTJS_BUILD_MIDDLEWARE_FN_DIR, true);
+    // this.nextDir = this._getNextDir();
   }
 
   private runNpmBuild() {
@@ -123,24 +93,22 @@ export class NextjsBuild extends Construct {
     }
 
     // build environment vars
-    const outputTracingRoot = this.projectRoot;
     const buildEnv = {
       ...process.env,
-      [NEXTJS_BUILD_STANDALONE_ENV]: 'true',
-      [NEXTJS_BUILD_OUTPUTTRACEROOT_ENV]: outputTracingRoot,
       ...getBuildCmdEnvironment(this.props.environment),
       ...(this.props.nodeEnv ? { NODE_ENV: this.props.nodeEnv } : {}),
     };
 
     const buildPath = this.props.buildPath ?? nextjsPath;
-    const packageManager = this.props.packageManager ?? 'npm';
-    const buildCommand = packageManager === 'yarn' ? ['build'] : ['run', 'build'];
+    const buildCommand = this.props.buildCommand ?? 'npx --yes open-next build';
     // run build
-    console.debug(`├ Running "${packageManager} build" in`, buildPath);
-    const buildResult = spawn.sync(packageManager, buildCommand, {
+    console.debug(`├ Running "${buildCommand}" in`, buildPath);
+    const cmdParts = buildCommand.split(/\s+/);
+    const buildResult = spawn.sync(cmdParts[0], cmdParts.slice(1), {
       cwd: buildPath,
       stdio: this.props.quiet ? 'ignore' : 'inherit',
       env: buildEnv,
+      shell: true,
     });
     if (buildResult.status !== 0) {
       throw new Error('The app "build" script failed.');
@@ -152,7 +120,7 @@ export class NextjsBuild extends Construct {
   // }
 
   readPublicFileList() {
-    const publicDir = this._getNextPublicDir();
+    const publicDir = this._getNextStaticDir();
     if (!fs.existsSync(publicDir)) return [];
     return listDirectory(publicDir).map((file) => path.join('/', path.relative(publicDir, file)));
   }
@@ -168,55 +136,24 @@ export class NextjsBuild extends Construct {
     return absolutePath;
   }
 
-  // get relative path from root of the project to the nextjs project
-  // e.g. 'web' or 'packages/web'
-  private _getNextDirRelative() {
-    const absNextDir = this._getNextDir();
-    const absProjectDir = this.projectRoot;
-    return path.relative(absProjectDir, absNextDir);
-  }
-
   // .next
   private _getNextBuildDir() {
     return path.join(this._getNextDir(), NEXTJS_BUILD_DIR);
   }
 
-  // output of nextjs standalone build
-  private _getStandaloneDir() {
+  private _getOutputDir(subdir: string, silent = false) {
     const nextDir = this._getNextBuildDir();
-    const standaloneDir = path.join(nextDir, NEXTJS_BUILD_STANDALONE_DIR);
+    const standaloneDir = path.join(nextDir, subdir);
 
     if (!fs.existsSync(standaloneDir) && !this.props.isPlaceholder) {
-      throw new Error(`Could not find ${standaloneDir} directory.`);
+      if (!silent) throw new Error(`Could not find ${standaloneDir} directory.`);
     }
     return standaloneDir;
-  }
-
-  // .next/ directory inside of standalone build output directory
-  // contains manifests and server code
-  private _getNextStandaloneBuildDir() {
-    return path.join(this._getNextStandaloneDir(), NEXTJS_BUILD_DIR); // e.g. /home/me/myapp/web/.next/standalone/web/.next
-  }
-
-  // nextjs project inside of standalone build
-  // contains manifests and server code
-  private _getNextStandaloneDir() {
-    const standaloneDir = this._getStandaloneDir();
-
-    // if the project is at /home/me/myapp and the nextjs project is at /home/me/myapp/web
-    // the standalone build of the web app will be at /home/me/myapp/web/.next/standalone/web
-    // so we need to get the relative path from the standalone dir to the nextjsPath
-    const relativePath = this._getNextDirRelative(); // e.g. 'web
-    const standaloneProjectDir = path.join(standaloneDir, relativePath); // e.g. /home/me/myapp/web/.next/standalone/web
-    return standaloneProjectDir;
   }
 
   // contains static files
   private _getNextStaticDir() {
     return path.join(this._getNextBuildDir(), NEXTJS_STATIC_DIR);
-  }
-  private _getNextPublicDir() {
-    return path.join(this._getNextDir(), NEXTJS_PUBLIC_DIR);
   }
 }
 

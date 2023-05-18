@@ -189,14 +189,31 @@ export function createArchive({
   }
 
   // run script to create zipfile, preserving symlinks for node_modules (e.g. pnpm structure)
-  const result = spawn.sync(
-    'bash', // getting ENOENT when specifying 'node' here for some reason
-    [
-      quiet ? '-c' : '-xc',
-      [`cd '${directory}'`, `zip -ryq${compressionLevel} '${zipFilePath}' ${fileGlob}`].join('&&'),
-    ],
-    { stdio: 'inherit' }
-  );
+  let result;
+  const isWindows = process.platform === 'win32';
+  if (isWindows) {
+    const psCompressionLevel = compressionLevel === 0 ? 'NoCompression' : 'Fastest';
+    result = spawn.sync(
+      'powershell.exe',
+      [
+        '-NoLogo',
+        '-NoProfile',
+        '-NonInteractive',
+        '-Command',
+        `Compress-Archive -Path '${directory}\\*' -DestinationPath '${zipFilePath}' -CompressionLevel ${psCompressionLevel}`,
+      ],
+      { stdio: 'inherit' }
+    );
+  } else {
+    result = spawn.sync(
+      'bash', // getting ENOENT when specifying 'node' here for some reason
+      [
+        quiet ? '-c' : '-xc',
+        [`cd '${directory}'`, `zip -ryq${compressionLevel} '${zipFilePath}' ${fileGlob}`].join('&&'),
+      ],
+      { stdio: 'inherit' }
+    );
+  }
   if (result.status !== 0) {
     throw new Error(`There was a problem generating the package for ${zipFileName} with ${directory}: ${result.error}`);
   }

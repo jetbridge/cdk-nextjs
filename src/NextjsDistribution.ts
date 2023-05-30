@@ -6,7 +6,7 @@ import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import { Distribution, ResponseHeadersPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
-import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
+import { PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as route53 from 'aws-cdk-lib/aws-route53';
@@ -126,6 +126,12 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
    * It defaults to "Nextjs"
    */
   readonly stackPrefix?: string;
+
+  /**
+   * Override lambda function url auth type
+   * @default "NONE"
+   */
+  readonly functionUrlAuthType?: lambda.FunctionUrlAuthType;
 }
 
 /**
@@ -330,27 +336,28 @@ export class NextjsDistribution extends Construct {
     const lambdaOriginRequestPolicy =
       originRequestPolicies?.lambdaOriginRequestPolicy ?? this.createLambdaOriginRequestPolicy();
 
+    const fnUrlAuthType: lambda.FunctionUrlAuthType = this.props.functionUrlAuthType || lambda.FunctionUrlAuthType.NONE;
+    const isFnUrlIamAuth = fnUrlAuthType === lambda.FunctionUrlAuthType.AWS_IAM;
     // main server function origin (lambda URL HTTP origin)
-    const fnUrl = this.props.serverFunction.addFunctionUrl({
-      authType: lambda.FunctionUrlAuthType.NONE,
-    });
-    const serverFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), {
-      customHeaders: {
-        // provide config to edge lambda function
-        'x-origin-url': fnUrl.url,
-      },
-    });
+    const fnUrl = this.props.serverFunction.addFunctionUrl({ authType: fnUrlAuthType });
+    const serverFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url));
 
     // Image Optimization
-    const imageOptFnUrl = this.props.imageOptFunction.addFunctionUrl({
-      authType: lambda.FunctionUrlAuthType.NONE,
-    });
+    const imageOptFnUrl = this.props.imageOptFunction.addFunctionUrl({ authType: fnUrlAuthType });
     const imageOptFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(imageOptFnUrl.url));
     const imageOptORP =
       originRequestPolicies?.imageOptimizationOriginRequestPolicy ?? this.createImageOptimizationOriginRequestPolicy();
 
     // lambda behavior edge function
     const lambdaOriginRequestEdgeFn = this.buildLambdaOriginRequestEdgeFunction();
+    if (isFnUrlIamAuth) {
+      lambdaOriginRequestEdgeFn.addToRolePolicy(
+        new PolicyStatement({
+          actions: ['lambda:InvokeFunctionUrl'],
+          resources: [this.props.serverFunction.functionArn, this.props.imageOptFunction.functionArn],
+        })
+      );
+    }
     const lambdaOriginRequestEdgeFnVersion = lambda.Version.fromVersionArn(
       this,
       'Version',
@@ -360,7 +367,7 @@ export class NextjsDistribution extends Construct {
       {
         eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
         functionVersion: lambdaOriginRequestEdgeFnVersion,
-        includeBody: false,
+        includeBody: isFnUrlIamAuth,
       },
     ];
 
@@ -415,6 +422,17 @@ export class NextjsDistribution extends Construct {
       edgeLambdas: lambdaOriginEdgeFns,
     };
 
+    const imageBehavior: cloudfront.BehaviorOptions = {
+      viewerProtocolPolicy,
+      origin: imageOptFunctionOrigin,
+      allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+      cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
+      compress: true,
+      cachePolicy: imageCachePolicy,
+      originRequestPolicy: imageOptORP,
+      edgeLambdas: isFnUrlIamAuth ? lambdaOriginEdgeFns : [],
+    };
+
     // requests to fallback origin group (default behavior)
     // used for S3 and lambda. would prefer to forward all headers to lambda but need to strip out host
     // TODO: try to do this with headers whitelist or edge lambda
@@ -456,15 +474,7 @@ export class NextjsDistribution extends Construct {
         '_next/data/*': lambdaBehavior,
 
         // dynamic images go to lambda
-        '_next/image*': {
-          viewerProtocolPolicy,
-          origin: imageOptFunctionOrigin,
-          allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
-          cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
-          compress: true,
-          cachePolicy: imageCachePolicy,
-          originRequestPolicy: imageOptORP,
-        },
+        '_next/image*': imageBehavior,
 
         // known static routes
         // it would be nice to create routes for all the static files we know of
@@ -546,7 +556,11 @@ export class NextjsDistribution extends Construct {
     const app = App.of(this) as App;
 
     // bundle the edge function
-    const inputPath = path.join(__dirname, '..', 'assets', 'lambda@edge', 'LambdaOriginRequest');
+    const fileName =
+      this.props.functionUrlAuthType === lambda.FunctionUrlAuthType.NONE
+        ? 'LambdaOriginRequestNoAuth'
+        : 'LambdaOriginRequestIamAuth';
+    const inputPath = path.join(__dirname, '..', 'assets', 'lambda@edge', fileName);
     const outputPath = path.join(this.tempBuildDir, 'lambda@edge', 'LambdaOriginRequest.js');
     bundleFunction({
       inputPath,
@@ -561,7 +575,7 @@ export class NextjsDistribution extends Construct {
     });
 
     const fn = new cloudfront.experimental.EdgeFunction(this, 'DefaultOriginRequestEdgeFn', {
-      runtime: Runtime.NODEJS_16_X,
+      runtime: Runtime.NODEJS_18_X,
       // role,
       handler: 'LambdaOriginRequest.handler',
       code: lambda.Code.fromAsset(dirname(outputPath)),

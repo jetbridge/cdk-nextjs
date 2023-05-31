@@ -1,11 +1,6 @@
-import type { CloudFrontRequestEvent, CloudFrontRequestHandler } from 'aws-lambda';
-import { cfHeadersToHeaderBag, signRequest } from './LambdaOriginRequestIamAuth';
+import type { CloudFrontRequestEvent } from 'aws-lambda';
+import { signRequest } from './LambdaOriginRequestIamAuth';
 
-type CloudFrontRequestContext = Parameters<CloudFrontRequestHandler>[1];
-
-/**
- * Simple test to debug lambda@edge functions
- */
 describe('LambdaOriginRequestIamAuth', () => {
   test('signRequest should add x-amz headers', async () => {
     // dummy AWS credentials
@@ -16,50 +11,6 @@ describe('LambdaOriginRequestIamAuth', () => {
     const securityHeaders = ['x-amz-date', 'x-amz-security-token', 'x-amz-content-sha256', 'authorization'];
     const hasSignedHeaders = securityHeaders.every((h) => h in request.headers);
     expect(hasSignedHeaders).toBe(true);
-  });
-
-  test('cfHeadersToHeaderBag should transform correctly', () => {
-    const cfHeaders = {
-      host: [
-        {
-          key: 'Host',
-          value: 'd6b8brjqfujeb.cloudfront.net',
-        },
-      ],
-      'accept-language': [
-        {
-          key: 'Accept-Language',
-          value: 'en-US,en;q=0.9',
-        },
-      ],
-    };
-    const headerBag = cfHeadersToHeaderBag(cfHeaders);
-    expect(headerBag).toEqual({
-      host: 'd6b8brjqfujeb.cloudfront.net',
-      'accept-language': 'en-US,en;q=0.9',
-    });
-  });
-
-  test('cfHeadersToHeaderBag should transform correctly', () => {
-    const cfHeaders = {
-      host: [
-        {
-          key: 'Host',
-          value: 'd6b8brjqfujeb.cloudfront.net',
-        },
-      ],
-      'accept-language': [
-        {
-          key: 'Accept-Language',
-          value: 'en-US,en;q=0.9',
-        },
-      ],
-    };
-    const headerBag = cfHeadersToHeaderBag(cfHeaders);
-    expect(headerBag).toEqual({
-      host: 'd6b8brjqfujeb.cloudfront.net',
-      'accept-language': 'en-US,en;q=0.9',
-    });
   });
 });
 

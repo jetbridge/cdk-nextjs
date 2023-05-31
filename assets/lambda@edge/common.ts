@@ -14,16 +14,16 @@ export function handleS3Request(request: CloudFrontRequest) {
 }
 
 /**
- * This fixes the "host" header to be the host of the origin.
- * The origin is the lambda server function URL.
- * If we don't provide its expected "host", it will not know how to route the request.
+ * This tries to fix the "host" header to be the host of the origin. The origin
+ * is the lambda server function URL. If we don't provide its expected "host",
+ * it will not know how to route the request.
  */
 export function fixHostHeader(request: CloudFrontRequest) {
   const originDomainName = request.origin?.custom?.domainName;
-  if (!originDomainName) throw new Error('Origin domain is missing');
-
-  // fix host header and pass along the original host header
-  const originalHost = request.headers.host[0].value;
-  request.headers['x-forwarded-host'] = [{ key: 'x-forwarded-host', value: originalHost }];
-  request.headers.host = [{ key: 'host', value: originDomainName }];
+  if (originDomainName) {
+    // fix host header and pass along the original host header
+    const originalHost = request.headers.host[0].value;
+    request.headers['x-forwarded-host'] = [{ key: 'x-forwarded-host', value: originalHost }];
+    request.headers.host = [{ key: 'host', value: originDomainName }];
+  }
 }

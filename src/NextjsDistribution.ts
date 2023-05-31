@@ -201,9 +201,13 @@ export class NextjsDistribution extends Construct {
   };
 
   public static imageOptimizationOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
+    cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
+    // NOTE: if `NextjsDistributionProps.functionUrlAuthType` is set to AWS_IAM
+    // auth, then the assets/lambda@edge/LambdaOriginRequestIamAuth.ts file
+    // needs to be updated to exclude these query strings/headers (below) from
+    // the signature calculation. Otherwise you'll get signature mismatch error.
     queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.allowList('q', 'w', 'url'),
     headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList('accept'),
-    cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
     comment: 'Nextjs Image Optimization Origin Request Policy',
   };
 
@@ -298,6 +302,10 @@ export class NextjsDistribution extends Construct {
     return this.distribution.distributionDomainName;
   }
 
+  private get isFnUrlIamAuth() {
+    return this.props.functionUrlAuthType === lambda.FunctionUrlAuthType.AWS_IAM;
+  }
+
   /////////////////////
   // CloudFront Distribution
   /////////////////////
@@ -337,7 +345,6 @@ export class NextjsDistribution extends Construct {
       originRequestPolicies?.lambdaOriginRequestPolicy ?? this.createLambdaOriginRequestPolicy();
 
     const fnUrlAuthType: lambda.FunctionUrlAuthType = this.props.functionUrlAuthType || lambda.FunctionUrlAuthType.NONE;
-    const isFnUrlIamAuth = fnUrlAuthType === lambda.FunctionUrlAuthType.AWS_IAM;
     // main server function origin (lambda URL HTTP origin)
     const fnUrl = this.props.serverFunction.addFunctionUrl({ authType: fnUrlAuthType });
     const serverFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url));
@@ -350,7 +357,7 @@ export class NextjsDistribution extends Construct {
 
     // lambda behavior edge function
     const lambdaOriginRequestEdgeFn = this.buildLambdaOriginRequestEdgeFunction();
-    if (isFnUrlIamAuth) {
+    if (this.isFnUrlIamAuth) {
       lambdaOriginRequestEdgeFn.addToRolePolicy(
         new PolicyStatement({
           actions: ['lambda:InvokeFunctionUrl'],
@@ -367,7 +374,7 @@ export class NextjsDistribution extends Construct {
       {
         eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
         functionVersion: lambdaOriginRequestEdgeFnVersion,
-        includeBody: isFnUrlIamAuth,
+        includeBody: this.isFnUrlIamAuth,
       },
     ];
 
@@ -430,7 +437,7 @@ export class NextjsDistribution extends Construct {
       compress: true,
       cachePolicy: imageCachePolicy,
       originRequestPolicy: imageOptORP,
-      edgeLambdas: isFnUrlIamAuth ? lambdaOriginEdgeFns : [],
+      edgeLambdas: this.isFnUrlIamAuth ? lambdaOriginEdgeFns : [],
     };
 
     // requests to fallback origin group (default behavior)
@@ -576,7 +583,6 @@ export class NextjsDistribution extends Construct {
 
     const fn = new cloudfront.experimental.EdgeFunction(this, 'DefaultOriginRequestEdgeFn', {
       runtime: Runtime.NODEJS_18_X,
-      // role,
       handler: 'LambdaOriginRequest.handler',
       code: lambda.Code.fromAsset(dirname(outputPath)),
       currentVersionOptions: {

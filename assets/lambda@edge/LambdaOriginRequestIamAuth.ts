@@ -4,9 +4,9 @@ import type { CloudFrontHeaders, CloudFrontRequest, CloudFrontRequestHandler } f
 import { fixHostHeader, handleS3Request } from './common';
 
 /**
- * This fixes the "host" header to be the host of the origin.
- * The origin is the lambda server function URL.
- * If we don't provide its expected "host", it will not know how to route the request.
+ * This Lambda@Edge handler fixes s3 requests, fixes the host header, and
+ * signs requests as they're destined for Lambda Function URL that requires
+ * IAM Auth.
  */
 export const handler: CloudFrontRequestHandler = async (event) => {
   const request = event.Records[0].cf.request;
@@ -30,7 +30,7 @@ let sigv4: SignatureV4;
  * functions.
  * @link https://medium.com/@dario_26152/restrict-access-to-lambda-functionurl-to-cloudfront-using-aws-iam-988583834705
  */
-async function signRequest(request: CloudFrontRequest) {
+export async function signRequest(request: CloudFrontRequest) {
   if (!sigv4) {
     sigv4 = getSigV4();
   }
@@ -42,6 +42,7 @@ async function signRequest(request: CloudFrontRequest) {
     body = Buffer.from(request.body.data, 'base64').toString();
   }
   const query = queryStringToQuery(request.querystring);
+  console.log({ query, querystring: request.querystring });
   const signed = await sigv4.sign({
     method: request.method,
     headers: headerBag,
@@ -80,7 +81,7 @@ type HeaderBag = Record<string, string>;
  * Converts CloudFront headers (can have array of header values) to simple
  * header bag (object) required by `sigv4.sign`
  */
-function cfHeadersToHeaderBag(cfHeaders: CloudFrontHeaders): HeaderBag {
+export function cfHeadersToHeaderBag(cfHeaders: CloudFrontHeaders): HeaderBag {
   let headerBag: HeaderBag = {};
   for (const [header, values] of Object.entries(cfHeaders)) {
     headerBag[header] = values[0].value;
@@ -91,7 +92,7 @@ function cfHeadersToHeaderBag(cfHeaders: CloudFrontHeaders): HeaderBag {
 /**
  * Converts simple header bag (object) to CloudFront headers
  */
-function headerBagToCfHeaders(headerBag: HeaderBag): CloudFrontHeaders {
+export function headerBagToCfHeaders(headerBag: HeaderBag): CloudFrontHeaders {
   const cfHeaders: CloudFrontHeaders = {};
   for (const [header, value] of Object.entries(headerBag)) {
     cfHeaders[header] = [{ key: header, value }];

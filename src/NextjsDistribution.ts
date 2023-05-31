@@ -558,7 +558,7 @@ export class NextjsDistribution extends Construct {
     // bundle the edge function
     const fileName =
       this.props.functionUrlAuthType === lambda.FunctionUrlAuthType.NONE
-        ? 'LambdaOriginRequestNoAuth'
+        ? 'LambdaOriginRequest'
         : 'LambdaOriginRequestIamAuth';
     const inputPath = path.join(__dirname, '..', 'assets', 'lambda@edge', fileName);
     const outputPath = path.join(this.tempBuildDir, 'lambda@edge', 'LambdaOriginRequest.js');
@@ -569,7 +569,7 @@ export class NextjsDistribution extends Construct {
         bundle: true,
         external: ['aws-sdk', 'url'],
         minify: true,
-        target: 'node16',
+        target: 'node18',
         platform: 'node',
       },
     });

@@ -118,7 +118,15 @@
       "type": "build"
     },
     {
+      "name": "@aws-crypto/sha256-js",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/client-s3",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/signature-v4",
       "type": "bundled"
     },
     {

@@ -67,7 +67,9 @@
     "constructs": "^10.0.5"
   },
   "dependencies": {
+    "@aws-crypto/sha256-js": "^4.0.0",
     "@aws-sdk/client-s3": "^3.310.0",
+    "@aws-sdk/signature-v4": "^3.341.0",
     "@types/aws-lambda": "^8.10.114",
     "@types/cross-spawn": "^6.0.2",
     "@types/fs-extra": "^9.0.13",
@@ -84,7 +86,9 @@
     "serverless-http": "^3.2.0"
   },
   "bundledDependencies": [
+    "@aws-crypto/sha256-js",
     "@aws-sdk/client-s3",
+    "@aws-sdk/signature-v4",
     "@types/aws-lambda",
     "@types/cross-spawn",
     "@types/fs-extra",

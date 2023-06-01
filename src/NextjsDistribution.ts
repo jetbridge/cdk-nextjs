@@ -167,7 +167,7 @@ export class NextjsDistribution extends Construct {
    */
   public static lambdaCachePolicyProps: cloudfront.CachePolicyProps = {
     queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-    headerBehavior: cloudfront.CacheHeaderBehavior.none(),
+    headerBehavior: cloudfront.CacheHeaderBehavior.allowList('rsc', 'next-router-prefetch', 'next-router-state-tree'),
     cookieBehavior: cloudfront.CacheCookieBehavior.all(),
     defaultTtl: Duration.seconds(0),
     maxTtl: Duration.days(365),

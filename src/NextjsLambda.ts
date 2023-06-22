@@ -1,6 +1,6 @@
 import * as os from 'os';
 import * as path from 'path';
-import { Duration, RemovalPolicy, Token } from 'aws-cdk-lib';
+import { Duration, PhysicalName, RemovalPolicy, Stack, Token } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
@@ -82,7 +82,10 @@ export class NextJsLambda extends Construct {
       handler: path.join('index.handler'),
       code,
       environment,
-
+      // prevents "Resolution error: Cannot use resource in a cross-environment
+      // fashion, the resource's physical name must be explicit set or use
+      // PhysicalName.GENERATE_IF_NEEDED."
+      functionName: Stack.of(this).region !== 'us-east-1' ? PhysicalName.GENERATE_IF_NEEDED : undefined,
       ...functionOptions,
     });
     this.lambdaFunction = fn;

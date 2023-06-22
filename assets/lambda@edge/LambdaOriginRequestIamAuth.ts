@@ -4,6 +4,8 @@ import { SignatureV4 } from '@aws-sdk/signature-v4';
 import type { CloudFrontHeaders, CloudFrontRequest, CloudFrontRequestHandler } from 'aws-lambda';
 import { fixHostHeader, handleS3Request } from './common';
 
+const debug = false;
+
 /**
  * This Lambda@Edge handler fixes s3 requests, fixes the host header, and
  * signs requests as they're destined for Lambda Function URL that requires
@@ -11,16 +13,22 @@ import { fixHostHeader, handleS3Request } from './common';
  */
 export const handler: CloudFrontRequestHandler = async (event) => {
   const request = event.Records[0].cf.request;
-  // console.log('request', JSON.stringify(request, null, 2));
+  if (debug) console.log('request', JSON.stringify(request, null, 2));
 
   handleS3Request(request);
   fixHostHeader(request);
-  await signRequest(request);
-  // console.log(JSON.stringify(request), null, 2);
+  if (isLambdaUrlRequest(request)) {
+    await signRequest(request);
+  }
+  if (debug) console.log(JSON.stringify(request), null, 2);
   return request;
 };
 
 let sigv4: SignatureV4;
+
+export function isLambdaUrlRequest(request: CloudFrontRequest) {
+  return /[a-z0-9]+\.lambda-url\.[a-z0-9-]+\.on\.aws/.test(request.origin?.custom?.domainName || '');
+}
 
 /**
  * When `NextjsDistributionProps.functionUrlAuthType` is set to
@@ -33,7 +41,8 @@ let sigv4: SignatureV4;
  */
 export async function signRequest(request: CloudFrontRequest) {
   if (!sigv4) {
-    sigv4 = getSigV4();
+    const region = getRegionFromLambdaUrl(request.origin?.custom?.domainName || '');
+    sigv4 = getSigV4(region);
   }
   const headerBag = cfHeadersToHeaderBag(request);
   let body: string | undefined;
@@ -53,8 +62,7 @@ export async function signRequest(request: CloudFrontRequest) {
   request.headers = headerBagToCfHeaders(signed.headers);
 }
 
-function getSigV4(): SignatureV4 {
-  const region = process.env.AWS_REGION;
+function getSigV4(region: string): SignatureV4 {
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
   const sessionToken = process.env.AWS_SESSION_TOKEN;
@@ -72,6 +80,12 @@ function getSigV4(): SignatureV4 {
     },
     sha256: Sha256,
   });
+}
+
+export function getRegionFromLambdaUrl(url: string): string {
+  const region = url.split('.').at(2);
+  if (!region) throw new Error("Region couldn't be extracted from Lambda Function URL");
+  return region;
 }
 
 type HeaderBag = Record<string, string>;

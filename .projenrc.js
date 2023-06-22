@@ -42,7 +42,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   devDeps: ['open-next', 'aws-sdk', 'constructs'] /* Build dependencies for this module. */,
   jestOptions: {
     jestConfig: {
-      testMatch: ['<rootDir>/src/**/__tests__/**/*.ts?(x)', '<rootDir>/(test|src)/**/*(*.)@(spec|test|assets).ts?(x)'],
+      testMatch: ['<rootDir>/src/**/__tests__/**/*.ts?(x)', '<rootDir>/(test|src|assets)/**/*(*.)@(spec|test).ts?(x)'],
     },
   },
 

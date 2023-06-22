@@ -76,6 +76,9 @@ Here is a short HowTo before you get started:
 2. Link the bug in your pull request
 3. Run `yarn build` after you made your changes and before you open a pull request
 
+### Projen
+Don't manually update package.json or use npm CLI. Update dependencies in .projenrc.js then run npm projen.
+
 ## Breaking changes
 
 - v3.0.0: Using open-next for building, ARM64 architecture for image handling, new build options.

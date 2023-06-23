@@ -30,6 +30,49 @@ new Nextjs(this, 'Web', {
 
 Available on [Construct Hub](https://constructs.dev/packages/cdk-nextjs-standalone/).
 
+## Customization
+
+### Increased Security
+```ts
+import { RemovalPolicy, Stack } from "aws-cdk-lib";
+import { Construct } from "constructs";
+import { CfnWebAcl } from "aws-cdk-lib/aws-wafv2";
+import { SecurityPolicyProtocol, type DistributionProps } from "aws-cdk-lib/aws-cloudfront";
+import { Nextjs, type NextjsDistributionProps } from "cdk-nextjs-standalone";
+import { Bucket, BlockPublicAccess, BucketEncryption } from "aws-cdk-lib/aws-s3";
+
+// Because of `WebAcl`, this stack must be deployed in us-east-1. If you want
+// to deploy Nextjs in another region, add WAF in separate stack deployed in us-east-1
+export class UiStack {
+  constructor(scope: Construct, id: string) {
+    const webAcl = new CfnWebAcl(this, "WebAcl", { ... });
+    new Nextjs(this, "NextSite", {
+      nextjsPath: "...",
+      defaults: {
+        assetDeployment: {
+          bucket: new Bucket(this, "NextjsAssetDeploymentBucket", {
+            autoDeleteObjects: true,
+            removalPolicy: RemovalPolicy.DESTROY,
+            encryption: BucketEncryption.S3_MANAGED,
+            enforceSSL: true,
+            blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+          }),
+        },
+        distribution: {
+          functionUrlAuthType: FunctionUrlAuthType.AWS_IAM,
+          cdk: {
+            distribution: {
+              webAclId: webAcl.attrArn,
+              minimumProtocolVersion: SecurityPolicyProtocol.TLS_V1_2_2021,
+            } as DistributionProps,
+          },
+        } satisfies Partial<NextjsDistributionProps>,
+      },
+    });
+  }
+}
+```
+
 ### Discord Chat
 
 We're in the #open-next channel on the [Serverless Stack Discord](https://discord.gg/sst).

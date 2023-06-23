@@ -77,7 +77,7 @@ Here is a short HowTo before you get started:
 3. Run `yarn build` after you made your changes and before you open a pull request
 
 ### Projen
-Don't manually update package.json or use npm CLI. Update dependencies in .projenrc.js then run npm projen.
+Don't manually update package.json or use npm CLI. Update dependencies in .projenrc.js then run yarn projen.
 
 ## Breaking changes
 

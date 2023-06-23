@@ -1,4 +1,4 @@
-const { awscdk } = require('projen');
+const { awscdk, JsonPatch } = require('projen');
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'JetBridge',
   authorAddress: 'mischa@jetbridge.com',
@@ -40,15 +40,19 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@aws-crypto/sha256-js',
   ] /* Runtime dependencies of this module. */,
   devDeps: ['open-next', 'aws-sdk', 'constructs'] /* Build dependencies for this module. */,
-  jestOptions: {
-    jestConfig: {
-      testMatch: ['<rootDir>/src/**/__tests__/**/*.ts?(x)', '<rootDir>/(test|src)/**/*(*.)@(spec|test|assets).ts?(x)'],
-    },
-  },
 
   // do not generate sample test files
   sampleCode: false,
 });
+const packageJson = project.tryFindObjectFile('package.json');
+if (packageJson) {
+  packageJson.patch(
+    JsonPatch.replace('/jest/testMatch', [
+      '<rootDir>/src/**/__tests__/**/*.ts?(x)',
+      '<rootDir>/(test|src|assets)/**/*(*.)@(spec|test).ts?(x)',
+    ])
+  );
+}
 // project.eslint.addOverride({
 //   rules: {},
 // });

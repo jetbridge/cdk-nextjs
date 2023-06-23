@@ -1,20 +1,34 @@
 import type { CloudFrontRequestEvent } from 'aws-lambda';
-import { signRequest } from './LambdaOriginRequestIamAuth';
+import { getRegionFromLambdaUrl, isLambdaUrlRequest, signRequest } from './LambdaOriginRequestIamAuth';
 
 describe('LambdaOriginRequestIamAuth', () => {
   test('signRequest should add x-amz headers', async () => {
     // dummy AWS credentials
     process.env = { ...process.env, ...getFakeAwsCreds() };
-    const event = getFakeCloudFrontRequest();
+    const event = getFakeCloudFrontLambdaUrlRequest();
     const request = event.Records[0].cf.request;
     await signRequest(request);
     const securityHeaders = ['x-amz-date', 'x-amz-security-token', 'x-amz-content-sha256', 'authorization'];
     const hasSignedHeaders = securityHeaders.every((h) => h in request.headers);
     expect(hasSignedHeaders).toBe(true);
   });
+
+  test('isLambdaFunctionUrl should correctly identity Lambda URL', () => {
+    const event = getFakeCloudFrontLambdaUrlRequest();
+    const request = event.Records[0].cf.request;
+    const actual = isLambdaUrlRequest(request);
+    expect(actual).toBe(true);
+  });
+
+  test('getRegionFromLambdaUrl should correctly get region', () => {
+    const event = getFakeCloudFrontLambdaUrlRequest();
+    const request = event.Records[0].cf.request;
+    const actual = getRegionFromLambdaUrl(request.origin?.custom?.domainName || '');
+    expect(actual).toBe('us-east-1');
+  });
 });
 
-function getFakeCloudFrontRequest(): CloudFrontRequestEvent {
+function getFakeCloudFrontLambdaUrlRequest(): CloudFrontRequestEvent {
   return {
     Records: [
       {
@@ -43,7 +57,7 @@ function getFakeCloudFrontRequest(): CloudFrontRequestEvent {
               referer: [
                 {
                   key: 'Referer',
-                  value: 'https://d6b8brjqfujeb.cloudfront.net/batches/2/overview',
+                  value: 'https://d6b8brjqfujeb.cloudfront.net/some/path',
                 },
               ],
               'x-forwarded-for': [

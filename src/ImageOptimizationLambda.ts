@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Duration } from 'aws-cdk-lib';
+import { Duration, PhysicalName, Stack } from 'aws-cdk-lib';
 import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Architecture, Code, Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
@@ -52,6 +52,10 @@ export class ImageOptimizationLambda extends Function {
       handler: 'index.handler',
       runtime: LAMBDA_RUNTIME,
       architecture: Architecture.ARM_64,
+      // prevents "Resolution error: Cannot use resource in a cross-environment
+      // fashion, the resource's physical name must be explicit set or use
+      // PhysicalName.GENERATE_IF_NEEDED."
+      functionName: Stack.of(scope).region !== 'us-east-1' ? PhysicalName.GENERATE_IF_NEEDED : undefined,
       ...lambdaOptions,
       // defaults
       memorySize: lambdaOptions?.memorySize || 1024,

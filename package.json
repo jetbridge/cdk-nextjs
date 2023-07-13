@@ -17,6 +17,7 @@
     "eslint": "npx projen eslint",
     "package": "npx projen package",
     "package-all": "npx projen package-all",
+    "package:java": "npx projen package:java",
     "package:js": "npx projen package:js",
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
@@ -167,7 +168,15 @@
   "stability": "stable",
   "jsii": {
     "outdir": "dist",
-    "targets": {},
+    "targets": {
+      "java": {
+        "package": "com.jetbridge.cdknextjsstandalone",
+        "maven": {
+          "groupId": "com.jetbridge",
+          "artifactId": "cdk-nextjs-standalone"
+        }
+      }
+    },
     "tsc": {
       "outDir": "lib",
       "rootDir": "src"

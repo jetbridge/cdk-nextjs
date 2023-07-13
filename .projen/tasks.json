@@ -163,6 +163,18 @@
       "steps": [
         {
           "spawn": "package:js"
+        },
+        {
+          "spawn": "package:java"
+        }
+      ]
+    },
+    "package:java": {
+      "name": "package:java",
+      "description": "Create java language bindings",
+      "steps": [
+        {
+          "exec": "jsii-pacmak -v --target java"
         }
       ]
     },

@@ -13,11 +13,12 @@ import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
 import { NextJsLambda } from './NextjsLambda';
+import { NextjsRevaluation } from './NextjsRevaluation';
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
-export interface NextjsDomainProps extends BaseSiteDomainProps { }
+export interface NextjsDomainProps extends BaseSiteDomainProps {}
 
 /**
  * Defaults for created resources.
@@ -99,6 +100,11 @@ export class Nextjs extends Construct {
    */
   public tempBuildDir: string;
 
+  /**
+   * Revalidation handler and queue.
+   */
+  public revalidation: NextjsRevaluation;
+
   public configBucket?: s3.Bucket;
   public lambdaFunctionUrl!: lambda.FunctionUrl;
   public imageOptimizationLambdaFunctionUrl!: lambda.FunctionUrl;
@@ -134,6 +140,7 @@ export class Nextjs extends Construct {
       tempBuildDir,
       nextBuild: this.nextBuild,
       lambda: props.defaults?.lambda,
+      cacheBucket: this.staticAssetBucket,
     });
     // build image optimization
     this.imageOptimizationFunction = new ImageOptimizationLambda(this, 'ImgOptFn', {
@@ -159,6 +166,12 @@ export class Nextjs extends Construct {
     } else {
       this.serverFunction.lambdaFunction.node.addDependency(...this.assetsDeployment.deployments);
     }
+
+    this.revalidation = new NextjsRevaluation(this, 'Revaluation', {
+      ...props,
+      nextBuild: this.nextBuild,
+      serverFunction: this.serverFunction,
+    });
 
     this.distribution = new NextjsDistribution(this, 'Distribution', {
       ...props,

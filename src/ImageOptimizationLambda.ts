@@ -52,6 +52,7 @@ export class ImageOptimizationLambda extends Function {
       handler: 'index.handler',
       runtime: LAMBDA_RUNTIME,
       architecture: Architecture.ARM_64,
+      description: 'Next.js Image Optimization Function',
       // prevents "Resolution error: Cannot use resource in a cross-environment
       // fashion, the resource's physical name must be explicit set or use
       // PhysicalName.GENERATE_IF_NEEDED."

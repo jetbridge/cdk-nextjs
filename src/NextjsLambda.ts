@@ -3,7 +3,7 @@ import * as path from 'path';
 import { Duration, PhysicalName, RemovalPolicy, Stack, Token } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
-import { Bucket } from 'aws-cdk-lib/aws-s3';
+import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import * as s3Assets from 'aws-cdk-lib/aws-s3-assets';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
@@ -22,6 +22,13 @@ function getEnvironment(props: NextjsLambdaProps): { [name: string]: string } {
     ...props.environment,
     ...props.lambda?.environment,
     ...(props.nodeEnv ? { NODE_ENV: props.nodeEnv } : {}),
+    ...{
+      CACHE_BUCKET_NAME: props.cacheBucket?.bucketName || '',
+      CACHE_BUCKET_KEY_PREFIX: '_cache',
+      // @see: https://github.com/serverless-stack/sst/blob/master/packages/sst/src/constructs/NextjsSite.ts#L158
+      // TODO: refactor this or pass in the region
+      // CACHE_BUCKET_REGION: Stack.of(this).region,
+    },
   };
 
   return environmentVariables;
@@ -37,6 +44,11 @@ export interface NextjsLambdaProps extends NextjsBaseProps {
    * Override function properties.
    */
   readonly lambda?: FunctionOptions;
+
+  /**
+   * The S3 bucket holding application cache.
+   */
+  readonly cacheBucket: IBucket;
 }
 
 /**
@@ -89,6 +101,9 @@ export class NextJsLambda extends Construct {
       ...functionOptions,
     });
     this.lambdaFunction = fn;
+
+    // todo: once we figure out the correct S3 bucket, make sure permissions are appropriate.
+    props.cacheBucket.grantReadWrite(fn);
 
     // rewrite env var placeholders in server code
     const replacementParams = this._getReplacementParams(environment);

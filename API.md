@@ -4038,6 +4038,7 @@ const nextjsDefaultsProps: NextjsDefaultsProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.assetDeployment">assetDeployment</a></code> | <code>any</code> | Override static file deployment settings. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.cacheBucket">cacheBucket</a></code> | <code>any</code> | Override cache bucket. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.distribution">distribution</a></code> | <code>any</code> | Override CloudFront distribution settings. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override server lambda function settings. |
 
@@ -4052,6 +4053,18 @@ public readonly assetDeployment: any;
 - *Type:* any
 
 Override static file deployment settings.
+
+---
+
+##### `cacheBucket`<sup>Optional</sup> <a name="cacheBucket" id="cdk-nextjs-standalone.NextjsDefaultsProps.property.cacheBucket"></a>
+
+```typescript
+public readonly cacheBucket: any;
+```
+
+- *Type:* any
+
+Override cache bucket.
 
 ---
 

@@ -9,6 +9,7 @@ import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import * as cr from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import { bundleFunction } from './BundleFunction';
+import { DEFAULT_LAMBA_MEMORY } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
 import { makeTokenPlaceholder } from './NextjsBuild';
 
@@ -73,7 +74,7 @@ export class NextjsS3EnvRewriter extends Construct {
     // rewriter lambda function
     const rewriteFn = new lambda.Function(this, 'RewriteOnEventHandler', {
       runtime: Runtime.NODEJS_16_X,
-      memorySize: 1024,
+      memorySize: DEFAULT_LAMBA_MEMORY,
       timeout: Duration.minutes(5),
       handler: 'S3EnvRewriter.handler',
       code: lambda.Code.fromAsset(handlerDir),

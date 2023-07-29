@@ -9,7 +9,7 @@ import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
-import { LAMBDA_RUNTIME } from './constants';
+import { LAMBDA_RUNTIME, DEFAULT_LAMBA_MEMORY } from './constants';
 import { CONFIG_ENV_JSON_PATH } from './Nextjs';
 import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, NextjsBuild } from './NextjsBuild';
@@ -24,10 +24,9 @@ function getEnvironment(props: NextjsLambdaProps): { [name: string]: string } {
     ...(props.nodeEnv ? { NODE_ENV: props.nodeEnv } : {}),
     ...{
       CACHE_BUCKET_NAME: props.cacheBucket?.bucketName || '',
+      CACHE_BUCKET_REGION: props.cacheBucket ? Stack.of(props.cacheBucket).region : '',
       // Note we don't need a CACHE_BUCKET_KEY_PREFIX because we're using a separate bucket for cache
       // @see: https://github.com/serverless-stack/sst/blob/master/packages/sst/src/constructs/NextjsSite.ts#L158
-      // TODO: refactor this or pass in the region
-      // CACHE_BUCKET_REGION: Stack.of(this).region,
     },
   };
 
@@ -88,7 +87,7 @@ export class NextJsLambda extends Construct {
     // build the lambda function
     const environment = getEnvironment(props);
     const fn = new Function(scope, 'ServerHandler', {
-      memorySize: functionOptions?.memorySize || 1024,
+      memorySize: functionOptions?.memorySize || DEFAULT_LAMBA_MEMORY,
       timeout: functionOptions?.timeout ?? Duration.seconds(10),
       runtime: LAMBDA_RUNTIME,
       handler: path.join('index.handler'),
@@ -102,7 +101,6 @@ export class NextJsLambda extends Construct {
     });
     this.lambdaFunction = fn;
 
-    // todo: once we figure out the correct S3 bucket, make sure permissions are appropriate.
     props.cacheBucket.grantReadWrite(fn);
 
     // rewrite env var placeholders in server code

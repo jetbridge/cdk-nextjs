@@ -32,6 +32,11 @@ export interface NextjsDefaultsProps {
   readonly assetDeployment?: NextjsAssetsDeploymentProps | any;
 
   /**
+   * Override cache bucket.
+   */
+  readonly cacheBucket?: s3.IBucket | any;
+
+  /**
    * Override server lambda function settings.
    */
   readonly lambda?: FunctionOptions;
@@ -130,22 +135,22 @@ export class Nextjs extends Construct {
     // create static asset bucket
     this.staticAssetBucket =
       props.defaults?.assetDeployment?.bucket ??
-      new s3.Bucket(this, 'AssetBucket', {
+      new s3.Bucket(this, 'Assets', {
         removalPolicy: RemovalPolicy.DESTROY,
         autoDeleteObjects: true,
       });
 
     // create cache bucket
     this.cacheBucket =
-      props.defaults?.assetDeployment?.bucket ??
-      new s3.Bucket(this, 'CacheBucket', {
+      props.defaults?.cacheBucket ??
+      new s3.Bucket(this, 'Cache', {
         removalPolicy: RemovalPolicy.DESTROY,
         autoDeleteObjects: true,
       });
 
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir });
-    this.serverFunction = new NextJsLambda(this, 'Fn', {
+    this.serverFunction = new NextJsLambda(this, 'ServerFn', {
       ...props,
       tempBuildDir,
       nextBuild: this.nextBuild,
@@ -161,7 +166,7 @@ export class Nextjs extends Construct {
     });
 
     // build revalidation queue and handler function
-    this.revalidation = new NextjsRevalidation(this, 'Revaluation', {
+    this.revalidation = new NextjsRevalidation(this, 'Revalidation', {
       ...props,
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction,

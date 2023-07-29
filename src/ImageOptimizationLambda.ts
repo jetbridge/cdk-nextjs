@@ -4,7 +4,7 @@ import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Architecture, Code, Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import { LAMBDA_RUNTIME } from './constants';
+import { LAMBDA_RUNTIME, DEFAULT_LAMBA_MEMORY } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
 import type { NextjsBuild } from './NextjsBuild';
 
@@ -59,7 +59,7 @@ export class ImageOptimizationLambda extends Function {
       functionName: Stack.of(scope).region !== 'us-east-1' ? PhysicalName.GENERATE_IF_NEEDED : undefined,
       ...lambdaOptions,
       // defaults
-      memorySize: lambdaOptions?.memorySize || 1024,
+      memorySize: lambdaOptions?.memorySize || DEFAULT_LAMBA_MEMORY,
       timeout: lambdaOptions?.timeout ?? Duration.seconds(10),
       environment: {
         BUCKET_NAME: bucket.bucketName,

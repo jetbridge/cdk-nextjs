@@ -1302,6 +1302,7 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.imageOptimizationLambdaFunctionUrl">imageOptimizationLambdaFunctionUrl</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrl</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.lambdaFunctionUrl">lambdaFunctionUrl</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrl</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built NextJS project output. |
+| <code><a href="#cdk-nextjs-standalone.Nextjs.property.revalidation">revalidation</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation">NextjsRevalidation</a></code> | Revalidation handler and queue. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextJsLambda">NextJsLambda</a></code> | The main NextJS server handler lambda function. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Where build-time assets for deployment are stored. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.configBucket">configBucket</a></code> | <code>aws-cdk-lib.aws_s3.Bucket</code> | *No description.* |
@@ -1405,6 +1406,18 @@ public readonly nextBuild: NextjsBuild;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 Built NextJS project output.
+
+---
+
+##### `revalidation`<sup>Required</sup> <a name="revalidation" id="cdk-nextjs-standalone.Nextjs.property.revalidation"></a>
+
+```typescript
+public readonly revalidation: NextjsRevalidation;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsRevalidation">NextjsRevalidation</a>
+
+Revalidation handler and queue.
 
 ---
 
@@ -1689,6 +1702,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir">nextCacheDir</a></code> | <code>string</code> | Cache setup directory. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir">nextImageFnDir</a></code> | <code>string</code> | Contains function for processessing image requests. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextServerFnDir">nextServerFnDir</a></code> | <code>string</code> | Contains server code and dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir">nextStaticDir</a></code> | <code>string</code> | Static files containing client-side code. |
@@ -1707,6 +1721,18 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `nextCacheDir`<sup>Required</sup> <a name="nextCacheDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir"></a>
+
+```typescript
+public readonly nextCacheDir: string;
+```
+
+- *Type:* string
+
+Cache setup directory.
 
 ---
 
@@ -2501,6 +2527,107 @@ public readonly compatibleRuntimes: Runtime[];
 - *Type:* aws-cdk-lib.aws_lambda.Runtime[]
 
 The runtimes compatible with this Layer.
+
+---
+
+
+### NextjsRevalidation <a name="NextjsRevalidation" id="cdk-nextjs-standalone.NextjsRevalidation"></a>
+
+Builds the system for revaluating Next.js resources. This includes a Lambda function handler and queue system.
+
+#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsRevalidation.Initializer"></a>
+
+```typescript
+import { NextjsRevalidation } from 'cdk-nextjs-standalone'
+
+new NextjsRevalidation(scope: Construct, id: string, props: RevalidationProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.RevalidationProps">RevalidationProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#cdk-nextjs-standalone.RevalidationProps">RevalidationProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsRevalidation.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsRevalidation.isConstruct"></a>
+
+```typescript
+import { NextjsRevalidation } from 'cdk-nextjs-standalone'
+
+NextjsRevalidation.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsRevalidation.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsRevalidation.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
 
 ---
 
@@ -4466,6 +4593,7 @@ const nextjsLambdaProps: NextjsLambdaProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
+| <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.cacheBucket">cacheBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application cache. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built nextJS application. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
 
@@ -4617,6 +4745,18 @@ public readonly tempBuildDir: string;
 Directory to store temporary build files in.
 
 Defaults to os.tmpdir().
+
+---
+
+##### `cacheBucket`<sup>Required</sup> <a name="cacheBucket" id="cdk-nextjs-standalone.NextjsLambdaProps.property.cacheBucket"></a>
+
+```typescript
+public readonly cacheBucket: IBucket;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.IBucket
+
+The S3 bucket holding application cache.
 
 ---
 
@@ -5137,6 +5277,222 @@ public readonly debug: boolean;
 ```
 
 - *Type:* boolean
+
+---
+
+### RevalidationProps <a name="RevalidationProps" id="cdk-nextjs-standalone.RevalidationProps"></a>
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.RevalidationProps.Initializer"></a>
+
+```typescript
+import { RevalidationProps } from 'cdk-nextjs-standalone'
+
+const revalidationProps: RevalidationProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextJsLambda">NextJsLambda</a></code> | The main NextJS server handler lambda function. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
+
+---
+
+##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.RevalidationProps.property.nextjsPath"></a>
+
+```typescript
+public readonly nextjsPath: string;
+```
+
+- *Type:* string
+
+Relative path to the directory where the NextJS project is located.
+
+Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+
+---
+
+##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.RevalidationProps.property.buildCommand"></a>
+
+```typescript
+public readonly buildCommand: string;
+```
+
+- *Type:* string
+
+Optional value used to install NextJS node dependencies.
+
+It defaults to 'npx --yes open-next@latest build'
+
+---
+
+##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.RevalidationProps.property.buildPath"></a>
+
+```typescript
+public readonly buildPath: string;
+```
+
+- *Type:* string
+
+The directory to execute `npm run build` from.
+
+By default, it is `nextjsPath`.
+Can be overridden, particularly useful for monorepos where `build` is expected to run
+at the root of the project.
+
+---
+
+##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.RevalidationProps.property.compressionLevel"></a>
+
+```typescript
+public readonly compressionLevel: number;
+```
+
+- *Type:* number
+- *Default:* 1
+
+0 - no compression, fastest 9 - maximum compression, slowest.
+
+---
+
+##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.RevalidationProps.property.environment"></a>
+
+```typescript
+public readonly environment: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+Custom environment variables to pass to the NextJS build and runtime.
+
+---
+
+##### `isPlaceholder`<sup>Optional</sup> <a name="isPlaceholder" id="cdk-nextjs-standalone.RevalidationProps.property.isPlaceholder"></a>
+
+```typescript
+public readonly isPlaceholder: boolean;
+```
+
+- *Type:* boolean
+
+Skip building app and deploy a placeholder.
+
+Useful when using `next dev` for local development.
+
+---
+
+##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.RevalidationProps.property.nodeEnv"></a>
+
+```typescript
+public readonly nodeEnv: string;
+```
+
+- *Type:* string
+
+Optional value for NODE_ENV during build and runtime.
+
+---
+
+##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.RevalidationProps.property.projectRoot"></a>
+
+```typescript
+public readonly projectRoot: string;
+```
+
+- *Type:* string
+
+Root of your project, if different from `nextjsPath`.
+
+Defaults to current working directory.
+
+---
+
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.RevalidationProps.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+Less build output.
+
+---
+
+##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.RevalidationProps.property.sharpLayerArn"></a>
+
+```typescript
+public readonly sharpLayerArn: string;
+```
+
+- *Type:* string
+
+Optional arn for the sharp lambda layer.
+
+If omitted, the layer will be created.
+
+---
+
+##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.RevalidationProps.property.tempBuildDir"></a>
+
+```typescript
+public readonly tempBuildDir: string;
+```
+
+- *Type:* string
+
+Directory to store temporary build files in.
+
+Defaults to os.tmpdir().
+
+---
+
+##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.RevalidationProps.property.nextBuild"></a>
+
+```typescript
+public readonly nextBuild: NextjsBuild;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+
+The `NextjsBuild` instance representing the built Nextjs application.
+
+---
+
+##### `serverFunction`<sup>Required</sup> <a name="serverFunction" id="cdk-nextjs-standalone.RevalidationProps.property.serverFunction"></a>
+
+```typescript
+public readonly serverFunction: NextJsLambda;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextJsLambda">NextJsLambda</a>
+
+The main NextJS server handler lambda function.
+
+---
+
+##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="cdk-nextjs-standalone.RevalidationProps.property.lambdaOptions"></a>
+
+```typescript
+public readonly lambdaOptions: FunctionOptions;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.FunctionOptions
+
+Override function properties.
 
 ---
 

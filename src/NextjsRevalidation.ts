@@ -7,7 +7,7 @@ import { NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextJsLambda } from './NextjsLambda';
 
-export interface RevaluationProps extends NextjsBaseProps {
+export interface RevalidationProps extends NextjsBaseProps {
   /**
    * Override function properties.
    */
@@ -27,15 +27,15 @@ export interface RevaluationProps extends NextjsBaseProps {
 /**
  * Builds the system for revaluating Next.js resources. This includes a Lambda function handler and queue system.
  */
-export class NextjsRevaluation extends Construct {
-  constructor(scope: Construct, id: string, props: RevaluationProps) {
+export class NextjsRevalidation extends Construct {
+  constructor(scope: Construct, id: string, props: RevalidationProps) {
     super(scope, id);
 
     if (!props.nextBuild) return;
 
     const code = props.isPlaceholder
       ? Code.fromInline(
-          "module.exports.handler = async () => { return { statusCode: 200, body: 'SST placeholder site' } }"
+          "module.exports.handler = async () => { return { statusCode: 200, body: 'cdk-nextjs placeholder site' } }"
         )
       : Code.fromAsset(props.nextBuild.nextImageFnDir);
 
@@ -44,13 +44,11 @@ export class NextjsRevaluation extends Construct {
       receiveMessageWaitTime: Duration.seconds(20),
     });
     const consumer = new Function(this, 'RevalidationFunction', {
-      description: 'Next.js revalidator',
+      description: 'Next.js revalidation function',
       handler: 'index.handler',
       code,
       runtime: Runtime.NODEJS_18_X,
       timeout: Duration.seconds(30),
-      // This, I think, is supposed to be the VPC or VPC Subnet config (https://github.com/serverless-stack/sst/blob/master/packages/sst/src/constructs/NextjsSite.ts#L59C5-L59C17)
-      // ...this.revalidation,
     });
     consumer.addEventSource(new SqsEventSource(queue, { batchSize: 5 }));
 

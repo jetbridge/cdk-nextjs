@@ -24,7 +24,7 @@ function getEnvironment(props: NextjsLambdaProps): { [name: string]: string } {
     ...(props.nodeEnv ? { NODE_ENV: props.nodeEnv } : {}),
     ...{
       CACHE_BUCKET_NAME: props.cacheBucket?.bucketName || '',
-      CACHE_BUCKET_KEY_PREFIX: '_cache',
+      // Note we don't need a CACHE_BUCKET_KEY_PREFIX because we're using a separate bucket for cache
       // @see: https://github.com/serverless-stack/sst/blob/master/packages/sst/src/constructs/NextjsSite.ts#L158
       // TODO: refactor this or pass in the region
       // CACHE_BUCKET_REGION: Stack.of(this).region,

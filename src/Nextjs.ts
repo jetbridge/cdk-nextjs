@@ -5,6 +5,7 @@ import { RemovalPolicy } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
+import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import { ImageOptimizationLambda } from './ImageOptimizationLambda';
@@ -13,7 +14,7 @@ import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
 import { NextJsLambda } from './NextjsLambda';
-import { NextjsRevaluation } from './NextjsRevaluation';
+import { NextjsRevalidation } from './NextjsRevalidation';
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -103,13 +104,14 @@ export class Nextjs extends Construct {
   /**
    * Revalidation handler and queue.
    */
-  public revalidation: NextjsRevaluation;
+  public revalidation: NextjsRevalidation;
 
   public configBucket?: s3.Bucket;
   public lambdaFunctionUrl!: lambda.FunctionUrl;
   public imageOptimizationLambdaFunctionUrl!: lambda.FunctionUrl;
 
   protected staticAssetBucket: s3.IBucket;
+  protected cacheBucket: s3.IBucket;
 
   constructor(scope: Construct, id: string, protected props: NextjsProps) {
     super(scope, id);
@@ -119,8 +121,8 @@ export class Nextjs extends Construct {
     // get dir to store temp build files in
     const tempBuildDir = props.tempBuildDir
       ? path.resolve(
-        path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
-      )
+          path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
+        )
       : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
 
     this.tempBuildDir = tempBuildDir;
@@ -128,7 +130,15 @@ export class Nextjs extends Construct {
     // create static asset bucket
     this.staticAssetBucket =
       props.defaults?.assetDeployment?.bucket ??
-      new s3.Bucket(this, 'Bucket', {
+      new s3.Bucket(this, 'AssetBucket', {
+        removalPolicy: RemovalPolicy.DESTROY,
+        autoDeleteObjects: true,
+      });
+
+    // create cache bucket
+    this.cacheBucket =
+      props.defaults?.assetDeployment?.bucket ??
+      new s3.Bucket(this, 'CacheBucket', {
         removalPolicy: RemovalPolicy.DESTROY,
         autoDeleteObjects: true,
       });
@@ -140,7 +150,7 @@ export class Nextjs extends Construct {
       tempBuildDir,
       nextBuild: this.nextBuild,
       lambda: props.defaults?.lambda,
-      cacheBucket: this.staticAssetBucket,
+      cacheBucket: this.cacheBucket,
     });
     // build image optimization
     this.imageOptimizationFunction = new ImageOptimizationLambda(this, 'ImgOptFn', {
@@ -148,6 +158,18 @@ export class Nextjs extends Construct {
       nextBuild: this.nextBuild,
       bucket: props.imageOptimizationBucket || this.bucket,
       lambdaOptions: props.defaults?.lambda,
+    });
+
+    // build revalidation queue and handler function
+    this.revalidation = new NextjsRevalidation(this, 'Revaluation', {
+      ...props,
+      nextBuild: this.nextBuild,
+      serverFunction: this.serverFunction,
+    });
+
+    new BucketDeployment(this, 'DeployCacheFiles', {
+      sources: [Source.asset(this.nextBuild.nextCacheDir)],
+      destinationBucket: this.cacheBucket,
     });
 
     // deploy nextjs static assets to s3
@@ -166,12 +188,6 @@ export class Nextjs extends Construct {
     } else {
       this.serverFunction.lambdaFunction.node.addDependency(...this.assetsDeployment.deployments);
     }
-
-    this.revalidation = new NextjsRevaluation(this, 'Revaluation', {
-      ...props,
-      nextBuild: this.nextBuild,
-      serverFunction: this.serverFunction,
-    });
 
     this.distribution = new NextjsDistribution(this, 'Distribution', {
       ...props,

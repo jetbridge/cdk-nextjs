@@ -43,8 +43,8 @@ export class ImageOptimizationLambda extends Function {
 
     const code = isPlaceholder
       ? Code.fromInline(
-        "module.exports.handler = async () => { return { statusCode: 200, body: 'SST placeholder site' } }"
-      )
+          "module.exports.handler = async () => { return { statusCode: 200, body: 'cdk-nextjs placeholder site' } }"
+        )
       : Code.fromAsset(props.nextBuild.nextImageFnDir);
 
     super(scope, id, {

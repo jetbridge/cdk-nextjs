@@ -100,7 +100,7 @@ export class NextjsBuild extends Construct {
     };
 
     const buildPath = this.props.buildPath ?? nextjsPath;
-    const buildCommand = this.props.buildCommand ?? 'npx --yes open-next@1 build';
+    const buildCommand = this.props.buildCommand ?? 'npx --yes open-next@2 build';
     // run build
     console.debug(`├ Running "${buildCommand}" in`, buildPath);
     const cmdParts = buildCommand.split(/\s+/);

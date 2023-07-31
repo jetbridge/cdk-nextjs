@@ -9,6 +9,7 @@ import { CompressionLevel, NextjsBaseProps } from './NextjsBase';
 const NEXTJS_BUILD_DIR = '.open-next';
 const NEXTJS_STATIC_DIR = 'assets';
 const NEXTJS_BUILD_MIDDLEWARE_FN_DIR = 'middleware-function';
+const NEXTJS_BUILD_REVALIDATE_FN_DIR = 'revalidation-function';
 const NEXTJS_BUILD_IMAGE_FN_DIR = 'image-optimization-function';
 const NEXTJS_BUILD_SERVER_FN_DIR = 'server-function';
 
@@ -34,6 +35,10 @@ export class NextjsBuild extends Construct {
    * Should be arm64.
    */
   public nextImageFnDir: string;
+  /**
+   * Contains function for processing items from revalidation queue.
+   */
+  public nextRevalidateFnDir: string;
   /**
    * Static files containing client-side code.
    */
@@ -66,6 +71,7 @@ export class NextjsBuild extends Construct {
     // our outputs
     this.nextStaticDir = this._getNextStaticDir();
     this.nextImageFnDir = this._getOutputDir(NEXTJS_BUILD_IMAGE_FN_DIR);
+    this.nextRevalidateFnDir = this._getOutputDir(NEXTJS_BUILD_REVALIDATE_FN_DIR);
     this.nextServerFnDir = this._getOutputDir(NEXTJS_BUILD_SERVER_FN_DIR);
     this.nextMiddlewareFnDir = this._getOutputDir(NEXTJS_BUILD_MIDDLEWARE_FN_DIR, true);
     // this.nextDir = this._getNextDir();

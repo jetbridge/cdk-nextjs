@@ -1704,6 +1704,7 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir">nextCacheDir</a></code> | <code>string</code> | Cache setup directory. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir">nextImageFnDir</a></code> | <code>string</code> | Contains function for processessing image requests. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir">nextRevalidateFnDir</a></code> | <code>string</code> | Contains function for processing items from revalidation queue. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextServerFnDir">nextServerFnDir</a></code> | <code>string</code> | Contains server code and dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir">nextStaticDir</a></code> | <code>string</code> | Static files containing client-side code. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.projectRoot">projectRoot</a></code> | <code>string</code> | *No description.* |
@@ -1747,6 +1748,18 @@ public readonly nextImageFnDir: string;
 Contains function for processessing image requests.
 
 Should be arm64.
+
+---
+
+##### `nextRevalidateFnDir`<sup>Required</sup> <a name="nextRevalidateFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir"></a>
+
+```typescript
+public readonly nextRevalidateFnDir: string;
+```
+
+- *Type:* string
+
+Contains function for processing items from revalidation queue.
 
 ---
 

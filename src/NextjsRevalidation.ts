@@ -37,7 +37,7 @@ export class NextjsRevalidation extends Construct {
       ? Code.fromInline(
           "module.exports.handler = async () => { return { statusCode: 200, body: 'cdk-nextjs placeholder site' } }"
         )
-      : Code.fromAsset(props.nextBuild.nextImageFnDir);
+      : Code.fromAsset(props.nextBuild.nextRevalidateFnDir);
 
     const queue = new Queue(this, 'RevalidationQueue', {
       fifo: true,

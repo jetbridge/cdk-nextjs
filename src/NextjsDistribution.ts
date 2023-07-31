@@ -378,6 +378,17 @@ export class NextjsDistribution extends Construct {
       },
     ];
 
+    // default handler for requests that don't match any other path:
+    //   - try lambda handler first (/some-page, etc...)
+    //   - if 403, fall back to S3
+    //   - if 404, fall back to lambda handler
+    //   - if 503, fall back to lambda handler
+    const fallbackOriginGroup = new origins.OriginGroup({
+      primaryOrigin: serverFunctionOrigin,
+      fallbackOrigin: s3Origin,
+      fallbackStatusCodes: [403, 404, 503],
+    });
+
     const lambdaCachePolicy = cachePolicies?.lambdaCachePolicy ?? this.createCloudFrontLambdaCachePolicy();
 
     // requests for static objects
@@ -450,18 +461,13 @@ export class NextjsDistribution extends Construct {
       domainNames,
       certificate: this.certificate,
       defaultBehavior: {
-        origin: new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), {
-          // todo: decide what an appropriate way to allow this to be configured is
-          readTimeout: Duration.seconds(10),
-        }),
+        origin: fallbackOriginGroup, // try S3 first, then lambda
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         compress: true,
         // what goes here? static or lambda?
         cachePolicy: lambdaCachePolicy,
         originRequestPolicy: fallbackOriginRequestPolicy,
         edgeLambdas: lambdaOriginEdgeFns,
-        allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-        cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
       },
 
       additionalBehaviors: {

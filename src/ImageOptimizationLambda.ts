@@ -48,6 +48,8 @@ export class ImageOptimizationLambda extends Function {
       : Code.fromAsset(props.nextBuild.nextImageFnDir);
 
     super(scope, id, {
+      // open-next image-optimization-function
+      // see: https://github.com/serverless-stack/open-next/blob/274d446ed7e940cfbe7ce05a21108f4c854ee37a/README.md?plain=1#L66
       code,
       handler: 'index.handler',
       runtime: LAMBDA_RUNTIME,

@@ -26,6 +26,9 @@ export interface RevalidationProps extends NextjsBaseProps {
 
 /**
  * Builds the system for revaluating Next.js resources. This includes a Lambda function handler and queue system.
+ *
+ * @see {@link https://github.com/serverless-stack/open-next/blob/main/README.md?plain=1#L65}
+ *
  */
 export class NextjsRevalidation extends Construct {
   constructor(scope: Construct, id: string, props: RevalidationProps) {
@@ -44,6 +47,8 @@ export class NextjsRevalidation extends Construct {
     const consumer = new Function(this, 'RevalidationFunction', {
       description: 'Next.js revalidation function',
       handler: 'index.handler',
+      // open-next revalidation-function
+      // see: https://github.com/serverless-stack/open-next/blob/274d446ed7e940cfbe7ce05a21108f4c854ee37a/README.md?plain=1#L65
       code,
       runtime: Runtime.NODEJS_18_X,
       timeout: Duration.seconds(30),

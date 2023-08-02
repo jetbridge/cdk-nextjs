@@ -31,8 +31,6 @@ export class NextjsRevalidation extends Construct {
   constructor(scope: Construct, id: string, props: RevalidationProps) {
     super(scope, id);
 
-    if (!props.nextBuild) return;
-
     const code = props.isPlaceholder
       ? Code.fromInline(
           "module.exports.handler = async () => { return { statusCode: 200, body: 'cdk-nextjs placeholder site' } }"
@@ -56,6 +54,6 @@ export class NextjsRevalidation extends Construct {
     const server = props.serverFunction.lambdaFunction;
     server?.addEnvironment('REVALIDATION_QUEUE_URL', queue.queueUrl);
     server?.addEnvironment('REVALIDATION_QUEUE_REGION', Stack.of(this).region);
-    queue.grantSendMessages(server?.role!);
+    queue.grantSendMessages(server);
   }
 }

@@ -2548,6 +2548,8 @@ The runtimes compatible with this Layer.
 
 Builds the system for revaluating Next.js resources. This includes a Lambda function handler and queue system.
 
+> [{@link https://github.com/serverless-stack/open-next/blob/main/README.md?plain=1#L65}]({@link https://github.com/serverless-stack/open-next/blob/main/README.md?plain=1#L65})
+
 #### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsRevalidation.Initializer"></a>
 
 ```typescript
@@ -3076,6 +3078,7 @@ const imageOptimizationProps: ImageOptimizationProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
+| <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
 | <code><a href="#cdk-nextjs-standalone.ImageOptimizationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
@@ -3218,6 +3221,21 @@ If omitted, the layer will be created.
 
 ---
 
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.ImageOptimizationProps.property.skipFullInvalidation"></a>
+
+```typescript
+public readonly skipFullInvalidation: boolean;
+```
+
+- *Type:* boolean
+
+By default all CloudFront cache will be invalidated on deployment.
+
+This can be set to true to skip the full cache invalidation, which
+could be important for some users.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.ImageOptimizationProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -3339,6 +3357,7 @@ const nextjsAssetsDeploymentProps: NextjsAssetsDeploymentProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
+| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Properties for the S3 bucket containing the NextJS assets. |
 | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
@@ -3484,6 +3503,21 @@ public readonly sharpLayerArn: string;
 Optional arn for the sharp lambda layer.
 
 If omitted, the layer will be created.
+
+---
+
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.skipFullInvalidation"></a>
+
+```typescript
+public readonly skipFullInvalidation: boolean;
+```
+
+- *Type:* boolean
+
+By default all CloudFront cache will be invalidated on deployment.
+
+This can be set to true to skip the full cache invalidation, which
+could be important for some users.
 
 ---
 
@@ -3637,6 +3671,7 @@ const nextjsBaseProps: NextjsBaseProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 
 ---
@@ -3776,6 +3811,21 @@ If omitted, the layer will be created.
 
 ---
 
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsBaseProps.property.skipFullInvalidation"></a>
+
+```typescript
+public readonly skipFullInvalidation: boolean;
+```
+
+- *Type:* boolean
+
+By default all CloudFront cache will be invalidated on deployment.
+
+This can be set to true to skip the full cache invalidation, which
+could be important for some users.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsBaseProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -3814,6 +3864,7 @@ const nextjsBuildProps: NextjsBuildProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 
 ---
@@ -3950,6 +4001,21 @@ public readonly sharpLayerArn: string;
 Optional arn for the sharp lambda layer.
 
 If omitted, the layer will be created.
+
+---
+
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsBuildProps.property.skipFullInvalidation"></a>
+
+```typescript
+public readonly skipFullInvalidation: boolean;
+```
+
+- *Type:* boolean
+
+By default all CloudFront cache will be invalidated on deployment.
+
+This can be set to true to skip the full cache invalidation, which
+could be important for some users.
 
 ---
 
@@ -4161,6 +4227,7 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.imageOptFunction">imageOptFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to optimize images. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built NextJS app. |
@@ -4308,6 +4375,21 @@ public readonly sharpLayerArn: string;
 Optional arn for the sharp lambda layer.
 
 If omitted, the layer will be created.
+
+---
+
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsDistributionProps.property.skipFullInvalidation"></a>
+
+```typescript
+public readonly skipFullInvalidation: boolean;
+```
+
+- *Type:* boolean
+
+By default all CloudFront cache will be invalidated on deployment.
+
+This can be set to true to skip the full cache invalidation, which
+could be important for some users.
 
 ---
 
@@ -4618,6 +4700,7 @@ const nextjsLambdaProps: NextjsLambdaProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
+| <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.cacheBucket">cacheBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application cache. |
 | <code><a href="#cdk-nextjs-standalone.NextjsLambdaProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built nextJS application. |
@@ -4760,6 +4843,21 @@ If omitted, the layer will be created.
 
 ---
 
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsLambdaProps.property.skipFullInvalidation"></a>
+
+```typescript
+public readonly skipFullInvalidation: boolean;
+```
+
+- *Type:* boolean
+
+By default all CloudFront cache will be invalidated on deployment.
+
+This can be set to true to skip the full cache invalidation, which
+could be important for some users.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsLambdaProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -4895,6 +4993,7 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.defaults">defaults</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps">NextjsDefaultsProps</a></code> | Allows you to override defaults for the resources created by this construct. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket">imageOptimizationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Optional S3 Bucket to use, defaults to assets bucket. |
@@ -5036,6 +5135,21 @@ If omitted, the layer will be created.
 
 ---
 
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation"></a>
+
+```typescript
+public readonly skipFullInvalidation: boolean;
+```
+
+- *Type:* boolean
+
+By default all CloudFront cache will be invalidated on deployment.
+
+This can be set to true to skip the full cache invalidation, which
+could be important for some users.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -5098,6 +5212,7 @@ const nextjsS3EnvRewriterProps: NextjsS3EnvRewriterProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
+| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
 | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.replacementConfig">replacementConfig</a></code> | <code><a href="#cdk-nextjs-standalone.RewriteReplacementsConfig">RewriteReplacementsConfig</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.s3Bucket">s3Bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | *No description.* |
@@ -5242,6 +5357,21 @@ If omitted, the layer will be created.
 
 ---
 
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.skipFullInvalidation"></a>
+
+```typescript
+public readonly skipFullInvalidation: boolean;
+```
+
+- *Type:* boolean
+
+By default all CloudFront cache will be invalidated on deployment.
+
+This can be set to true to skip the full cache invalidation, which
+could be important for some users.
+
+---
+
 ##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.tempBuildDir"></a>
 
 ```typescript
@@ -5330,6 +5460,7 @@ const revalidationProps: RevalidationProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
 | <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
 | <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextJsLambda">NextJsLambda</a></code> | The main NextJS server handler lambda function. |
@@ -5469,6 +5600,21 @@ public readonly sharpLayerArn: string;
 Optional arn for the sharp lambda layer.
 
 If omitted, the layer will be created.
+
+---
+
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.RevalidationProps.property.skipFullInvalidation"></a>
+
+```typescript
+public readonly skipFullInvalidation: boolean;
+```
+
+- *Type:* boolean
+
+By default all CloudFront cache will be invalidated on deployment.
+
+This can be set to true to skip the full cache invalidation, which
+could be important for some users.
 
 ---
 

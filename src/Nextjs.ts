@@ -172,11 +172,6 @@ export class Nextjs extends Construct {
       serverFunction: this.serverFunction,
     });
 
-    new BucketDeployment(this, 'DeployCacheFiles', {
-      sources: [Source.asset(this.nextBuild.nextCacheDir)],
-      destinationBucket: this.cacheBucket,
-    });
-
     // deploy nextjs static assets to s3
     this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
       ...props,
@@ -202,6 +197,21 @@ export class Nextjs extends Construct {
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction.lambdaFunction,
       imageOptFunction: this.imageOptimizationFunction,
+    });
+
+    // We only want to provide the distribution options below if
+    // we are keep to invalidate the cache
+    const invalidationOptions = this.props.skipFullInvalidation
+      ? {}
+      : {
+          distribution: this.distribution.distribution,
+          distributionPaths: ['/*'],
+        };
+
+    new BucketDeployment(this, 'DeployCacheFiles', {
+      sources: [Source.asset(this.nextBuild.nextCacheDir)],
+      destinationBucket: this.cacheBucket,
+      ...invalidationOptions,
     });
 
     if (!props.quiet) console.debug('└ Finished preparing NextJS app for deployment');

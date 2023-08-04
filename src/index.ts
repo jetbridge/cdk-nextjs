@@ -11,6 +11,7 @@ export {
   NextjsAssetsDeploymentProps,
   NextjsAssetsCachePolicyProps,
 } from './NextjsAssetsDeployment';
+export { NextjsRevalidation, RevalidationProps } from './NextjsRevalidation';
 export { NextjsBuild, NextjsBuildProps, CreateArchiveArgs } from './NextjsBuild';
 export { EnvironmentVars, NextJsLambda, NextjsLambdaProps } from './NextjsLambda';
 export { ImageOptimizationLambda, ImageOptimizationProps } from './ImageOptimizationLambda';

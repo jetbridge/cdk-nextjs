@@ -15,7 +15,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     // ignorePatterns: ['assets/**/*']
   },
   majorVersion: 3,
-  // prerelease: 'pre',
+  prerelease: 'beta',
 
   tsconfig: { compilerOptions: { noUnusedLocals: false }, include: ['assets/**/*.ts'] },
   tsconfigDev: { compilerOptions: { noUnusedLocals: false } },
@@ -44,6 +44,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   // do not generate sample test files
   sampleCode: false,
 });
+
 const packageJson = project.tryFindObjectFile('package.json');
 if (packageJson) {
   packageJson.patch(
@@ -53,8 +54,5 @@ if (packageJson) {
     ])
   );
 }
-// project.eslint.addOverride({
-//   rules: {},
-// });
-// project.tsconfig.addInclude('assets/**/*.ts');
+
 project.synth();

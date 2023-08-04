@@ -51,7 +51,7 @@ export interface NextjsBaseProps {
 
   /**
    * Optional value used to install NextJS node dependencies.
-   * It defaults to 'npx --yes open-next@1 build'
+   * It defaults to 'npx --yes open-next@2 build'
    */
   readonly buildCommand?: string;
 
@@ -72,6 +72,13 @@ export interface NextjsBaseProps {
    * If omitted, the layer will be created.
    */
   readonly sharpLayerArn?: string;
+
+  /**
+   * By default all CloudFront cache will be invalidated on deployment.
+   * This can be set to true to skip the full cache invalidation, which
+   * could be important for some users.
+   */
+  readonly skipFullInvalidation?: boolean;
 }
 
 ///// stuff below taken from https://github.com/serverless-stack/sst/blob/8d377e941467ced81d8cc31ee67d5a06550f04d4/packages/resources/src/BaseSite.ts

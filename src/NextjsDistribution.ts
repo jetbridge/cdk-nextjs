@@ -379,13 +379,12 @@ export class NextjsDistribution extends Construct {
     ];
 
     // default handler for requests that don't match any other path:
-    //   - try lambda handler first (/some-page, etc...)
-    //   - if 403, fall back to S3
-    //   - if 404, fall back to lambda handler
-    //   - if 503, fall back to lambda handler
+    //   - try S3 bucket first
+    //   - if 403, 404, or 503 fall back to Lambda handler
+    // see discussion here: https://github.com/jetbridge/cdk-nextjs/pull/125#discussion_r1279212678
     const fallbackOriginGroup = new origins.OriginGroup({
-      primaryOrigin: serverFunctionOrigin,
-      fallbackOrigin: s3Origin,
+      primaryOrigin: s3Origin,
+      fallbackOrigin: serverFunctionOrigin,
       fallbackStatusCodes: [403, 404, 503],
     });
 
@@ -464,11 +463,9 @@ export class NextjsDistribution extends Construct {
         origin: fallbackOriginGroup, // try S3 first, then lambda
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         compress: true,
-
         // what goes here? static or lambda?
         cachePolicy: lambdaCachePolicy,
         originRequestPolicy: fallbackOriginRequestPolicy,
-
         edgeLambdas: lambdaOriginEdgeFns,
       },
 

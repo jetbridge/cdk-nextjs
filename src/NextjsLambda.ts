@@ -3,13 +3,13 @@ import * as path from 'path';
 import { Duration, PhysicalName, RemovalPolicy, Stack, Token } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
-import { Bucket } from 'aws-cdk-lib/aws-s3';
+import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import * as s3Assets from 'aws-cdk-lib/aws-s3-assets';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
-import { LAMBDA_RUNTIME } from './constants';
+import { LAMBDA_RUNTIME, DEFAULT_LAMBA_MEMORY, CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { CONFIG_ENV_JSON_PATH } from './Nextjs';
 import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, NextjsBuild } from './NextjsBuild';
@@ -22,6 +22,11 @@ function getEnvironment(props: NextjsLambdaProps): { [name: string]: string } {
     ...props.environment,
     ...props.lambda?.environment,
     ...(props.nodeEnv ? { NODE_ENV: props.nodeEnv } : {}),
+    ...{
+      CACHE_BUCKET_NAME: props.staticAssetBucket?.bucketName || '',
+      CACHE_BUCKET_REGION: Stack.of(props.staticAssetBucket).region,
+      CACHE_BUCKET_KEY_PREFIX,
+    },
   };
 
   return environmentVariables;
@@ -37,6 +42,11 @@ export interface NextjsLambdaProps extends NextjsBaseProps {
    * Override function properties.
    */
   readonly lambda?: FunctionOptions;
+
+  /**
+   * Static asset bucket. Function needs bucket to read from cache.
+   */
+  readonly staticAssetBucket: IBucket;
 }
 
 /**
@@ -76,19 +86,24 @@ export class NextJsLambda extends Construct {
     // build the lambda function
     const environment = getEnvironment(props);
     const fn = new Function(scope, 'ServerHandler', {
-      memorySize: functionOptions?.memorySize || 1024,
+      memorySize: functionOptions?.memorySize || DEFAULT_LAMBA_MEMORY,
       timeout: functionOptions?.timeout ?? Duration.seconds(10),
       runtime: LAMBDA_RUNTIME,
       handler: path.join('index.handler'),
       code,
-      environment,
       // prevents "Resolution error: Cannot use resource in a cross-environment
       // fashion, the resource's physical name must be explicit set or use
       // PhysicalName.GENERATE_IF_NEEDED."
       functionName: Stack.of(this).region !== 'us-east-1' ? PhysicalName.GENERATE_IF_NEEDED : undefined,
       ...functionOptions,
+      // `environment` needs to go after `functionOptions` b/c if
+      // `functionOptions.environment` is defined, it will override
+      // CACHE_* environment variables which are required
+      environment,
     });
     this.lambdaFunction = fn;
+
+    props.staticAssetBucket.grantReadWrite(fn);
 
     // rewrite env var placeholders in server code
     const replacementParams = this._getReplacementParams(environment);

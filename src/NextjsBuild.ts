@@ -8,6 +8,7 @@ import { CompressionLevel, NextjsBaseProps } from './NextjsBase';
 
 const NEXTJS_BUILD_DIR = '.open-next';
 const NEXTJS_STATIC_DIR = 'assets';
+const NEXTJS_CACHE_DIR = 'cache';
 const NEXTJS_BUILD_MIDDLEWARE_FN_DIR = 'middleware-function';
 const NEXTJS_BUILD_REVALIDATE_FN_DIR = 'revalidation-function';
 const NEXTJS_BUILD_IMAGE_FN_DIR = 'image-optimization-function';
@@ -43,6 +44,10 @@ export class NextjsBuild extends Construct {
    * Static files containing client-side code.
    */
   public nextStaticDir: string;
+  /**
+   * Cache directory for generated data.
+   */
+  public nextCacheDir: string;
 
   public props: NextjsBuildProps;
 
@@ -70,6 +75,7 @@ export class NextjsBuild extends Construct {
 
     // our outputs
     this.nextStaticDir = this._getNextStaticDir();
+    this.nextCacheDir = this._getNextCacheDir();
     this.nextImageFnDir = this._getOutputDir(NEXTJS_BUILD_IMAGE_FN_DIR);
     this.nextRevalidateFnDir = this._getOutputDir(NEXTJS_BUILD_REVALIDATE_FN_DIR);
     this.nextServerFnDir = this._getOutputDir(NEXTJS_BUILD_SERVER_FN_DIR);
@@ -160,6 +166,11 @@ export class NextjsBuild extends Construct {
   // contains static files
   private _getNextStaticDir() {
     return path.join(this._getNextBuildDir(), NEXTJS_STATIC_DIR);
+  }
+
+  // contains cache files
+  private _getNextCacheDir() {
+    return path.join(this._getNextBuildDir(), NEXTJS_CACHE_DIR);
   }
 }
 

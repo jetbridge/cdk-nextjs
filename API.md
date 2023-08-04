@@ -1702,7 +1702,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir">nextCacheDir</a></code> | <code>string</code> | Cache setup directory. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir">nextCacheDir</a></code> | <code>string</code> | Cache directory for generated data. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir">nextImageFnDir</a></code> | <code>string</code> | Contains function for processessing image requests. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir">nextRevalidateFnDir</a></code> | <code>string</code> | Contains function for processing items from revalidation queue. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextServerFnDir">nextServerFnDir</a></code> | <code>string</code> | Contains server code and dependencies. |
@@ -1733,7 +1733,7 @@ public readonly nextCacheDir: string;
 
 - *Type:* string
 
-Cache setup directory.
+Cache directory for generated data.
 
 ---
 
@@ -2546,7 +2546,7 @@ The runtimes compatible with this Layer.
 
 ### NextjsRevalidation <a name="NextjsRevalidation" id="cdk-nextjs-standalone.NextjsRevalidation"></a>
 
-Builds the system for revaluating Next.js resources. This includes a Lambda function handler and queue system.
+Builds the system for revalidating Next.js resources. This includes a Lambda function handler and queue system.
 
 > [{@link https://github.com/serverless-stack/open-next/blob/main/README.md?plain=1#L65}]({@link https://github.com/serverless-stack/open-next/blob/main/README.md?plain=1#L65})
 
@@ -3110,7 +3110,7 @@ public readonly buildCommand: string;
 
 Optional value used to install NextJS node dependencies.
 
-It defaults to 'npx --yes open-next@latest build'
+It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -3395,7 +3395,7 @@ public readonly buildCommand: string;
 
 Optional value used to install NextJS node dependencies.
 
-It defaults to 'npx --yes open-next@latest build'
+It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -3700,7 +3700,7 @@ public readonly buildCommand: string;
 
 Optional value used to install NextJS node dependencies.
 
-It defaults to 'npx --yes open-next@latest build'
+It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -3893,7 +3893,7 @@ public readonly buildCommand: string;
 
 Optional value used to install NextJS node dependencies.
 
-It defaults to 'npx --yes open-next@latest build'
+It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -4267,7 +4267,7 @@ public readonly buildCommand: string;
 
 Optional value used to install NextJS node dependencies.
 
-It defaults to 'npx --yes open-next@latest build'
+It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -4732,7 +4732,7 @@ public readonly buildCommand: string;
 
 Optional value used to install NextJS node dependencies.
 
-It defaults to 'npx --yes open-next@latest build'
+It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -5024,7 +5024,7 @@ public readonly buildCommand: string;
 
 Optional value used to install NextJS node dependencies.
 
-It defaults to 'npx --yes open-next@latest build'
+It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -5246,7 +5246,7 @@ public readonly buildCommand: string;
 
 Optional value used to install NextJS node dependencies.
 
-It defaults to 'npx --yes open-next@latest build'
+It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -5492,7 +5492,7 @@ public readonly buildCommand: string;
 
 Optional value used to install NextJS node dependencies.
 
-It defaults to 'npx --yes open-next@latest build'
+It defaults to 'npx --yes open-next@2 build'
 
 ---
 

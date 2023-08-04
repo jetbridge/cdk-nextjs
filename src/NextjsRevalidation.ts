@@ -25,7 +25,7 @@ export interface RevalidationProps extends NextjsBaseProps {
 }
 
 /**
- * Builds the system for revaluating Next.js resources. This includes a Lambda function handler and queue system.
+ * Builds the system for revalidating Next.js resources. This includes a Lambda function handler and queue system.
  *
  * @see {@link https://github.com/serverless-stack/open-next/blob/main/README.md?plain=1#L65}
  *

@@ -9,7 +9,7 @@ import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
-import { LAMBDA_RUNTIME, DEFAULT_LAMBA_MEMORY } from './constants';
+import { LAMBDA_RUNTIME, DEFAULT_LAMBA_MEMORY, CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { CONFIG_ENV_JSON_PATH } from './Nextjs';
 import { NextjsBaseProps } from './NextjsBase';
 import { createArchive, NextjsBuild } from './NextjsBuild';
@@ -23,10 +23,9 @@ function getEnvironment(props: NextjsLambdaProps): { [name: string]: string } {
     ...props.lambda?.environment,
     ...(props.nodeEnv ? { NODE_ENV: props.nodeEnv } : {}),
     ...{
-      CACHE_BUCKET_NAME: props.cacheBucket?.bucketName || '',
-      CACHE_BUCKET_REGION: props.cacheBucket ? Stack.of(props.cacheBucket).region : '',
-      // Note we don't need a CACHE_BUCKET_KEY_PREFIX because we're using a separate bucket for cache
-      // @see: https://github.com/serverless-stack/sst/blob/master/packages/sst/src/constructs/NextjsSite.ts#L158
+      CACHE_BUCKET_NAME: props.staticAssetBucket?.bucketName || '',
+      CACHE_BUCKET_REGION: Stack.of(props.staticAssetBucket).region,
+      CACHE_BUCKET_KEY_PREFIX,
     },
   };
 
@@ -45,9 +44,9 @@ export interface NextjsLambdaProps extends NextjsBaseProps {
   readonly lambda?: FunctionOptions;
 
   /**
-   * The S3 bucket holding application cache.
+   * Static asset bucket. Function needs bucket to read from cache.
    */
-  readonly cacheBucket: IBucket;
+  readonly staticAssetBucket: IBucket;
 }
 
 /**
@@ -104,7 +103,7 @@ export class NextJsLambda extends Construct {
     });
     this.lambdaFunction = fn;
 
-    props.cacheBucket.grantReadWrite(fn);
+    props.staticAssetBucket.grantReadWrite(fn);
 
     // rewrite env var placeholders in server code
     const replacementParams = this._getReplacementParams(environment);

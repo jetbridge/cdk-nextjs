@@ -8,6 +8,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
+import { CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { ImageOptimizationLambda } from './ImageOptimizationLambda';
 import { NextJsAssetsDeployment, NextjsAssetsDeploymentProps } from './NextjsAssetsDeployment';
 import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
@@ -116,7 +117,6 @@ export class Nextjs extends Construct {
   public imageOptimizationLambdaFunctionUrl!: lambda.FunctionUrl;
 
   protected staticAssetBucket: s3.IBucket;
-  protected cacheBucket: s3.IBucket;
 
   constructor(scope: Construct, id: string, protected props: NextjsProps) {
     super(scope, id);
@@ -140,14 +140,6 @@ export class Nextjs extends Construct {
         autoDeleteObjects: true,
       });
 
-    // create cache bucket
-    this.cacheBucket =
-      props.defaults?.cacheBucket ??
-      new s3.Bucket(this, 'Cache', {
-        removalPolicy: RemovalPolicy.DESTROY,
-        autoDeleteObjects: true,
-      });
-
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir });
     this.serverFunction = new NextJsLambda(this, 'ServerFn', {
@@ -155,7 +147,7 @@ export class Nextjs extends Construct {
       tempBuildDir,
       nextBuild: this.nextBuild,
       lambda: props.defaults?.lambda,
-      cacheBucket: this.cacheBucket,
+      staticAssetBucket: this.staticAssetBucket,
     });
     // build image optimization
     this.imageOptimizationFunction = new ImageOptimizationLambda(this, 'ImgOptFn', {
@@ -210,7 +202,8 @@ export class Nextjs extends Construct {
 
     new BucketDeployment(this, 'DeployCacheFiles', {
       sources: [Source.asset(this.nextBuild.nextCacheDir)],
-      destinationBucket: this.cacheBucket,
+      destinationBucket: this.staticAssetBucket,
+      destinationKeyPrefix: CACHE_BUCKET_KEY_PREFIX,
       ...invalidationOptions,
     });
 

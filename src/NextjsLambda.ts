@@ -92,12 +92,15 @@ export class NextJsLambda extends Construct {
       runtime: LAMBDA_RUNTIME,
       handler: path.join('index.handler'),
       code,
-      environment,
       // prevents "Resolution error: Cannot use resource in a cross-environment
       // fashion, the resource's physical name must be explicit set or use
       // PhysicalName.GENERATE_IF_NEEDED."
       functionName: Stack.of(this).region !== 'us-east-1' ? PhysicalName.GENERATE_IF_NEEDED : undefined,
       ...functionOptions,
+      // `environment` needs to go after `functionOptions` b/c if
+      // `functionOptions.environment` is defined, it will override
+      // CACHE_* environment variables which are required
+      environment,
     });
     this.lambdaFunction = fn;
 

@@ -37,7 +37,7 @@ export interface NextjsDistributionCdkProps {
 
 export interface NextjsCachePolicyProps {
   readonly staticCachePolicy?: cloudfront.ICachePolicy;
-  readonly lambdaCachePolicy?: cloudfront.ICachePolicy;
+  readonly serverCachePolicy?: cloudfront.ICachePolicy;
   readonly imageCachePolicy?: cloudfront.ICachePolicy;
 
   /**
@@ -48,8 +48,7 @@ export interface NextjsCachePolicyProps {
 }
 
 export interface NextjsOriginRequestPolicyProps {
-  readonly lambdaOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
-  readonly fallbackOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
+  readonly serverOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
   readonly imageOptimizationOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
 }
 
@@ -139,21 +138,6 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
  */
 export class NextjsDistribution extends Construct {
   /**
-   * The default CloudFront cache policy properties for static pages.
-   */
-  public static staticCachePolicyProps: cloudfront.CachePolicyProps = {
-    queryStringBehavior: cloudfront.CacheQueryStringBehavior.none(),
-    headerBehavior: cloudfront.CacheHeaderBehavior.none(),
-    cookieBehavior: cloudfront.CacheCookieBehavior.none(),
-    defaultTtl: Duration.days(30),
-    maxTtl: Duration.days(60),
-    minTtl: Duration.days(30),
-    enableAcceptEncodingBrotli: true,
-    enableAcceptEncodingGzip: true,
-    comment: 'Nextjs Static Default Cache Policy',
-  };
-
-  /**
    * The default CloudFront cache policy properties for images.
    */
   public static imageCachePolicyProps: cloudfront.CachePolicyProps = {
@@ -171,33 +155,32 @@ export class NextjsDistribution extends Construct {
   /**
    * The default CloudFront cache policy properties for dynamic requests to server handler.
    */
-  public static dynamicCachePolicyProps: cloudfront.CachePolicyProps = {
+  public static serverCachePolicyProps: cloudfront.CachePolicyProps = {
     queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-    headerBehavior: cloudfront.CacheHeaderBehavior.allowList('rsc', 'next-router-prefetch', 'next-router-state-tree'),
+    headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
+      'accept',
+      'rsc',
+      'next-router-prefetch',
+      'next-router-state-tree',
+      'next-url'
+    ),
     cookieBehavior: cloudfront.CacheCookieBehavior.all(),
     defaultTtl: Duration.seconds(0),
     maxTtl: Duration.days(365),
     minTtl: Duration.seconds(0),
     enableAcceptEncodingBrotli: true,
     enableAcceptEncodingGzip: true,
-    comment: 'Nextjs Dynamic Default Cache Policy',
+    comment: 'Nextjs Server Default Cache Policy',
   };
 
   /**
    * The default CloudFront lambda origin request policy.
    */
-  public static dynamicOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
+  public static serverOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
     cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(),
     queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
     headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(), // can't include host
-    comment: 'Nextjs Dynamic Origin Request Policy',
-  };
-
-  public static fallbackOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
-    cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(), // pretty much disables caching - maybe can be changed
-    queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-    headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
-    comment: 'Nextjs Fallback Origin Request Policy',
+    comment: 'Nextjs Server Origin Request Policy',
   };
 
   public static imageOptimizationOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
@@ -231,6 +214,21 @@ export class NextjsDistribution extends Construct {
 
   public tempBuildDir: string;
 
+  private commonBehaviorOptions: Pick<cloudfront.BehaviorOptions, 'viewerProtocolPolicy' | 'compress'> = {
+    viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+    compress: true,
+  };
+
+  private s3Origin: origins.S3Origin;
+
+  private staticBehaviorOptions: cloudfront.BehaviorOptions;
+
+  private edgeLambdas: cloudfront.EdgeLambda[];
+
+  private serverBehaviorOptions: cloudfront.BehaviorOptions;
+
+  private imageBehaviorOptions: cloudfront.BehaviorOptions;
+
   constructor(scope: Construct, id: string, props: NextjsDistributionProps) {
     super(scope, id);
 
@@ -248,6 +246,13 @@ export class NextjsDistribution extends Construct {
     this.validateCustomDomainSettings();
     this.hostedZone = this.lookupHostedZone();
     this.certificate = this.createCertificate();
+
+    // Create Behaviors
+    this.s3Origin = new origins.S3Origin(this.props.staticAssetsBucket);
+    this.staticBehaviorOptions = this.createStaticBehaviorOptions();
+    this.edgeLambdas = this.createEdgeLambdas();
+    this.serverBehaviorOptions = this.createServerBehaviorOptions();
+    this.imageBehaviorOptions = this.createImageBehaviorOptions();
 
     // Create CloudFront
     if (this.props.isPlaceholder) {
@@ -309,18 +314,7 @@ export class NextjsDistribution extends Construct {
     return this.props.functionUrlAuthType === lambda.FunctionUrlAuthType.AWS_IAM;
   }
 
-  get #s3Origin(): origins.S3Origin {
-    return new origins.S3Origin(this.props.staticAssetsBucket);
-  }
-
-  get #commonBehaviorOptions(): Pick<cloudfront.BehaviorOptions, 'viewerProtocolPolicy' | 'compress'> {
-    return {
-      viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-      compress: true,
-    };
-  }
-
-  get #staticBehaviorOptions(): cloudfront.BehaviorOptions {
+  private createStaticBehaviorOptions(): cloudfront.BehaviorOptions {
     const staticClientMaxAge = this.props.cachePolicies?.staticClientMaxAgeDefault || DEFAULT_STATIC_MAX_AGE;
     const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
       // add default header for static assets
@@ -336,12 +330,10 @@ export class NextjsDistribution extends Construct {
         ],
       },
     });
-    const cachePolicy =
-      this.props.cachePolicies?.staticCachePolicy ??
-      new cloudfront.CachePolicy(this, 'StaticCachePolicy', NextjsDistribution.staticCachePolicyProps);
+    const cachePolicy = this.props.cachePolicies?.staticCachePolicy ?? cloudfront.CachePolicy.CACHING_OPTIMIZED;
     return {
-      ...this.#commonBehaviorOptions,
-      origin: this.#s3Origin,
+      ...this.commonBehaviorOptions,
+      origin: this.s3Origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
       cachePolicy,
@@ -349,79 +341,81 @@ export class NextjsDistribution extends Construct {
     };
   }
 
-  get #fnUrlAuthType(): lambda.FunctionUrlAuthType {
+  private get fnUrlAuthType(): lambda.FunctionUrlAuthType {
     return this.props.functionUrlAuthType || lambda.FunctionUrlAuthType.NONE;
   }
 
-  get #edgeLambdas(): cloudfront.EdgeLambda[] {
-    const lambdaOriginRequestEdgeFn = this.buildLambdaOriginRequestEdgeFunction();
+  private createEdgeLambdas(): cloudfront.EdgeLambda[] {
+    const originRequestEdgeFn = this.buildLambdaOriginRequestEdgeFunction();
     if (this.isFnUrlIamAuth) {
-      lambdaOriginRequestEdgeFn.addToRolePolicy(
+      originRequestEdgeFn.addToRolePolicy(
         new PolicyStatement({
           actions: ['lambda:InvokeFunctionUrl'],
           resources: [this.props.serverFunction.functionArn, this.props.imageOptFunction.functionArn],
         })
       );
     }
-    const lambdaOriginRequestEdgeFnVersion = lambda.Version.fromVersionArn(
+    const originRequestEdgeFnVersion = lambda.Version.fromVersionArn(
       this,
       'Version',
-      lambdaOriginRequestEdgeFn.currentVersion.functionArn
+      originRequestEdgeFn.currentVersion.functionArn
     );
     return [
       {
         eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
-        functionVersion: lambdaOriginRequestEdgeFnVersion,
+        functionVersion: originRequestEdgeFnVersion,
         includeBody: this.isFnUrlIamAuth,
       },
     ];
   }
 
-  get #dynamicBehaviorOptions(): cloudfront.BehaviorOptions {
-    const fnUrl = this.props.serverFunction.addFunctionUrl({ authType: this.#fnUrlAuthType });
-    const serverFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url));
-    const originRequestPolicy = new cloudfront.OriginRequestPolicy(
-      this,
-      'LambdaOriginPolicy',
-      NextjsDistribution.dynamicOriginRequestPolicyProps
-    );
+  private createServerBehaviorOptions(): cloudfront.BehaviorOptions {
+    const fnUrl = this.props.serverFunction.addFunctionUrl({ authType: this.fnUrlAuthType });
+    const origin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url));
+    const originRequestPolicy =
+      this.props.originRequestPolicies?.serverOriginRequestPolicy ??
+      new cloudfront.OriginRequestPolicy(
+        this,
+        'ServerOriginRequestPolicy',
+        NextjsDistribution.serverOriginRequestPolicyProps
+      );
     const cachePolicy =
-      this.props.cachePolicies?.lambdaCachePolicy ??
-      new cloudfront.CachePolicy(this, 'LambdaCache', NextjsDistribution.dynamicCachePolicyProps);
+      this.props.cachePolicies?.serverCachePolicy ??
+      new cloudfront.CachePolicy(this, 'ServerCachePolicy', NextjsDistribution.serverCachePolicyProps);
     return {
-      ...this.#commonBehaviorOptions,
-      origin: serverFunctionOrigin,
+      ...this.commonBehaviorOptions,
+      origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
       // cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS, // this should be configurable
       originRequestPolicy,
       // changed from CACHING_DISABLED. Is this ok? If we need to keep CACHING_DISABLED,
-      // then we should remove props.cachePolicy.dynamic b/c it's misleading
+      // then we should remove props.cachePolicy.lambda b/c it's misleading
       cachePolicy,
-      edgeLambdas: this.#edgeLambdas,
+      edgeLambdas: this.edgeLambdas,
     };
   }
 
-  get #imageBehaviorOptions(): cloudfront.BehaviorOptions {
-    const imageOptFnUrl = this.props.imageOptFunction.addFunctionUrl({ authType: this.#fnUrlAuthType });
-    const imageOptFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(imageOptFnUrl.url));
+  private createImageBehaviorOptions(): cloudfront.BehaviorOptions {
+    const imageOptFnUrl = this.props.imageOptFunction.addFunctionUrl({ authType: this.fnUrlAuthType });
+    const origin = new origins.HttpOrigin(Fn.parseDomainName(imageOptFnUrl.url));
     const originRequestPolicy =
       this.props.originRequestPolicies?.imageOptimizationOriginRequestPolicy ??
       new cloudfront.OriginRequestPolicy(
         this,
-        'ImageOptPolicy',
+        'ImageOriginRequestPolicy',
         NextjsDistribution.imageOptimizationOriginRequestPolicyProps
       );
     const cachePolicy =
       this.props.cachePolicies?.imageCachePolicy ??
-      new cloudfront.CachePolicy(this, 'ImageCache', NextjsDistribution.imageCachePolicyProps);
+      new cloudfront.CachePolicy(this, 'ImageCachePolicy', NextjsDistribution.imageCachePolicyProps);
     return {
-      ...this.#commonBehaviorOptions,
-      origin: imageOptFunctionOrigin,
+      ...this.commonBehaviorOptions,
+      origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
       cachePolicy,
       originRequestPolicy,
-      edgeLambdas: this.isFnUrlIamAuth ? this.#edgeLambdas : [],
+      edgeLambdas: this.isFnUrlIamAuth ? this.edgeLambdas : [],
     };
   }
 
@@ -450,30 +444,30 @@ export class NextjsDistribution extends Construct {
       // these values can NOT be overwritten by cfDistributionProps
       domainNames,
       certificate: this.certificate,
-      defaultBehavior: this.#dynamicBehaviorOptions,
+      defaultBehavior: this.serverBehaviorOptions,
 
       additionalBehaviors: {
         // is index.html static or dynamic?
-        ...(hasIndexHtml ? {} : { '/': this.#dynamicBehaviorOptions }),
+        ...(hasIndexHtml ? {} : { '/': this.serverBehaviorOptions }),
+
+        // known dynamic routes
+        'api/*': this.serverBehaviorOptions,
+        '_next/data/*': this.serverBehaviorOptions,
 
         // dynamic images go to lambda
-        '_next/image*': this.#imageBehaviorOptions,
-
-        // known static routes
-        '_next/*': this.#staticBehaviorOptions,
+        '_next/image*': this.imageBehaviorOptions,
       },
     });
     return distribution;
   }
 
   private addStaticBehaviorsToDistribution() {
-    const publicFiles = this.props.nextBuild.readPublicFileList();
+    const publicFiles = fs.readdirSync(path.join(this.props.nextjsPath, '.open-next/assets'), { withFileTypes: true });
     for (const publicFile of publicFiles) {
-      const isDir = fs.statSync(publicFile).isDirectory();
       this.distribution.addBehavior(
-        isDir ? `${publicFile}/*` : publicFile,
-        this.#s3Origin,
-        this.#staticBehaviorOptions
+        publicFile.isDirectory() ? `${publicFile.name}/*` : publicFile.name,
+        this.s3Origin,
+        this.staticBehaviorOptions
       );
     }
   }

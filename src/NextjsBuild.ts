@@ -3,16 +3,17 @@ import { Token } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as spawn from 'cross-spawn';
 import * as fs from 'fs-extra';
+import {
+  NEXTJS_BUILD_DIR,
+  NEXTJS_BUILD_IMAGE_FN_DIR,
+  NEXTJS_BUILD_MIDDLEWARE_FN_DIR,
+  NEXTJS_BUILD_REVALIDATE_FN_DIR,
+  NEXTJS_BUILD_SERVER_FN_DIR,
+  NEXTJS_CACHE_DIR,
+  NEXTJS_STATIC_DIR,
+} from './constants';
 import { listDirectory } from './NextjsAssetsDeployment';
 import { CompressionLevel, NextjsBaseProps } from './NextjsBase';
-
-const NEXTJS_BUILD_DIR = '.open-next';
-const NEXTJS_STATIC_DIR = 'assets';
-const NEXTJS_CACHE_DIR = 'cache';
-const NEXTJS_BUILD_MIDDLEWARE_FN_DIR = 'middleware-function';
-const NEXTJS_BUILD_REVALIDATE_FN_DIR = 'revalidation-function';
-const NEXTJS_BUILD_IMAGE_FN_DIR = 'image-optimization-function';
-const NEXTJS_BUILD_SERVER_FN_DIR = 'server-function';
 
 export interface NextjsBuildProps extends NextjsBaseProps {}
 

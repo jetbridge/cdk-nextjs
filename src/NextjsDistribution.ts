@@ -16,7 +16,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import { bundleFunction } from './BundleFunction';
-import { DEFAULT_STATIC_MAX_AGE } from './constants';
+import { DEFAULT_STATIC_MAX_AGE, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
 import { BaseSiteDomainProps, buildErrorResponsesForRedirectToIndex, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 
@@ -464,13 +464,22 @@ export class NextjsDistribution extends Construct {
   }
 
   private addStaticBehaviorsToDistribution() {
-    const publicFiles = fs.readdirSync(path.join(this.props.nextjsPath, '.open-next/assets'), { withFileTypes: true });
-    for (const publicFile of publicFiles) {
-      this.distribution.addBehavior(
-        publicFile.isDirectory() ? `${publicFile.name}/*` : publicFile.name,
-        this.s3Origin,
-        this.staticBehaviorOptions
+    const publicFiles = fs.readdirSync(path.join(this.props.nextjsPath, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR), {
+      withFileTypes: true,
+    });
+    if (publicFiles.length >= 25) {
+      throw new Error(
+        `Too many public/ files in Next.js build. CloudFront limits Distributions to 25 Cache Behaviors. See documented limit here: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions`
       );
+    }
+    for (const publicFile of publicFiles) {
+      const pathPattern = publicFile.isDirectory() ? `${publicFile.name}/*` : publicFile.name;
+      if (!/^[a-zA-Z0-9_\-\.\*\$/~"'@:+?&]+$/.test(pathPattern)) {
+        throw new Error(
+          `Invalid CloudFront Distribution Cache Behavior Path Pattern: ${pathPattern}. Please see documentation here: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern`
+        );
+      }
+      this.distribution.addBehavior(pathPattern, this.s3Origin, this.staticBehaviorOptions);
     }
   }
 

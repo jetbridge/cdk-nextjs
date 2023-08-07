@@ -183,6 +183,8 @@ export class NextjsDistribution extends Construct {
     comment: 'Nextjs Server Origin Request Policy',
   };
 
+  // NOTE: when Lambda Function URL Auth Type is `FunctionUrlAuthType.AWS_IAM`
+  // we must ensure Lambda@Edge is only signing request with allowed cookies/query/headers
   public static imageOptimizationOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
     cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
     // NOTE: if `NextjsDistributionProps.functionUrlAuthType` is set to AWS_IAM
@@ -479,7 +481,7 @@ export class NextjsDistribution extends Construct {
       domainNames: this.buildDistributionDomainNames(),
       certificate: this.certificate,
       defaultBehavior: {
-        origin: new origins.S3Origin(this.props.staticAssetsBucket),
+        origin: this.s3Origin,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
       ...this.props.cdk?.distribution, // not sure if needed
@@ -525,7 +527,7 @@ export class NextjsDistribution extends Construct {
       },
     });
 
-    const fn = new cloudfront.experimental.EdgeFunction(this, 'DefaultOriginRequestEdgeFn', {
+    const fn = new cloudfront.experimental.EdgeFunction(this, 'EdgeFn', {
       runtime: Runtime.NODEJS_18_X,
       handler: 'LambdaOriginRequest.handler',
       code: lambda.Code.fromAsset(dirname(outputPath)),

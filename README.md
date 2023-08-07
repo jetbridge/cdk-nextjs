@@ -128,6 +128,8 @@ Don't manually update package.json or use npm CLI. Update dependencies in .proje
 ## Breaking changes
 
 - v4.0.0
+  - Renamed `NextjsLambda` to `NextjsServer`
+  - Renamed `ImageOptimizationLambda` to `NextjsImage`
   - Renamed `NextjsCachePolicyProps.lambdaCachePolicy` to `NextjsCachePolicyProps.serverCachePolicy`
   - Removed `NextjsOriginRequestPolicyProps.fallbackOriginRequestPolicy`
   - Renamed `NextjsOriginRequestPolicyProps.lambdaOriginRequestPolicy` to `NextjsOriginRequestPolicyProps.serverOriginRequestPolicy`

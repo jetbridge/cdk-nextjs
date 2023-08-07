@@ -17,7 +17,7 @@ import { getS3ReplaceValues, NextjsS3EnvRewriter } from './NextjsS3EnvRewriter';
 
 export type EnvironmentVars = Record<string, string>;
 
-function getEnvironment(props: NextjsLambdaProps): { [name: string]: string } {
+function getEnvironment(props: NextjsServerProps): { [name: string]: string } {
   const environmentVariables: { [name: string]: string } = {
     ...props.environment,
     ...props.lambda?.environment,
@@ -32,7 +32,7 @@ function getEnvironment(props: NextjsLambdaProps): { [name: string]: string } {
   return environmentVariables;
 }
 
-export interface NextjsLambdaProps extends NextjsBaseProps {
+export interface NextjsServerProps extends NextjsBaseProps {
   /**
    * Built nextJS application.
    */
@@ -52,11 +52,11 @@ export interface NextjsLambdaProps extends NextjsBaseProps {
 /**
  * Build a lambda function from a NextJS application to handle server-side rendering, API routes, and image optimization.
  */
-export class NextJsLambda extends Construct {
+export class NextJsServer extends Construct {
   configBucket?: Bucket;
   lambdaFunction: Function;
 
-  constructor(scope: Construct, id: string, props: NextjsLambdaProps) {
+  constructor(scope: Construct, id: string, props: NextjsServerProps) {
     super(scope, id);
     const { nextBuild, lambda: functionOptions, isPlaceholder } = props;
 

@@ -15,7 +15,7 @@ export type RemotePattern = {
   pathname?: string;
 };
 
-export interface ImageOptimizationProps extends NextjsBaseProps {
+export interface NextjsImageProps extends NextjsBaseProps {
   /**
    * The S3 bucket holding application images.
    */
@@ -35,10 +35,10 @@ export interface ImageOptimizationProps extends NextjsBaseProps {
 /**
  * This lambda handles image optimization.
  */
-export class ImageOptimizationLambda extends Function {
+export class NextjsImage extends Function {
   bucket: IBucket;
 
-  constructor(scope: Construct, id: string, props: ImageOptimizationProps) {
+  constructor(scope: Construct, id: string, props: NextjsImageProps) {
     const { lambdaOptions, bucket, isPlaceholder } = props;
 
     const code = isPlaceholder

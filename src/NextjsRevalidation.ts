@@ -5,7 +5,7 @@ import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
 import { NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
-import { NextJsLambda } from './NextjsLambda';
+import { NextJsServer } from './NextjsServer';
 
 export interface RevalidationProps extends NextjsBaseProps {
   /**
@@ -21,7 +21,7 @@ export interface RevalidationProps extends NextjsBaseProps {
   /**
    * The main NextJS server handler lambda function.
    */
-  readonly serverFunction: NextJsLambda;
+  readonly serverFunction: NextJsServer;
 }
 
 /**

@@ -13,3 +13,10 @@ export const LAMBDA_RUNTIME = Runtime.NODEJS_18_X;
 export const DEFAULT_LAMBA_MEMORY = 1536;
 
 export const CACHE_BUCKET_KEY_PREFIX = '_cache';
+
+export const NEXTJS_STATIC_DIR = 'assets';
+export const NEXTJS_BUILD_DIR = '.open-next';
+export const NEXTJS_CACHE_DIR = 'cache';
+export const NEXTJS_BUILD_REVALIDATE_FN_DIR = 'revalidation-function';
+export const NEXTJS_BUILD_IMAGE_FN_DIR = 'image-optimization-function';
+export const NEXTJS_BUILD_SERVER_FN_DIR = 'server-function';

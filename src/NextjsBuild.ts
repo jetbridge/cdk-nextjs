@@ -3,6 +3,14 @@ import { Token } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as spawn from 'cross-spawn';
 import * as fs from 'fs-extra';
+import {
+  NEXTJS_BUILD_DIR,
+  NEXTJS_BUILD_IMAGE_FN_DIR,
+  NEXTJS_BUILD_REVALIDATE_FN_DIR,
+  NEXTJS_BUILD_SERVER_FN_DIR,
+  NEXTJS_CACHE_DIR,
+  NEXTJS_STATIC_DIR,
+} from './constants';
 import { listDirectory } from './NextjsAssetsDeployment';
 import { CompressionLevel, NextjsBaseProps } from './NextjsBase';
 
@@ -22,11 +30,6 @@ export interface NextjsBuildProps extends NextjsBaseProps {}
  * This construct can be used by higher level constructs or used directly.
  */
 export class NextjsBuild extends Construct {
-  // build output directories
-  /**
-   * Contains code for middleware. Not currently used.
-   */
-  public nextMiddlewareFnDir?: string;
   /**
    * Contains server code and dependencies.
    */
@@ -79,8 +82,6 @@ export class NextjsBuild extends Construct {
     this.nextImageFnDir = this._getOutputDir(NEXTJS_BUILD_IMAGE_FN_DIR);
     this.nextRevalidateFnDir = this._getOutputDir(NEXTJS_BUILD_REVALIDATE_FN_DIR);
     this.nextServerFnDir = this._getOutputDir(NEXTJS_BUILD_SERVER_FN_DIR);
-    this.nextMiddlewareFnDir = this._getOutputDir(NEXTJS_BUILD_MIDDLEWARE_FN_DIR, true);
-    // this.nextDir = this._getNextDir();
   }
 
   private runNpmBuild() {
@@ -112,7 +113,7 @@ export class NextjsBuild extends Construct {
     };
 
     const buildPath = this.props.buildPath ?? nextjsPath;
-    const buildCommand = this.props.buildCommand ?? 'npx --yes open-next@2 build';
+    const buildCommand = this.props.buildCommand ?? 'npm exec -- open-next build';
     // run build
     console.debug(`├ Running "${buildCommand}" in`, buildPath);
     const cmdParts = buildCommand.split(/\s+/);
@@ -126,10 +127,6 @@ export class NextjsBuild extends Construct {
       throw new Error('The app "build" script failed.');
     }
   }
-
-  // getNextBuildId() {
-  //   return fs.readFileSync(path.join(this._getNextStandaloneBuildDir(), 'BUILD_ID'), 'utf-8');
-  // }
 
   readPublicFileList() {
     const publicDir = this._getNextStaticDir();

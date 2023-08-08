@@ -137,6 +137,8 @@ Don't manually update package.json or use npm CLI. Update dependencies in .proje
   - Renamed `NextjsDistribution.lambdaCachePolicyProps` to `NextjsDistribution.serverCachePolicyProps`
   - Renamed `NextjsDistribution.lambdaOriginRequestPolicyProps` to `NextjsDistribution.serverOriginRequestPolicyProps`
   - Removed `NextjsDistribution.fallbackOriginRequestPolicyProps`
+  - Removed `NextjsDistribution.imageOptimizationOriginRequestPolicyProps`
+  - NOTE: when upgrading to v4 from v3, the Lambda@Edge function will be renamed or removed. CloudFormation will fail to delete the function b/c they're replicated a take ~15 min to delete (more [here](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html)). You can either deploy CloudFormation with it's "no rollback" feature for a clean deployment or mark the Lambda@Edge function as "retain on delete".
 
 - v3.0.0: Using open-next for building, ARM64 architecture for image handling, new build options.
 

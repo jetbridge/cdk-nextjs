@@ -13,7 +13,7 @@ export {
 } from './NextjsAssetsDeployment';
 export { NextjsRevalidation, RevalidationProps } from './NextjsRevalidation';
 export { NextjsBuild, NextjsBuildProps, CreateArchiveArgs } from './NextjsBuild';
-export { EnvironmentVars, NextJsServer, NextjsServerProps } from './NextjsServer';
+export { EnvironmentVars, NextjsServer, NextjsServerProps } from './NextjsServer';
 export { NextjsImage, NextjsImageProps } from './NextjsImage';
 export {
   NextjsS3EnvRewriter,

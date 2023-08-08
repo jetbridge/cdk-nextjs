@@ -15,7 +15,7 @@ import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
 import { NextjsImage } from './NextjsImage';
 import { NextjsRevalidation } from './NextjsRevalidation';
-import { NextJsServer } from './NextjsServer';
+import { NextjsServer } from './NextjsServer';
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -80,7 +80,7 @@ export class Nextjs extends Construct {
   /**
    * The main NextJS server handler lambda function.
    */
-  public serverFunction: NextJsServer;
+  public serverFunction: NextjsServer;
 
   /**
    * The image optimization handler lambda function.
@@ -142,7 +142,7 @@ export class Nextjs extends Construct {
 
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir });
-    this.serverFunction = new NextJsServer(this, 'ServerFn', {
+    this.serverFunction = new NextjsServer(this, 'ServerFn', {
       ...props,
       tempBuildDir,
       nextBuild: this.nextBuild,

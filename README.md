@@ -26,6 +26,9 @@ new Nextjs(this, 'Web', {
 });
 ```
 
+## Important Notes
+- Due to CloudFront's Distribution Cache Behavior pattern matching limitations, a cache behavior will be created for each top level file or directory in your `public/` folder. CloudFront has a soft limit of [25 cache behaviors per distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions). Therefore, it's recommended to include all assets that can be under a top level folder like `public/static/`. Learn more in open-next docs [here](https://github.com/sst/open-next/blob/main/README.md#workaround-create-one-cache-behavior-per-top-level-file-and-folder-in-public-aws-specific).
+
 ## Documentation
 
 Available on [Construct Hub](https://constructs.dev/packages/cdk-nextjs-standalone/).
@@ -123,6 +126,19 @@ Here is a short HowTo before you get started:
 Don't manually update package.json or use npm CLI. Update dependencies in .projenrc.js then run yarn projen.
 
 ## Breaking changes
+
+- v4.0.0
+  - Renamed `NextjsLambda` to `NextjsServer`
+  - Renamed `ImageOptimizationLambda` to `NextjsImage`
+  - Renamed `NextjsCachePolicyProps.lambdaCachePolicy` to `NextjsCachePolicyProps.serverCachePolicy`
+  - Removed `NextjsOriginRequestPolicyProps.fallbackOriginRequestPolicy`
+  - Renamed `NextjsOriginRequestPolicyProps.lambdaOriginRequestPolicy` to `NextjsOriginRequestPolicyProps.serverOriginRequestPolicy`
+  - Removed `NextjsDistribution.staticCachePolicyProps`
+  - Renamed `NextjsDistribution.lambdaCachePolicyProps` to `NextjsDistribution.serverCachePolicyProps`
+  - Renamed `NextjsDistribution.lambdaOriginRequestPolicyProps` to `NextjsDistribution.serverOriginRequestPolicyProps`
+  - Removed `NextjsDistribution.fallbackOriginRequestPolicyProps`
+  - Removed `NextjsDistribution.imageOptimizationOriginRequestPolicyProps`
+  - NOTE: when upgrading to v4 from v3, the Lambda@Edge function will be renamed or removed. CloudFormation will fail to delete the function b/c they're replicated a take ~15 min to delete (more [here](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html)). You can either deploy CloudFormation with it's "no rollback" feature for a clean deployment or mark the Lambda@Edge function as "retain on delete".
 
 - v3.0.0: Using open-next for building, ARM64 architecture for image handling, new build options.
 

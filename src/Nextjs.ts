@@ -9,13 +9,13 @@ import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { Construct } from 'constructs';
 import * as fs from 'fs-extra';
 import { CACHE_BUCKET_KEY_PREFIX } from './constants';
-import { ImageOptimizationLambda } from './ImageOptimizationLambda';
 import { NextJsAssetsDeployment, NextjsAssetsDeploymentProps } from './NextjsAssetsDeployment';
 import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
-import { NextJsLambda } from './NextjsLambda';
+import { NextjsImage } from './NextjsImage';
 import { NextjsRevalidation } from './NextjsRevalidation';
+import { NextjsServer } from './NextjsServer';
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -80,12 +80,12 @@ export class Nextjs extends Construct {
   /**
    * The main NextJS server handler lambda function.
    */
-  public serverFunction: NextJsLambda;
+  public serverFunction: NextjsServer;
 
   /**
    * The image optimization handler lambda function.
    */
-  public imageOptimizationFunction: ImageOptimizationLambda;
+  public imageOptimizationFunction: NextjsImage;
 
   /**
    * Built NextJS project output.
@@ -142,7 +142,7 @@ export class Nextjs extends Construct {
 
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir });
-    this.serverFunction = new NextJsLambda(this, 'ServerFn', {
+    this.serverFunction = new NextjsServer(this, 'ServerFn', {
       ...props,
       tempBuildDir,
       nextBuild: this.nextBuild,
@@ -150,7 +150,7 @@ export class Nextjs extends Construct {
       staticAssetBucket: this.staticAssetBucket,
     });
     // build image optimization
-    this.imageOptimizationFunction = new ImageOptimizationLambda(this, 'ImgOptFn', {
+    this.imageOptimizationFunction = new NextjsImage(this, 'ImgOptFn', {
       ...props,
       nextBuild: this.nextBuild,
       bucket: props.imageOptimizationBucket || this.bucket,

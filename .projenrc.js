@@ -39,7 +39,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@aws-sdk/signature-v4',
     '@aws-crypto/sha256-js',
   ] /* Runtime dependencies of this module. */,
-  devDeps: ['open-next', 'aws-sdk', 'constructs'] /* Build dependencies for this module. */,
+  devDeps: ['aws-sdk', 'constructs'] /* Build dependencies for this module. */,
+  peerDeps: ['open-next@2'],
 
   // do not generate sample test files
   sampleCode: false,

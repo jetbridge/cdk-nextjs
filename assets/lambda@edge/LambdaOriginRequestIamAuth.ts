@@ -1,8 +1,7 @@
-import qs from 'node:querystring';
+import qs, { escape } from 'node:querystring';
 import { Sha256 } from '@aws-crypto/sha256-js';
 import { SignatureV4 } from '@aws-sdk/signature-v4';
 import type { CloudFrontHeaders, CloudFrontRequest, CloudFrontRequestHandler } from 'aws-lambda';
-import { fixHostHeader, handleS3Request } from './common';
 
 const debug = false;
 
@@ -13,22 +12,24 @@ const debug = false;
  */
 export const handler: CloudFrontRequestHandler = async (event) => {
   const request = event.Records[0].cf.request;
-  if (debug) console.log('request', JSON.stringify(request, null, 2));
+  if (debug) console.log('input request', JSON.stringify(request, null, 2));
 
-  handleS3Request(request);
-  fixHostHeader(request);
-  if (isLambdaUrlRequest(request)) {
-    await signRequest(request);
-  }
-  if (debug) console.log(JSON.stringify(request), null, 2);
+  escapeQuerystring(request);
+  await signRequest(request);
+
+  if (debug) console.log('output request', JSON.stringify(request), null, 2);
   return request;
 };
 
-let sigv4: SignatureV4;
-
-export function isLambdaUrlRequest(request: CloudFrontRequest) {
-  return /[a-z0-9]+\.lambda-url\.[a-z0-9-]+\.on\.aws/.test(request.origin?.custom?.domainName || '');
+/**
+ * Lambda URL will reject query parameters with brackets so we need to encode
+ * https://github.dev/pwrdrvr/lambda-url-signing/blob/main/packages/edge-to-origin/src/translate-request.ts#L19-L31
+ */
+function escapeQuerystring(request: CloudFrontRequest) {
+  request.querystring = request.querystring.replace(/\[/g, '%5B').replace(/]/g, '%5D');
 }
+
+let sigv4: SignatureV4;
 
 /**
  * When `NextjsDistributionProps.functionUrlAuthType` is set to
@@ -44,12 +45,14 @@ export async function signRequest(request: CloudFrontRequest) {
     const region = getRegionFromLambdaUrl(request.origin?.custom?.domainName || '');
     sigv4 = getSigV4(region);
   }
-  const headerBag = cfHeadersToHeaderBag(request);
+  // remove x-forwarded-for b/c it changes from hop to hop
+  delete request.headers['x-forwarded-for'];
+  const headerBag = cfHeadersToHeaderBag(request.headers);
   let body: string | undefined;
   if (request.body?.data) {
     body = Buffer.from(request.body.data, 'base64').toString();
   }
-  const params = queryStringToParams(request);
+  const params = queryStringToQueryParamBag(request.querystring);
   const signed = await sigv4.sign({
     method: request.method,
     headers: headerBag,
@@ -88,7 +91,10 @@ export function getRegionFromLambdaUrl(url: string): string {
   return region;
 }
 
-type HeaderBag = Record<string, string>;
+/**
+ * Bag or Map used for HeaderBag or QueryStringParameterBag for `sigv4.sign()`
+ */
+type Bag = Record<string, string>;
 /**
  * Converts CloudFront headers (can have array of header values) to simple
  * header bag (object) required by `sigv4.sign`
@@ -96,19 +102,13 @@ type HeaderBag = Record<string, string>;
  * NOTE: only includes headers allowed by origin policy to prevent signature
  * mismatch
  */
-export function cfHeadersToHeaderBag(request: CloudFrontRequest): HeaderBag {
-  let headerBag: HeaderBag = {};
-  for (const [header, values] of Object.entries(request.headers)) {
-    // don't sign 'x-forwarded-for' b/c it changes from hop to hop
-    if (header === 'x-forwarded-for') continue;
-    if (request.uri === '_next/image') {
-      // _next/image origin policy only allows accept
-      if (header === 'accept') {
-        headerBag[header] = values[0].value;
-      }
-    } else {
-      headerBag[header] = values[0].value;
-    }
+export function cfHeadersToHeaderBag(headers: CloudFrontHeaders): Bag {
+  let headerBag: Bag = {};
+  // assume first header value is the best match
+  // headerKey is case insensitive whereas key (adjacent property value that is
+  // not destructured) is case sensitive. we arbitrarily use case insensitive key
+  for (const [headerKey, [{ value }]] of Object.entries(headers)) {
+    headerBag[headerKey] = value;
   }
   return headerBag;
 }
@@ -116,32 +116,26 @@ export function cfHeadersToHeaderBag(request: CloudFrontRequest): HeaderBag {
 /**
  * Converts simple header bag (object) to CloudFront headers
  */
-export function headerBagToCfHeaders(headerBag: HeaderBag): CloudFrontHeaders {
+export function headerBagToCfHeaders(headerBag: Bag): CloudFrontHeaders {
   const cfHeaders: CloudFrontHeaders = {};
-  for (const [header, value] of Object.entries(headerBag)) {
-    cfHeaders[header] = [{ key: header, value }];
+  for (const [headerKey, value] of Object.entries(headerBag)) {
+    /*
+      When your Lambda function adds or modifies request headers and you don't include the header key field, Lambda@Edge automatically inserts a header key using the header name that you provide. Regardless of how you've formatted the header name, the header key that's inserted automatically is formatted with initial capitalization for each part, separated by hyphens (-).
+      See: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-event-structure.html
+    */
+    cfHeaders[headerKey] = [{ value }];
   }
   return cfHeaders;
 }
 
 /**
- * Converts CloudFront querystring to `HttpRequest.query` for IAM Sig V4
- *
- * NOTE: only includes query parameters allowed at origin to prevent signature
- * mismatch errors
+ * Converts CloudFront querystring to QueryParamaterBag for IAM Sig V4
  */
-export function queryStringToParams(request: CloudFrontRequest) {
-  const params: Record<string, string> = {};
-  const _params = new URLSearchParams(request.querystring);
-  for (const [k, v] of _params) {
-    if (request.uri === '_next/image') {
-      // _next/image origin policy only allows these querystrings
-      if (['url', 'q', 'w'].includes(k)) {
-        params[k] = v;
-      }
-    } else {
-      params[k] = v;
-    }
+export function queryStringToQueryParamBag(querystring: string): Bag {
+  const oldParams = new URLSearchParams(querystring);
+  const newParams: Bag = {};
+  for (const [k, v] of oldParams) {
+    newParams[k] = v;
   }
-  return params;
+  return newParams;
 }

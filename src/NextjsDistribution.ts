@@ -138,21 +138,6 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
  */
 export class NextjsDistribution extends Construct {
   /**
-   * The default CloudFront cache policy properties for images.
-   */
-  public static imageCachePolicyProps: cloudfront.CachePolicyProps = {
-    queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-    headerBehavior: cloudfront.CacheHeaderBehavior.allowList('Accept'),
-    cookieBehavior: cloudfront.CacheCookieBehavior.none(),
-    defaultTtl: Duration.days(1),
-    maxTtl: Duration.days(365),
-    minTtl: Duration.days(0),
-    enableAcceptEncodingBrotli: true,
-    enableAcceptEncodingGzip: true,
-    comment: 'Nextjs Image Default Cache Policy',
-  };
-
-  /**
    * The default CloudFront cache policy properties for dynamic requests to server handler.
    */
   public static serverCachePolicyProps: cloudfront.CachePolicyProps = {
@@ -174,26 +159,18 @@ export class NextjsDistribution extends Construct {
   };
 
   /**
-   * The default CloudFront lambda origin request policy.
+   * The default CloudFront Cache Policy properties for images.
    */
-  public static serverOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
-    cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(),
-    queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-    headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(), // can't include host
-    comment: 'Nextjs Server Origin Request Policy',
-  };
-
-  // NOTE: when Lambda Function URL Auth Type is `FunctionUrlAuthType.AWS_IAM`
-  // we must ensure Lambda@Edge is only signing request with allowed cookies/query/headers
-  public static imageOptimizationOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
-    cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
-    // NOTE: if `NextjsDistributionProps.functionUrlAuthType` is set to AWS_IAM
-    // auth, then the assets/lambda@edge/LambdaOriginRequestIamAuth.ts file
-    // needs to be updated to exclude these query strings/headers (below) from
-    // the signature calculation. Otherwise you'll get signature mismatch error.
-    queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.allowList('q', 'w', 'url'),
-    headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList('accept'),
-    comment: 'Nextjs Image Optimization Origin Request Policy',
+  public static imageCachePolicyProps: cloudfront.CachePolicyProps = {
+    queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+    headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
+    cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+    defaultTtl: Duration.days(1),
+    maxTtl: Duration.days(365),
+    minTtl: Duration.days(0),
+    enableAcceptEncodingBrotli: true,
+    enableAcceptEncodingGzip: true,
+    comment: 'Nextjs Image Default Cache Policy',
   };
 
   protected props: NextjsDistributionProps;
@@ -225,7 +202,7 @@ export class NextjsDistribution extends Construct {
 
   private staticBehaviorOptions: cloudfront.BehaviorOptions;
 
-  private edgeLambdas: cloudfront.EdgeLambda[];
+  private edgeLambdas: cloudfront.EdgeLambda[] = [];
 
   private serverBehaviorOptions: cloudfront.BehaviorOptions;
 
@@ -252,7 +229,9 @@ export class NextjsDistribution extends Construct {
     // Create Behaviors
     this.s3Origin = new origins.S3Origin(this.props.staticAssetsBucket);
     this.staticBehaviorOptions = this.createStaticBehaviorOptions();
-    this.edgeLambdas = this.createEdgeLambdas();
+    if (this.props.functionUrlAuthType === lambda.FunctionUrlAuthType.AWS_IAM) {
+      this.edgeLambdas.push(this.createEdgeLambda());
+    }
     this.serverBehaviorOptions = this.createServerBehaviorOptions();
     this.imageBehaviorOptions = this.createImageBehaviorOptions();
 
@@ -318,6 +297,7 @@ export class NextjsDistribution extends Construct {
 
   private createStaticBehaviorOptions(): cloudfront.BehaviorOptions {
     const staticClientMaxAge = this.props.cachePolicies?.staticClientMaxAgeDefault || DEFAULT_STATIC_MAX_AGE;
+    // TODO: remove this response headers policy once S3 files have correct cache control headers with new asset deployment technique
     const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
       // add default header for static assets
       customHeadersBehavior: {
@@ -347,7 +327,7 @@ export class NextjsDistribution extends Construct {
     return this.props.functionUrlAuthType || lambda.FunctionUrlAuthType.NONE;
   }
 
-  private createEdgeLambdas(): cloudfront.EdgeLambda[] {
+  private createEdgeLambda(): cloudfront.EdgeLambda {
     const originRequestEdgeFn = this.buildLambdaOriginRequestEdgeFunction();
     if (this.isFnUrlIamAuth) {
       originRequestEdgeFn.addToRolePolicy(
@@ -362,13 +342,11 @@ export class NextjsDistribution extends Construct {
       'Version',
       originRequestEdgeFn.currentVersion.functionArn
     );
-    return [
-      {
-        eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
-        functionVersion: originRequestEdgeFnVersion,
-        includeBody: this.isFnUrlIamAuth,
-      },
-    ];
+    return {
+      eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
+      functionVersion: originRequestEdgeFnVersion,
+      includeBody: this.isFnUrlIamAuth,
+    };
   }
 
   private createServerBehaviorOptions(): cloudfront.BehaviorOptions {
@@ -376,11 +354,7 @@ export class NextjsDistribution extends Construct {
     const origin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url));
     const originRequestPolicy =
       this.props.originRequestPolicies?.serverOriginRequestPolicy ??
-      new cloudfront.OriginRequestPolicy(
-        this,
-        'ServerOriginRequestPolicy',
-        NextjsDistribution.serverOriginRequestPolicyProps
-      );
+      cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER;
     const cachePolicy =
       this.props.cachePolicies?.serverCachePolicy ??
       new cloudfront.CachePolicy(this, 'ServerCachePolicy', NextjsDistribution.serverCachePolicyProps);
@@ -388,10 +362,7 @@ export class NextjsDistribution extends Construct {
       ...this.commonBehaviorOptions,
       origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-      // cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS, // this should be configurable
       originRequestPolicy,
-      // changed from CACHING_DISABLED. Is this ok? If we need to keep CACHING_DISABLED,
-      // then we should remove props.cachePolicy.lambda b/c it's misleading
       cachePolicy,
       edgeLambdas: this.edgeLambdas,
     };
@@ -402,11 +373,7 @@ export class NextjsDistribution extends Construct {
     const origin = new origins.HttpOrigin(Fn.parseDomainName(imageOptFnUrl.url));
     const originRequestPolicy =
       this.props.originRequestPolicies?.imageOptimizationOriginRequestPolicy ??
-      new cloudfront.OriginRequestPolicy(
-        this,
-        'ImageOriginRequestPolicy',
-        NextjsDistribution.imageOptimizationOriginRequestPolicyProps
-      );
+      cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER;
     const cachePolicy =
       this.props.cachePolicies?.imageCachePolicy ??
       new cloudfront.CachePolicy(this, 'ImageCachePolicy', NextjsDistribution.imageCachePolicyProps);
@@ -417,7 +384,7 @@ export class NextjsDistribution extends Construct {
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
       cachePolicy,
       originRequestPolicy,
-      edgeLambdas: this.isFnUrlIamAuth ? this.edgeLambdas : [],
+      edgeLambdas: this.edgeLambdas,
     };
   }
 
@@ -518,11 +485,7 @@ export class NextjsDistribution extends Construct {
     const app = App.of(this) as App;
 
     // bundle the edge function
-    const fileName =
-      this.props.functionUrlAuthType === lambda.FunctionUrlAuthType.NONE
-        ? 'LambdaOriginRequest'
-        : 'LambdaOriginRequestIamAuth';
-    const inputPath = path.join(__dirname, '..', 'assets', 'lambda@edge', fileName);
+    const inputPath = path.join(__dirname, '..', 'assets', 'lambda@edge', 'LambdaOriginRequestIamAuth');
     const outputPath = path.join(this.tempBuildDir, 'lambda@edge', 'LambdaOriginRequest.js');
     bundleFunction({
       inputPath,

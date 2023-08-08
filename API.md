@@ -137,6 +137,8 @@ Don't manually update package.json or use npm CLI. Update dependencies in .proje
   - Renamed `NextjsDistribution.lambdaCachePolicyProps` to `NextjsDistribution.serverCachePolicyProps`
   - Renamed `NextjsDistribution.lambdaOriginRequestPolicyProps` to `NextjsDistribution.serverOriginRequestPolicyProps`
   - Removed `NextjsDistribution.fallbackOriginRequestPolicyProps`
+  - Removed `NextjsDistribution.imageOptimizationOriginRequestPolicyProps`
+  - NOTE: when upgrading to v4 from v3, the Lambda@Edge function will be renamed or removed. CloudFormation will fail to delete the function b/c they're replicated a take ~15 min to delete (more [here](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html)). You can either deploy CloudFormation with it's "no rollback" feature for a clean deployment or mark the Lambda@Edge function as "retain on delete".
 
 - v3.0.0: Using open-next for building, ARM64 architecture for image handling, new build options.
 
@@ -255,7 +257,7 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.lambdaFunctionUrl">lambdaFunctionUrl</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrl</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built NextJS project output. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.revalidation">revalidation</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation">NextjsRevalidation</a></code> | Revalidation handler and queue. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextJsServer">NextJsServer</a></code> | The main NextJS server handler lambda function. |
+| <code><a href="#cdk-nextjs-standalone.Nextjs.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | The main NextJS server handler lambda function. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Where build-time assets for deployment are stored. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.configBucket">configBucket</a></code> | <code>aws-cdk-lib.aws_s3.Bucket</code> | *No description.* |
 
@@ -376,10 +378,10 @@ Revalidation handler and queue.
 ##### `serverFunction`<sup>Required</sup> <a name="serverFunction" id="cdk-nextjs-standalone.Nextjs.property.serverFunction"></a>
 
 ```typescript
-public readonly serverFunction: NextJsServer;
+public readonly serverFunction: NextjsServer;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextJsServer">NextJsServer</a>
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a>
 
 The main NextJS server handler lambda function.
 
@@ -2605,39 +2607,39 @@ public readonly rewriteNode: Construct;
 ---
 
 
-### NextJsServer <a name="NextJsServer" id="cdk-nextjs-standalone.NextJsServer"></a>
+### NextjsServer <a name="NextjsServer" id="cdk-nextjs-standalone.NextjsServer"></a>
 
 Build a lambda function from a NextJS application to handle server-side rendering, API routes, and image optimization.
 
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextJsServer.Initializer"></a>
+#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsServer.Initializer"></a>
 
 ```typescript
-import { NextJsServer } from 'cdk-nextjs-standalone'
+import { NextjsServer } from 'cdk-nextjs-standalone'
 
-new NextJsServer(scope: Construct, id: string, props: NextjsServerProps)
+new NextjsServer(scope: Construct, id: string, props: NextjsServerProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextJsServer.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextJsServer.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextJsServer.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServerProps">NextjsServerProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsServer.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsServer.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsServer.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServerProps">NextjsServerProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextJsServer.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsServer.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextJsServer.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsServer.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextJsServer.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsServer.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsServerProps">NextjsServerProps</a>
 
@@ -2647,11 +2649,11 @@ new NextJsServer(scope: Construct, id: string, props: NextjsServerProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextJsServer.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cdk-nextjs-standalone.NextjsServer.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextJsServer.toString"></a>
+##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsServer.toString"></a>
 
 ```typescript
 public toString(): string
@@ -2663,21 +2665,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextJsServer.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#cdk-nextjs-standalone.NextjsServer.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextJsServer.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsServer.isConstruct"></a>
 
 ```typescript
-import { NextJsServer } from 'cdk-nextjs-standalone'
+import { NextjsServer } from 'cdk-nextjs-standalone'
 
-NextJsServer.isConstruct(x: any)
+NextjsServer.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextJsServer.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsServer.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -2689,13 +2691,13 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextJsServer.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextJsServer.property.lambdaFunction">lambdaFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextJsServer.property.configBucket">configBucket</a></code> | <code>aws-cdk-lib.aws_s3.Bucket</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsServer.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-nextjs-standalone.NextjsServer.property.lambdaFunction">lambdaFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsServer.property.configBucket">configBucket</a></code> | <code>aws-cdk-lib.aws_s3.Bucket</code> | *No description.* |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextJsServer.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsServer.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -2707,7 +2709,7 @@ The tree node.
 
 ---
 
-##### `lambdaFunction`<sup>Required</sup> <a name="lambdaFunction" id="cdk-nextjs-standalone.NextJsServer.property.lambdaFunction"></a>
+##### `lambdaFunction`<sup>Required</sup> <a name="lambdaFunction" id="cdk-nextjs-standalone.NextjsServer.property.lambdaFunction"></a>
 
 ```typescript
 public readonly lambdaFunction: Function;
@@ -2717,7 +2719,7 @@ public readonly lambdaFunction: Function;
 
 ---
 
-##### `configBucket`<sup>Optional</sup> <a name="configBucket" id="cdk-nextjs-standalone.NextJsServer.property.configBucket"></a>
+##### `configBucket`<sup>Optional</sup> <a name="configBucket" id="cdk-nextjs-standalone.NextjsServer.property.configBucket"></a>
 
 ```typescript
 public readonly configBucket: Bucket;
@@ -5420,7 +5422,7 @@ const revalidationProps: RevalidationProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
 | <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextJsServer">NextJsServer</a></code> | The main NextJS server handler lambda function. |
+| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | The main NextJS server handler lambda function. |
 | <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
 
 ---
@@ -5604,10 +5606,10 @@ The `NextjsBuild` instance representing the built Nextjs application.
 ##### `serverFunction`<sup>Required</sup> <a name="serverFunction" id="cdk-nextjs-standalone.RevalidationProps.property.serverFunction"></a>
 
 ```typescript
-public readonly serverFunction: NextJsServer;
+public readonly serverFunction: NextjsServer;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextJsServer">NextJsServer</a>
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a>
 
 The main NextJS server handler lambda function.
 

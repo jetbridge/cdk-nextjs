@@ -6,7 +6,7 @@ import { NextjsBaseProps } from './NextjsBase';
 import type { NextjsBuild } from './NextjsBuild';
 import { getCommonNodejsFunctionProps } from './utils/common-lambda-props';
 
-export interface ImageOptimizationProps extends NextjsBaseProps {
+export interface NextjsImageProps extends NextjsBaseProps {
   /**
    * The S3 bucket holding application images.
    */

@@ -5,7 +5,7 @@ describe('LambdaOriginRequestIamAuth', () => {
   test('signRequest should add x-amz headers', async () => {
     // dummy AWS credentials
     process.env = { ...process.env, ...getFakeAwsCreds() };
-    const event = getFakeCloudFrontLambdaUrlRequest();
+    const event = getFakePageRequest();
     const request = event.Records[0].cf.request;
     await signRequest(request);
     const securityHeaders = ['x-amz-date', 'x-amz-security-token', 'x-amz-content-sha256', 'authorization'];
@@ -13,22 +13,15 @@ describe('LambdaOriginRequestIamAuth', () => {
     expect(hasSignedHeaders).toBe(true);
   });
 
-  test('isLambdaFunctionUrl should correctly identity Lambda URL', () => {
-    const event = getFakeCloudFrontLambdaUrlRequest();
-    const request = event.Records[0].cf.request;
-    const actual = isLambdaUrlRequest(request);
-    expect(actual).toBe(true);
-  });
-
   test('getRegionFromLambdaUrl should correctly get region', () => {
-    const event = getFakeCloudFrontLambdaUrlRequest();
+    const event = getFakePageRequest();
     const request = event.Records[0].cf.request;
     const actual = getRegionFromLambdaUrl(request.origin?.custom?.domainName || '');
     expect(actual).toBe('us-east-1');
   });
 });
 
-function getFakeCloudFrontLambdaUrlRequest(): CloudFrontRequestEvent {
+function getFakePageRequest(): CloudFrontRequestEvent {
   return {
     Records: [
       {

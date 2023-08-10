@@ -79,12 +79,12 @@ export class Nextjs extends Construct {
   /**
    * The main NextJS server handler lambda function.
    */
-  public serverFunction: NextJsLambda;
+  public serverFunction: NextjsServer;
 
   /**
    * The image optimization handler lambda function.
    */
-  public imageOptimizationFunction: ImageOptimizationLambda;
+  public imageOptimizationFunction: NextjsImage;
 
   /**
    * Built NextJS project output.
@@ -142,7 +142,7 @@ export class Nextjs extends Construct {
       staticAssetBucket: this.staticAssets.bucket,
     });
     // build image optimization
-    this.imageOptimizationFunction = new ImageOptimizationLambda(this, 'ImgOptFn', {
+    this.imageOptimizationFunction = new NextjsImage(this, 'ImgOptFn', {
       ...props,
       nextBuild: this.nextBuild,
       bucket: props.imageOptimizationBucket || this.bucket,

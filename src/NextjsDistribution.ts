@@ -32,7 +32,7 @@ export interface NextjsDistributionCdkProps {
 
 export interface NextjsCachePolicyProps {
   readonly staticCachePolicy?: cloudfront.ICachePolicy;
-  readonly lambdaCachePolicy?: cloudfront.ICachePolicy;
+  readonly serverCachePolicy?: cloudfront.ICachePolicy;
   readonly imageCachePolicy?: cloudfront.ICachePolicy;
 
   /**
@@ -43,8 +43,7 @@ export interface NextjsCachePolicyProps {
 }
 
 export interface NextjsOriginRequestPolicyProps {
-  readonly lambdaOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
-  readonly fallbackOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
+  readonly serverOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
   readonly imageOptimizationOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
 }
 
@@ -134,76 +133,39 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
  */
 export class NextjsDistribution extends Construct {
   /**
-   * The default CloudFront cache policy properties for static pages.
+   * The default CloudFront cache policy properties for dynamic requests to server handler.
    */
-  public static staticCachePolicyProps: cloudfront.CachePolicyProps = {
-    queryStringBehavior: cloudfront.CacheQueryStringBehavior.none(),
-    headerBehavior: cloudfront.CacheHeaderBehavior.none(),
-    cookieBehavior: cloudfront.CacheCookieBehavior.none(),
-    defaultTtl: Duration.days(30),
-    maxTtl: Duration.days(60),
-    minTtl: Duration.days(30),
-    enableAcceptEncodingBrotli: true,
-    enableAcceptEncodingGzip: true,
-    comment: 'Nextjs Static Default Cache Policy',
-  };
-
-  /**
-   * The default CloudFront cache policy properties for images.
-   */
-  public static imageCachePolicyProps: cloudfront.CachePolicyProps = {
+  public static serverCachePolicyProps: cloudfront.CachePolicyProps = {
     queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-    headerBehavior: cloudfront.CacheHeaderBehavior.allowList('Accept'),
-    cookieBehavior: cloudfront.CacheCookieBehavior.none(),
-    defaultTtl: Duration.days(1),
-    maxTtl: Duration.days(365),
-    minTtl: Duration.days(0),
-    enableAcceptEncodingBrotli: true,
-    enableAcceptEncodingGzip: true,
-    comment: 'Nextjs Image Default Cache Policy',
-  };
-
-  /**
-   * The default CloudFront cache policy properties for the Lambda server handler.
-   */
-  public static lambdaCachePolicyProps: cloudfront.CachePolicyProps = {
-    queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-    headerBehavior: cloudfront.CacheHeaderBehavior.allowList('rsc', 'next-router-prefetch', 'next-router-state-tree'),
+    headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
+      'accept',
+      'rsc',
+      'next-router-prefetch',
+      'next-router-state-tree',
+      'next-url'
+    ),
     cookieBehavior: cloudfront.CacheCookieBehavior.all(),
     defaultTtl: Duration.seconds(0),
     maxTtl: Duration.days(365),
     minTtl: Duration.seconds(0),
     enableAcceptEncodingBrotli: true,
     enableAcceptEncodingGzip: true,
-    comment: 'Nextjs Lambda Default Cache Policy',
+    comment: 'Nextjs Server Default Cache Policy',
   };
 
   /**
-   * The default CloudFront lambda origin request policy.
+   * The default CloudFront Cache Policy properties for images.
    */
-  public static lambdaOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
-    cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(),
-    queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-    headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(), // can't include host
-    comment: 'Nextjs Lambda Origin Request Policy',
-  };
-
-  public static fallbackOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
-    cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(), // pretty much disables caching - maybe can be changed
-    queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-    headerBehavior: cloudfront.OriginRequestHeaderBehavior.all(),
-    comment: 'Nextjs Fallback Origin Request Policy',
-  };
-
-  public static imageOptimizationOriginRequestPolicyProps: cloudfront.OriginRequestPolicyProps = {
-    cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
-    // NOTE: if `NextjsDistributionProps.functionUrlAuthType` is set to AWS_IAM
-    // auth, then the assets/lambda@edge/LambdaOriginRequestIamAuth.ts file
-    // needs to be updated to exclude these query strings/headers (below) from
-    // the signature calculation. Otherwise you'll get signature mismatch error.
-    queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.allowList('q', 'w', 'url'),
-    headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList('accept'),
-    comment: 'Nextjs Image Optimization Origin Request Policy',
+  public static imageCachePolicyProps: cloudfront.CachePolicyProps = {
+    queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+    headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
+    cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+    defaultTtl: Duration.days(1),
+    maxTtl: Duration.days(365),
+    minTtl: Duration.days(0),
+    enableAcceptEncodingBrotli: true,
+    enableAcceptEncodingGzip: true,
+    comment: 'Nextjs Image Default Cache Policy',
   };
 
   protected props: NextjsDistributionProps;
@@ -225,6 +187,21 @@ export class NextjsDistribution extends Construct {
   certificate?: acm.ICertificate;
 
   public tempBuildDir: string;
+
+  private commonBehaviorOptions: Pick<cloudfront.BehaviorOptions, 'viewerProtocolPolicy' | 'compress'> = {
+    viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+    compress: true,
+  };
+
+  private s3Origin: origins.S3Origin;
+
+  private staticBehaviorOptions: cloudfront.BehaviorOptions;
+
+  private edgeLambdas: cloudfront.EdgeLambda[] = [];
+
+  private serverBehaviorOptions: cloudfront.BehaviorOptions;
+
+  private imageBehaviorOptions: cloudfront.BehaviorOptions;
 
   constructor(scope: Construct, id: string, props: NextjsDistributionProps) {
     super(scope, id);
@@ -309,93 +286,10 @@ export class NextjsDistribution extends Construct {
     return this.props.functionUrlAuthType === lambda.FunctionUrlAuthType.AWS_IAM;
   }
 
-  /////////////////////
-  // CloudFront Distribution
-  /////////////////////
-
-  private createCloudFrontDistribution(): cloudfront.Distribution {
-    const { cdk: cdkProps, cachePolicies, originRequestPolicies } = this.props;
-    const cfDistributionProps = cdkProps?.distribution;
-
-    // build domainNames
-    const domainNames = this.buildDistributionDomainNames();
-
-    // S3 origin
-    const s3Origin = new origins.S3Origin(this.props.staticAssetsBucket);
-
-    const viewerProtocolPolicy = cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS;
-
-    // handle placeholder
-    if (this.props.isPlaceholder) {
-      return new cloudfront.Distribution(this, 'Distribution', {
-        defaultRootObject: 'index.html',
-        errorResponses: buildErrorResponsesForRedirectToIndex('index.html'),
-        domainNames,
-        certificate: this.certificate,
-        defaultBehavior: {
-          origin: s3Origin,
-          viewerProtocolPolicy,
-        },
-      });
-    }
-
-    // cache policies
-    const staticCachePolicy = cachePolicies?.staticCachePolicy ?? this.createCloudFrontStaticCachePolicy();
-    const imageCachePolicy = cachePolicies?.imageCachePolicy ?? this.createCloudFrontImageCachePolicy();
-
-    // origin request policies
-    const lambdaOriginRequestPolicy =
-      originRequestPolicies?.lambdaOriginRequestPolicy ?? this.createLambdaOriginRequestPolicy();
-
-    const fnUrlAuthType: lambda.FunctionUrlAuthType = this.props.functionUrlAuthType || lambda.FunctionUrlAuthType.NONE;
-    // main server function origin (lambda URL HTTP origin)
-    const fnUrl = this.props.serverFunction.addFunctionUrl({ authType: fnUrlAuthType });
-    const serverFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url));
-
-    // Image Optimization
-    const imageOptFnUrl = this.props.imageOptFunction.addFunctionUrl({ authType: fnUrlAuthType });
-    const imageOptFunctionOrigin = new origins.HttpOrigin(Fn.parseDomainName(imageOptFnUrl.url));
-    const imageOptORP =
-      originRequestPolicies?.imageOptimizationOriginRequestPolicy ?? this.createImageOptimizationOriginRequestPolicy();
-
-    // lambda behavior edge function
-    const lambdaOriginRequestEdgeFn = this.buildLambdaOriginRequestEdgeFunction();
-    if (this.isFnUrlIamAuth) {
-      lambdaOriginRequestEdgeFn.addToRolePolicy(
-        new PolicyStatement({
-          actions: ['lambda:InvokeFunctionUrl'],
-          resources: [this.props.serverFunction.functionArn, this.props.imageOptFunction.functionArn],
-        })
-      );
-    }
-    const lambdaOriginRequestEdgeFnVersion = lambda.Version.fromVersionArn(
-      this,
-      'Version',
-      lambdaOriginRequestEdgeFn.currentVersion.functionArn
-    );
-    const lambdaOriginEdgeFns: cloudfront.EdgeLambda[] = [
-      {
-        eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
-        functionVersion: lambdaOriginRequestEdgeFnVersion,
-        includeBody: this.isFnUrlIamAuth,
-      },
-    ];
-
-    // default handler for requests that don't match any other path:
-    //   - try S3 bucket first
-    //   - if 403, 404, or 503 fall back to Lambda handler
-    // see discussion here: https://github.com/jetbridge/cdk-nextjs/pull/125#discussion_r1279212678
-    const fallbackOriginGroup = new origins.OriginGroup({
-      primaryOrigin: s3Origin,
-      fallbackOrigin: serverFunctionOrigin,
-      fallbackStatusCodes: [403, 404, 503],
-    });
-
-    const lambdaCachePolicy = cachePolicies?.lambdaCachePolicy ?? this.createCloudFrontLambdaCachePolicy();
-
-    // requests for static objects
-    const defaultStaticMaxAge = cachePolicies?.staticClientMaxAgeDefault?.toSeconds() || DEFAULT_STATIC_MAX_AGE;
-    const staticResponseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
+  private createStaticBehaviorOptions(): cloudfront.BehaviorOptions {
+    const staticClientMaxAge = this.props.cachePolicies?.staticClientMaxAgeDefault || DEFAULT_STATIC_MAX_AGE;
+    // TODO: remove this response headers policy once S3 files have correct cache control headers with new asset deployment technique
+    const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
       // add default header for static assets
       customHeadersBehavior: {
         customHeaders: [
@@ -404,20 +298,21 @@ export class NextjsDistribution extends Construct {
             override: false,
             // by default tell browser to cache static files for this long
             // this is separate from the origin cache policy
-            value: `public,max-age=${defaultStaticMaxAge},immutable`,
+            value: `public,max-age=${staticClientMaxAge},immutable`,
           },
         ],
       },
     });
-    const staticBehavior: cloudfront.BehaviorOptions = {
-      viewerProtocolPolicy,
-      origin: s3Origin,
+    const cachePolicy = this.props.cachePolicies?.staticCachePolicy ?? cloudfront.CachePolicy.CACHING_OPTIMIZED;
+    return {
+      ...this.commonBehaviorOptions,
+      origin: this.s3Origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
-      compress: true,
-      cachePolicy: staticCachePolicy,
-      responseHeadersPolicy: staticResponseHeadersPolicy,
+      cachePolicy,
+      responseHeadersPolicy,
     };
+  }
 
   private get fnUrlAuthType(): lambda.FunctionUrlAuthType {
     return this.props.functionUrlAuthType || lambda.FunctionUrlAuthType.NONE;
@@ -466,35 +361,48 @@ export class NextjsDistribution extends Construct {
       ...this.commonBehaviorOptions,
       origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-      // cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS, // this should be configurable
-      originRequestPolicy: lambdaOriginRequestPolicy,
-      compress: true,
-      cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
-      edgeLambdas: lambdaOriginEdgeFns,
+      originRequestPolicy,
+      cachePolicy,
+      edgeLambdas: this.edgeLambdas,
     };
+  }
 
-    const imageBehavior: cloudfront.BehaviorOptions = {
-      viewerProtocolPolicy,
-      origin: imageOptFunctionOrigin,
+  private createImageBehaviorOptions(): cloudfront.BehaviorOptions {
+    const imageOptFnUrl = this.props.imageOptFunction.addFunctionUrl({ authType: this.fnUrlAuthType });
+    const origin = new origins.HttpOrigin(Fn.parseDomainName(imageOptFnUrl.url));
+    const originRequestPolicy =
+      this.props.originRequestPolicies?.imageOptimizationOriginRequestPolicy ??
+      cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER;
+    const cachePolicy =
+      this.props.cachePolicies?.imageCachePolicy ??
+      new cloudfront.CachePolicy(this, 'ImageCachePolicy', NextjsDistribution.imageCachePolicyProps);
+    return {
+      ...this.commonBehaviorOptions,
+      origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
-      compress: true,
-      cachePolicy: imageCachePolicy,
-      originRequestPolicy: imageOptORP,
-      edgeLambdas: this.isFnUrlIamAuth ? lambdaOriginEdgeFns : [],
+      cachePolicy,
+      originRequestPolicy,
+      edgeLambdas: this.edgeLambdas,
     };
+  }
 
-    // requests to fallback origin group (default behavior)
-    // used for S3 and lambda. would prefer to forward all headers to lambda but need to strip out host
-    // TODO: try to do this with headers whitelist or edge lambda
-    const fallbackOriginRequestPolicy =
-      originRequestPolicies?.fallbackOriginRequestPolicy ?? this.createFallbackOriginRequestPolicy();
+  /////////////////////
+  // CloudFront Distribution
+  /////////////////////
+
+  private createCloudFrontDistribution(): cloudfront.Distribution {
+    const { cdk: cdkProps } = this.props;
+    const cfDistributionProps = cdkProps?.distribution;
+
+    // build domainNames
+    const domainNames = this.buildDistributionDomainNames();
 
     // if we don't have a static file called index.html then we should
     // redirect to the lambda handler
     const hasIndexHtml = this.props.nextBuild.readPublicFileList().includes('index.html');
 
-    return new cloudfront.Distribution(this, 'Distribution', {
+    const distribution = new cloudfront.Distribution(this, 'Distribution', {
       // defaultRootObject: "index.html",
       defaultRootObject: '',
 
@@ -504,69 +412,41 @@ export class NextjsDistribution extends Construct {
       // these values can NOT be overwritten by cfDistributionProps
       domainNames,
       certificate: this.certificate,
-      defaultBehavior: {
-        origin: fallbackOriginGroup, // try S3 first, then lambda
-        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        compress: true,
-        // what goes here? static or lambda?
-        cachePolicy: lambdaCachePolicy,
-        originRequestPolicy: fallbackOriginRequestPolicy,
-        edgeLambdas: lambdaOriginEdgeFns,
-      },
+      defaultBehavior: this.serverBehaviorOptions,
 
       additionalBehaviors: {
         // is index.html static or dynamic?
-        ...(hasIndexHtml ? {} : { '/': lambdaBehavior }),
+        ...(hasIndexHtml ? {} : { '/': this.serverBehaviorOptions }),
 
         // known dynamic routes
-        'api/*': lambdaBehavior,
-        '_next/data/*': lambdaBehavior,
+        'api/*': this.serverBehaviorOptions,
+        '_next/data/*': this.serverBehaviorOptions,
 
         // dynamic images go to lambda
-        '_next/image*': imageBehavior,
-
-        // known static routes
-        // it would be nice to create routes for all the static files we know of
-        // but we run into the limit of CacheBehaviors per distribution
-        '_next/*': staticBehavior,
+        '_next/image*': this.imageBehaviorOptions,
       },
     });
+    return distribution;
   }
 
-  private createCloudFrontStaticCachePolicy(): cloudfront.CachePolicy {
-    return new cloudfront.CachePolicy(this, 'StaticsCache', NextjsDistribution.staticCachePolicyProps);
-  }
-
-  private createCloudFrontImageCachePolicy(): cloudfront.CachePolicy {
-    return new cloudfront.CachePolicy(this, 'ImageCache', NextjsDistribution.imageCachePolicyProps);
-  }
-
-  private createLambdaOriginRequestPolicy(): cloudfront.OriginRequestPolicy {
-    return new cloudfront.OriginRequestPolicy(
-      this,
-      'LambdaOriginPolicy',
-      NextjsDistribution.lambdaOriginRequestPolicyProps
-    );
-  }
-
-  private createFallbackOriginRequestPolicy(): cloudfront.OriginRequestPolicy {
-    return new cloudfront.OriginRequestPolicy(
-      this,
-      'FallbackOriginRequestPolicy',
-      NextjsDistribution.fallbackOriginRequestPolicyProps
-    );
-  }
-
-  private createImageOptimizationOriginRequestPolicy(): cloudfront.OriginRequestPolicy {
-    return new cloudfront.OriginRequestPolicy(
-      this,
-      'ImageOptPolicy',
-      NextjsDistribution.imageOptimizationOriginRequestPolicyProps
-    );
-  }
-
-  private createCloudFrontLambdaCachePolicy(): cloudfront.CachePolicy {
-    return new cloudfront.CachePolicy(this, 'LambdaCache', NextjsDistribution.lambdaCachePolicyProps);
+  private addStaticBehaviorsToDistribution() {
+    const publicFiles = fs.readdirSync(path.join(this.props.nextjsPath, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR), {
+      withFileTypes: true,
+    });
+    if (publicFiles.length >= 25) {
+      throw new Error(
+        `Too many public/ files in Next.js build. CloudFront limits Distributions to 25 Cache Behaviors. See documented limit here: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions`
+      );
+    }
+    for (const publicFile of publicFiles) {
+      const pathPattern = publicFile.isDirectory() ? `${publicFile.name}/*` : publicFile.name;
+      if (!/^[a-zA-Z0-9_\-\.\*\$/~"'@:+?&]+$/.test(pathPattern)) {
+        throw new Error(
+          `Invalid CloudFront Distribution Cache Behavior Path Pattern: ${pathPattern}. Please see documentation here: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern`
+        );
+      }
+      this.distribution.addBehavior(pathPattern, this.s3Origin, this.staticBehaviorOptions);
+    }
   }
 
   private buildDistributionDomainNames(): string[] {

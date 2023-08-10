@@ -31,7 +31,7 @@ export interface NextjsServerProps extends NextjsBaseProps {
 /**
  * Build a lambda function from a NextJS application to handle server-side rendering, API routes, and image optimization.
  */
-export class NextJsLambda extends Construct {
+export class NextjsServer extends Construct {
   configBucket?: Bucket;
   lambdaFunction: Function;
 

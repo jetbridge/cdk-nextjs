@@ -26,6 +26,9 @@ new Nextjs(this, 'Web', {
 });
 ```
 
+## Important Notes
+- Due to CloudFront's Distribution Cache Behavior pattern matching limitations, a cache behavior will be created for each top level file or directory in your `public/` folder. CloudFront has a soft limit of [25 cache behaviors per distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions). Therefore, it's recommended to include all assets that can be under a top level folder like `public/static/`. Learn more in open-next docs [here](https://github.com/sst/open-next/blob/main/README.md#workaround-create-one-cache-behavior-per-top-level-file-and-folder-in-public-aws-specific).
+
 ## Documentation
 
 Available on [Construct Hub](https://constructs.dev/packages/cdk-nextjs-standalone/).

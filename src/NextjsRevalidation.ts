@@ -23,7 +23,7 @@ export interface NextjsRevalidationProps extends NextjsBaseProps {
   /**
    * The main NextJS server handler lambda function.
    */
-  readonly serverFunction: NextJsLambda;
+  readonly serverFunction: NextjsServer;
 }
 
 /**

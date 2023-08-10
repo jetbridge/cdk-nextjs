@@ -2,5 +2,4 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "eslint.packageManager": "yarn",
 }

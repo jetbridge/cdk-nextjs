@@ -1,13 +1,15 @@
 import { Duration, Stack } from 'aws-cdk-lib';
-import { Code, Function, FunctionOptions, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
 import { NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
-import { NextJsLambda } from './NextjsLambda';
+import { NextjsServer } from './NextjsServer';
+import { getCommonNodejsFunctionProps } from './utils/common-lambda-props';
 
-export interface RevalidationProps extends NextjsBaseProps {
+export interface NextjsRevalidationProps extends NextjsBaseProps {
   /**
    * Override function properties.
    */
@@ -31,34 +33,43 @@ export interface RevalidationProps extends NextjsBaseProps {
  *
  */
 export class NextjsRevalidation extends Construct {
-  constructor(scope: Construct, id: string, props: RevalidationProps) {
+  queue: Queue;
+  function: NodejsFunction;
+  private props: NextjsRevalidationProps;
+
+  constructor(scope: Construct, id: string, props: NextjsRevalidationProps) {
     super(scope, id);
+    this.props = props;
 
-    const code = props.isPlaceholder
-      ? Code.fromInline(
-          "module.exports.handler = async () => { return { statusCode: 200, body: 'cdk-nextjs placeholder site' } }"
-        )
-      : Code.fromAsset(props.nextBuild.nextRevalidateFnDir);
+    this.queue = this.createQueue();
+    this.function = this.createFunction();
+  }
 
-    const queue = new Queue(this, 'RevalidationQueue', {
+  private createQueue(): Queue {
+    const queue = new Queue(this, 'Queue', {
       fifo: true,
       receiveMessageWaitTime: Duration.seconds(20),
     });
-    const consumer = new Function(this, 'RevalidationFunction', {
-      description: 'Next.js revalidation function',
-      handler: 'index.handler',
+    // Allow server to send messages to the queue
+    queue.grantSendMessages(this.props.serverFunction.lambdaFunction);
+    return queue;
+  }
+
+  private createFunction(): NodejsFunction {
+    const fn = new NodejsFunction(this, 'Function', {
+      ...getCommonNodejsFunctionProps(this),
       // open-next revalidation-function
       // see: https://github.com/serverless-stack/open-next/blob/274d446ed7e940cfbe7ce05a21108f4c854ee37a/README.md?plain=1#L65
-      code,
-      runtime: Runtime.NODEJS_18_X,
+      entry: this.props.nextBuild.nextRevalidateFnDir,
+      handler: 'index.handler',
+      description: 'Next.js revalidation function',
       timeout: Duration.seconds(30),
+      environment: {
+        REVALIDATION_QUEUE_URL: this.queue.queueUrl,
+        REVALIDATION_QUEUE_REGION: Stack.of(this).region,
+      },
     });
-    consumer.addEventSource(new SqsEventSource(queue, { batchSize: 5 }));
-
-    // Allow server to send messages to the queue
-    const server = props.serverFunction.lambdaFunction;
-    server?.addEnvironment('REVALIDATION_QUEUE_URL', queue.queueUrl);
-    server?.addEnvironment('REVALIDATION_QUEUE_REGION', Stack.of(this).region);
-    queue.grantSendMessages(server);
+    fn.addEventSource(new SqsEventSource(this.queue, { batchSize: 5 }));
+    return fn;
   }
 }

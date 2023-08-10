@@ -6,22 +6,16 @@ export {
 } from './NextjsBase';
 
 // L2 constructs
+export { NextjsStaticAssets, NextjsStaticAssetsProps } from './NextjsStaticAssets';
+export { NextjsRevalidation, NextjsRevalidationProps } from './NextjsRevalidation';
+export { NextjsBuild, NextjsBuildProps } from './NextjsBuild';
+export { EnvironmentVars, NextjsServer, NextjsServerProps } from './NextjsServer';
+export { NextjsImage, NextjsImageProps } from './NextjsImage';
 export {
-  NextJsAssetsDeployment,
-  NextjsAssetsDeploymentProps,
-  NextjsAssetsCachePolicyProps,
-} from './NextjsAssetsDeployment';
-export { NextjsRevalidation, RevalidationProps } from './NextjsRevalidation';
-export { NextjsBuild, NextjsBuildProps, CreateArchiveArgs } from './NextjsBuild';
-export { EnvironmentVars, NextJsLambda, NextjsLambdaProps } from './NextjsLambda';
-export { ImageOptimizationLambda, ImageOptimizationProps } from './ImageOptimizationLambda';
-export {
-  NextjsS3EnvRewriter,
-  NextjsS3EnvRewriterProps,
-  RewriterParams,
-  RewriteReplacementsConfig,
-} from './NextjsS3EnvRewriter';
-export { NextjsLayer, NextjsLayerProps } from './NextjsLayer';
+  NextjsBucketDeployment,
+  NextjsBucketDeploymentProps,
+  NextjsBucketDeploymentPutConfigOptions,
+} from './NextjsBucketDeployment';
 export {
   NextjsDistribution,
   NextjsDistributionCdkProps,
@@ -31,6 +25,7 @@ export {
   NextjsCachePolicyProps,
   NextjsOriginRequestPolicyProps,
 } from './NextjsDistribution';
+export { NextjsInvalidation, NextjsInvalidationProps } from './NextjsInvalidation';
 
 // L3 constructs
 export { Nextjs, NextjsProps, NextjsDefaultsProps } from './Nextjs';

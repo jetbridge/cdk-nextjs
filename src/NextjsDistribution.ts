@@ -1,7 +1,7 @@
+import * as fs from 'node:fs';
 import * as os from 'os';
 import * as path from 'path';
-import { dirname } from 'path';
-import { App, Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
+import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import { Distribution, ResponseHeadersPolicy } from 'aws-cdk-lib/aws-cloudfront';
@@ -14,14 +14,9 @@ import * as route53Patterns from 'aws-cdk-lib/aws-route53-patterns';
 import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import * as fs from 'fs-extra';
-import { bundleFunction } from './BundleFunction';
-import { DEFAULT_STATIC_MAX_AGE } from './constants';
-import { BaseSiteDomainProps, buildErrorResponsesForRedirectToIndex, NextjsBaseProps } from './NextjsBase';
+import { DEFAULT_STATIC_MAX_AGE, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
+import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
-
-// contains server-side resolved environment vars in config bucket
-export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
 export interface NextjsDomainProps extends BaseSiteDomainProps {}
 
@@ -249,10 +244,18 @@ export class NextjsDistribution extends Construct {
     this.hostedZone = this.lookupHostedZone();
     this.certificate = this.createCertificate();
 
-    // Create CloudFront
-    this.distribution = this.props.isPlaceholder
-      ? this.createCloudFrontDistributionForStub()
-      : this.createCloudFrontDistribution();
+    // Create Behaviors
+    this.s3Origin = new origins.S3Origin(this.props.staticAssetsBucket);
+    this.staticBehaviorOptions = this.createStaticBehaviorOptions();
+    if (this.isFnUrlIamAuth) {
+      this.edgeLambdas.push(this.createEdgeLambda());
+    }
+    this.serverBehaviorOptions = this.createServerBehaviorOptions();
+    this.imageBehaviorOptions = this.createImageBehaviorOptions();
+
+    // Create CloudFront Distribution
+    this.distribution = this.createCloudFrontDistribution();
+    this.addStaticBehaviorsToDistribution();
 
     // Connect Custom Domain to CloudFront Distribution
     this.createRoute53Records();
@@ -416,10 +419,52 @@ export class NextjsDistribution extends Construct {
       responseHeadersPolicy: staticResponseHeadersPolicy,
     };
 
-    // requests going to lambda (api, etc)
-    const lambdaBehavior: cloudfront.BehaviorOptions = {
-      viewerProtocolPolicy,
-      origin: serverFunctionOrigin,
+  private get fnUrlAuthType(): lambda.FunctionUrlAuthType {
+    return this.props.functionUrlAuthType || lambda.FunctionUrlAuthType.NONE;
+  }
+
+  private createEdgeLambda(): cloudfront.EdgeLambda {
+    const originRequestEdgeFn = new cloudfront.experimental.EdgeFunction(this, 'EdgeFn', {
+      runtime: Runtime.NODEJS_18_X,
+      handler: 'sign-fn-url.handler',
+      code: lambda.Code.fromAsset(path.join(__dirname, 'lambdas')),
+      currentVersionOptions: {
+        removalPolicy: RemovalPolicy.DESTROY, // destroy old versions
+        retryAttempts: 1, // async retry attempts
+      },
+    });
+    originRequestEdgeFn.currentVersion.grantInvoke(new ServicePrincipal('edgelambda.amazonaws.com'));
+    originRequestEdgeFn.currentVersion.grantInvoke(new ServicePrincipal('lambda.amazonaws.com'));
+    originRequestEdgeFn.addToRolePolicy(
+      new PolicyStatement({
+        actions: ['lambda:InvokeFunctionUrl'],
+        resources: [this.props.serverFunction.functionArn, this.props.imageOptFunction.functionArn],
+      })
+    );
+    const originRequestEdgeFnVersion = lambda.Version.fromVersionArn(
+      this,
+      'Version',
+      originRequestEdgeFn.currentVersion.functionArn
+    );
+    return {
+      eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
+      functionVersion: originRequestEdgeFnVersion,
+      includeBody: true,
+    };
+  }
+
+  private createServerBehaviorOptions(): cloudfront.BehaviorOptions {
+    const fnUrl = this.props.serverFunction.addFunctionUrl({ authType: this.fnUrlAuthType });
+    const origin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url));
+    const originRequestPolicy =
+      this.props.originRequestPolicies?.serverOriginRequestPolicy ??
+      cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER;
+    const cachePolicy =
+      this.props.cachePolicies?.serverCachePolicy ??
+      new cloudfront.CachePolicy(this, 'ServerCachePolicy', NextjsDistribution.serverCachePolicyProps);
+    return {
+      ...this.commonBehaviorOptions,
+      origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
       // cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS, // this should be configurable
       originRequestPolicy: lambdaOriginRequestPolicy,
@@ -524,20 +569,6 @@ export class NextjsDistribution extends Construct {
     return new cloudfront.CachePolicy(this, 'LambdaCache', NextjsDistribution.lambdaCachePolicyProps);
   }
 
-  private createCloudFrontDistributionForStub(): cloudfront.Distribution {
-    return new cloudfront.Distribution(this, 'Distribution', {
-      defaultRootObject: 'index.html',
-      errorResponses: buildErrorResponsesForRedirectToIndex('index.html'),
-      domainNames: this.buildDistributionDomainNames(),
-      certificate: this.certificate,
-      defaultBehavior: {
-        origin: new origins.S3Origin(this.props.staticAssetsBucket),
-        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-      },
-      ...this.props.cdk?.distribution, // not sure if needed
-    });
-  }
-
   private buildDistributionDomainNames(): string[] {
     const customDomain =
       typeof this.props.customDomain === 'string' ? this.props.customDomain : this.props.customDomain?.domainName;
@@ -546,54 +577,6 @@ export class NextjsDistribution extends Construct {
       typeof this.props.customDomain === 'string' ? [] : this.props.customDomain?.alternateNames || [];
 
     return customDomain ? [customDomain, ...alternateNames] : [];
-  }
-
-  /**
-   * Create an edge function to handle requests to the lambda server handler origin.
-   * It overrides the host header in the request to be the lambda URL's host.
-   * It's needed because we forward all headers to the origin, but the origin is itself an
-   *  HTTP server so it needs the host header to be the address of the lambda and not
-   *  the distribution.
-   *
-   */
-  private buildLambdaOriginRequestEdgeFunction() {
-    const app = App.of(this) as App;
-
-    // bundle the edge function
-    const fileName =
-      this.props.functionUrlAuthType === lambda.FunctionUrlAuthType.NONE
-        ? 'LambdaOriginRequest'
-        : 'LambdaOriginRequestIamAuth';
-    const inputPath = path.join(__dirname, '..', 'assets', 'lambda@edge', fileName);
-    const outputPath = path.join(this.tempBuildDir, 'lambda@edge', 'LambdaOriginRequest.js');
-    bundleFunction({
-      inputPath,
-      outputPath,
-      bundleOptions: {
-        bundle: true,
-        external: ['aws-sdk', 'url'],
-        minify: true,
-        target: 'node18',
-        platform: 'node',
-      },
-    });
-
-    const fn = new cloudfront.experimental.EdgeFunction(this, 'DefaultOriginRequestEdgeFn', {
-      runtime: Runtime.NODEJS_18_X,
-      handler: 'LambdaOriginRequest.handler',
-      code: lambda.Code.fromAsset(dirname(outputPath)),
-      currentVersionOptions: {
-        removalPolicy: RemovalPolicy.DESTROY, // destroy old versions
-        retryAttempts: 1, // async retry attempts
-      },
-      stackId:
-        `${this.props.stackPrefix ?? 'Nextjs'}-${this.props.stageName || app.stageName || 'default'}-EdgeFn-` +
-        this.node.addr.substring(0, 5),
-    });
-    fn.currentVersion.grantInvoke(new ServicePrincipal('edgelambda.amazonaws.com'));
-    fn.currentVersion.grantInvoke(new ServicePrincipal('lambda.amazonaws.com'));
-
-    return fn;
   }
 
   /////////////////////

@@ -1,21 +1,19 @@
 /* eslint-disable prettier/prettier */
+import * as fs from 'node:fs';
 import * as os from 'os';
 import * as path from 'path';
-import { RemovalPolicy } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
-import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { Construct } from 'constructs';
-import * as fs from 'fs-extra';
-import { CACHE_BUCKET_KEY_PREFIX } from './constants';
-import { ImageOptimizationLambda } from './ImageOptimizationLambda';
-import { NextJsAssetsDeployment, NextjsAssetsDeploymentProps } from './NextjsAssetsDeployment';
 import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
-import { NextJsLambda } from './NextjsLambda';
+import { NextjsImage } from './NextjsImage';
+import { NextjsInvalidation } from './NextjsInvalidation';
 import { NextjsRevalidation } from './NextjsRevalidation';
+import { NextjsServer } from './NextjsServer';
+import { NextjsStaticAssets, NextjsStaticAssetsProps } from './NextjsStaticAssets';
 
 // contains server-side resolved environment vars in config bucket
 export const CONFIG_ENV_JSON_PATH = 'next-env.json';
@@ -30,12 +28,7 @@ export interface NextjsDefaultsProps {
   /**
    * Override static file deployment settings.
    */
-  readonly assetDeployment?: NextjsAssetsDeploymentProps | any;
-
-  /**
-   * Override cache bucket.
-   */
-  readonly cacheBucket?: s3.IBucket | any;
+  readonly assetDeployment?: NextjsStaticAssetsProps | any;
 
   /**
    * Override server lambda function settings.
@@ -60,6 +53,12 @@ export interface NextjsProps extends NextjsBaseProps {
    * construct.
    */
   readonly defaults?: NextjsDefaultsProps;
+  /**
+   * Skips running Next.js build. Useful if you want to deploy `Nextjs` but
+   * haven't made any changes to Next.js app code.
+   * @default false
+   */
+  readonly skipBuild?: boolean;
 }
 
 /**
@@ -95,7 +94,7 @@ export class Nextjs extends Construct {
   /**
    * Asset deployment to S3.
    */
-  public assetsDeployment: NextJsAssetsDeployment;
+  public staticAssets: NextjsStaticAssets;
 
   /**
    * CloudFront distribution.
@@ -105,49 +104,42 @@ export class Nextjs extends Construct {
   /**
    * Where build-time assets for deployment are stored.
    */
-  public tempBuildDir: string;
+  public get tempBuildDir(): string {
+    return this.props.tempBuildDir
+    ? path.resolve(
+        path.join(this.props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
+      )
+    : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'))
+  }
 
   /**
    * Revalidation handler and queue.
    */
   public revalidation: NextjsRevalidation;
 
-  public configBucket?: s3.Bucket;
   public lambdaFunctionUrl!: lambda.FunctionUrl;
   public imageOptimizationLambdaFunctionUrl!: lambda.FunctionUrl;
-
-  protected staticAssetBucket: s3.IBucket;
 
   constructor(scope: Construct, id: string, protected props: NextjsProps) {
     super(scope, id);
 
     if (!props.quiet) console.debug('┌ Building Next.js app ▼ ...');
 
-    // get dir to store temp build files in
-    const tempBuildDir = props.tempBuildDir
-      ? path.resolve(
-          path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
-        )
-      : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
-
-    this.tempBuildDir = tempBuildDir;
-
-    // create static asset bucket
-    this.staticAssetBucket =
-      props.defaults?.assetDeployment?.bucket ??
-      new s3.Bucket(this, 'Assets', {
-        removalPolicy: RemovalPolicy.DESTROY,
-        autoDeleteObjects: true,
-      });
-
     // build nextjs app
-    this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir });
-    this.serverFunction = new NextJsLambda(this, 'ServerFn', {
+    this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir: this.tempBuildDir });
+
+    // deploy nextjs static assets to s3
+    this.staticAssets = new NextjsStaticAssets(this, 'AssetDeployment', {
+      nextBuild: this.nextBuild,
+      bucket: props.defaults?.assetDeployment.bucket,
+    });
+
+    this.serverFunction = new NextjsServer(this, 'ServerFn', {
       ...props,
-      tempBuildDir,
+      tempBuildDir: this.tempBuildDir,
       nextBuild: this.nextBuild,
       lambda: props.defaults?.lambda,
-      staticAssetBucket: this.staticAssetBucket,
+      staticAssetBucket: this.staticAssets.bucket,
     });
     // build image optimization
     this.imageOptimizationFunction = new ImageOptimizationLambda(this, 'ImgOptFn', {
@@ -164,58 +156,36 @@ export class Nextjs extends Construct {
       serverFunction: this.serverFunction,
     });
 
-    // deploy nextjs static assets to s3
-    this.assetsDeployment = new NextJsAssetsDeployment(this, 'AssetDeployment', {
-      ...props,
-      ...props.defaults?.assetDeployment,
-      tempBuildDir,
-      nextBuild: this.nextBuild,
-      bucket: this.staticAssetBucket,
-    });
-    // finish static deployment BEFORE deploying new function code
-    // as there is some time after the new static files are uploaded but before they are rewritten
-    const rewriter = this.assetsDeployment.rewriter?.rewriteNode;
-    if (rewriter) {
-      this.serverFunction.lambdaFunction.node.addDependency(rewriter);
-    } else {
-      this.serverFunction.lambdaFunction.node.addDependency(...this.assetsDeployment.deployments);
-    }
-
     this.distribution = new NextjsDistribution(this, 'Distribution', {
       ...props,
       ...props.defaults?.distribution,
-      staticAssetsBucket: this.assetsDeployment.bucket,
-      tempBuildDir,
+      staticAssetsBucket: this.staticAssets.bucket,
+      tempBuildDir: this.tempBuildDir,
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction.lambdaFunction,
       imageOptFunction: this.imageOptimizationFunction,
     });
 
-    // We only want to provide the distribution options below if
-    // we are keep to invalidate the cache
-    const invalidationOptions = this.props.skipFullInvalidation
-      ? {}
-      : {
-          distribution: this.distribution.distribution,
-          distributionPaths: ['/*'],
-        };
-
-    new BucketDeployment(this, 'DeployCacheFiles', {
-      sources: [Source.asset(this.nextBuild.nextCacheDir)],
-      destinationBucket: this.staticAssetBucket,
-      destinationKeyPrefix: CACHE_BUCKET_KEY_PREFIX,
-      ...invalidationOptions,
-    });
+    new NextjsInvalidation(this, 'Invalidation', {
+      distributionId: this.distribution.distributionId,
+      dependencies: [this.staticAssets, this.serverFunction, this.imageOptimizationFunction]
+    })
 
     if (!props.quiet) console.debug('└ Finished preparing NextJS app for deployment');
   }
 
+  /**
+   * URL of Next.js App.
+   */
   public get url(): string {
     const customDomain = this.distribution.customDomainName;
     return customDomain ? `https://${customDomain}` : this.distribution.url;
   }
 
+  /**
+   * Convenience method to access `Nextjs.staticAssets.bucket`.
+   */
   public get bucket(): s3.IBucket {
-    return this.staticAssetBucket;
+    return this.staticAssets.bucket;
   }
 }

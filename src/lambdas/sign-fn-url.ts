@@ -1,6 +1,6 @@
-import qs from 'node:querystring';
+/* eslint-disable import/no-extraneous-dependencies */
 import { Sha256 } from '@aws-crypto/sha256-js';
-import { SignatureV4 } from '@aws-sdk/signature-v4';
+import { SignatureV4 } from '@smithy/signature-v4';
 import type { CloudFrontHeaders, CloudFrontRequest, CloudFrontRequestHandler } from 'aws-lambda';
 import { fixHostHeader, handleS3Request } from './common';
 

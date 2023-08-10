@@ -33,12 +33,6 @@ export interface NextjsBaseProps {
   readonly environment?: Record<string, string>;
 
   /**
-   * Skip building app and deploy a placeholder.
-   * Useful when using `next dev` for local development.
-   */
-  readonly isPlaceholder?: boolean;
-
-  /**
    * Directory to store temporary build files in.
    * Defaults to os.tmpdir().
    */

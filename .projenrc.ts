@@ -1,6 +1,6 @@
 import { awscdk } from 'projen';
 import { TypeScriptCompilerOptions } from 'projen/lib/javascript';
-import { commonBundlingOptions } from './src/utils/bundle-function';
+import { commonBundlingOptions } from './src/utils/common-build-options';
 
 const commonTscOptions: TypeScriptCompilerOptions = {
   skipLibCheck: true,
@@ -27,7 +27,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     dirs: ['src'],
   },
   projenrcTs: true,
-  tsconfig: { compilerOptions: { ...commonTscOptions }, exclude: ['src/**/*.test.ts'] },
+  tsconfig: { compilerOptions: { ...commonTscOptions } },
   tsconfigDev: { compilerOptions: { ...commonTscOptions } },
   // depdency config
   jsiiVersion: '~5.0.0',
@@ -53,7 +53,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   sampleCode: false, // do not generate sample test files
 });
 
-project.bundler.addBundle('src/lambdas/nextjs-bucket-deployment.ts', commonBundlingOptions);
-project.bundler.addBundle('src/lambdas/sign-fn-urls.ts', commonBundlingOptions);
+project.bundler.addBundle('./src/lambdas/nextjs-bucket-deployment.ts', commonBundlingOptions);
+project.bundler.addBundle('./src/lambdas/sign-fn-url.ts', commonBundlingOptions);
 
 project.synth();

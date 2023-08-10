@@ -49,43 +49,43 @@
           "spawn": "bundle:lambdas/nextjs-bucket-deployment"
         },
         {
-          "spawn": "bundle:lambdas/sign-fn-urls"
+          "spawn": "bundle:lambdas/sign-fn-url"
         }
       ]
     },
     "bundle:lambdas/nextjs-bucket-deployment": {
       "name": "bundle:lambdas/nextjs-bucket-deployment",
-      "description": "Create a JavaScript bundle from src/lambdas/nextjs-bucket-deployment.ts",
+      "description": "Create a JavaScript bundle from ./src/lambdas/nextjs-bucket-deployment.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/lambdas/nextjs-bucket-deployment.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap"
+          "exec": "esbuild --bundle ./src/lambdas/nextjs-bucket-deployment.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap"
         }
       ]
     },
     "bundle:lambdas/nextjs-bucket-deployment:watch": {
       "name": "bundle:lambdas/nextjs-bucket-deployment:watch",
-      "description": "Continuously update the JavaScript bundle from src/lambdas/nextjs-bucket-deployment.ts",
+      "description": "Continuously update the JavaScript bundle from ./src/lambdas/nextjs-bucket-deployment.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/lambdas/nextjs-bucket-deployment.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap --watch"
+          "exec": "esbuild --bundle ./src/lambdas/nextjs-bucket-deployment.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap --watch"
         }
       ]
     },
-    "bundle:lambdas/sign-fn-urls": {
-      "name": "bundle:lambdas/sign-fn-urls",
-      "description": "Create a JavaScript bundle from src/lambdas/sign-fn-urls.ts",
+    "bundle:lambdas/sign-fn-url": {
+      "name": "bundle:lambdas/sign-fn-url",
+      "description": "Create a JavaScript bundle from ./src/lambdas/sign-fn-url.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/lambdas/sign-fn-urls.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-urls/index.js\" --sourcemap"
+          "exec": "esbuild --bundle ./src/lambdas/sign-fn-url.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-url/index.js\" --sourcemap"
         }
       ]
     },
-    "bundle:lambdas/sign-fn-urls:watch": {
-      "name": "bundle:lambdas/sign-fn-urls:watch",
-      "description": "Continuously update the JavaScript bundle from src/lambdas/sign-fn-urls.ts",
+    "bundle:lambdas/sign-fn-url:watch": {
+      "name": "bundle:lambdas/sign-fn-url:watch",
+      "description": "Continuously update the JavaScript bundle from ./src/lambdas/sign-fn-url.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/lambdas/sign-fn-urls.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-urls/index.js\" --sourcemap --watch"
+          "exec": "esbuild --bundle ./src/lambdas/sign-fn-url.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-url/index.js\" --sourcemap --watch"
         }
       ]
     },

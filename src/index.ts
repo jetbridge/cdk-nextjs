@@ -11,11 +11,7 @@ export { NextjsRevalidation, NextjsRevalidationProps } from './NextjsRevalidatio
 export { NextjsBuild, NextjsBuildProps } from './NextjsBuild';
 export { EnvironmentVars, NextjsServer, NextjsServerProps } from './NextjsServer';
 export { NextjsImage, NextjsImageProps } from './NextjsImage';
-export {
-  NextjsBucketDeployment,
-  NextjsBucketDeploymentProps,
-  NextjsBucketDeploymentPutConfigOptions,
-} from './NextjsBucketDeployment';
+export { NextjsBucketDeployment, NextjsBucketDeploymentProps } from './NextjsBucketDeployment';
 export {
   NextjsDistribution,
   NextjsDistributionCdkProps,

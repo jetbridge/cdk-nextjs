@@ -1,17 +1,19 @@
 import { Stack } from 'aws-cdk-lib';
+import { IDistribution } from 'aws-cdk-lib/aws-cloudfront';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import {
   AwsCustomResource,
-  AwsCustomResourcePolicy,
   AwsSdkCall,
+  AwsCustomResourcePolicy,
   PhysicalResourceId,
 } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 
 export interface NextjsInvalidationProps {
   /**
-   * ID of CloudFront Distribution to invalidate
+   * CloudFront Distribution to invalidate
    */
-  readonly distributionId: string;
+  readonly distribution: IDistribution;
   /**
    * Constructs that should complete before invalidating CloudFront Distribution.
    *
@@ -26,11 +28,14 @@ export class NextjsInvalidation extends Construct {
     const awsSdkCall: AwsSdkCall = {
       // make `physicalResourceId` change each time to invalidate CloudFront
       // distribution on each change
-      physicalResourceId: PhysicalResourceId.of(`${props.distributionId}-${Date.now()}`),
+      physicalResourceId: PhysicalResourceId.of(`${props.distribution.distributionId}-${Date.now()}`),
       action: 'createInvalidation',
       service: 'CloudFront',
+      // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.custom_resources-readme.html#using-aws-sdk-for-javascript-v3
+      // action: 'CreateInvalidationCommand',
+      // service: '@aws-sdk/client-cloudfront',
       parameters: {
-        DistributionId: props.distributionId,
+        DistributionId: props.distribution.distributionId,
         InvalidationBatch: {
           CallerReference: new Date().toISOString(),
           Paths: {
@@ -43,14 +48,17 @@ export class NextjsInvalidation extends Construct {
     const awsCustomResource = new AwsCustomResource(this, 'AwsCR', {
       onCreate: awsSdkCall,
       onUpdate: awsSdkCall,
-      policy: AwsCustomResourcePolicy.fromSdkCalls({
-        resources: [
-          Stack.of(this).formatArn({
-            service: 'cloudfront',
-            resource: `distribution/${props.distributionId}`,
-          }),
-        ],
-      }),
+      policy: AwsCustomResourcePolicy.fromStatements([
+        new PolicyStatement({
+          actions: ['cloudfront:CreateInvalidation'],
+          resources: [
+            Stack.of(this).formatArn({
+              resource: `distribution/${props.distribution.distributionId}`,
+              service: 'cloudfront',
+            }),
+          ],
+        }),
+      ]),
     });
     for (const dependency of props.dependencies) {
       dependency.node.addDependency(awsCustomResource);

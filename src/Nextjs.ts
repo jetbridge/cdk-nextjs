@@ -170,7 +170,7 @@ export class Nextjs extends Construct {
 
     if (!this.props.skipFullInvalidation) {
       new NextjsInvalidation(this, 'Invalidation', {
-        distributionId: this.distribution.distributionId,
+        distribution: this.distribution.distribution,
         dependencies: [], // [this.staticAssets, this.serverFunction, this.imageOptimizationFunction]
       })
     }

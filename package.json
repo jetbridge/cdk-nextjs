@@ -57,7 +57,7 @@
     "aws-cdk-lib": "2.73.0",
     "aws-lambda": "^1.0.7",
     "constructs": "10.0.5",
-    "esbuild": "^0.17.16",
+    "esbuild": "^0.19.2",
     "eslint": "^8",
     "eslint-config-prettier": "^8.9.0",
     "eslint-import-resolver-node": "^0.3.7",
@@ -85,6 +85,12 @@
     "aws-cdk-lib": "^2.73.0",
     "constructs": "^10.0.5"
   },
+  "dependencies": {
+    "esbuild": "^0.19.2"
+  },
+  "bundledDependencies": [
+    "esbuild"
+  ],
   "keywords": [
     "aws",
     "aws-cdk",

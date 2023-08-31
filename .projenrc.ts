@@ -1,8 +1,9 @@
 import { awscdk } from 'projen';
-import { TypeScriptCompilerOptions } from 'projen/lib/javascript';
+import { TypeScriptCompilerOptions, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
 import { commonBundlingOptions } from './src/utils/common-build-options';
 
 const commonTscOptions: TypeScriptCompilerOptions = {
+  isolatedModules: true,
   skipLibCheck: true,
 };
 
@@ -13,6 +14,11 @@ const project = new awscdk.AwsCdkConstructLibrary({
   authorOrganization: true,
   defaultReleaseBranch: 'main',
   repositoryUrl: 'https://github.com/jetbridge/cdk-nextjs.git',
+  depsUpgradeOptions: {
+    workflowOptions: {
+      schedule: UpgradeDependenciesSchedule.MONTHLY,
+    },
+  },
   // package config
   name: 'cdk-nextjs-standalone',
   packageName: 'cdk-nextjs-standalone',
@@ -29,10 +35,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
   projenrcTs: true,
   tsconfig: { compilerOptions: { ...commonTscOptions } },
   tsconfigDev: { compilerOptions: { ...commonTscOptions } },
-  // depdency config
+  // dependency config
   jsiiVersion: '~5.0.0',
   cdkVersion: '2.73.0',
-  bundledDeps: [] /* Runtime dependencies of this module. */,
+  bundledDeps: ['esbuild'] /* Runtime dependencies of this module. */,
   devDeps: [
     '@aws-crypto/sha256-js',
     '@aws-sdk/client-s3',

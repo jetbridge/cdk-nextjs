@@ -11,13 +11,13 @@ import { NextjsBuild } from './NextjsBuild';
 
 export interface NextjsStaticAssetsProps {
   /**
-   * The `NextjsBuild` instance representing the built Nextjs application.
-   */
-  readonly nextBuild: NextjsBuild;
-  /**
    * Define your own bucket to store static assets.
    */
   readonly bucket?: s3.IBucket | undefined;
+  /**
+   * The `NextjsBuild` instance representing the built Nextjs application.
+   */
+  readonly nextBuild: NextjsBuild;
 }
 
 /**
@@ -57,18 +57,19 @@ export class NextjsStaticAssets extends Construct {
   }
 
   private createAsset(): Asset {
-    const tmpDir = tmpdir();
-    fs.cpSync(this.props.nextBuild.nextStaticDir, tmpDir, { recursive: true });
-    fs.cpSync(this.props.nextBuild.nextCacheDir, resolve(tmpDir, NEXTJS_CACHE_DIR), { recursive: true });
+    // create temporary directory to join open-next's static output with cache output
+    const tmpAssetsDir = fs.mkdtempSync(resolve(tmpdir(), 'cdk-nextjs-assets-'));
+    fs.cpSync(this.props.nextBuild.nextStaticDir, tmpAssetsDir, { recursive: true });
+    fs.cpSync(this.props.nextBuild.nextCacheDir, resolve(tmpAssetsDir, NEXTJS_CACHE_DIR), { recursive: true });
     const asset = new Asset(this, 'Asset', {
-      path: tmpDir,
+      path: tmpAssetsDir,
     });
-    fs.rmSync(tmpDir, { recursive: true }); // is this ok?
+    fs.rmSync(tmpAssetsDir, { recursive: true }); // is this ok?
     return asset;
   }
 
   private createBucketDeployment(asset: Asset) {
-    return new NextjsBucketDeployment(this, 'StaticAssetsDeployment', {
+    return new NextjsBucketDeployment(this, 'BucketDeployment', {
       asset,
       destinationBucketName: this.bucket.bucketName,
       debug: true,

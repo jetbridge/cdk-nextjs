@@ -319,10 +319,11 @@ export class NextjsDistribution extends Construct {
   }
 
   private createEdgeLambda(): cloudfront.EdgeLambda {
+    const lambdasDir = path.resolve(__dirname, '../assets/lambdas');
     const originRequestEdgeFn = new cloudfront.experimental.EdgeFunction(this, 'EdgeFn', {
       runtime: Runtime.NODEJS_18_X,
       handler: 'sign-fn-url.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, 'lambdas')),
+      code: lambda.Code.fromAsset(lambdasDir),
       currentVersionOptions: {
         removalPolicy: RemovalPolicy.DESTROY, // destroy old versions
         retryAttempts: 1, // async retry attempts

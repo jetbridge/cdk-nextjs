@@ -84,11 +84,12 @@ export class NextjsBucketDeployment extends Construct {
 
   constructor(scope: Construct, id: string, props: NextjsBucketDeploymentProps) {
     super(scope, id);
+    const lambdasDir = path.resolve(__dirname, '../assets/lambdas');
     // singleton means same lambda function will be invoked for each use
     const fn = new SingletonFunction(this, 'Fn', {
       ...getCommonFunctionProps(this),
-      code: Code.fromAsset(path.resolve(__dirname, 'lambdas')),
-      handler: 'nextjs-bucket-deployment',
+      code: Code.fromAsset(lambdasDir),
+      handler: 'nextjs-bucket-deployment.handler',
       uuid: '0ae27ba9-d073-4bbb-ab46-9e1ba7461e45',
       timeout: Duration.minutes(5),
     });

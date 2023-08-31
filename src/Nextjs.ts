@@ -123,18 +123,20 @@ export class Nextjs extends Construct {
   constructor(scope: Construct, id: string, protected props: NextjsProps) {
     super(scope, id);
 
-    if (!props.quiet) console.debug('┌ Building Next.js app ▼ ...');
+    if (!props.quiet && !props.skipBuild) {
+      console.debug('┌ Building Next.js app ▼ ...');
+    }
 
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir: this.tempBuildDir });
 
     // deploy nextjs static assets to s3
-    this.staticAssets = new NextjsStaticAssets(this, 'AssetDeployment', {
-      nextBuild: this.nextBuild,
+    this.staticAssets = new NextjsStaticAssets(this, 'StaticAssets', {
       bucket: props.defaults?.assetDeployment.bucket,
+      nextBuild: this.nextBuild,
     });
 
-    this.serverFunction = new NextjsServer(this, 'ServerFn', {
+    this.serverFunction = new NextjsServer(this, 'Server', {
       ...props,
       tempBuildDir: this.tempBuildDir,
       nextBuild: this.nextBuild,
@@ -166,12 +168,16 @@ export class Nextjs extends Construct {
       imageOptFunction: this.imageOptimizationFunction,
     });
 
-    new NextjsInvalidation(this, 'Invalidation', {
-      distributionId: this.distribution.distributionId,
-      dependencies: [this.staticAssets, this.serverFunction, this.imageOptimizationFunction]
-    })
+    if (!this.props.skipFullInvalidation) {
+      new NextjsInvalidation(this, 'Invalidation', {
+        distributionId: this.distribution.distributionId,
+        dependencies: [], // [this.staticAssets, this.serverFunction, this.imageOptimizationFunction]
+      })
+    }
 
-    if (!props.quiet) console.debug('└ Finished preparing NextJS app for deployment');
+    if (!props.quiet && !props.skipBuild) {
+      console.debug('└ Finished preparing NextJS app for deployment');
+    }
   }
 
   /**

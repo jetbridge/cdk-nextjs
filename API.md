@@ -600,8 +600,8 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.buildEnvVars">buildEnvVars</a></code> | <code>{[ key: string ]: string}</code> | Environment variables for build time (when `open-next build` is called). |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir">nextCacheDir</a></code> | <code>string</code> | Cache directory for generated data. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir">nextImageFnDir</a></code> | <code>string</code> | Contains function for processessing image requests. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir">nextRevalidateFnDir</a></code> | <code>string</code> | Contains function for processing items from revalidation queue. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextImageFnPath">nextImageFnPath</a></code> | <code>string</code> | Contains function for processessing image requests. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnPath">nextRevalidateFnPath</a></code> | <code>string</code> | Contains function for processing items from revalidation queue. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextServerFnDir">nextServerFnDir</a></code> | <code>string</code> | Contains server code and dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir">nextStaticDir</a></code> | <code>string</code> | Static files containing client-side code. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a></code> | *No description.* |
@@ -647,10 +647,10 @@ Cache directory for generated data.
 
 ---
 
-##### `nextImageFnDir`<sup>Required</sup> <a name="nextImageFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir"></a>
+##### `nextImageFnPath`<sup>Required</sup> <a name="nextImageFnPath" id="cdk-nextjs-standalone.NextjsBuild.property.nextImageFnPath"></a>
 
 ```typescript
-public readonly nextImageFnDir: string;
+public readonly nextImageFnPath: string;
 ```
 
 - *Type:* string
@@ -661,10 +661,10 @@ Should be arm64.
 
 ---
 
-##### `nextRevalidateFnDir`<sup>Required</sup> <a name="nextRevalidateFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir"></a>
+##### `nextRevalidateFnPath`<sup>Required</sup> <a name="nextRevalidateFnPath" id="cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnPath"></a>
 
 ```typescript
-public readonly nextRevalidateFnDir: string;
+public readonly nextRevalidateFnPath: string;
 ```
 
 - *Type:* string

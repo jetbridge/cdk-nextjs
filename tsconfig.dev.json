@@ -24,6 +24,7 @@
     "strictPropertyInitialization": true,
     "stripInternal": true,
     "target": "ES2019",
+    "isolatedModules": true,
     "skipLibCheck": true
   },
   "include": [

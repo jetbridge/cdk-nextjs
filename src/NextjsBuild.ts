@@ -38,18 +38,18 @@ export class NextjsBuild extends Construct {
    * Contains function for processessing image requests.
    * Should be arm64.
    */
-  public get nextImageFnDir(): string {
-    const dir = path.join(this.getNextBuildDir(), NEXTJS_BUILD_IMAGE_FN_DIR);
-    this.warnIfMissing(dir);
-    return dir;
+  public get nextImageFnPath(): string {
+    const fnPath = path.join(this.getNextBuildDir(), NEXTJS_BUILD_IMAGE_FN_DIR, 'index.mjs');
+    this.warnIfMissing(fnPath);
+    return fnPath;
   }
   /**
    * Contains function for processing items from revalidation queue.
    */
-  public get nextRevalidateFnDir(): string {
-    const dir = path.join(this.getNextBuildDir(), NEXTJS_BUILD_REVALIDATE_FN_DIR);
-    this.warnIfMissing(dir);
-    return dir;
+  public get nextRevalidateFnPath(): string {
+    const fnPath = path.join(this.getNextBuildDir(), NEXTJS_BUILD_REVALIDATE_FN_DIR, 'index.mjs');
+    this.warnIfMissing(fnPath);
+    return fnPath;
   }
   /**
    * Static files containing client-side code.
@@ -125,9 +125,6 @@ export class NextjsBuild extends Construct {
   }
 
   private build() {
-    if (!this.props.quiet) {
-      console.debug(`Skipping build for placeholder NextjsBuild at ${this.props.nextjsPath}`);
-    }
     const buildPath = this.props.buildPath ?? this.props.nextjsPath;
     const buildCommand = this.props.buildCommand ?? 'npx open-next@2 build';
     // run build

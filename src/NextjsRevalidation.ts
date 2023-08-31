@@ -1,4 +1,5 @@
 import { Duration, Stack } from 'aws-cdk-lib';
+import { AnyPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
@@ -50,6 +51,19 @@ export class NextjsRevalidation extends Construct {
       fifo: true,
       receiveMessageWaitTime: Duration.seconds(20),
     });
+    // https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-least-privilege-policy.html
+    queue.addToResourcePolicy(
+      new PolicyStatement({
+        sid: 'DenyUnsecureTransport',
+        actions: ['sqs:SendMessage', 'sqs:ReceiveMessage'],
+        effect: Effect.DENY,
+        principals: [new AnyPrincipal()],
+        resources: [queue.queueArn],
+        conditions: {
+          Bool: { 'aws:SecureTransport': 'false' },
+        },
+      })
+    );
     // Allow server to send messages to the queue
     queue.grantSendMessages(this.props.serverFunction.lambdaFunction);
     return queue;
@@ -60,7 +74,7 @@ export class NextjsRevalidation extends Construct {
       ...getCommonNodejsFunctionProps(this),
       // open-next revalidation-function
       // see: https://github.com/serverless-stack/open-next/blob/274d446ed7e940cfbe7ce05a21108f4c854ee37a/README.md?plain=1#L65
-      entry: this.props.nextBuild.nextRevalidateFnDir,
+      entry: this.props.nextBuild.nextRevalidateFnPath,
       handler: 'index.handler',
       description: 'Next.js revalidation function',
       timeout: Duration.seconds(30),

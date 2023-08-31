@@ -1,4 +1,10 @@
-import { AwsCustomResource, AwsCustomResourcePolicy, AwsSdkCall } from 'aws-cdk-lib/custom-resources';
+import { Stack } from 'aws-cdk-lib';
+import {
+  AwsCustomResource,
+  AwsCustomResourcePolicy,
+  AwsSdkCall,
+  PhysicalResourceId,
+} from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 
 export interface NextjsInvalidationProps {
@@ -18,6 +24,9 @@ export class NextjsInvalidation extends Construct {
   constructor(scope: Construct, id: string, props: NextjsInvalidationProps) {
     super(scope, id);
     const awsSdkCall: AwsSdkCall = {
+      // make `physicalResourceId` change each time to invalidate CloudFront
+      // distribution on each change
+      physicalResourceId: PhysicalResourceId.of(`${props.distributionId}-${Date.now()}`),
       action: 'createInvalidation',
       service: 'CloudFront',
       parameters: {
@@ -35,7 +44,12 @@ export class NextjsInvalidation extends Construct {
       onCreate: awsSdkCall,
       onUpdate: awsSdkCall,
       policy: AwsCustomResourcePolicy.fromSdkCalls({
-        resources: [`distribution/${props.distributionId}`],
+        resources: [
+          Stack.of(this).formatArn({
+            service: 'cloudfront',
+            resource: `distribution/${props.distributionId}`,
+          }),
+        ],
       }),
     });
     for (const dependency of props.dependencies) {

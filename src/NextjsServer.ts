@@ -51,15 +51,17 @@ export class NextjsServer extends Construct {
     super(scope, id);
     this.props = props;
 
-    const asset = this.createAsset();
+    // must create code asset separately (typically it is implicitly created in
+    //`Function` construct) b/c we need to substitute values
+    const asset = this.createCodeAsset();
     const bucketDeployment = this.createBucketDeployment(asset);
     this.lambdaFunction = this.createFunction(asset);
-    // don't update lambda function until buck deployment is complete
+    // don't update lambda function until bucket deployment is complete
     this.lambdaFunction.node.addDependency(bucketDeployment);
   }
 
-  private createAsset() {
-    return new Asset(this, 'Asset', {
+  private createCodeAsset() {
+    return new Asset(this, 'CodeAsset', {
       path: this.props.nextBuild.nextServerFnDir,
     });
   }
@@ -86,17 +88,16 @@ export class NextjsServer extends Construct {
   }
 
   private createFunction(asset: Asset) {
-    const fn = new Function(this, 'ServerFn', {
+    const fn = new Function(this, 'Function', {
       ...getCommonFunctionProps(this),
       code: Code.fromBucket(asset.bucket, asset.s3ObjectKey),
       handler: 'nextjs-bucket-deployment.handler',
       ...this.props.lambda,
-      // `environment` needs to go after `functionOptions` b/c if
-      // `functionOptions.environment` is defined, it will override
+      // `environment` needs to go after `this.props.lambda` b/c if
+      // `this.props.lambda.environment` is defined, it will override
       // CACHE_* environment variables which are required
-      environment: this.environment,
+      environment: { ...this.environment, ...this.props.lambda?.environment },
     });
-
     this.props.staticAssetBucket.grantReadWrite(fn);
 
     return fn;

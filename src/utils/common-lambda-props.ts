@@ -1,6 +1,6 @@
 import { Duration, PhysicalName, Stack } from 'aws-cdk-lib';
 import { Architecture, FunctionProps, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { NodejsFunctionProps, OutputFormat } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import { commonBundlingOptions } from './common-build-options';
 
@@ -28,6 +28,7 @@ export function getCommonNodejsFunctionProps(scope: Construct): NodejsFunctionPr
       ...commonBundlingOptions,
       // https://github.com/evanw/esbuild/issues/1921
       banner: `import { createRequire } from 'module'; const require = createRequire(import.meta.url);`,
+      format: OutputFormat.ESM,
     },
   };
 }

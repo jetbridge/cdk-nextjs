@@ -4028,7 +4028,7 @@ const nextjsInvalidationProps: NextjsInvalidationProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps.property.dependencies">dependencies</a></code> | <code>constructs.Construct[]</code> | Constructs that should complete before invalidating CloudFront Distribution. |
-| <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps.property.distributionId">distributionId</a></code> | <code>string</code> | ID of CloudFront Distribution to invalidate. |
+| <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | CloudFront Distribution to invalidate. |
 
 ---
 
@@ -4046,15 +4046,15 @@ Useful for assets that must be deployed/updated before invalidating.
 
 ---
 
-##### `distributionId`<sup>Required</sup> <a name="distributionId" id="cdk-nextjs-standalone.NextjsInvalidationProps.property.distributionId"></a>
+##### `distribution`<sup>Required</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsInvalidationProps.property.distribution"></a>
 
 ```typescript
-public readonly distributionId: string;
+public readonly distribution: IDistribution;
 ```
 
-- *Type:* string
+- *Type:* aws-cdk-lib.aws_cloudfront.IDistribution
 
-ID of CloudFront Distribution to invalidate.
+CloudFront Distribution to invalidate.
 
 ---
 

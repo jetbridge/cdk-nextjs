@@ -338,7 +338,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @aws-crypto/sha256-js @aws-sdk/client-s3 @smithy/signature-v4 @types/adm-zip @types/aws-lambda @types/cross-spawn @types/fs-extra @types/jest @types/micromatch @types/mime-types @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser adm-zip aws-cdk-lib aws-lambda constructs esbuild eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii micromatch mime-types npm-check-updates prettier projen standard-version ts-jest ts-node typescript esbuild aws-cdk-lib constructs"
+          "exec": "yarn upgrade @aws-crypto/sha256-js @aws-sdk/client-s3 @smithy/signature-v4 @types/adm-zip @types/aws-lambda @types/jest @types/micromatch @types/mime-types @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser adm-zip aws-cdk-lib aws-lambda constructs esbuild eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii micromatch mime-types npm-check-updates prettier projen standard-version ts-jest ts-node typescript undici esbuild aws-cdk-lib constructs"
         },
         {
           "exec": "npx projen"

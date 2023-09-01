@@ -1,8 +1,8 @@
 import * as path from 'node:path';
 import { CustomResource, Duration } from 'aws-cdk-lib';
-import { Code, SingletonFunction } from 'aws-cdk-lib/aws-lambda';
+import { Code, Function } from 'aws-cdk-lib/aws-lambda';
+import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
-import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 
@@ -33,9 +33,9 @@ export interface NextjsBucketDeploymentProps {
    */
   readonly putConfig?: Record<string, Record<string, string>>;
   /**
-   * Destination S3 Bucket Name
+   * Destination S3 Bucket
    */
-  readonly destinationBucketName: string;
+  readonly destinationBucket: IBucket;
   /**
    * Destination S3 Bucket Key Prefix
    */
@@ -81,38 +81,49 @@ export class NextjsBucketDeployment extends Construct {
   static getSubstitutionValue(v: string): string {
     return `{{ ${v} }}`;
   }
+  /**
+   * Lambda Function Provider for Custom Resource
+   */
+  function: Function;
+  private props: NextjsBucketDeploymentProps;
 
   constructor(scope: Construct, id: string, props: NextjsBucketDeploymentProps) {
     super(scope, id);
-    const lambdasDir = path.resolve(__dirname, '../assets/lambdas');
-    // singleton means same lambda function will be invoked for each use
-    const fn = new SingletonFunction(this, 'Fn', {
+    this.props = props;
+    this.function = this.createFunction();
+    this.createCustomResource(this.function.functionArn);
+  }
+
+  private createFunction() {
+    const fn = new Function(this, 'Fn', {
       ...getCommonFunctionProps(this),
-      code: Code.fromAsset(lambdasDir),
-      handler: 'nextjs-bucket-deployment.handler',
-      uuid: '0ae27ba9-d073-4bbb-ab46-9e1ba7461e45',
+      code: Code.fromAsset(path.resolve(__dirname, '..', 'assets', 'lambdas', 'nextjs-bucket-deployment')),
+      handler: 'index.handler',
       timeout: Duration.minutes(5),
     });
-    if (props.debug) {
-      fn.addEnvironment('DEBUG', 'true');
+    if (this.props.debug) {
+      fn.addEnvironment('DEBUG', '1');
     }
-    const provider = new Provider(this, 'Provider', {
-      onEventHandler: fn,
-    });
+    this.props.asset.grantRead(fn);
+    this.props.destinationBucket.grantReadWrite(fn);
+    return fn;
+  }
+
+  private createCustomResource(serviceToken: string) {
     const properties: CustomResourceProperties = {
-      sourceBucketName: props.asset.s3BucketName,
-      sourceKeyPrefix: props.asset.s3ObjectKey,
-      destinationBucketName: props.destinationBucketName,
-      destinationKeyPrefix: props.destinationKeyPrefix,
-      putConfig: props.putConfig,
-      prune: props.prune,
-      substitutionConfig: props.substitutionConfig,
-      zip: false,
+      sourceBucketName: this.props.asset.s3BucketName,
+      sourceKeyPrefix: this.props.asset.s3ObjectKey,
+      destinationBucketName: this.props.destinationBucket.bucketName,
+      destinationKeyPrefix: this.props.destinationKeyPrefix,
+      putConfig: this.props.putConfig,
+      prune: this.props.prune,
+      substitutionConfig: this.props.substitutionConfig,
+      zip: this.props.zip,
     };
-    new CustomResource(this, 'CustomResource', {
-      resourceType: 'Custom::NextjsBucketDeployment',
-      serviceToken: provider.serviceToken,
+    return new CustomResource(this, 'CustomResource', {
       properties,
+      resourceType: 'Custom::NextjsBucketDeployment',
+      serviceToken,
     });
   }
 }

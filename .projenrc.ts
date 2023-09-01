@@ -3,8 +3,9 @@ import { TypeScriptCompilerOptions, UpgradeDependenciesSchedule } from 'projen/l
 import { commonBundlingOptions } from './src/utils/common-build-options';
 
 const commonTscOptions: TypeScriptCompilerOptions = {
-  isolatedModules: true,
+  isolatedModules: true, // why doesn't this work?
   skipLibCheck: true,
+  // esModuleInterop: true, // why doesn't this work?
 };
 
 const project = new awscdk.AwsCdkConstructLibrary({
@@ -37,23 +38,23 @@ const project = new awscdk.AwsCdkConstructLibrary({
   tsconfigDev: { compilerOptions: { ...commonTscOptions } },
   // dependency config
   jsiiVersion: '~5.0.0',
-  cdkVersion: '2.73.0',
+  cdkVersion: '2.93.0',
   bundledDeps: ['esbuild'] /* Runtime dependencies of this module. */,
   devDeps: [
     '@aws-crypto/sha256-js',
     '@aws-sdk/client-s3',
     '@smithy/signature-v4',
     '@types/adm-zip',
-    '@types/cross-spawn',
-    '@types/fs-extra',
+    '@types/aws-lambda',
     '@types/micromatch',
     '@types/mime-types',
-    '@types/aws-lambda',
+    '@types/node@^18',
     'adm-zip',
     'aws-lambda',
     'constructs',
     'micromatch',
     'mime-types',
+    'undici',
   ] /* Build dependencies for this module. */,
   // misc config
   sampleCode: false, // do not generate sample test files

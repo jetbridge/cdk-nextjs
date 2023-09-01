@@ -45,8 +45,6 @@
     "@smithy/signature-v4": "^2.0.2",
     "@types/adm-zip": "^0.5.0",
     "@types/aws-lambda": "^8.10.119",
-    "@types/cross-spawn": "^6.0.2",
-    "@types/fs-extra": "^11.0.1",
     "@types/jest": "^27",
     "@types/micromatch": "^4.0.2",
     "@types/mime-types": "^2.1.1",
@@ -54,7 +52,7 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "adm-zip": "^0.5.10",
-    "aws-cdk-lib": "2.73.0",
+    "aws-cdk-lib": "2.93.0",
     "aws-lambda": "^1.0.7",
     "constructs": "10.0.5",
     "esbuild": "^0.19.2",
@@ -79,10 +77,11 @@
     "standard-version": "^9",
     "ts-jest": "^27",
     "ts-node": "^10.9.1",
-    "typescript": "4.9.5"
+    "typescript": "4.9.5",
+    "undici": "^5.23.0"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "^2.73.0",
+    "aws-cdk-lib": "^2.93.0",
     "constructs": "^10.0.5"
   },
   "dependencies": {

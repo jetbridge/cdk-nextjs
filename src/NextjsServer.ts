@@ -67,14 +67,16 @@ export class NextjsServer extends Construct {
   }
 
   private createBucketDeployment(asset: Asset) {
-    return new NextjsBucketDeployment(this, 'BucketDeployment', {
+    const bucketDeployment = new NextjsBucketDeployment(this, 'BucketDeployment', {
       asset,
-      destinationBucketName: asset.s3BucketName,
+      debug: true,
+      destinationBucket: asset.bucket,
       destinationKeyPrefix: asset.s3ObjectKey,
       // this.props.environment is for build time, not this.environment which is for runtime
       substitutionConfig: this.getSubstitutionConfig(this.props.environment || {}),
       zip: true,
     });
+    return bucketDeployment;
   }
 
   private getSubstitutionConfig(env: Record<string, string>): Record<string, string> {
@@ -88,10 +90,12 @@ export class NextjsServer extends Construct {
   }
 
   private createFunction(asset: Asset) {
+    // cannot use NodejsFunction because we must wait to deploy the function
+    // until after the build time env vars in code zip asset are substituted
     const fn = new Function(this, 'Function', {
       ...getCommonFunctionProps(this),
       code: Code.fromBucket(asset.bucket, asset.s3ObjectKey),
-      handler: 'nextjs-bucket-deployment.handler',
+      handler: 'index.handler',
       ...this.props.lambda,
       // `environment` needs to go after `this.props.lambda` b/c if
       // `this.props.lambda.environment` is defined, it will override

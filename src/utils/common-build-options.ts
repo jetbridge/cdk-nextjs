@@ -4,6 +4,7 @@ import { BuildOptions } from 'esbuild';
 export const commonBundlingOptions = {
   bundle: true,
   external: ['@aws-sdk/*'],
+  // format: 'esm',
   minify: true,
   platform: 'node',
   sourcemap: true,

@@ -45,6 +45,7 @@ export class NextjsInvalidation extends Construct {
         },
       },
     };
+    console.log({ distribution: props.distribution });
     const awsCustomResource = new AwsCustomResource(this, 'AwsCR', {
       onCreate: awsSdkCall,
       onUpdate: awsSdkCall,

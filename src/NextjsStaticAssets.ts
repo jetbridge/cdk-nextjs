@@ -71,7 +71,7 @@ export class NextjsStaticAssets extends Construct {
   private createBucketDeployment(asset: Asset) {
     return new NextjsBucketDeployment(this, 'BucketDeployment', {
       asset,
-      destinationBucketName: this.bucket.bucketName,
+      destinationBucket: this.bucket,
       debug: true,
       // only put env vars that are placeholders in custom resource properties
       // to be replaced. other env vars were injected at build time.

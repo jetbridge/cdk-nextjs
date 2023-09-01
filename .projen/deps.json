@@ -21,14 +21,6 @@
       "type": "build"
     },
     {
-      "name": "@types/cross-spawn",
-      "type": "build"
-    },
-    {
-      "name": "@types/fs-extra",
-      "type": "build"
-    },
-    {
       "name": "@types/jest",
       "type": "build"
     },
@@ -61,7 +53,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "2.73.0",
+      "version": "2.93.0",
       "type": "build"
     },
     {
@@ -172,12 +164,16 @@
       "type": "build"
     },
     {
+      "name": "undici",
+      "type": "build"
+    },
+    {
       "name": "esbuild",
       "type": "bundled"
     },
     {
       "name": "aws-cdk-lib",
-      "version": "^2.73.0",
+      "version": "^2.93.0",
       "type": "peer"
     },
     {

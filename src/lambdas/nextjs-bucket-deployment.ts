@@ -21,22 +21,27 @@ import {
   type PutObjectCommandInput,
   S3Client,
 } from '@aws-sdk/client-s3';
-import * as AdmZip from 'adm-zip';
-import type { CdkCustomResourceHandler } from 'aws-lambda';
+import type * as AdmZipType from 'adm-zip';
+// @ts-ignore jsii doesn't support esModuleInterop
+// eslint-disable-next-line no-duplicate-imports
+import _AdmZip from 'adm-zip';
+import type { CloudFormationCustomResourceHandler } from 'aws-lambda';
 import * as micromatch from 'micromatch';
 import * as mime from 'mime-types';
 import type { CustomResourceProperties, NextjsBucketDeploymentProps } from '../NextjsBucketDeployment';
+const AdmZip = _AdmZip as typeof AdmZipType;
 
 const s3 = new S3Client({});
 
-export const handler: CdkCustomResourceHandler = async (event) => {
+export const handler: CloudFormationCustomResourceHandler = async (event, context) => {
   debug({ event });
-  if (event.RequestType === 'Create' || event.RequestType === 'Update') {
-    const props = event.ResourceProperties as CustomResourceProperties & { ServiceToken: string };
-    let tmpDir = '';
-    try {
-      const { tmpDir: _tmpDir, sourceDirPath, sourceZipFilePath } = initDirectories();
-      tmpDir = _tmpDir;
+  let responseStatus: 'SUCCESS' | 'FAILED' = 'SUCCESS';
+  try {
+    if (event.RequestType === 'Create' || event.RequestType === 'Update') {
+      const props = getProperties(event);
+      let tmpDir = '';
+      const { assetsTmpDir, sourceDirPath, sourceZipFilePath } = initDirectories();
+      tmpDir = assetsTmpDir;
       debug('Downloading zip');
       await downloadFile({
         bucket: props.sourceBucketName,
@@ -51,7 +56,7 @@ export const handler: CdkCustomResourceHandler = async (event) => {
         substitute({ config: props.substitutionConfig, filePaths });
       }
       if (props.prune) {
-        console.log('Emptying/pruning bucket: ' + props.destinationBucketName);
+        debug('Emptying/pruning bucket: ' + props.destinationBucketName);
         await pruneBucket({ bucketName: props.destinationBucketName, keyPrefix: props.destinationKeyPrefix });
       }
       if (!props.zip) {
@@ -72,30 +77,40 @@ export const handler: CdkCustomResourceHandler = async (event) => {
           tmpDir: sourceDirPath,
         });
       }
-    } catch (err) {
-      console.error(err);
-    } finally {
       if (tmpDir.length) {
+        debug('Removing temp directory');
         rmSync(tmpDir, { force: true, recursive: true });
       }
+      responseStatus = 'SUCCESS';
     }
+  } catch (err) {
+    console.error(err);
+    responseStatus = 'FAILED';
   }
-  // don't return PhysicalResourceId so Custom Resource will be run every time.
-  return {};
+  await cfnResponse({ event, context, responseStatus });
 };
 
 function debug(value: unknown) {
-  if (process.env.DEBUG) JSON.stringify(value, null, 2);
+  if (process.env.DEBUG) console.log(JSON.stringify(value, null, 2));
+}
+
+function getProperties(event: Parameters<CloudFormationCustomResourceHandler>[0]) {
+  const props = event.ResourceProperties;
+  return {
+    ...props,
+    prune: props.prune === 'true',
+    zip: props.zip === 'true',
+  } as CustomResourceProperties & { ServiceToken: string };
 }
 
 function initDirectories() {
-  const tmpDir = mkdtempSync(tmpdir());
-  const sourceZipDirPath = resolvePath(tmpDir, 'source-zip');
+  const assetsTmpDir = mkdtempSync(resolvePath(tmpdir(), 'assets'));
+  const sourceZipDirPath = resolvePath(assetsTmpDir, 'source-zip');
   mkdirSync(sourceZipDirPath);
   const sourceZipFilePath = resolvePath(sourceZipDirPath, 'temp.zip');
-  const sourceDirPath = resolvePath(tmpDir, 'source');
+  const sourceDirPath = resolvePath(assetsTmpDir, 'source');
   mkdirSync(sourceDirPath);
-  return { tmpDir, sourceZipFilePath, sourceDirPath };
+  return { assetsTmpDir, sourceZipFilePath, sourceDirPath };
 }
 
 async function downloadFile({
@@ -229,18 +244,18 @@ async function zipObjects({
   filePaths: string[];
   tmpDir: string;
 }) {
-  const destinationZipDir = resolvePath(tmpDir, 'destination-zip');
-  const destinationZip = new AdmZip(destinationZipDir);
+  const destinationZip = new AdmZip();
   for (const filePath of filePaths) {
     destinationZip.addLocalFile(filePath);
   }
-  destinationZip.writeZip();
-  const contentType = mime.lookup(destinationZipDir) || undefined;
+  const destinationZipPath = resolvePath(tmpDir, 'destination-zip.zip');
+  destinationZip.writeZip(destinationZipPath);
+  const contentType = mime.lookup(destinationZipPath) || undefined;
   return s3.send(
     new PutObjectCommand({
       Bucket: bucket,
       Key: keyPrefix,
-      Body: createReadStream(destinationZipDir),
+      Body: createReadStream(destinationZipPath),
       ContentType: contentType,
     })
   );
@@ -260,4 +275,31 @@ function getPutObjectOptions({
     }
   }
   return putObjectOptions;
+}
+
+interface CfnResponseProps {
+  event: Parameters<CloudFormationCustomResourceHandler>[0];
+  context: Parameters<CloudFormationCustomResourceHandler>[1];
+  responseStatus: 'SUCCESS' | 'FAILED';
+  responseData?: Record<string, string>;
+  physicalResourceId?: string;
+}
+/**
+ * Inspired by: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html
+ */
+function cfnResponse(props: CfnResponseProps) {
+  const body = JSON.stringify({
+    Status: props.responseStatus,
+    Reason: 'See the details in CloudWatch Log Stream: ' + props.context.logStreamName,
+    PhysicalResourceId: props.physicalResourceId || props.context.logStreamName,
+    StackId: props.event.StackId,
+    RequestId: props.event.RequestId,
+    LogicalResourceId: props.event.LogicalResourceId,
+    Data: props.responseData,
+  });
+  return fetch(props.event.ResponseURL, {
+    method: 'PUT',
+    body,
+    headers: { 'content-type': '', 'content-length': body.length.toString() },
+  });
 }

@@ -406,6 +406,7 @@ export class NextjsDistribution extends Construct {
     const distribution = new cloudfront.Distribution(this, 'Distribution', {
       // defaultRootObject: "index.html",
       defaultRootObject: '',
+      minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
 
       // Override props.
       ...cfDistributionProps,

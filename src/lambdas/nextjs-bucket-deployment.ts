@@ -10,7 +10,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { relative, resolve as resolvePath } from 'node:path';
+import { join, relative, resolve as resolvePath } from 'node:path';
 import { Readable } from 'node:stream';
 import {
   DeleteObjectsCommand,
@@ -73,7 +73,6 @@ export const handler: CloudFormationCustomResourceHandler = async (event, contex
         await zipObjects({
           bucket: props.destinationBucketName,
           keyPrefix: props.destinationKeyPrefix,
-          filePaths,
           tmpDir: sourceDirPath,
         });
       }
@@ -104,11 +103,12 @@ function getProperties(event: Parameters<CloudFormationCustomResourceHandler>[0]
 }
 
 function initDirectories() {
-  const assetsTmpDir = mkdtempSync(resolvePath(tmpdir(), 'assets'));
+  const assetsTmpDir = mkdtempSync(resolvePath(tmpdir(), 'assets-'));
   const sourceZipDirPath = resolvePath(assetsTmpDir, 'source-zip');
   mkdirSync(sourceZipDirPath);
   const sourceZipFilePath = resolvePath(sourceZipDirPath, 'temp.zip');
-  const sourceDirPath = resolvePath(assetsTmpDir, 'source');
+  // trailing slash expected by adm-zip's `extractAllTo` method
+  const sourceDirPath = resolvePath(assetsTmpDir, 'source') + '/';
   mkdirSync(sourceDirPath);
   return { assetsTmpDir, sourceZipFilePath, sourceDirPath };
 }
@@ -221,12 +221,15 @@ function uploadObjects({
   const putObjectInputs: PutObjectCommandInput[] = filePaths.map((path) => {
     const contentType = mime.lookup(path) || undefined;
     const putObjectOptions = getPutObjectOptions({ path, putConfig });
+    const keyPaths: string[] = [];
+    if (keyPrefix) keyPaths.push(keyPrefix);
+    keyPaths.push(relative(tmpDir, path));
     return {
       ContentType: contentType,
       ...putObjectOptions,
       Bucket: bucket,
       // .slice(1) to remove leading slash b/c s3 will create top level / folder
-      Key: resolvePath('/' + keyPrefix, relative(tmpDir, path)).slice(1),
+      Key: join(...keyPaths),
       Body: createReadStream(path),
     };
   });
@@ -236,19 +239,15 @@ function uploadObjects({
 async function zipObjects({
   bucket,
   keyPrefix,
-  filePaths,
   tmpDir,
 }: {
   bucket: CustomResourceProperties['destinationBucketName'];
   keyPrefix?: CustomResourceProperties['destinationKeyPrefix'];
-  filePaths: string[];
   tmpDir: string;
 }) {
   const destinationZip = new AdmZip();
-  for (const filePath of filePaths) {
-    destinationZip.addLocalFile(filePath);
-  }
-  const destinationZipPath = resolvePath(tmpDir, 'destination-zip.zip');
+  destinationZip.addLocalFolder(tmpDir);
+  const destinationZipPath = resolvePath(tmpDir, 'destination.zip');
   destinationZip.writeZip(destinationZipPath);
   const contentType = mime.lookup(destinationZipPath) || undefined;
   return s3.send(

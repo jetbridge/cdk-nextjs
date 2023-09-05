@@ -3,7 +3,7 @@ import { TypeScriptCompilerOptions, UpgradeDependenciesSchedule } from 'projen/l
 import { commonBundlingOptions } from './src/utils/common-build-options';
 
 const commonTscOptions: TypeScriptCompilerOptions = {
-  isolatedModules: true, // why doesn't this work?
+  // isolatedModules: true, // why doesn't this work?
   skipLibCheck: true,
   // esModuleInterop: true, // why doesn't this work?
 };

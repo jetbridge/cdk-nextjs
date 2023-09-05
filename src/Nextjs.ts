@@ -10,7 +10,7 @@ import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
 import { NextjsImage } from './NextjsImage';
-import { NextjsInvalidation } from './NextjsInvalidation';
+// import { NextjsInvalidation } from './NextjsInvalidation';
 import { NextjsRevalidation } from './NextjsRevalidation';
 import { NextjsServer } from './NextjsServer';
 import { NextjsStaticAssets, NextjsStaticAssetsProps } from './NextjsStaticAssets';

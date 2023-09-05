@@ -8,7 +8,7 @@ import { getCommonFunctionProps } from './utils/common-lambda-props';
 
 export interface NextjsBucketDeploymentProps {
   /**
-   * Input `Asset`
+   * Source `Asset`
    */
   readonly asset: Asset;
   /**

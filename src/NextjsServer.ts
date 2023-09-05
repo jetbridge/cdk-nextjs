@@ -1,3 +1,7 @@
+import { randomUUID } from 'node:crypto';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { resolve } from 'node:path';
 import { Stack, Token } from 'aws-cdk-lib';
 import { Code, Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
@@ -52,26 +56,45 @@ export class NextjsServer extends Construct {
     this.props = props;
 
     // must create code asset separately (typically it is implicitly created in
-    //`Function` construct) b/c we need to substitute values
-    const asset = this.createCodeAsset();
-    const bucketDeployment = this.createBucketDeployment(asset);
-    this.lambdaFunction = this.createFunction(asset);
+    //`Function` construct) b/c we need to substitute unresolve env vars
+    const sourceAsset = this.createSourceCodeAsset();
+    // source and destination assets are defined separately so that source
+    // assets are immutable (easier debugging). Technically we could overwrite
+    // source asset
+    const destinationAsset = this.createDestinationCodeAsset();
+    const bucketDeployment = this.createBucketDeployment(sourceAsset, destinationAsset);
+    this.lambdaFunction = this.createFunction(destinationAsset);
     // don't update lambda function until bucket deployment is complete
     this.lambdaFunction.node.addDependency(bucketDeployment);
   }
 
-  private createCodeAsset() {
-    return new Asset(this, 'CodeAsset', {
+  private createSourceCodeAsset() {
+    return new Asset(this, 'SourceCodeAsset', {
       path: this.props.nextBuild.nextServerFnDir,
     });
   }
 
-  private createBucketDeployment(asset: Asset) {
+  private createDestinationCodeAsset() {
+    // create dummy directory to upload with random values so it's uploaded each time
+    // TODO: look into caching?
+    const assetsTmpDir = mkdtempSync(resolve(tmpdir(), 'bucket-deployment-dest-asset-'));
+    // this code will never run b/c we explicitly declare dependency between
+    // lambda function and bucket deployment.
+    writeFileSync(resolve(assetsTmpDir, 'index.mjs'), `export function handler() { return '${randomUUID()}' }`);
+    const destinationAsset = new Asset(this, 'DestinationCodeAsset', {
+      path: assetsTmpDir,
+    });
+    rmSync(assetsTmpDir, { recursive: true });
+    return destinationAsset;
+  }
+
+  private createBucketDeployment(sourceAsset: Asset, destinationAsset: Asset) {
     const bucketDeployment = new NextjsBucketDeployment(this, 'BucketDeployment', {
-      asset,
+      asset: sourceAsset,
       debug: true,
-      destinationBucket: asset.bucket,
-      destinationKeyPrefix: asset.s3ObjectKey,
+      destinationBucket: destinationAsset.bucket,
+      destinationKeyPrefix: destinationAsset.s3ObjectKey,
+      prune: true,
       // this.props.environment is for build time, not this.environment which is for runtime
       substitutionConfig: this.getSubstitutionConfig(this.props.environment || {}),
       zip: true,

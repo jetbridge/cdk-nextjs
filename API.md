@@ -490,6 +490,7 @@ Formats a string as a template value so custom resource knows to replace.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.property.function">function</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | Lambda Function Provider for Custom Resource. |
 
 ---
 
@@ -502,6 +503,18 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `function`<sup>Required</sup> <a name="function" id="cdk-nextjs-standalone.NextjsBucketDeployment.property.function"></a>
+
+```typescript
+public readonly function: Function;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Function
+
+Lambda Function Provider for Custom Resource.
 
 ---
 
@@ -1051,11 +1064,11 @@ public addEventSource(source: IEventSource): void
 
 Adds an event source to this function.
 
-Event sources are implemented in the @aws-cdk/aws-lambda-event-sources module.
+Event sources are implemented in the aws-cdk-lib/aws-lambda-event-sources module.
 
 The following example adds an SQS Queue as an event source:
 ```
-import { SqsEventSource } from '@aws-cdk/aws-lambda-event-sources';
+import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 myFunction.addEventSource(new SqsEventSource(myQueue));
 ```
 
@@ -2866,8 +2879,8 @@ const nextjsBucketDeploymentProps: NextjsBucketDeploymentProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.asset">asset</a></code> | <code>aws-cdk-lib.aws_s3_assets.Asset</code> | Input `Asset`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationBucketName">destinationBucketName</a></code> | <code>string</code> | Destination S3 Bucket Name. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.asset">asset</a></code> | <code>aws-cdk-lib.aws_s3_assets.Asset</code> | Source `Asset`. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationBucket">destinationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Destination S3 Bucket. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.debug">debug</a></code> | <code>boolean</code> | Enable verbose output of Custom Resource Lambda. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationKeyPrefix">destinationKeyPrefix</a></code> | <code>string</code> | Destination S3 Bucket Key Prefix. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | If `true`, then delete files in `destinationBucket`/`destinationKeyPrefix` before uploading new objects. |
@@ -2885,19 +2898,19 @@ public readonly asset: Asset;
 
 - *Type:* aws-cdk-lib.aws_s3_assets.Asset
 
-Input `Asset`.
+Source `Asset`.
 
 ---
 
-##### `destinationBucketName`<sup>Required</sup> <a name="destinationBucketName" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationBucketName"></a>
+##### `destinationBucket`<sup>Required</sup> <a name="destinationBucket" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationBucket"></a>
 
 ```typescript
-public readonly destinationBucketName: string;
+public readonly destinationBucket: IBucket;
 ```
 
-- *Type:* string
+- *Type:* aws-cdk-lib.aws_s3.IBucket
 
-Destination S3 Bucket Name.
+Destination S3 Bucket.
 
 ---
 

@@ -1,5 +1,4 @@
 import * as fs from 'node:fs';
-import * as os from 'os';
 import * as path from 'path';
 import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
@@ -186,8 +185,6 @@ export class NextjsDistribution extends Construct {
    */
   certificate?: acm.ICertificate;
 
-  public tempBuildDir: string;
-
   private commonBehaviorOptions: Pick<cloudfront.BehaviorOptions, 'viewerProtocolPolicy' | 'compress'> = {
     viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
     compress: true,
@@ -206,15 +203,7 @@ export class NextjsDistribution extends Construct {
   constructor(scope: Construct, id: string, props: NextjsDistributionProps) {
     super(scope, id);
 
-    // get dir to store temp build files in
-    this.tempBuildDir = props.tempBuildDir
-      ? path.resolve(
-          path.join(props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
-        )
-      : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
-
-    // save props
-    this.props = { ...props, tempBuildDir: this.tempBuildDir };
+    this.props = props;
 
     // Create Custom Domain
     this.validateCustomDomainSettings();

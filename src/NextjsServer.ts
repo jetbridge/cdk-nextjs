@@ -12,6 +12,7 @@ import { NextjsBaseProps } from './NextjsBase';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
+import { createArchive } from './utils/create-archive';
 
 export type EnvironmentVars = Record<string, string>;
 
@@ -69,9 +70,16 @@ export class NextjsServer extends Construct {
   }
 
   private createSourceCodeAsset() {
-    return new Asset(this, 'SourceCodeAsset', {
-      path: this.props.nextBuild.nextServerFnDir,
+    const archivePath = createArchive({
+      directory: this.props.nextBuild.nextServerFnDir,
+      zipFileName: 'server-fn.zip',
     });
+    const asset = new Asset(this, 'SourceCodeAsset', {
+      path: archivePath,
+    });
+    // new Asset() creates copy of zip into cdk.out/. This cleans up tmp folder
+    rmSync(archivePath, { recursive: true });
+    return asset;
   }
 
   private createDestinationCodeAsset() {
@@ -115,7 +123,7 @@ export class NextjsServer extends Construct {
   private createFunction(asset: Asset) {
     // cannot use NodejsFunction because we must wait to deploy the function
     // until after the build time env vars in code zip asset are substituted
-    const fn = new Function(this, 'Function', {
+    const fn = new Function(this, 'Fn', {
       ...getCommonFunctionProps(this),
       code: Code.fromBucket(asset.bucket, asset.s3ObjectKey),
       handler: 'index.handler',

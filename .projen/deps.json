@@ -48,10 +48,6 @@
       "type": "build"
     },
     {
-      "name": "adm-zip",
-      "type": "build"
-    },
-    {
       "name": "aws-cdk-lib",
       "version": "2.93.0",
       "type": "build"
@@ -123,6 +119,10 @@
     {
       "name": "jsii",
       "version": "~5.0.0",
+      "type": "build"
+    },
+    {
+      "name": "jszip",
       "type": "build"
     },
     {

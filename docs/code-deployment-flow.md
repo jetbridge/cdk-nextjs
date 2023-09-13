@@ -1,6 +1,6 @@
-# Nextjs Deployment Flow
+# Nextjs Code Deployment Flow
 
-Deep dive into `Nextjs` constructs deployment flow - how your Next.js code gets deployed into AWS.
+Deep dive into `Nextjs` constructs code deployment flow - how your Next.js code gets deployed into AWS.
 
 1. `cdk deploy "**"`
 1. `Nextjs` is instantiated
@@ -8,4 +8,11 @@ Deep dive into `Nextjs` constructs deployment flow - how your Next.js code gets 
 1. `NextjsStaticAssets` is instantiated which creates an S3 bucket, an `Asset` for your Next.js static assets, and a `NextjsBucketDeployment`. [Asset](https://docs.aws.amazon.com/cdk/v2/guide/assets.html) is uploaded to the S3 Bucket created during CDK Bootstrap in your AWS account (not bucket created in `NextjsStaticAssets`). `NextjsBucketDeployment` is a CloudFormation Custom Resource that downloads files from the CDK Assets Bucket, updates placeholder values, and then deploys the files to the target bucket. Placeholder values were unresolved tokens at synthesis time (because they reference values where names/ids aren't known yet) but at the time the code runs in the Custom Resource Lambda Function, those values have been resolved and are passed into custom resource through `ResourceProperties`. Only the public environment variable (NEXT_PUBLIC) placeholders are passed to `NextjsBucketDeployment.substitutionConfig` because server variables shouldn't live in static assets. Learn more about Next.js environment variables [here](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables). It's important to note the deployment order so that we don't write the static assets to the bucket until they're placeholders are replaced, otherwise we risk a user downloading a file with placeholders which would result in an error.
 1. `NextjsServer` is instantiated which creates an `Asset`, `NextjsBucketDeployment`, and lambda function to run Next.js server code. `NextjsBucketDeployment` will replace all (public and private) unresolved tokens within open-next generated server function code. Additional environment variables to support cache ISR feature are added: CACHE_BUCKET_NAME, CACHE_BUCKET_KEY, CACHE_BUCKET_REGION. `NextjsServer` also bundles lambda code with `esbuild`. The same note above about the important of deployment order applies here.
 1. `NextjsImage` and `NextjsRevalidation` are instantiated with each create a `NodejsFunction` which automatically does bundling and uploading of asset for us. We don't need to replace environment variable placeholders because they don't any (TODO: confirm this).
-1. `NextjsInvalidation` is instantiated to invalidate CloudFront Distribution. This construct explicitly depends upon `NextjsStaticAssets`, `NextjsServer`, `NextjsImage` so that we ensure any resources that could impact cached resoures (static assets, dynamic html, images) are up to date before invalidating CloudFront Distribution's cache.
+1. `NextjsInvalidation` is instantiated to invalidate CloudFront Distribution. This construct explicitly depends upon `NextjsStaticAssets`, `NextjsServer`, `NextjsImage` so that we ensure any resources that could impact cached resources (static assets, dynamic html, images) are up to date before invalidating CloudFront Distribution's cache.
+
+## PNPM Monorepo Symlinks
+PNPM Monorepos use symlinks between workspace node_modules and the top level node_modules. CDK Assets do not support symlinks despite the configuration options available. Therefore, we must zip up the assets ourselves. Also, `nextjs-bucket-deployment.ts` handles symlinks to unzip and zip symlinks within Lambda Custom Resources (for ServerFnBucketDeployment).
+
+Relevant GitHub Issues:
+- https://github.com/aws/aws-cdk/issues/9251
+- https://github.com/Stuk/jszip/issues/386#issuecomment-634773343

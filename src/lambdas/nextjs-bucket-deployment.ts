@@ -2,15 +2,19 @@
 import {
   createReadStream,
   createWriteStream,
+  existsSync,
+  lstatSync,
   mkdirSync,
   mkdtempSync,
   readdirSync,
   readFileSync,
+  readlinkSync,
   rmSync,
+  symlinkSync,
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, relative, resolve as resolvePath } from 'node:path';
+import { dirname, join, relative, resolve as resolvePath } from 'node:path';
 import { Readable } from 'node:stream';
 import {
   DeleteObjectsCommand,
@@ -21,15 +25,15 @@ import {
   type PutObjectCommandInput,
   S3Client,
 } from '@aws-sdk/client-s3';
-import type * as AdmZipType from 'adm-zip';
+import type { CloudFormationCustomResourceHandler } from 'aws-lambda';
+import type * as JSZipType from 'jszip';
 // @ts-ignore jsii doesn't support esModuleInterop
 // eslint-disable-next-line no-duplicate-imports
-import _AdmZip from 'adm-zip';
-import type { CloudFormationCustomResourceHandler } from 'aws-lambda';
+import _JSZip from 'jszip';
 import * as micromatch from 'micromatch';
 import * as mime from 'mime-types';
 import type { CustomResourceProperties, NextjsBucketDeploymentProps } from '../NextjsBucketDeployment';
-const AdmZip = _AdmZip as typeof AdmZipType;
+const JSZip = _JSZip as JSZipType;
 
 const s3 = new S3Client({});
 
@@ -70,10 +74,11 @@ export const handler: CloudFormationCustomResourceHandler = async (event, contex
         });
       } else {
         debug('Uploading zip to: ' + props.destinationBucketName);
-        await zipObjects({
+        const zipBuffer = await zipObjects({ tmpDir: sourceDirPath });
+        await uploadZip({
+          zipBuffer,
           bucket: props.destinationBucketName,
           keyPrefix: props.destinationKeyPrefix,
-          tmpDir: sourceDirPath,
         });
       }
       if (tmpDir.length) {
@@ -136,8 +141,32 @@ async function downloadFile({
 }
 
 async function extractZip({ sourceZipFilePath, sourceDirPath }: { sourceZipFilePath: string; sourceDirPath: string }) {
-  const zip = new AdmZip(sourceZipFilePath);
-  zip.extractAllTo(sourceDirPath);
+  const zipBuffer = readFileSync(sourceZipFilePath);
+  const archive = await JSZip.loadAsync(zipBuffer);
+  for (const [zipRelativePath, zipObject] of Object.entries(archive.files)) {
+    const absPath = resolvePath(sourceDirPath, zipRelativePath);
+    if (zipObject.dir) {
+      mkdirSync(absPath, { recursive: true });
+    } else {
+      const pathDirname = dirname(absPath);
+      if (!existsSync(pathDirname)) {
+        mkdirSync(pathDirname, { recursive: true });
+      }
+      const fileContents = await zipObject.async('string');
+      let isSymLink = false;
+      const unixPermissions = zipObject?.unixPermissions;
+      if (typeof unixPermissions === 'number') {
+        // https://github.com/twolfson/grunt-zip/pull/52/files
+        // eslint-disable-next-line no-bitwise
+        isSymLink = (unixPermissions & 0xf000) === 0xa000;
+      }
+      if (isSymLink) {
+        symlinkSync(fileContents, absPath);
+      } else {
+        writeFileSync(absPath, fileContents);
+      }
+    }
+  }
 }
 
 /**
@@ -160,6 +189,7 @@ function listFilePaths(dirPath: string): string[] {
 function substitute({ filePaths, config }: { filePaths: string[]; config: Record<string, string> }) {
   const findRegExp = new RegExp(Object.keys(config).join('|'), 'g');
   for (const filePath of filePaths) {
+    if (filePath.includes('node_modules')) continue;
     const fileContents = readFileSync(filePath, { encoding: 'utf8' });
     const newFileContents = fileContents.replace(findRegExp, (matched) => {
       const matchedEnvVar = config[matched];
@@ -236,26 +266,47 @@ function uploadObjects({
   return Promise.all(putObjectInputs.map((input) => s3.send(new PutObjectCommand(input))));
 }
 
-async function zipObjects({
+/**
+ * Zips objects taking into account symlinks
+ * @see https://github.com/Stuk/jszip/issues/386#issuecomment-634773343
+ */
+function zipObjects({ tmpDir }: { tmpDir: string }): Promise<Buffer> {
+  const zip = new JSZip();
+  const filePaths = listFilePaths(tmpDir);
+  for (const filePath of filePaths) {
+    const relativePath = relative(tmpDir, filePath);
+    const stat = lstatSync(filePath);
+    if (stat.isSymbolicLink()) {
+      zip.file(relativePath, readlinkSync(filePath), {
+        dir: stat.isDirectory(),
+        unixPermissions: parseInt('120755', 8),
+      });
+    } else {
+      zip.file(relativePath, readFileSync(filePath), { dir: stat.isDirectory(), unixPermissions: stat.mode });
+    }
+  }
+  return zip.generateAsync({
+    type: 'nodebuffer',
+    platform: 'UNIX',
+    compression: 'STORE',
+  });
+}
+
+async function uploadZip({
   bucket,
   keyPrefix,
-  tmpDir,
+  zipBuffer,
 }: {
   bucket: CustomResourceProperties['destinationBucketName'];
   keyPrefix?: CustomResourceProperties['destinationKeyPrefix'];
-  tmpDir: string;
+  zipBuffer: Buffer;
 }) {
-  const destinationZip = new AdmZip();
-  destinationZip.addLocalFolder(tmpDir);
-  const destinationZipPath = resolvePath(tmpDir, 'destination.zip');
-  destinationZip.writeZip(destinationZipPath);
-  const contentType = mime.lookup(destinationZipPath) || undefined;
   return s3.send(
     new PutObjectCommand({
       Bucket: bucket,
       Key: keyPrefix,
-      Body: createReadStream(destinationZipPath),
-      ContentType: contentType,
+      Body: zipBuffer,
+      ContentType: 'application/zip',
     })
   );
 }

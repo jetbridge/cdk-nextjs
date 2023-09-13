@@ -2574,106 +2574,6 @@ Set this option if the domain is not hosted on Amazon Route 53.
 
 ---
 
-### BaseSiteEnvironmentOutputsInfo <a name="BaseSiteEnvironmentOutputsInfo" id="cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.Initializer"></a>
-
-```typescript
-import { BaseSiteEnvironmentOutputsInfo } from 'cdk-nextjs-standalone'
-
-const baseSiteEnvironmentOutputsInfo: BaseSiteEnvironmentOutputsInfo = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.property.environmentOutputs">environmentOutputs</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.property.path">path</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.property.stack">stack</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `environmentOutputs`<sup>Required</sup> <a name="environmentOutputs" id="cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.property.environmentOutputs"></a>
-
-```typescript
-public readonly environmentOutputs: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
----
-
-##### `path`<sup>Required</sup> <a name="path" id="cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.property.path"></a>
-
-```typescript
-public readonly path: string;
-```
-
-- *Type:* string
-
----
-
-##### `stack`<sup>Required</sup> <a name="stack" id="cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.property.stack"></a>
-
-```typescript
-public readonly stack: string;
-```
-
-- *Type:* string
-
----
-
-### BaseSiteReplaceProps <a name="BaseSiteReplaceProps" id="cdk-nextjs-standalone.BaseSiteReplaceProps"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.BaseSiteReplaceProps.Initializer"></a>
-
-```typescript
-import { BaseSiteReplaceProps } from 'cdk-nextjs-standalone'
-
-const baseSiteReplaceProps: BaseSiteReplaceProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteReplaceProps.property.files">files</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteReplaceProps.property.replace">replace</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteReplaceProps.property.search">search</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `files`<sup>Required</sup> <a name="files" id="cdk-nextjs-standalone.BaseSiteReplaceProps.property.files"></a>
-
-```typescript
-public readonly files: string;
-```
-
-- *Type:* string
-
----
-
-##### `replace`<sup>Required</sup> <a name="replace" id="cdk-nextjs-standalone.BaseSiteReplaceProps.property.replace"></a>
-
-```typescript
-public readonly replace: string;
-```
-
-- *Type:* string
-
----
-
-##### `search`<sup>Required</sup> <a name="search" id="cdk-nextjs-standalone.BaseSiteReplaceProps.property.search"></a>
-
-```typescript
-public readonly search: string;
-```
-
-- *Type:* string
-
----
-
 ### NextjsBaseProps <a name="NextjsBaseProps" id="cdk-nextjs-standalone.NextjsBaseProps"></a>
 
 Common props shared across NextJS-related CDK constructs.
@@ -2693,9 +2593,7 @@ const nextjsBaseProps: NextjsBaseProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
@@ -2725,10 +2623,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -2748,19 +2645,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsBaseProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsBaseProps.property.environment"></a>
 
 ```typescript
@@ -2770,18 +2654,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsBaseProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 
@@ -3009,9 +2881,7 @@ const nextjsBuildProps: NextjsBuildProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
@@ -3042,10 +2912,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -3065,19 +2934,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsBuildProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsBuildProps.property.environment"></a>
 
 ```typescript
@@ -3087,18 +2943,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsBuildProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 
@@ -3357,9 +3201,7 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
@@ -3400,10 +3242,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -3423,19 +3264,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsDistributionProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsDistributionProps.property.environment"></a>
 
 ```typescript
@@ -3445,18 +3273,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsDistributionProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 
@@ -3815,9 +3631,7 @@ const nextjsImageProps: NextjsImageProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
@@ -3850,10 +3664,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -3873,19 +3686,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsImageProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsImageProps.property.environment"></a>
 
 ```typescript
@@ -3895,18 +3695,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsImageProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 
@@ -4116,9 +3904,7 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
@@ -4151,10 +3937,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -4174,19 +3959,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsProps.property.environment"></a>
 
 ```typescript
@@ -4196,18 +3968,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 
@@ -4334,9 +4094,7 @@ const nextjsRevalidationProps: NextjsRevalidationProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
@@ -4369,10 +4127,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -4392,19 +4149,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.environment"></a>
 
 ```typescript
@@ -4414,18 +4158,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 
@@ -4551,9 +4283,7 @@ const nextjsServerProps: NextjsServerProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
@@ -4586,10 +4316,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -4609,19 +4338,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsServerProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsServerProps.property.environment"></a>
 
 ```typescript
@@ -4631,18 +4347,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsServerProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 

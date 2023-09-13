@@ -79,9 +79,6 @@ export class NextjsBuild extends Construct {
         env[k] = v;
       }
     }
-    if (this.props.nodeEnv) {
-      env.NODE_ENV = this.props.nodeEnv;
-    }
     for (const [k, v] of Object.entries(this.props.environment || {})) {
       // don't replace server only env vars for static assets
       if (Token.isUnresolved(v) && k.startsWith('NEXT_PUBLIC_')) {

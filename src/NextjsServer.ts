@@ -45,7 +45,6 @@ export class NextjsServer extends Construct {
     return {
       ...this.props.environment,
       ...this.props.lambda?.environment,
-      ...(this.props.nodeEnv ? { NODE_ENV: this.props.nodeEnv } : {}),
       CACHE_BUCKET_NAME: this.props.staticAssetBucket.bucketName,
       CACHE_BUCKET_REGION: Stack.of(this.props.staticAssetBucket).region,
       CACHE_BUCKET_KEY_PREFIX,
@@ -72,6 +71,7 @@ export class NextjsServer extends Construct {
   private createSourceCodeAsset() {
     const archivePath = createArchive({
       directory: this.props.nextBuild.nextServerFnDir,
+      quiet: this.props.quiet,
       zipFileName: 'server-fn.zip',
     });
     const asset = new Asset(this, 'SourceCodeAsset', {

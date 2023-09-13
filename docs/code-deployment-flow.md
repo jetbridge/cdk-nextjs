@@ -16,3 +16,6 @@ PNPM Monorepos use symlinks between workspace node_modules and the top level nod
 Relevant GitHub Issues:
 - https://github.com/aws/aws-cdk/issues/9251
 - https://github.com/Stuk/jszip/issues/386#issuecomment-634773343
+
+## Reason Why We Cannot use NodejsFunction for all Lambdas
+Originally I wanted to use NodejsFunction which manages bundling for us. However, we cannot couple bundling and deploying the function together when we don't know deploy time values because this would deploy the function without inject environment variables. The period of the function being in this state would be small, but isn't acceptable IMO. Therefore, we must deploy assets to S3, inject environment variables, then deploy the function - similar to how it works currently. There are still improvements to make, though. Server and Image functions must be inject with env vars where as Revalidation and in the future, Warmer can be bundled with NodejsLambda.

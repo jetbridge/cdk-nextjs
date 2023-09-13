@@ -1,9 +1,4 @@
-export {
-  BaseSiteEnvironmentOutputsInfo,
-  BaseSiteReplaceProps,
-  BaseSiteDomainProps,
-  NextjsBaseProps,
-} from './NextjsBase';
+export { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 
 // L2 constructs
 export { NextjsStaticAssets, NextjsStaticAssetsProps } from './NextjsStaticAssets';

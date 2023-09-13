@@ -1,8 +1,5 @@
 import { ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { ErrorResponse } from 'aws-cdk-lib/aws-cloudfront';
 import { IHostedZone } from 'aws-cdk-lib/aws-route53';
-
-export type CompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 /**
  * Common props shared across NextJS-related CDK constructs.
@@ -39,22 +36,10 @@ export interface NextjsBaseProps {
   readonly tempBuildDir?: string; // move to NextjsBuildProps?
 
   /**
-   * Optional value for NODE_ENV during build and runtime.
-   */
-  readonly nodeEnv?: string;
-
-  /**
    * Optional value used to install NextJS node dependencies.
-   * It defaults to 'npx --yes open-next@2 build'
+   * @default 'npx --yes open-next@2 build'
    */
   readonly buildCommand?: string;
-
-  /**
-   * 0 - no compression, fastest
-   * 9 - maximum compression, slowest
-   * @default 1
-   */
-  readonly compressionLevel?: CompressionLevel;
 
   /**
    * Less build output.
@@ -109,57 +94,4 @@ export interface BaseSiteDomainProps {
    * Set this option if you have an existing certificate in the `us-east-1` region in AWS Certificate Manager you want to use.
    */
   readonly certificate?: ICertificate;
-}
-
-export interface BaseSiteReplaceProps {
-  readonly files: string;
-  readonly search: string;
-  readonly replace: string;
-}
-
-export interface BaseSiteEnvironmentOutputsInfo {
-  readonly path: string;
-  readonly stack: string;
-  readonly environmentOutputs: { [key: string]: string };
-}
-
-/////////////////////
-// Helper Functions
-/////////////////////
-
-export function buildErrorResponsesForRedirectToIndex(indexPage: string): ErrorResponse[] {
-  return [
-    {
-      httpStatus: 403,
-      responsePagePath: `/${indexPage}`,
-      responseHttpStatus: 200,
-    },
-    {
-      httpStatus: 404,
-      responsePagePath: `/${indexPage}`,
-      responseHttpStatus: 200,
-    },
-    {
-      httpStatus: 503,
-      responsePagePath: `/${indexPage}`,
-      responseHttpStatus: 200,
-    },
-  ];
-}
-
-export function buildErrorResponsesFor404ErrorPage(errorPage: string): ErrorResponse[] {
-  return [
-    {
-      httpStatus: 403,
-      responsePagePath: `/${errorPage}`,
-    },
-    {
-      httpStatus: 404,
-      responsePagePath: `/${errorPage}`,
-    },
-    {
-      httpStatus: 503,
-      responsePagePath: `/${errorPage}`,
-    },
-  ];
 }

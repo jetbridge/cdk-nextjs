@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { Duration, Stack } from 'aws-cdk-lib';
 import { AnyPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
@@ -5,10 +6,12 @@ import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
+import { NEXTJS_BUILD_INDEX_FILE } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsServer } from './NextjsServer';
 import { getCommonNodejsFunctionProps } from './utils/common-lambda-props';
+import { fixPath } from './utils/convert-path';
 
 export interface NextjsRevalidationProps extends NextjsBaseProps {
   /**
@@ -44,6 +47,10 @@ export class NextjsRevalidation extends Construct {
 
     this.queue = this.createQueue();
     this.function = this.createFunction();
+
+    // allow server fn to send messages to queue
+    props.serverFunction.lambdaFunction?.addEnvironment('REVALIDATION_QUEUE_URL', this.queue.queueUrl);
+    props.serverFunction.lambdaFunction?.addEnvironment('REVALIDATION_QUEUE_REGION', Stack.of(this).region);
   }
 
   private createQueue(): Queue {
@@ -70,18 +77,28 @@ export class NextjsRevalidation extends Construct {
   }
 
   private createFunction(): NodejsFunction {
+    const nodejsFnProps = getCommonNodejsFunctionProps(this);
     const fn = new NodejsFunction(this, 'Fn', {
-      ...getCommonNodejsFunctionProps(this),
+      ...nodejsFnProps,
+      bundling: {
+        ...nodejsFnProps.bundling,
+        commandHooks: {
+          afterBundling: () => [],
+          beforeBundling: (_inputDir, outputDir) => [
+            // copy non-bundled assets into zip. use node -e so cross-os compatible
+            `node -e "fs.cpSync('${fixPath(this.props.nextBuild.nextRevalidateFnDir)}', '${fixPath(
+              outputDir
+            )}', { recursive: true, filter: (src) => !src.endsWith('index.mjs') })"`,
+          ],
+          beforeInstall: () => [],
+        },
+      },
       // open-next revalidation-function
       // see: https://github.com/serverless-stack/open-next/blob/274d446ed7e940cfbe7ce05a21108f4c854ee37a/README.md?plain=1#L65
-      entry: this.props.nextBuild.nextRevalidateFnPath,
+      entry: join(this.props.nextBuild.nextRevalidateFnDir, NEXTJS_BUILD_INDEX_FILE),
       handler: 'index.handler',
       description: 'Next.js revalidation function',
       timeout: Duration.seconds(30),
-      environment: {
-        REVALIDATION_QUEUE_URL: this.queue.queueUrl,
-        REVALIDATION_QUEUE_REGION: Stack.of(this).region,
-      },
     });
     fn.addEventSource(new SqsEventSource(this.queue, { batchSize: 5 }));
     return fn;

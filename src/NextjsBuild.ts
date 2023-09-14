@@ -38,16 +38,16 @@ export class NextjsBuild extends Construct {
    * Contains function for processessing image requests.
    * Should be arm64.
    */
-  public get nextImageFnPath(): string {
-    const fnPath = path.join(this.getNextBuildDir(), NEXTJS_BUILD_IMAGE_FN_DIR, 'index.mjs');
+  public get nextImageFnDir(): string {
+    const fnPath = path.join(this.getNextBuildDir(), NEXTJS_BUILD_IMAGE_FN_DIR);
     this.warnIfMissing(fnPath);
     return fnPath;
   }
   /**
    * Contains function for processing items from revalidation queue.
    */
-  public get nextRevalidateFnPath(): string {
-    const fnPath = path.join(this.getNextBuildDir(), NEXTJS_BUILD_REVALIDATE_FN_DIR, 'index.mjs');
+  public get nextRevalidateFnDir(): string {
+    const fnPath = path.join(this.getNextBuildDir(), NEXTJS_BUILD_REVALIDATE_FN_DIR);
     this.warnIfMissing(fnPath);
     return fnPath;
   }

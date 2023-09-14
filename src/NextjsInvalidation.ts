@@ -29,11 +29,8 @@ export class NextjsInvalidation extends Construct {
       // make `physicalResourceId` change each time to invalidate CloudFront
       // distribution on each change
       physicalResourceId: PhysicalResourceId.of(`${props.distribution.distributionId}-${Date.now()}`),
-      action: 'createInvalidation',
-      service: 'CloudFront',
-      // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.custom_resources-readme.html#using-aws-sdk-for-javascript-v3
-      // action: 'CreateInvalidationCommand',
-      // service: '@aws-sdk/client-cloudfront',
+      action: 'CreateInvalidationCommand',
+      service: '@aws-sdk/client-cloudfront',
       parameters: {
         DistributionId: props.distribution.distributionId,
         InvalidationBatch: {
@@ -45,7 +42,6 @@ export class NextjsInvalidation extends Construct {
         },
       },
     };
-    console.log({ distribution: props.distribution });
     const awsCustomResource = new AwsCustomResource(this, 'AwsCR', {
       onCreate: awsSdkCall,
       onUpdate: awsSdkCall,
@@ -56,6 +52,7 @@ export class NextjsInvalidation extends Construct {
             Stack.of(this).formatArn({
               resource: `distribution/${props.distribution.distributionId}`,
               service: 'cloudfront',
+              region: '',
             }),
           ],
         }),

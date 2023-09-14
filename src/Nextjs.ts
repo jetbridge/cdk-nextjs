@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import * as fs from 'node:fs';
 import * as os from 'os';
 import * as path from 'path';
@@ -10,13 +9,10 @@ import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
 import { NextjsImage } from './NextjsImage';
-// import { NextjsInvalidation } from './NextjsInvalidation';
+import { NextjsInvalidation } from './NextjsInvalidation';
 import { NextjsRevalidation } from './NextjsRevalidation';
 import { NextjsServer } from './NextjsServer';
 import { NextjsStaticAssets, NextjsStaticAssetsProps } from './NextjsStaticAssets';
-
-// contains server-side resolved environment vars in config bucket
-export const CONFIG_ENV_JSON_PATH = 'next-env.json';
 
 export interface NextjsDomainProps extends BaseSiteDomainProps {}
 
@@ -106,10 +102,10 @@ export class Nextjs extends Construct {
    */
   public get tempBuildDir(): string {
     return this.props.tempBuildDir
-    ? path.resolve(
-        path.join(this.props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
-      )
-    : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'))
+      ? path.resolve(
+          path.join(this.props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
+        )
+      : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
   }
 
   /**
@@ -169,10 +165,10 @@ export class Nextjs extends Construct {
     });
 
     if (!this.props.skipFullInvalidation) {
-      // new NextjsInvalidation(this, 'Invalidation', {
-      //   distribution: this.distribution.distribution,
-      //   dependencies: [], // [this.staticAssets, this.serverFunction, this.imageOptimizationFunction]
-      // })
+      new NextjsInvalidation(this, 'Invalidation', {
+        distribution: this.distribution.distribution,
+        dependencies: [], // [this.staticAssets, this.serverFunction, this.imageOptimizationFunction]
+      });
     }
 
     if (!props.quiet && !props.skipBuild) {

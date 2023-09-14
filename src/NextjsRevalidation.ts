@@ -70,7 +70,7 @@ export class NextjsRevalidation extends Construct {
   }
 
   private createFunction(): NodejsFunction {
-    const fn = new NodejsFunction(this, 'Function', {
+    const fn = new NodejsFunction(this, 'Fn', {
       ...getCommonNodejsFunctionProps(this),
       // open-next revalidation-function
       // see: https://github.com/serverless-stack/open-next/blob/274d446ed7e940cfbe7ce05a21108f4c854ee37a/README.md?plain=1#L65

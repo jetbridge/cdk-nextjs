@@ -53,7 +53,7 @@ export const handler: CloudFormationCustomResourceHandler = async (event, contex
         localDestinationPath: sourceZipFilePath,
       });
       debug('Extracting zip');
-      await extractZip({ sourceZipFilePath, sourceDirPath });
+      await extractZip({ sourceZipFilePath, destinationDirPath: sourceDirPath });
       const filePaths = listFilePaths(sourceDirPath);
       if (props.substitutionConfig && Object.keys(props.substitutionConfig).length) {
         console.log('Replacing environment variables: ' + JSON.stringify(props.substitutionConfig));
@@ -140,19 +140,23 @@ async function downloadFile({
   });
 }
 
-async function extractZip({ sourceZipFilePath, sourceDirPath }: { sourceZipFilePath: string; sourceDirPath: string }) {
+async function extractZip({
+  sourceZipFilePath,
+  destinationDirPath,
+}: {
+  sourceZipFilePath: string;
+  destinationDirPath: string;
+}) {
   const zipBuffer = readFileSync(sourceZipFilePath);
   const archive = await JSZip.loadAsync(zipBuffer);
   for (const [zipRelativePath, zipObject] of Object.entries(archive.files)) {
-    const absPath = resolvePath(sourceDirPath, zipRelativePath);
-    if (zipObject.dir) {
-      mkdirSync(absPath, { recursive: true });
-    } else {
+    if (!zipObject.dir) {
+      const absPath = resolvePath(destinationDirPath, zipRelativePath);
       const pathDirname = dirname(absPath);
       if (!existsSync(pathDirname)) {
         mkdirSync(pathDirname, { recursive: true });
       }
-      const fileContents = await zipObject.async('string');
+      const fileContents = await zipObject.async('nodebuffer');
       let isSymLink = false;
       const unixPermissions = zipObject?.unixPermissions;
       if (typeof unixPermissions === 'number') {

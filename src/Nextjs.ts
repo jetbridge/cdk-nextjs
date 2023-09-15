@@ -129,6 +129,7 @@ export class Nextjs extends Construct {
     // deploy nextjs static assets to s3
     this.staticAssets = new NextjsStaticAssets(this, 'StaticAssets', {
       bucket: props.defaults?.assetDeployment?.bucket,
+      environment: props.environment,
       nextBuild: this.nextBuild,
     });
 

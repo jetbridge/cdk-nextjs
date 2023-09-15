@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
-import { Stack, Token } from 'aws-cdk-lib';
+import { Stack } from 'aws-cdk-lib';
 import { Code, Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
@@ -104,20 +104,10 @@ export class NextjsServer extends Construct {
       destinationKeyPrefix: destinationAsset.s3ObjectKey,
       prune: true,
       // this.props.environment is for build time, not this.environment which is for runtime
-      substitutionConfig: this.getSubstitutionConfig(this.props.environment || {}),
+      substitutionConfig: NextjsBucketDeployment.getSubstitutionConfig(this.props.environment || {}),
       zip: true,
     });
     return bucketDeployment;
-  }
-
-  private getSubstitutionConfig(env: Record<string, string>): Record<string, string> {
-    const substitutionConfig: Record<string, string> = {};
-    for (const [k, v] of Object.entries(env)) {
-      if (Token.isUnresolved(v)) {
-        substitutionConfig[NextjsBucketDeployment.getSubstitutionValue(k)] = v;
-      }
-    }
-    return substitutionConfig;
   }
 
   private createFunction(asset: Asset) {

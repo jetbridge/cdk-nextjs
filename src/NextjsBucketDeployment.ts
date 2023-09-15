@@ -1,5 +1,5 @@
 import * as path from 'node:path';
-import { CustomResource, Duration } from 'aws-cdk-lib';
+import { CustomResource, Duration, Token } from 'aws-cdk-lib';
 import { Code, Function } from 'aws-cdk-lib/aws-lambda';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
@@ -80,6 +80,18 @@ export class NextjsBucketDeployment extends Construct {
    */
   static getSubstitutionValue(v: string): string {
     return `{{ ${v} }}`;
+  }
+  /**
+   * Creates `substitutionConfig` an object by extracting unresolved tokens.
+   */
+  static getSubstitutionConfig(env: Record<string, string>): Record<string, string> {
+    const substitutionConfig: Record<string, string> = {};
+    for (const [k, v] of Object.entries(env)) {
+      if (Token.isUnresolved(v)) {
+        substitutionConfig[NextjsBucketDeployment.getSubstitutionValue(k)] = v;
+      }
+    }
+    return substitutionConfig;
   }
   /**
    * Lambda Function Provider for Custom Resource

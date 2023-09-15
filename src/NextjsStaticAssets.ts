@@ -18,6 +18,10 @@ export interface NextjsStaticAssetsProps {
    * The `NextjsBuild` instance representing the built Nextjs application.
    */
   readonly nextBuild: NextjsBuild;
+  /**
+   * Custom environment variables to pass to the NextJS build and runtime.
+   */
+  readonly environment?: Record<string, string>;
 }
 
 /**
@@ -33,6 +37,16 @@ export class NextjsStaticAssets extends Construct {
   bucket: s3.IBucket;
 
   protected props: NextjsStaticAssetsProps;
+
+  private get buildEnvVars() {
+    const buildEnvVars: Record<string, string> = {};
+    for (const [k, v] of Object.entries(this.props.environment || {})) {
+      if (k.startsWith('NEXT_PUBLIC')) {
+        buildEnvVars[k] = v;
+      }
+    }
+    return buildEnvVars;
+  }
 
   constructor(scope: Construct, id: string, props: NextjsStaticAssetsProps) {
     super(scope, id);
@@ -64,7 +78,7 @@ export class NextjsStaticAssets extends Construct {
     const asset = new Asset(this, 'Asset', {
       path: tmpAssetsDir,
     });
-    fs.rmSync(tmpAssetsDir, { recursive: true }); // is this ok?
+    fs.rmSync(tmpAssetsDir, { recursive: true });
     return asset;
   }
 
@@ -75,7 +89,7 @@ export class NextjsStaticAssets extends Construct {
       debug: true,
       // only put env vars that are placeholders in custom resource properties
       // to be replaced. other env vars were injected at build time.
-      substitutionConfig: this.getSubstitutions(this.props.nextBuild.buildEnvVars),
+      substitutionConfig: NextjsBucketDeployment.getSubstitutionConfig(this.buildEnvVars),
       prune: true,
       putConfig: {
         '**/*': {
@@ -86,15 +100,5 @@ export class NextjsStaticAssets extends Construct {
         },
       },
     });
-  }
-
-  private getSubstitutions(envVars: Record<string, string>): Record<string, string> {
-    const envWithPlaceholders: Record<string, string> = {};
-    for (const [k, v] of Object.entries(envVars)) {
-      if (/^{{ \s }}$/.test(v)) {
-        envWithPlaceholders[k] = v;
-      }
-    }
-    return envWithPlaceholders;
   }
 }

@@ -67,28 +67,6 @@ export class NextjsBuild extends Construct {
     this.warnIfMissing(dir);
     return dir;
   }
-  /**
-   * Environment variables for build time (when `open-next build` is called).
-   * Unresolved tokens are replace with placeholders like {{ TOKEN_NAME }} and
-   * will be resolved later in custom resource.
-   */
-  public get buildEnvVars(): Record<string, string> {
-    const env: Record<string, string> = {};
-    for (const [k, v] of Object.entries(process.env)) {
-      if (v) {
-        env[k] = v;
-      }
-    }
-    for (const [k, v] of Object.entries(this.props.environment || {})) {
-      // don't replace server only env vars for static assets
-      if (Token.isUnresolved(v) && k.startsWith('NEXT_PUBLIC_')) {
-        env[k] = NextjsBucketDeployment.getSubstitutionValue(k);
-      } else {
-        env[k] = v;
-      }
-    }
-    return env;
-  }
 
   public props: NextjsBuildProps;
 
@@ -132,8 +110,31 @@ export class NextjsBuild extends Construct {
     execSync(buildCommand, {
       cwd: buildPath,
       stdio: this.props.quiet ? 'ignore' : 'inherit',
-      env: this.buildEnvVars,
+      env: this.getBuildEnvVars(),
     });
+  }
+
+  /**
+   * Gets environment variables for build time (when `open-next build` is called).
+   * Unresolved tokens are replace with placeholders like {{ TOKEN_NAME }} and
+   * will be resolved later in `NextjsBucketDeployment` custom resource.
+   */
+  private getBuildEnvVars() {
+    const env: Record<string, string> = {};
+    for (const [k, v] of Object.entries(process.env)) {
+      if (v) {
+        env[k] = v;
+      }
+    }
+    for (const [k, v] of Object.entries(this.props.environment || {})) {
+      // don't replace server only env vars for static assets
+      if (Token.isUnresolved(v) && k.startsWith('NEXT_PUBLIC_')) {
+        env[k] = NextjsBucketDeployment.getSubstitutionValue(k);
+      } else {
+        env[k] = v;
+      }
+    }
+    return env;
   }
 
   readPublicFileList() {

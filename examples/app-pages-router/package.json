@@ -1,0 +1,21 @@
+{
+  "name": "cdk-nextjs-standalone-example-app-router",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/node": "20.5.7",
+    "aws-cdk": "2.94.0",
+    "esbuild": "^0.19.3",
+    "tsx": "^3.12.10",
+    "typescript": "~5.2.2"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.94.0",
+    "cdk-nextjs-standalone": "link:../..",
+    "constructs": "^10.0.0"
+  }
+}

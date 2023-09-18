@@ -32,6 +32,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   eslintOptions: {
     prettier: true,
     dirs: ['src'],
+    ignorePatterns: ['examples/', 'e2e-tests/'],
   },
   projenrcTs: true,
   tsconfig: { compilerOptions: { ...commonTscOptions } },
@@ -62,5 +63,58 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
 project.bundler.addBundle('./src/lambdas/nextjs-bucket-deployment.ts', commonBundlingOptions);
 project.bundler.addBundle('./src/lambdas/sign-fn-url.ts', commonBundlingOptions);
+
+// const e2eTestsWorkflow = project.github?.addWorkflow('e2e-tests');
+// e2eTestsWorkflow?.on({ pullRequest: { branches: ['main'] } });
+// e2eTestsWorkflow?.addJob('run-e2e-tests', {
+//   runsOn: ['ubuntu-latest'],
+//   permissions: {},
+//   steps: [
+//     { uses: 'actions/checkout@v3' },
+//     {
+//       name: 'Setup Node.js',
+//       uses: 'actions/setup-node@v3',
+//       with: {
+//         'node-version': '18',
+//       },
+//     },
+//     { uses: 'pnpm/action-setup@v2', with: { run_install: false } },
+//     { name: 'Install dependencies', run: 'examples/install.sh' },
+//     { name: 'Install Playwright Browsers', run: 'pnpx playwright install --with-deps' },
+//     // TODO: cache browsers?
+//     { name: 'Install CDK', run: 'pnpm add -g aws-cdk' },
+//     { name: 'Deploy App Router', run: 'cdk deploy', workingDirectory: 'examples/app-router' },
+//     { name: 'Deploy Pages Router', run: 'cdk deploy', workingDirectory: 'examples/app-pages-router' },
+//     { name: 'Deploy App-Pages Router', run: 'cdk deploy', workingDirectory: 'examples/pages-router' },
+//     {
+//       uses: 'actions/upload-artifact@v3',
+//       if: 'always()',
+//       with: {
+//         name: 'app-router-playwright-report',
+//         path: 'examples/app-router/playwright-report',
+//         'retention-days': 30,
+//       },
+//     },
+//     {
+//       uses: 'actions/upload-artifact@v3',
+//       if: 'always()',
+//       with: {
+//         name: 'pages-router-playwright-report',
+//         path: 'examples/pages-router/playwright-report',
+//         'retention-days': 30,
+//       },
+//     },
+//     {
+//       uses: 'actions/upload-artifact@v3',
+//       if: 'always()',
+//       with: {
+//         name: 'app-pages-router-playwright-report',
+//         path: 'examples/app-pages-router/playwright-report',
+//         'retention-days': 30,
+//       },
+//     },
+//   ],
+//   timeoutMinutes: 60,
+// });
 
 project.synth();

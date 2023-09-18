@@ -37,11 +37,8 @@
     }
   },
   "ignorePatterns": [
-    "*.js",
-    "*.d.ts",
-    "node_modules/",
-    "*.generated.ts",
-    "coverage",
+    "examples/",
+    "e2e-tests/",
     "!.projenrc.ts",
     "!projenrc/**/*.ts"
   ],

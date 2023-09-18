@@ -79,6 +79,7 @@ project.bundler.addBundle('./src/lambdas/sign-fn-url.ts', commonBundlingOptions)
 //       },
 //     },
 //     { uses: 'pnpm/action-setup@v2', with: { run_install: false } },
+//     { name: 'Setup open-next git submodule', run: 'git submodule init && git submodule update' },
 //     { name: 'Install dependencies', run: 'examples/install.sh' },
 //     { name: 'Install Playwright Browsers', run: 'pnpx playwright install --with-deps' },
 //     // TODO: cache browsers?

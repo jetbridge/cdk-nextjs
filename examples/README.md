@@ -14,5 +14,4 @@ To deploy an app manually to test them out for yourself, run:
 1. `cdk deploy`
 
 ## Automatic E2E Testing
-1. `chmod u+x run.sh`
-1. Execute `run.sh` within the root of this repo
+See .projenrc.ts `run-e2e-tests` workflow.

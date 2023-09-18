@@ -447,6 +447,7 @@ Returns a string representation of this construct.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionConfig">getSubstitutionConfig</a></code> | Creates `substitutionConfig` an object by extracting unresolved tokens. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionValue">getSubstitutionValue</a></code> | Formats a string as a template value so custom resource knows to replace. |
 
 ---
@@ -466,6 +467,22 @@ Checks if `x` is a construct.
 - *Type:* any
 
 Any object.
+
+---
+
+##### `getSubstitutionConfig` <a name="getSubstitutionConfig" id="cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionConfig"></a>
+
+```typescript
+import { NextjsBucketDeployment } from 'cdk-nextjs-standalone'
+
+NextjsBucketDeployment.getSubstitutionConfig(env: {[ key: string ]: string})
+```
+
+Creates `substitutionConfig` an object by extracting unresolved tokens.
+
+###### `env`<sup>Required</sup> <a name="env" id="cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionConfig.parameter.env"></a>
+
+- *Type:* {[ key: string ]: string}
 
 ---
 
@@ -611,10 +628,9 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.buildEnvVars">buildEnvVars</a></code> | <code>{[ key: string ]: string}</code> | Environment variables for build time (when `open-next build` is called). |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir">nextCacheDir</a></code> | <code>string</code> | Cache directory for generated data. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextImageFnPath">nextImageFnPath</a></code> | <code>string</code> | Contains function for processessing image requests. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnPath">nextRevalidateFnPath</a></code> | <code>string</code> | Contains function for processing items from revalidation queue. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir">nextImageFnDir</a></code> | <code>string</code> | Contains function for processessing image requests. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir">nextRevalidateFnDir</a></code> | <code>string</code> | Contains function for processing items from revalidation queue. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextServerFnDir">nextServerFnDir</a></code> | <code>string</code> | Contains server code and dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir">nextStaticDir</a></code> | <code>string</code> | Static files containing client-side code. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a></code> | *No description.* |
@@ -633,21 +649,6 @@ The tree node.
 
 ---
 
-##### `buildEnvVars`<sup>Required</sup> <a name="buildEnvVars" id="cdk-nextjs-standalone.NextjsBuild.property.buildEnvVars"></a>
-
-```typescript
-public readonly buildEnvVars: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-Environment variables for build time (when `open-next build` is called).
-
-Unresolved tokens are replace with placeholders like {{ TOKEN_NAME }} and
-will be resolved later in custom resource.
-
----
-
 ##### `nextCacheDir`<sup>Required</sup> <a name="nextCacheDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir"></a>
 
 ```typescript
@@ -660,10 +661,10 @@ Cache directory for generated data.
 
 ---
 
-##### `nextImageFnPath`<sup>Required</sup> <a name="nextImageFnPath" id="cdk-nextjs-standalone.NextjsBuild.property.nextImageFnPath"></a>
+##### `nextImageFnDir`<sup>Required</sup> <a name="nextImageFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir"></a>
 
 ```typescript
-public readonly nextImageFnPath: string;
+public readonly nextImageFnDir: string;
 ```
 
 - *Type:* string
@@ -674,10 +675,10 @@ Should be arm64.
 
 ---
 
-##### `nextRevalidateFnPath`<sup>Required</sup> <a name="nextRevalidateFnPath" id="cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnPath"></a>
+##### `nextRevalidateFnDir`<sup>Required</sup> <a name="nextRevalidateFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir"></a>
 
 ```typescript
-public readonly nextRevalidateFnPath: string;
+public readonly nextRevalidateFnDir: string;
 ```
 
 - *Type:* string
@@ -4473,6 +4474,7 @@ const nextjsStaticAssetsProps: NextjsStaticAssetsProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Define your own bucket to store static assets. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 
 ---
 
@@ -4497,6 +4499,18 @@ public readonly bucket: IBucket;
 - *Type:* aws-cdk-lib.aws_s3.IBucket
 
 Define your own bucket to store static assets.
+
+---
+
+##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment"></a>
+
+```typescript
+public readonly environment: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+Custom environment variables to pass to the NextJS build and runtime.
 
 ---
 

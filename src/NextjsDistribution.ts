@@ -353,8 +353,22 @@ export class NextjsDistribution extends Construct {
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
       originRequestPolicy,
       cachePolicy,
-      edgeLambdas: this.edgeLambdas,
+      edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
+      functionAssociations: !this.edgeLambdas.length ? this.createCloudFrontFnAssociations() : undefined,
     };
+  }
+
+  private createCloudFrontFnAssociations() {
+    const cloudFrontFn = new cloudfront.Function(this, 'CloudFrontFn', {
+      code: cloudfront.FunctionCode.fromInline(`
+      function handler(event) {
+        var request = event.request;
+        request.headers["x-forwarded-host"] = request.headers.host;
+        return request;
+      }
+      `),
+    });
+    return [{ eventType: cloudfront.FunctionEventType.VIEWER_REQUEST, function: cloudFrontFn }];
   }
 
   private createImageBehaviorOptions(): cloudfront.BehaviorOptions {

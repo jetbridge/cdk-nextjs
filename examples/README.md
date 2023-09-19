@@ -5,6 +5,7 @@ Each example app utilizes [open-next](https://github.com/sst/open-next)'s exampl
 After cloning this repository in order to run the example apps or e2e tests, run:
 1. Initialize git submodule: `git submodule init && git submodule update`
 1. Install dependencies: `cd open-next && pnpm i`
+1. Build packages `pnpm build`
 
 ## Deploy Manually
 To deploy an app manually to test them out for yourself, run:

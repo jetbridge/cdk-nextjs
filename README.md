@@ -10,20 +10,25 @@ Supported NextJs versions: >=12.3.0+ (includes 13.0.0+)
 Uses the [standalone output](https://nextjs.org/docs/advanced-features/output-file-tracing) build mode.
 
 ## Quickstart
-
-Add the dependency `esbuild@0.17.16` to your project along with `cdk-nextjs-standalone`.
-
-```shell
-npm install -D esbuild@0.17.16 cdk-nextjs-standalone
-```
-
 ```ts
-import path from 'path';
+import { App, Stack, StackProps } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { Nextjs } from 'cdk-nextjs-standalone';
 
-new Nextjs(this, 'Web', {
-  nextjsPath: './web', // relative path to nextjs project root
-});
+class WebStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
+    const nextjs = new Nextjs(this, 'Nextjs', {
+      nextjsPath: '../../web', // relative path to Next.js project root
+    });
+    new CfnOutput(this, "CloudFrontDistributionDomain", {
+      value: nextjs.distribution.distributionDomain,
+    });
+  }
+}
+
+const app = new App();
+new WebStack(app, 'web');
 ```
 
 ## Important Notes

@@ -119,10 +119,6 @@ export class Nextjs extends Construct {
   constructor(scope: Construct, id: string, protected props: NextjsProps) {
     super(scope, id);
 
-    if (!props.quiet && !props.skipBuild) {
-      console.debug('┌ Building Next.js app ▼ ...');
-    }
-
     // build nextjs app
     this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir: this.tempBuildDir });
 
@@ -170,10 +166,6 @@ export class Nextjs extends Construct {
         distribution: this.distribution.distribution,
         dependencies: [], // [this.staticAssets, this.serverFunction, this.imageOptimizationFunction]
       });
-    }
-
-    if (!props.quiet && !props.skipBuild) {
-      console.debug('└ Finished preparing NextJS app for deployment');
     }
   }
 

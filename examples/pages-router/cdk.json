@@ -1,5 +1,5 @@
 {
-  "app": "yarn tsx src/app.ts",
+  "app": "pnpm tsx src/app.ts",
   "watch": {
     "include": [
       "**"

@@ -15,7 +15,6 @@ export const handler: CloudFrontRequestHandler = async (event) => {
   if (debug) console.log('input request', JSON.stringify(request, null, 2));
 
   escapeQuerystring(request);
-  request.headers['x-forwarded-host'] = request.headers.host;
   await signRequest(request);
 
   if (debug) console.log('output request', JSON.stringify(request), null, 2);

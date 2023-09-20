@@ -307,12 +307,15 @@ export class NextjsDistribution extends Construct {
     return this.props.functionUrlAuthType || lambda.FunctionUrlAuthType.NONE;
   }
 
+  /**
+   * Once CloudFront OAC is released, remove this to reduce latency.
+   */
   private createEdgeLambda(): cloudfront.EdgeLambda {
-    const lambdasDir = path.resolve(__dirname, '../assets/lambdas');
+    const signFnUrlDir = path.resolve(__dirname, '..', 'assets', 'lambdas', 'sign-fn-url');
     const originRequestEdgeFn = new cloudfront.experimental.EdgeFunction(this, 'EdgeFn', {
       runtime: Runtime.NODEJS_18_X,
-      handler: 'sign-fn-url.handler',
-      code: lambda.Code.fromAsset(lambdasDir),
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(signFnUrlDir),
       currentVersionOptions: {
         removalPolicy: RemovalPolicy.DESTROY, // destroy old versions
         retryAttempts: 1, // async retry attempts
@@ -354,10 +357,14 @@ export class NextjsDistribution extends Construct {
       originRequestPolicy,
       cachePolicy,
       edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
-      functionAssociations: !this.edgeLambdas.length ? this.createCloudFrontFnAssociations() : undefined,
+      functionAssociations: this.createCloudFrontFnAssociations(),
     };
   }
 
+  /**
+   * If this doesn't run, then Next.js Server's `request.url` will be Lambda Function
+   * URL instead of domain
+   */
   private createCloudFrontFnAssociations() {
     const cloudFrontFn = new cloudfront.Function(this, 'CloudFrontFn', {
       code: cloudfront.FunctionCode.fromInline(`

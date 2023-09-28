@@ -1,7 +1,12 @@
 # cdk-nextjs-standalone Examples
 Each example app utilizes [open-next](https://github.com/sst/open-next)'s example Next.js apps. open-next's example apps are built to test core Next.js functionality so they're helpful for testing `cdk-nextjs-standalone`. We also don't want to reinvent the wheel. In order to use open-next's code within this repository we use git submodules. Read [this guide](https://www.atlassian.com/git/tutorials/git-submodule) for more info.
 
-## Setup
+## Prerequisites
+1. `git clone https://github.com/jetbridge/cdk-nextjs.git`
+1. `yarn install`
+1. `yarn build` (or faster option: `yarn compile`)
+
+## Setup Example Next.js Apps
 After cloning this repository in order to run the example apps or e2e tests, run:
 1. Initialize git submodule: `git submodule init && git submodule update`
 1. Install dependencies: `cd open-next && pnpm i`

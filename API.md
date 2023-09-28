@@ -19,7 +19,7 @@ class WebStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
     const nextjs = new Nextjs(this, 'Nextjs', {
-      nextjsPath: '../../web', // relative path to Next.js project root
+      nextjsPath: './web', // relative path from your project root to NextJS
     });
     new CfnOutput(this, "CloudFrontDistributionDomain", {
       value: nextjs.distribution.distributionDomain,

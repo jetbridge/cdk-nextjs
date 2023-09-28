@@ -11,6 +11,7 @@ Deep dive into `Nextjs` constructs code deployment flow - how your Next.js code 
 1. `NextjsInvalidation` is instantiated to invalidate CloudFront Distribution. This construct explicitly depends upon `NextjsStaticAssets`, `NextjsServer`, `NextjsImage` so that we ensure any resources that could impact cached resources (static assets, dynamic html, images) are up to date before invalidating CloudFront Distribution's cache.
 
 ## PNPM Monorepo Symlinks
+_Only applicable for PNPM Monorepos_
 PNPM Monorepos use symlinks between workspace node_modules and the top level node_modules. CDK Assets do not support symlinks despite the configuration options available. Therefore, we must zip up the assets ourselves. Also, `nextjs-bucket-deployment.ts` handles symlinks to unzip and zip symlinks within Lambda Custom Resources (for ServerFnBucketDeployment).
 
 Relevant GitHub Issues:

@@ -62,7 +62,7 @@ export class NextjsRevalidation extends Construct {
     queue.addToResourcePolicy(
       new PolicyStatement({
         sid: 'DenyUnsecureTransport',
-        actions: ['sqs:SendMessage', 'sqs:ReceiveMessage'],
+        actions: ['sqs:*'],
         effect: Effect.DENY,
         principals: [new AnyPrincipal()],
         resources: [queue.queueArn],

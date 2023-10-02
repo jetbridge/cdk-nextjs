@@ -41,6 +41,54 @@
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
     },
+    "bundle": {
+      "name": "bundle",
+      "description": "Prepare assets",
+      "steps": [
+        {
+          "spawn": "bundle:lambdas/nextjs-bucket-deployment"
+        },
+        {
+          "spawn": "bundle:lambdas/sign-fn-url"
+        }
+      ]
+    },
+    "bundle:lambdas/nextjs-bucket-deployment": {
+      "name": "bundle:lambdas/nextjs-bucket-deployment",
+      "description": "Create a JavaScript bundle from ./src/lambdas/nextjs-bucket-deployment.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle ./src/lambdas/nextjs-bucket-deployment.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap"
+        }
+      ]
+    },
+    "bundle:lambdas/nextjs-bucket-deployment:watch": {
+      "name": "bundle:lambdas/nextjs-bucket-deployment:watch",
+      "description": "Continuously update the JavaScript bundle from ./src/lambdas/nextjs-bucket-deployment.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle ./src/lambdas/nextjs-bucket-deployment.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap --watch"
+        }
+      ]
+    },
+    "bundle:lambdas/sign-fn-url": {
+      "name": "bundle:lambdas/sign-fn-url",
+      "description": "Create a JavaScript bundle from ./src/lambdas/sign-fn-url.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle ./src/lambdas/sign-fn-url.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-url/index.js\" --sourcemap"
+        }
+      ]
+    },
+    "bundle:lambdas/sign-fn-url:watch": {
+      "name": "bundle:lambdas/sign-fn-url:watch",
+      "description": "Continuously update the JavaScript bundle from ./src/lambdas/sign-fn-url.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle ./src/lambdas/sign-fn-url.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-url/index.js\" --sourcemap --watch"
+        }
+      ]
+    },
     "clobber": {
       "name": "clobber",
       "description": "hard resets to HEAD of origin and cleans the local repo",
@@ -96,7 +144,7 @@
       "description": "Synthesize project files",
       "steps": [
         {
-          "exec": "node .projenrc.js"
+          "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
         }
       ]
     },
@@ -126,7 +174,7 @@
       "description": "Runs eslint against the codebase",
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test build-tools .projenrc.js"
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test build-tools projenrc .projenrc.ts"
         }
       ]
     },
@@ -190,7 +238,12 @@
     },
     "pre-compile": {
       "name": "pre-compile",
-      "description": "Prepare the project for compilation"
+      "description": "Prepare the project for compilation",
+      "steps": [
+        {
+          "spawn": "bundle"
+        }
+      ]
     },
     "release": {
       "name": "release",
@@ -223,7 +276,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --updateSnapshot",
+          "exec": "jest --passWithNoTests --coverageProvider=v8 --updateSnapshot",
           "receiveArgs": true
         },
         {
@@ -267,25 +320,25 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii-rosetta,jsii,esbuild'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii-rosetta,jsii'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii-rosetta,jsii,esbuild'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii-rosetta,jsii'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii-rosetta,jsii,esbuild'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii-rosetta,jsii'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii-rosetta,jsii,esbuild'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii-rosetta,jsii'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii-rosetta,jsii,esbuild'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii-rosetta,jsii'"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade"
+          "exec": "yarn upgrade @aws-crypto/sha256-js @aws-sdk/client-s3 @smithy/signature-v4 @types/adm-zip @types/aws-lambda @types/jest @types/micromatch @types/mime-types @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk-lib aws-lambda constructs esbuild eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii jszip micromatch mime-types npm-check-updates prettier projen standard-version ts-jest ts-node typescript undici esbuild aws-cdk-lib constructs"
         },
         {
           "exec": "npx projen"
@@ -308,5 +361,5 @@
   "env": {
     "PATH": "$(npx -c \"node --print process.env.PATH\")"
   },
-  "//": "~~ Generated by projen. To modify, edit .projenrc.js and run \"npx projen\"."
+  "//": "~~ Generated by projen. To modify, edit .projenrc.ts and run \"npx projen\"."
 }

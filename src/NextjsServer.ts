@@ -1,36 +1,20 @@
-import * as os from 'os';
-import * as path from 'path';
-import { Duration, PhysicalName, RemovalPolicy, Stack, Token } from 'aws-cdk-lib';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
+import { randomUUID } from 'node:crypto';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { resolve } from 'node:path';
+import { Stack } from 'aws-cdk-lib';
+import { Code, Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
-import * as s3Assets from 'aws-cdk-lib/aws-s3-assets';
-import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
-import { StringParameter } from 'aws-cdk-lib/aws-ssm';
+import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
-import * as fs from 'fs-extra';
-import { LAMBDA_RUNTIME, DEFAULT_LAMBA_MEMORY, CACHE_BUCKET_KEY_PREFIX } from './constants';
-import { CONFIG_ENV_JSON_PATH } from './Nextjs';
+import { CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
-import { createArchive, NextjsBuild } from './NextjsBuild';
-import { getS3ReplaceValues, NextjsS3EnvRewriter } from './NextjsS3EnvRewriter';
+import { NextjsBucketDeployment } from './NextjsBucketDeployment';
+import { NextjsBuild } from './NextjsBuild';
+import { getCommonFunctionProps } from './utils/common-lambda-props';
+import { createArchive } from './utils/create-archive';
 
 export type EnvironmentVars = Record<string, string>;
-
-function getEnvironment(props: NextjsServerProps): { [name: string]: string } {
-  const environmentVariables: { [name: string]: string } = {
-    ...props.environment,
-    ...props.lambda?.environment,
-    ...(props.nodeEnv ? { NODE_ENV: props.nodeEnv } : {}),
-    ...{
-      CACHE_BUCKET_NAME: props.staticAssetBucket?.bucketName || '',
-      CACHE_BUCKET_REGION: Stack.of(props.staticAssetBucket).region,
-      CACHE_BUCKET_KEY_PREFIX,
-    },
-  };
-
-  return environmentVariables;
-}
 
 export interface NextjsServerProps extends NextjsBaseProps {
   /**
@@ -56,121 +40,91 @@ export class NextjsServer extends Construct {
   configBucket?: Bucket;
   lambdaFunction: Function;
 
+  private props: NextjsServerProps;
+  private get environment(): Record<string, string> {
+    return {
+      ...this.props.environment,
+      ...this.props.lambda?.environment,
+      CACHE_BUCKET_NAME: this.props.staticAssetBucket.bucketName,
+      CACHE_BUCKET_REGION: Stack.of(this.props.staticAssetBucket).region,
+      CACHE_BUCKET_KEY_PREFIX,
+    };
+  }
+
   constructor(scope: Construct, id: string, props: NextjsServerProps) {
     super(scope, id);
-    const { nextBuild, lambda: functionOptions, isPlaceholder } = props;
+    this.props = props;
 
-    // zip up build.nextServerFnDir
-    const zipOutDir = path.resolve(
-      props.tempBuildDir
-        ? path.resolve(path.join(props.tempBuildDir, `standalone`))
-        : fs.mkdtempSync(path.join(os.tmpdir(), 'standalone-'))
-    );
+    // must create code asset separately (typically it is implicitly created in
+    //`Function` construct) b/c we need to substitute unresolve env vars
+    const sourceAsset = this.createSourceCodeAsset();
+    // source and destination assets are defined separately so that source
+    // assets are immutable (easier debugging). Technically we could overwrite
+    // source asset
+    const destinationAsset = this.createDestinationCodeAsset();
+    const bucketDeployment = this.createBucketDeployment(sourceAsset, destinationAsset);
+    this.lambdaFunction = this.createFunction(destinationAsset);
+    // don't update lambda function until bucket deployment is complete
+    this.lambdaFunction.node.addDependency(bucketDeployment);
+  }
 
-    const zipFilePath = createArchive({
-      directory: nextBuild.nextServerFnDir,
-      zipFileName: 'serverFn.zip',
-      zipOutDir,
-      quiet: props.quiet,
+  private createSourceCodeAsset() {
+    const archivePath = createArchive({
+      directory: this.props.nextBuild.nextServerFnDir,
+      quiet: this.props.quiet,
+      zipFileName: 'server-fn.zip',
     });
-    if (!zipFilePath) throw new Error('Failed to create archive for lambda function code');
+    const asset = new Asset(this, 'SourceCodeAsset', {
+      path: archivePath,
+    });
+    // new Asset() creates copy of zip into cdk.out/. This cleans up tmp folder
+    rmSync(archivePath, { recursive: true });
+    return asset;
+  }
 
-    // upload the lambda package to S3
-    const s3asset = new s3Assets.Asset(scope, 'MainFnAsset', { path: zipFilePath });
-    const code = isPlaceholder
-      ? lambda.Code.fromInline(
-          "module.exports.handler = async () => { return { statusCode: 200, body: 'SST placeholder site' } }"
-        )
-      : lambda.Code.fromBucket(s3asset.bucket, s3asset.s3ObjectKey);
+  private createDestinationCodeAsset() {
+    // create dummy directory to upload with random values so it's uploaded each time
+    // TODO: look into caching?
+    const assetsTmpDir = mkdtempSync(resolve(tmpdir(), 'bucket-deployment-dest-asset-'));
+    // this code will never run b/c we explicitly declare dependency between
+    // lambda function and bucket deployment.
+    writeFileSync(resolve(assetsTmpDir, 'index.mjs'), `export function handler() { return '${randomUUID()}' }`);
+    const destinationAsset = new Asset(this, 'DestinationCodeAsset', {
+      path: assetsTmpDir,
+    });
+    rmSync(assetsTmpDir, { recursive: true });
+    return destinationAsset;
+  }
 
-    // build the lambda function
-    const environment = getEnvironment(props);
-    const fn = new Function(scope, 'ServerHandler', {
-      memorySize: functionOptions?.memorySize || DEFAULT_LAMBA_MEMORY,
-      timeout: functionOptions?.timeout ?? Duration.seconds(10),
-      runtime: LAMBDA_RUNTIME,
-      handler: path.join('index.handler'),
-      code,
-      // prevents "Resolution error: Cannot use resource in a cross-environment
-      // fashion, the resource's physical name must be explicit set or use
-      // PhysicalName.GENERATE_IF_NEEDED."
-      functionName: Stack.of(this).region !== 'us-east-1' ? PhysicalName.GENERATE_IF_NEEDED : undefined,
-      ...functionOptions,
-      // `environment` needs to go after `functionOptions` b/c if
-      // `functionOptions.environment` is defined, it will override
+  private createBucketDeployment(sourceAsset: Asset, destinationAsset: Asset) {
+    const bucketDeployment = new NextjsBucketDeployment(this, 'BucketDeployment', {
+      asset: sourceAsset,
+      debug: true,
+      destinationBucket: destinationAsset.bucket,
+      destinationKeyPrefix: destinationAsset.s3ObjectKey,
+      prune: true,
+      // this.props.environment is for build time, not this.environment which is for runtime
+      substitutionConfig: NextjsBucketDeployment.getSubstitutionConfig(this.props.environment || {}),
+      zip: true,
+    });
+    return bucketDeployment;
+  }
+
+  private createFunction(asset: Asset) {
+    // cannot use NodejsFunction because we must wait to deploy the function
+    // until after the build time env vars in code zip asset are substituted
+    const fn = new Function(this, 'Fn', {
+      ...getCommonFunctionProps(this),
+      code: Code.fromBucket(asset.bucket, asset.s3ObjectKey),
+      handler: 'index.handler',
+      ...this.props.lambda,
+      // `environment` needs to go after `this.props.lambda` b/c if
+      // `this.props.lambda.environment` is defined, it will override
       // CACHE_* environment variables which are required
-      environment,
+      environment: { ...this.environment, ...this.props.lambda?.environment },
     });
-    this.lambdaFunction = fn;
+    this.props.staticAssetBucket.grantReadWrite(fn);
 
-    props.staticAssetBucket.grantReadWrite(fn);
-
-    // rewrite env var placeholders in server code
-    const replacementParams = this._getReplacementParams(environment);
-    if (!isPlaceholder && Object.keys(replacementParams).length) {
-      // put JSON file with env var replacements in S3
-      const [configBucket, configDeployment] = this.createConfigBucket(replacementParams);
-      this.configBucket = configBucket;
-
-      // replace env var placeholders in the lambda package with resolved values
-      const rewriter = new NextjsS3EnvRewriter(this, 'LambdaCodeRewriter', {
-        ...props,
-        s3Bucket: s3asset.bucket,
-        s3keys: [s3asset.s3ObjectKey],
-        replacementConfig: {
-          // use json file in S3 for replacement values
-          // this can contain backend secrets so better to not have them in custom resource logs
-          jsonS3Bucket: configDeployment.deployedBucket,
-          jsonS3Key: CONFIG_ENV_JSON_PATH,
-        },
-        debug: true, // enable for more verbose output from the rewriter function
-      });
-      rewriter.node.addDependency(s3asset);
-
-      // in order to create this dependency, the lambda function needs to be a child of the current construct
-      // meaning we can't inherit from Function
-      fn.node.addDependency(rewriter); // don't deploy lambda until rewriter is done - we are sort of 'intercepting' the deployment package
-    }
-  }
-
-  private _getReplacementParams(env: Record<string, string>) {
-    const replacements = getS3ReplaceValues(env, false); // get placeholder => replacement values
-    const replacementParams: EnvironmentVars = {}; // JSON file with replacements to be uploaded to S3
-    Object.entries(replacements).forEach(([key, value]) => {
-      // is it a token?
-      if (typeof value === 'undefined') return;
-      if (!value || !Token.isUnresolved(value)) {
-        replacementParams[key] = value;
-        return;
-      }
-
-      // create param
-      const param = new StringParameter(this, `Config('${key}')`, {
-        stringValue: value,
-      });
-
-      // add to env JSON
-      replacementParams[key] = param.stringValue;
-    });
-    return replacementParams;
-  }
-
-  // this can hold our resolved environment vars for the server
-  protected createConfigBucket(replacementParams: Record<string, string>) {
-    // won't work until this is fixed: https://github.com/aws/aws-cdk/issues/19257
-    const bucket = new Bucket(this, 'NextjsConfigBucket', {
-      removalPolicy: RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
-    });
-
-    // upload environment config to s3
-    const deployment = new BucketDeployment(this, 'EnvJsonDeployment', {
-      sources: [
-        // serialize as JSON to S3 object
-        Source.jsonData(CONFIG_ENV_JSON_PATH, replacementParams),
-      ],
-      destinationBucket: bucket,
-    });
-    return [bucket, deployment] as const;
+    return fn;
   }
 }

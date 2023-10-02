@@ -1,5 +1,5 @@
 import type { CloudFrontRequestEvent } from 'aws-lambda';
-import { getRegionFromLambdaUrl, signRequest } from './LambdaOriginRequestIamAuth';
+import { getRegionFromLambdaUrl, signRequest } from './sign-fn-url';
 
 describe('LambdaOriginRequestIamAuth', () => {
   test('signRequest should add x-amz headers', async () => {
@@ -123,82 +123,82 @@ function getFakeAwsCreds() {
   };
 }
 
-function getFakeImageEvent(): CloudFrontRequestEvent {
-  return {
-    Records: [
-      {
-        cf: {
-          config: {
-            distributionDomainName: 'd6b8brjqfujeb.cloudfront.net',
-            distributionId: 'EHX2SDUU61T7U',
-            eventType: 'origin-request',
-            requestId: '',
-          },
-          request: {
-            body: {
-              action: 'read-only',
-              data: '',
-              encoding: 'base64',
-              inputTruncated: false,
-            },
-            clientIp: '35.148.139.0',
-            headers: {
-              accept: [
-                {
-                  key: 'Accept',
-                  value:
-                    'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-                },
-              ],
-              'x-forwarded-for': [
-                {
-                  key: 'X-Forwarded-For',
-                  value: '35.148.139.0',
-                },
-              ],
-              'user-agent': [
-                {
-                  key: 'User-Agent',
-                  value: 'Amazon CloudFront',
-                },
-              ],
-              via: [
-                {
-                  key: 'Via',
-                  value: '2.0 56233ac1c78ee7b920e664cc0c7f287e.cloudfront.net (CloudFront)',
-                },
-              ],
-              'accept-encoding': [
-                {
-                  key: 'Accept-Encoding',
-                  value: 'br,gzip',
-                },
-              ],
-              host: [
-                {
-                  key: 'Host',
-                  value: 'lqlihcxizzcsefhpfcx2rnkgnu0pzrar.lambda-url.us-east-1.on.aws',
-                },
-              ],
-            },
-            method: 'GET',
-            origin: {
-              custom: {
-                customHeaders: {},
-                domainName: 'lqlihcxizzcsefhpfcx2rnkgnu0pzrar.lambda-url.us-east-1.on.aws',
-                keepaliveTimeout: 5,
-                path: '',
-                port: 443,
-                protocol: 'https',
-                readTimeout: 30,
-                sslProtocols: ['TLSv1.2'],
-              },
-            },
-            querystring: 'url=%2Fprince-akachi-LWkFHEGpleE-unsplash.jpg&w=96&q=75&badParam=bad',
-            uri: '/_next/image',
-          },
-        },
-      },
-    ],
-  };
-}
+// function getFakeImageEvent(): CloudFrontRequestEvent {
+//   return {
+//     Records: [
+//       {
+//         cf: {
+//           config: {
+//             distributionDomainName: 'd6b8brjqfujeb.cloudfront.net',
+//             distributionId: 'EHX2SDUU61T7U',
+//             eventType: 'origin-request',
+//             requestId: '',
+//           },
+//           request: {
+//             body: {
+//               action: 'read-only',
+//               data: '',
+//               encoding: 'base64',
+//               inputTruncated: false,
+//             },
+//             clientIp: '35.148.139.0',
+//             headers: {
+//               accept: [
+//                 {
+//                   key: 'Accept',
+//                   value:
+//                     'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+//                 },
+//               ],
+//               'x-forwarded-for': [
+//                 {
+//                   key: 'X-Forwarded-For',
+//                   value: '35.148.139.0',
+//                 },
+//               ],
+//               'user-agent': [
+//                 {
+//                   key: 'User-Agent',
+//                   value: 'Amazon CloudFront',
+//                 },
+//               ],
+//               via: [
+//                 {
+//                   key: 'Via',
+//                   value: '2.0 56233ac1c78ee7b920e664cc0c7f287e.cloudfront.net (CloudFront)',
+//                 },
+//               ],
+//               'accept-encoding': [
+//                 {
+//                   key: 'Accept-Encoding',
+//                   value: 'br,gzip',
+//                 },
+//               ],
+//               host: [
+//                 {
+//                   key: 'Host',
+//                   value: 'lqlihcxizzcsefhpfcx2rnkgnu0pzrar.lambda-url.us-east-1.on.aws',
+//                 },
+//               ],
+//             },
+//             method: 'GET',
+//             origin: {
+//               custom: {
+//                 customHeaders: {},
+//                 domainName: 'lqlihcxizzcsefhpfcx2rnkgnu0pzrar.lambda-url.us-east-1.on.aws',
+//                 keepaliveTimeout: 5,
+//                 path: '',
+//                 port: 443,
+//                 protocol: 'https',
+//                 readTimeout: 30,
+//                 sslProtocols: ['TLSv1.2'],
+//               },
+//             },
+//             querystring: 'url=%2Fprince-akachi-LWkFHEGpleE-unsplash.jpg&w=96&q=75&badParam=bad',
+//             uri: '/_next/image',
+//           },
+//         },
+//       },
+//     ],
+//   };
+// }

@@ -10,20 +10,25 @@ Supported NextJs versions: >=12.3.0+ (includes 13.0.0+)
 Uses the [standalone output](https://nextjs.org/docs/advanced-features/output-file-tracing) build mode.
 
 ## Quickstart
-
-Add the dependency `esbuild@0.17.16` to your project along with `cdk-nextjs-standalone`.
-
-```shell
-npm install -D esbuild@0.17.16 cdk-nextjs-standalone
-```
-
 ```ts
-import path from 'path';
+import { App, Stack, StackProps } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { Nextjs } from 'cdk-nextjs-standalone';
 
-new Nextjs(this, 'Web', {
-  nextjsPath: './web', // relative path to nextjs project root
-});
+class WebStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
+    const nextjs = new Nextjs(this, 'Nextjs', {
+      nextjsPath: './web', // relative path from your project root to NextJS
+    });
+    new CfnOutput(this, "CloudFrontDistributionDomain", {
+      value: nextjs.distribution.distributionDomain,
+    });
+  }
+}
+
+const app = new App();
+new WebStack(app, 'web');
 ```
 
 ## Important Notes
@@ -127,22 +132,7 @@ Don't manually update package.json or use npm CLI. Update dependencies in .proje
 
 ## Breaking changes
 
-- v4.0.0
-  - Renamed `NextjsLambda` to `NextjsServer`
-  - Renamed `ImageOptimizationLambda` to `NextjsImage`
-  - Renamed `NextjsCachePolicyProps.lambdaCachePolicy` to `NextjsCachePolicyProps.serverCachePolicy`
-  - Removed `NextjsOriginRequestPolicyProps.fallbackOriginRequestPolicy`
-  - Renamed `NextjsOriginRequestPolicyProps.lambdaOriginRequestPolicy` to `NextjsOriginRequestPolicyProps.serverOriginRequestPolicy`
-  - Removed `NextjsDistribution.staticCachePolicyProps`
-  - Renamed `NextjsDistribution.lambdaCachePolicyProps` to `NextjsDistribution.serverCachePolicyProps`
-  - Renamed `NextjsDistribution.lambdaOriginRequestPolicyProps` to `NextjsDistribution.serverOriginRequestPolicyProps`
-  - Removed `NextjsDistribution.fallbackOriginRequestPolicyProps`
-  - Removed `NextjsDistribution.imageOptimizationOriginRequestPolicyProps`
-  - NOTE: when upgrading to v4 from v3, the Lambda@Edge function will be renamed or removed. CloudFormation will fail to delete the function b/c they're replicated a take ~15 min to delete (more [here](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html)). You can either deploy CloudFormation with it's "no rollback" feature for a clean deployment or mark the Lambda@Edge function as "retain on delete".
-
-- v3.0.0: Using open-next for building, ARM64 architecture for image handling, new build options.
-
-- v2.0.0: SST wrapper changed, lambda/assets/distribution defaults now are in the `defaults` prop, refactored distribution settings into the new NextjsDistribution construct. If you are upgrading, you must temporarily remove the `customDomain` on your existing 1.x.x app before upgrading to >=2.x.x because the CloudFront distribution will get recreated due to refactoring, and the custom domain must be globally unique across all CloudFront distributions. Prepare for downtime.
+See [here](./docs/major-changes.md).
 
 # API Reference <a name="API Reference" id="api-reference"></a>
 
@@ -248,9 +238,9 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.url">url</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.assetsDeployment">assetsDeployment</a></code> | <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment">NextJsAssetsDeployment</a></code> | Asset deployment to S3. |
+| <code><a href="#cdk-nextjs-standalone.Nextjs.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Convenience method to access `Nextjs.staticAssets.bucket`. |
+| <code><a href="#cdk-nextjs-standalone.Nextjs.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Where build-time assets for deployment are stored. |
+| <code><a href="#cdk-nextjs-standalone.Nextjs.property.url">url</a></code> | <code>string</code> | URL of Next.js App. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.distribution">distribution</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistribution">NextjsDistribution</a></code> | CloudFront distribution. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.imageOptimizationFunction">imageOptimizationFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsImage">NextjsImage</a></code> | The image optimization handler lambda function. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.imageOptimizationLambdaFunctionUrl">imageOptimizationLambdaFunctionUrl</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrl</code> | *No description.* |
@@ -258,8 +248,7 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built NextJS project output. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.revalidation">revalidation</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation">NextjsRevalidation</a></code> | Revalidation handler and queue. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | The main NextJS server handler lambda function. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Where build-time assets for deployment are stored. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.configBucket">configBucket</a></code> | <code>aws-cdk-lib.aws_s3.Bucket</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.Nextjs.property.staticAssets">staticAssets</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets">NextjsStaticAssets</a></code> | Asset deployment to S3. |
 
 ---
 
@@ -283,6 +272,20 @@ public readonly bucket: IBucket;
 
 - *Type:* aws-cdk-lib.aws_s3.IBucket
 
+Convenience method to access `Nextjs.staticAssets.bucket`.
+
+---
+
+##### `tempBuildDir`<sup>Required</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.Nextjs.property.tempBuildDir"></a>
+
+```typescript
+public readonly tempBuildDir: string;
+```
+
+- *Type:* string
+
+Where build-time assets for deployment are stored.
+
 ---
 
 ##### `url`<sup>Required</sup> <a name="url" id="cdk-nextjs-standalone.Nextjs.property.url"></a>
@@ -293,17 +296,7 @@ public readonly url: string;
 
 - *Type:* string
 
----
-
-##### `assetsDeployment`<sup>Required</sup> <a name="assetsDeployment" id="cdk-nextjs-standalone.Nextjs.property.assetsDeployment"></a>
-
-```typescript
-public readonly assetsDeployment: NextJsAssetsDeployment;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextJsAssetsDeployment">NextJsAssetsDeployment</a>
-
-Asset deployment to S3.
+URL of Next.js App.
 
 ---
 
@@ -387,66 +380,54 @@ The main NextJS server handler lambda function.
 
 ---
 
-##### `tempBuildDir`<sup>Required</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.Nextjs.property.tempBuildDir"></a>
+##### `staticAssets`<sup>Required</sup> <a name="staticAssets" id="cdk-nextjs-standalone.Nextjs.property.staticAssets"></a>
 
 ```typescript
-public readonly tempBuildDir: string;
+public readonly staticAssets: NextjsStaticAssets;
 ```
 
-- *Type:* string
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsStaticAssets">NextjsStaticAssets</a>
 
-Where build-time assets for deployment are stored.
-
----
-
-##### `configBucket`<sup>Optional</sup> <a name="configBucket" id="cdk-nextjs-standalone.Nextjs.property.configBucket"></a>
-
-```typescript
-public readonly configBucket: Bucket;
-```
-
-- *Type:* aws-cdk-lib.aws_s3.Bucket
+Asset deployment to S3.
 
 ---
 
 
-### NextJsAssetsDeployment <a name="NextJsAssetsDeployment" id="cdk-nextjs-standalone.NextJsAssetsDeployment"></a>
+### NextjsBucketDeployment <a name="NextjsBucketDeployment" id="cdk-nextjs-standalone.NextjsBucketDeployment"></a>
 
-Uploads NextJS-built static and public files to S3.
+Similar to CDK's `BucketDeployment` construct, but with a focus on replacing template placeholders (i.e. environment variables) and configuring PUT options like cache control.
 
-Will rewrite CloudFormation references with their resolved values after uploading.
-
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextJsAssetsDeployment.Initializer"></a>
+#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsBucketDeployment.Initializer"></a>
 
 ```typescript
-import { NextJsAssetsDeployment } from 'cdk-nextjs-standalone'
+import { NextjsBucketDeployment } from 'cdk-nextjs-standalone'
 
-new NextJsAssetsDeployment(scope: Construct, id: string, props: NextjsAssetsDeploymentProps)
+new NextjsBucketDeployment(scope: Construct, id: string, props: NextjsBucketDeploymentProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps">NextjsAssetsDeploymentProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps">NextjsBucketDeploymentProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextJsAssetsDeployment.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextJsAssetsDeployment.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextJsAssetsDeployment.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps">NextjsAssetsDeploymentProps</a>
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps">NextjsBucketDeploymentProps</a>
 
 ---
 
@@ -454,11 +435,11 @@ new NextJsAssetsDeployment(scope: Construct, id: string, props: NextjsAssetsDepl
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextJsAssetsDeployment.toString"></a>
+##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsBucketDeployment.toString"></a>
 
 ```typescript
 public toString(): string
@@ -470,21 +451,23 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionConfig">getSubstitutionConfig</a></code> | Creates `substitutionConfig` an object by extracting unresolved tokens. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionValue">getSubstitutionValue</a></code> | Formats a string as a template value so custom resource knows to replace. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextJsAssetsDeployment.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsBucketDeployment.isConstruct"></a>
 
 ```typescript
-import { NextJsAssetsDeployment } from 'cdk-nextjs-standalone'
+import { NextjsBucketDeployment } from 'cdk-nextjs-standalone'
 
-NextJsAssetsDeployment.isConstruct(x: any)
+NextjsBucketDeployment.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextJsAssetsDeployment.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsBucketDeployment.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -492,19 +475,48 @@ Any object.
 
 ---
 
+##### `getSubstitutionConfig` <a name="getSubstitutionConfig" id="cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionConfig"></a>
+
+```typescript
+import { NextjsBucketDeployment } from 'cdk-nextjs-standalone'
+
+NextjsBucketDeployment.getSubstitutionConfig(env: {[ key: string ]: string})
+```
+
+Creates `substitutionConfig` an object by extracting unresolved tokens.
+
+###### `env`<sup>Required</sup> <a name="env" id="cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionConfig.parameter.env"></a>
+
+- *Type:* {[ key: string ]: string}
+
+---
+
+##### `getSubstitutionValue` <a name="getSubstitutionValue" id="cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionValue"></a>
+
+```typescript
+import { NextjsBucketDeployment } from 'cdk-nextjs-standalone'
+
+NextjsBucketDeployment.getSubstitutionValue(v: string)
+```
+
+Formats a string as a template value so custom resource knows to replace.
+
+###### `v`<sup>Required</sup> <a name="v" id="cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionValue.parameter.v"></a>
+
+- *Type:* string
+
+---
+
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing assets. |
-| <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.property.deployments">deployments</a></code> | <code>aws-cdk-lib.aws_s3_deployment.BucketDeployment[]</code> | Asset deployments to S3. |
-| <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.property.staticTempDir">staticTempDir</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextJsAssetsDeployment.property.rewriter">rewriter</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter">NextjsS3EnvRewriter</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.property.function">function</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | Lambda Function Provider for Custom Resource. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextJsAssetsDeployment.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsBucketDeployment.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -516,57 +528,22 @@ The tree node.
 
 ---
 
-##### `bucket`<sup>Required</sup> <a name="bucket" id="cdk-nextjs-standalone.NextJsAssetsDeployment.property.bucket"></a>
+##### `function`<sup>Required</sup> <a name="function" id="cdk-nextjs-standalone.NextjsBucketDeployment.property.function"></a>
 
 ```typescript
-public readonly bucket: IBucket;
+public readonly function: Function;
 ```
 
-- *Type:* aws-cdk-lib.aws_s3.IBucket
+- *Type:* aws-cdk-lib.aws_lambda.Function
 
-Bucket containing assets.
-
----
-
-##### `deployments`<sup>Required</sup> <a name="deployments" id="cdk-nextjs-standalone.NextJsAssetsDeployment.property.deployments"></a>
-
-```typescript
-public readonly deployments: BucketDeployment[];
-```
-
-- *Type:* aws-cdk-lib.aws_s3_deployment.BucketDeployment[]
-
-Asset deployments to S3.
-
----
-
-##### `staticTempDir`<sup>Required</sup> <a name="staticTempDir" id="cdk-nextjs-standalone.NextJsAssetsDeployment.property.staticTempDir"></a>
-
-```typescript
-public readonly staticTempDir: string;
-```
-
-- *Type:* string
-
----
-
-##### `rewriter`<sup>Optional</sup> <a name="rewriter" id="cdk-nextjs-standalone.NextJsAssetsDeployment.property.rewriter"></a>
-
-```typescript
-public readonly rewriter: NextjsS3EnvRewriter;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter">NextjsS3EnvRewriter</a>
+Lambda Function Provider for Custom Resource.
 
 ---
 
 
 ### NextjsBuild <a name="NextjsBuild" id="cdk-nextjs-standalone.NextjsBuild"></a>
 
-Represents a built NextJS application.
-
-This construct runs `npm build` in standalone output mode inside your `nextjsPath`.
-This construct can be used by higher level constructs or used directly.
+Build Next.js app.
 
 #### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsBuild.Initializer"></a>
 
@@ -661,9 +638,7 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir">nextRevalidateFnDir</a></code> | <code>string</code> | Contains function for processing items from revalidation queue. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextServerFnDir">nextServerFnDir</a></code> | <code>string</code> | Contains server code and dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir">nextStaticDir</a></code> | <code>string</code> | Static files containing client-side code. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.projectRoot">projectRoot</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextMiddlewareFnDir">nextMiddlewareFnDir</a></code> | <code>string</code> | Contains code for middleware. |
 
 ---
 
@@ -741,16 +716,6 @@ Static files containing client-side code.
 
 ---
 
-##### `projectRoot`<sup>Required</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsBuild.property.projectRoot"></a>
-
-```typescript
-public readonly projectRoot: string;
-```
-
-- *Type:* string
-
----
-
 ##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsBuild.property.props"></a>
 
 ```typescript
@@ -758,20 +723,6 @@ public readonly props: NextjsBuildProps;
 ```
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a>
-
----
-
-##### `nextMiddlewareFnDir`<sup>Optional</sup> <a name="nextMiddlewareFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextMiddlewareFnDir"></a>
-
-```typescript
-public readonly nextMiddlewareFnDir: string;
-```
-
-- *Type:* string
-
-Contains code for middleware.
-
-Not currently used.
 
 ---
 
@@ -869,7 +820,6 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.customDomainName">customDomainName</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.customDomainUrl">customDomainUrl</a></code> | <code>string</code> | If the custom domain is enabled, this is the URL of the website with the custom domain. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | The internally created CloudFront `Distribution` instance. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | The AWS Certificate Manager certificate for the custom domain. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | The Route 53 hosted zone for the custom domain. |
 
@@ -978,16 +928,6 @@ public readonly distribution: Distribution;
 - *Type:* aws-cdk-lib.aws_cloudfront.Distribution
 
 The internally created CloudFront `Distribution` instance.
-
----
-
-##### `tempBuildDir`<sup>Required</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsDistribution.property.tempBuildDir"></a>
-
-```typescript
-public readonly tempBuildDir: string;
-```
-
-- *Type:* string
 
 ---
 
@@ -1119,11 +1059,11 @@ public addEventSource(source: IEventSource): void
 
 Adds an event source to this function.
 
-Event sources are implemented in the @aws-cdk/aws-lambda-event-sources module.
+Event sources are implemented in the aws-cdk-lib/aws-lambda-event-sources module.
 
 The following example adds an SQS Queue as an event source:
 ```
-import { SqsEventSource } from '@aws-cdk/aws-lambda-event-sources';
+import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 myFunction.addEventSource(new SqsEventSource(myQueue));
 ```
 
@@ -1807,7 +1747,6 @@ Metric for the number of unreserved concurrent executions across all Lambdas.
 | <code><a href="#cdk-nextjs-standalone.NextjsImage.property.deadLetterQueue">deadLetterQueue</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | The DLQ (as queue) associated with this Lambda Function (this is an optional attribute). |
 | <code><a href="#cdk-nextjs-standalone.NextjsImage.property.deadLetterTopic">deadLetterTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | The DLQ (as topic) associated with this Lambda Function (this is an optional attribute). |
 | <code><a href="#cdk-nextjs-standalone.NextjsImage.property.timeout">timeout</a></code> | <code>aws-cdk-lib.Duration</code> | The timeout configured for this lambda. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | *No description.* |
 
 ---
 
@@ -2067,52 +2006,40 @@ The timeout configured for this lambda.
 
 ---
 
-##### `bucket`<sup>Required</sup> <a name="bucket" id="cdk-nextjs-standalone.NextjsImage.property.bucket"></a>
+
+### NextjsInvalidation <a name="NextjsInvalidation" id="cdk-nextjs-standalone.NextjsInvalidation"></a>
+
+#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsInvalidation.Initializer"></a>
 
 ```typescript
-public readonly bucket: IBucket;
-```
+import { NextjsInvalidation } from 'cdk-nextjs-standalone'
 
-- *Type:* aws-cdk-lib.aws_s3.IBucket
-
----
-
-
-### NextjsLayer <a name="NextjsLayer" id="cdk-nextjs-standalone.NextjsLayer"></a>
-
-Lambda layer for Next.js. Contains Sharp 0.30.0.
-
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsLayer.Initializer"></a>
-
-```typescript
-import { NextjsLayer } from 'cdk-nextjs-standalone'
-
-new NextjsLayer(scope: Construct, id: string, props: NextjsLayerProps)
+new NextjsInvalidation(scope: Construct, id: string, props: NextjsInvalidationProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsLayerProps">NextjsLayerProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps">NextjsInvalidationProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsLayer.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsLayer.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsLayer.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsLayerProps">NextjsLayerProps</a>
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsInvalidationProps">NextjsInvalidationProps</a>
 
 ---
 
@@ -2120,13 +2047,11 @@ new NextjsLayer(scope: Construct, id: string, props: NextjsLayerProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.addPermission">addPermission</a></code> | Add permission for this layer version to specific entities. |
+| <code><a href="#cdk-nextjs-standalone.NextjsInvalidation.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsLayer.toString"></a>
+##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsInvalidation.toString"></a>
 
 ```typescript
 public toString(): string
@@ -2134,78 +2059,25 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `applyRemovalPolicy` <a name="applyRemovalPolicy" id="cdk-nextjs-standalone.NextjsLayer.applyRemovalPolicy"></a>
-
-```typescript
-public applyRemovalPolicy(policy: RemovalPolicy): void
-```
-
-Apply the given removal policy to this resource.
-
-The Removal Policy controls what happens to this resource when it stops
-being managed by CloudFormation, either because you've removed it from the
-CDK application or because you've made a change that requires the resource
-to be replaced.
-
-The resource can be deleted (`RemovalPolicy.DESTROY`), or left in your AWS
-account for data recovery and cleanup later (`RemovalPolicy.RETAIN`).
-
-###### `policy`<sup>Required</sup> <a name="policy" id="cdk-nextjs-standalone.NextjsLayer.applyRemovalPolicy.parameter.policy"></a>
-
-- *Type:* aws-cdk-lib.RemovalPolicy
-
----
-
-##### `addPermission` <a name="addPermission" id="cdk-nextjs-standalone.NextjsLayer.addPermission"></a>
-
-```typescript
-public addPermission(id: string, permission: LayerVersionPermission): void
-```
-
-Add permission for this layer version to specific entities.
-
-Usage within
-the same account where the layer is defined is always allowed and does not
-require calling this method. Note that the principal that creates the
-Lambda function using the layer (for example, a CloudFormation changeset
-execution role) also needs to have the ``lambda:GetLayerVersion``
-permission on the layer version.
-
-###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsLayer.addPermission.parameter.id"></a>
-
-- *Type:* string
-
----
-
-###### `permission`<sup>Required</sup> <a name="permission" id="cdk-nextjs-standalone.NextjsLayer.addPermission.parameter.permission"></a>
-
-- *Type:* aws-cdk-lib.aws_lambda.LayerVersionPermission
-
----
-
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.isOwnedResource">isOwnedResource</a></code> | Returns true if the construct was created by CDK, and false otherwise. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.isResource">isResource</a></code> | Check whether the given construct is a Resource. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.fromLayerVersionArn">fromLayerVersionArn</a></code> | Imports a layer version by ARN. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.fromLayerVersionAttributes">fromLayerVersionAttributes</a></code> | Imports a Layer that has been defined externally. |
+| <code><a href="#cdk-nextjs-standalone.NextjsInvalidation.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsLayer.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsInvalidation.isConstruct"></a>
 
 ```typescript
-import { NextjsLayer } from 'cdk-nextjs-standalone'
+import { NextjsInvalidation } from 'cdk-nextjs-standalone'
 
-NextjsLayer.isConstruct(x: any)
+NextjsInvalidation.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsLayer.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsInvalidation.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -2213,115 +2085,15 @@ Any object.
 
 ---
 
-##### `isOwnedResource` <a name="isOwnedResource" id="cdk-nextjs-standalone.NextjsLayer.isOwnedResource"></a>
-
-```typescript
-import { NextjsLayer } from 'cdk-nextjs-standalone'
-
-NextjsLayer.isOwnedResource(construct: IConstruct)
-```
-
-Returns true if the construct was created by CDK, and false otherwise.
-
-###### `construct`<sup>Required</sup> <a name="construct" id="cdk-nextjs-standalone.NextjsLayer.isOwnedResource.parameter.construct"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-##### `isResource` <a name="isResource" id="cdk-nextjs-standalone.NextjsLayer.isResource"></a>
-
-```typescript
-import { NextjsLayer } from 'cdk-nextjs-standalone'
-
-NextjsLayer.isResource(construct: IConstruct)
-```
-
-Check whether the given construct is a Resource.
-
-###### `construct`<sup>Required</sup> <a name="construct" id="cdk-nextjs-standalone.NextjsLayer.isResource.parameter.construct"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-##### `fromLayerVersionArn` <a name="fromLayerVersionArn" id="cdk-nextjs-standalone.NextjsLayer.fromLayerVersionArn"></a>
-
-```typescript
-import { NextjsLayer } from 'cdk-nextjs-standalone'
-
-NextjsLayer.fromLayerVersionArn(scope: Construct, id: string, layerVersionArn: string)
-```
-
-Imports a layer version by ARN.
-
-Assumes it is compatible with all Lambda runtimes.
-
-###### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsLayer.fromLayerVersionArn.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsLayer.fromLayerVersionArn.parameter.id"></a>
-
-- *Type:* string
-
----
-
-###### `layerVersionArn`<sup>Required</sup> <a name="layerVersionArn" id="cdk-nextjs-standalone.NextjsLayer.fromLayerVersionArn.parameter.layerVersionArn"></a>
-
-- *Type:* string
-
----
-
-##### `fromLayerVersionAttributes` <a name="fromLayerVersionAttributes" id="cdk-nextjs-standalone.NextjsLayer.fromLayerVersionAttributes"></a>
-
-```typescript
-import { NextjsLayer } from 'cdk-nextjs-standalone'
-
-NextjsLayer.fromLayerVersionAttributes(scope: Construct, id: string, attrs: LayerVersionAttributes)
-```
-
-Imports a Layer that has been defined externally.
-
-###### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsLayer.fromLayerVersionAttributes.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
-the parent Construct that will use the imported layer.
-
----
-
-###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsLayer.fromLayerVersionAttributes.parameter.id"></a>
-
-- *Type:* string
-
-the id of the imported layer in the construct tree.
-
----
-
-###### `attrs`<sup>Required</sup> <a name="attrs" id="cdk-nextjs-standalone.NextjsLayer.fromLayerVersionAttributes.parameter.attrs"></a>
-
-- *Type:* aws-cdk-lib.aws_lambda.LayerVersionAttributes
-
-the properties of the imported layer.
-
----
-
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.property.layerVersionArn">layerVersionArn</a></code> | <code>string</code> | The ARN of the Lambda Layer version that this Layer defines. |
-| <code><a href="#cdk-nextjs-standalone.NextjsLayer.property.compatibleRuntimes">compatibleRuntimes</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime[]</code> | The runtimes compatible with this Layer. |
+| <code><a href="#cdk-nextjs-standalone.NextjsInvalidation.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsLayer.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsInvalidation.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -2330,61 +2102,6 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `env`<sup>Required</sup> <a name="env" id="cdk-nextjs-standalone.NextjsLayer.property.env"></a>
-
-```typescript
-public readonly env: ResourceEnvironment;
-```
-
-- *Type:* aws-cdk-lib.ResourceEnvironment
-
-The environment this resource belongs to.
-
-For resources that are created and managed by the CDK
-(generally, those created by creating new class instances like Role, Bucket, etc.),
-this is always the same as the environment of the stack they belong to;
-however, for imported resources
-(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
-that might be different than the stack they were imported into.
-
----
-
-##### `stack`<sup>Required</sup> <a name="stack" id="cdk-nextjs-standalone.NextjsLayer.property.stack"></a>
-
-```typescript
-public readonly stack: Stack;
-```
-
-- *Type:* aws-cdk-lib.Stack
-
-The stack in which this resource is defined.
-
----
-
-##### `layerVersionArn`<sup>Required</sup> <a name="layerVersionArn" id="cdk-nextjs-standalone.NextjsLayer.property.layerVersionArn"></a>
-
-```typescript
-public readonly layerVersionArn: string;
-```
-
-- *Type:* string
-
-The ARN of the Lambda Layer version that this Layer defines.
-
----
-
-##### `compatibleRuntimes`<sup>Optional</sup> <a name="compatibleRuntimes" id="cdk-nextjs-standalone.NextjsLayer.property.compatibleRuntimes"></a>
-
-```typescript
-public readonly compatibleRuntimes: Runtime[];
-```
-
-- *Type:* aws-cdk-lib.aws_lambda.Runtime[]
-
-The runtimes compatible with this Layer.
 
 ---
 
@@ -2400,14 +2117,14 @@ Builds the system for revalidating Next.js resources. This includes a Lambda fun
 ```typescript
 import { NextjsRevalidation } from 'cdk-nextjs-standalone'
 
-new NextjsRevalidation(scope: Construct, id: string, props: RevalidationProps)
+new NextjsRevalidation(scope: Construct, id: string, props: NextjsRevalidationProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.RevalidationProps">RevalidationProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps">NextjsRevalidationProps</a></code> | *No description.* |
 
 ---
 
@@ -2425,7 +2142,7 @@ new NextjsRevalidation(scope: Construct, id: string, props: RevalidationProps)
 
 ##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.RevalidationProps">RevalidationProps</a>
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsRevalidationProps">NextjsRevalidationProps</a>
 
 ---
 
@@ -2476,6 +2193,8 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.function">function</a></code> | <code>aws-cdk-lib.aws_lambda_nodejs.NodejsFunction</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.queue">queue</a></code> | <code>aws-cdk-lib.aws_sqs.Queue</code> | *No description.* |
 
 ---
 
@@ -2491,118 +2210,23 @@ The tree node.
 
 ---
 
-
-### NextjsS3EnvRewriter <a name="NextjsS3EnvRewriter" id="cdk-nextjs-standalone.NextjsS3EnvRewriter"></a>
-
-Rewrites variables in S3 objects after a deployment happens to replace CloudFormation tokens with their values.
-
-These values are not resolved at build time because they are
-only known at deploy time.
-
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer"></a>
+##### `function`<sup>Required</sup> <a name="function" id="cdk-nextjs-standalone.NextjsRevalidation.property.function"></a>
 
 ```typescript
-import { NextjsS3EnvRewriter } from 'cdk-nextjs-standalone'
-
-new NextjsS3EnvRewriter(scope: Construct, id: string, props: NextjsS3EnvRewriterProps)
+public readonly function: NodejsFunction;
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps">NextjsS3EnvRewriterProps</a></code> | *No description.* |
+- *Type:* aws-cdk-lib.aws_lambda_nodejs.NodejsFunction
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps">NextjsS3EnvRewriterProps</a>
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.toString">toString</a></code> | Returns a string representation of this construct. |
-
----
-
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.toString"></a>
+##### `queue`<sup>Required</sup> <a name="queue" id="cdk-nextjs-standalone.NextjsRevalidation.property.queue"></a>
 
 ```typescript
-public toString(): string
+public readonly queue: Queue;
 ```
 
-Returns a string representation of this construct.
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.isConstruct"></a>
-
-```typescript
-import { NextjsS3EnvRewriter } from 'cdk-nextjs-standalone'
-
-NextjsS3EnvRewriter.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriter.property.rewriteNode">rewriteNode</a></code> | <code>constructs.Construct</code> | *No description.* |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `rewriteNode`<sup>Optional</sup> <a name="rewriteNode" id="cdk-nextjs-standalone.NextjsS3EnvRewriter.property.rewriteNode"></a>
-
-```typescript
-public readonly rewriteNode: Construct;
-```
-
-- *Type:* constructs.Construct
+- *Type:* aws-cdk-lib.aws_sqs.Queue
 
 ---
 
@@ -2730,6 +2354,123 @@ public readonly configBucket: Bucket;
 ---
 
 
+### NextjsStaticAssets <a name="NextjsStaticAssets" id="cdk-nextjs-standalone.NextjsStaticAssets"></a>
+
+Uploads Nextjs built static and public files to S3.
+
+Will inject resolved environment variables that are unresolved at synthesis
+in CloudFormation Custom Resource.
+
+#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsStaticAssets.Initializer"></a>
+
+```typescript
+import { NextjsStaticAssets } from 'cdk-nextjs-standalone'
+
+new NextjsStaticAssets(scope: Construct, id: string, props: NextjsStaticAssetsProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps">NextjsStaticAssetsProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps">NextjsStaticAssetsProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsStaticAssets.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsStaticAssets.isConstruct"></a>
+
+```typescript
+import { NextjsStaticAssets } from 'cdk-nextjs-standalone'
+
+NextjsStaticAssets.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsStaticAssets.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing assets. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsStaticAssets.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `bucket`<sup>Required</sup> <a name="bucket" id="cdk-nextjs-standalone.NextjsStaticAssets.property.bucket"></a>
+
+```typescript
+public readonly bucket: IBucket;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.IBucket
+
+Bucket containing assets.
+
+---
+
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### BaseSiteDomainProps <a name="BaseSiteDomainProps" id="cdk-nextjs-standalone.BaseSiteDomainProps"></a>
@@ -2839,548 +2580,6 @@ Set this option if the domain is not hosted on Amazon Route 53.
 
 ---
 
-### BaseSiteEnvironmentOutputsInfo <a name="BaseSiteEnvironmentOutputsInfo" id="cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.Initializer"></a>
-
-```typescript
-import { BaseSiteEnvironmentOutputsInfo } from 'cdk-nextjs-standalone'
-
-const baseSiteEnvironmentOutputsInfo: BaseSiteEnvironmentOutputsInfo = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.property.environmentOutputs">environmentOutputs</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.property.path">path</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.property.stack">stack</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `environmentOutputs`<sup>Required</sup> <a name="environmentOutputs" id="cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.property.environmentOutputs"></a>
-
-```typescript
-public readonly environmentOutputs: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
----
-
-##### `path`<sup>Required</sup> <a name="path" id="cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.property.path"></a>
-
-```typescript
-public readonly path: string;
-```
-
-- *Type:* string
-
----
-
-##### `stack`<sup>Required</sup> <a name="stack" id="cdk-nextjs-standalone.BaseSiteEnvironmentOutputsInfo.property.stack"></a>
-
-```typescript
-public readonly stack: string;
-```
-
-- *Type:* string
-
----
-
-### BaseSiteReplaceProps <a name="BaseSiteReplaceProps" id="cdk-nextjs-standalone.BaseSiteReplaceProps"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.BaseSiteReplaceProps.Initializer"></a>
-
-```typescript
-import { BaseSiteReplaceProps } from 'cdk-nextjs-standalone'
-
-const baseSiteReplaceProps: BaseSiteReplaceProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteReplaceProps.property.files">files</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteReplaceProps.property.replace">replace</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteReplaceProps.property.search">search</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `files`<sup>Required</sup> <a name="files" id="cdk-nextjs-standalone.BaseSiteReplaceProps.property.files"></a>
-
-```typescript
-public readonly files: string;
-```
-
-- *Type:* string
-
----
-
-##### `replace`<sup>Required</sup> <a name="replace" id="cdk-nextjs-standalone.BaseSiteReplaceProps.property.replace"></a>
-
-```typescript
-public readonly replace: string;
-```
-
-- *Type:* string
-
----
-
-##### `search`<sup>Required</sup> <a name="search" id="cdk-nextjs-standalone.BaseSiteReplaceProps.property.search"></a>
-
-```typescript
-public readonly search: string;
-```
-
-- *Type:* string
-
----
-
-### CreateArchiveArgs <a name="CreateArchiveArgs" id="cdk-nextjs-standalone.CreateArchiveArgs"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.CreateArchiveArgs.Initializer"></a>
-
-```typescript
-import { CreateArchiveArgs } from 'cdk-nextjs-standalone'
-
-const createArchiveArgs: CreateArchiveArgs = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.directory">directory</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.zipFileName">zipFileName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.zipOutDir">zipOutDir</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.fileGlob">fileGlob</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.CreateArchiveArgs.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
-
----
-
-##### `directory`<sup>Required</sup> <a name="directory" id="cdk-nextjs-standalone.CreateArchiveArgs.property.directory"></a>
-
-```typescript
-public readonly directory: string;
-```
-
-- *Type:* string
-
----
-
-##### `zipFileName`<sup>Required</sup> <a name="zipFileName" id="cdk-nextjs-standalone.CreateArchiveArgs.property.zipFileName"></a>
-
-```typescript
-public readonly zipFileName: string;
-```
-
-- *Type:* string
-
----
-
-##### `zipOutDir`<sup>Required</sup> <a name="zipOutDir" id="cdk-nextjs-standalone.CreateArchiveArgs.property.zipOutDir"></a>
-
-```typescript
-public readonly zipOutDir: string;
-```
-
-- *Type:* string
-
----
-
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.CreateArchiveArgs.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-
----
-
-##### `fileGlob`<sup>Optional</sup> <a name="fileGlob" id="cdk-nextjs-standalone.CreateArchiveArgs.property.fileGlob"></a>
-
-```typescript
-public readonly fileGlob: string;
-```
-
-- *Type:* string
-
----
-
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.CreateArchiveArgs.property.quiet"></a>
-
-```typescript
-public readonly quiet: boolean;
-```
-
-- *Type:* boolean
-
----
-
-### NextjsAssetsCachePolicyProps <a name="NextjsAssetsCachePolicyProps" id="cdk-nextjs-standalone.NextjsAssetsCachePolicyProps"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsAssetsCachePolicyProps.Initializer"></a>
-
-```typescript
-import { NextjsAssetsCachePolicyProps } from 'cdk-nextjs-standalone'
-
-const nextjsAssetsCachePolicyProps: NextjsAssetsCachePolicyProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsCachePolicyProps.property.staticMaxAgeDefault">staticMaxAgeDefault</a></code> | <code>aws-cdk-lib.Duration</code> | Cache-control max-age default for S3 static assets. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsCachePolicyProps.property.staticStaleWhileRevalidateDefault">staticStaleWhileRevalidateDefault</a></code> | <code>aws-cdk-lib.Duration</code> | Cache-control stale-while-revalidate default for S3 static assets. |
-
----
-
-##### `staticMaxAgeDefault`<sup>Optional</sup> <a name="staticMaxAgeDefault" id="cdk-nextjs-standalone.NextjsAssetsCachePolicyProps.property.staticMaxAgeDefault"></a>
-
-```typescript
-public readonly staticMaxAgeDefault: Duration;
-```
-
-- *Type:* aws-cdk-lib.Duration
-
-Cache-control max-age default for S3 static assets.
-
-Default: 30 days.
-
----
-
-##### `staticStaleWhileRevalidateDefault`<sup>Optional</sup> <a name="staticStaleWhileRevalidateDefault" id="cdk-nextjs-standalone.NextjsAssetsCachePolicyProps.property.staticStaleWhileRevalidateDefault"></a>
-
-```typescript
-public readonly staticStaleWhileRevalidateDefault: Duration;
-```
-
-- *Type:* aws-cdk-lib.Duration
-
-Cache-control stale-while-revalidate default for S3 static assets.
-
-Default: 1 day.
-
----
-
-### NextjsAssetsDeploymentProps <a name="NextjsAssetsDeploymentProps" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.Initializer"></a>
-
-```typescript
-import { NextjsAssetsDeploymentProps } from 'cdk-nextjs-standalone'
-
-const nextjsAssetsDeploymentProps: NextjsAssetsDeploymentProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Properties for the S3 bucket containing the NextJS assets. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsAssetsCachePolicyProps">NextjsAssetsCachePolicyProps</a></code> | Override the default S3 cache policies created internally. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | Distribution to invalidate when assets change. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.ephemeralStorageSize">ephemeralStorageSize</a></code> | <code>aws-cdk-lib.Size</code> | ephemeralStorageSize for lambda function which been run by BucketDeployment. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.memoryLimit">memoryLimit</a></code> | <code>number</code> | memoryLimit for lambda function which been run by BucketDeployment. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | Set to true to delete old assets (defaults to false). |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.useEfs">useEfs</a></code> | <code>boolean</code> | In case of useEfs, vpc is required. |
-| <code><a href="#cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | In case of useEfs, vpc is required. |
-
----
-
-##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextjsPath"></a>
-
-```typescript
-public readonly nextjsPath: string;
-```
-
-- *Type:* string
-
-Relative path to the directory where the NextJS project is located.
-
-Can be the root of your project (`.`) or a subdirectory (`packages/web`).
-
----
-
-##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.buildCommand"></a>
-
-```typescript
-public readonly buildCommand: string;
-```
-
-- *Type:* string
-
-Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
-
----
-
-##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.buildPath"></a>
-
-```typescript
-public readonly buildPath: string;
-```
-
-- *Type:* string
-
-The directory to execute `npm run build` from.
-
-By default, it is `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run
-at the root of the project.
-
----
-
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.environment"></a>
-
-```typescript
-public readonly environment: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `isPlaceholder`<sup>Optional</sup> <a name="isPlaceholder" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.isPlaceholder"></a>
-
-```typescript
-public readonly isPlaceholder: boolean;
-```
-
-- *Type:* boolean
-
-Skip building app and deploy a placeholder.
-
-Useful when using `next dev` for local development.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
-
----
-
-##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.projectRoot"></a>
-
-```typescript
-public readonly projectRoot: string;
-```
-
-- *Type:* string
-
-Root of your project, if different from `nextjsPath`.
-
-Defaults to current working directory.
-
----
-
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.quiet"></a>
-
-```typescript
-public readonly quiet: boolean;
-```
-
-- *Type:* boolean
-
-Less build output.
-
----
-
-##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.sharpLayerArn"></a>
-
-```typescript
-public readonly sharpLayerArn: string;
-```
-
-- *Type:* string
-
-Optional arn for the sharp lambda layer.
-
-If omitted, the layer will be created.
-
----
-
-##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.skipFullInvalidation"></a>
-
-```typescript
-public readonly skipFullInvalidation: boolean;
-```
-
-- *Type:* boolean
-
-By default all CloudFront cache will be invalidated on deployment.
-
-This can be set to true to skip the full cache invalidation, which
-could be important for some users.
-
----
-
-##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.tempBuildDir"></a>
-
-```typescript
-public readonly tempBuildDir: string;
-```
-
-- *Type:* string
-
-Directory to store temporary build files in.
-
-Defaults to os.tmpdir().
-
----
-
-##### `bucket`<sup>Required</sup> <a name="bucket" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.bucket"></a>
-
-```typescript
-public readonly bucket: IBucket;
-```
-
-- *Type:* aws-cdk-lib.aws_s3.IBucket
-
-Properties for the S3 bucket containing the NextJS assets.
-
----
-
-##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.nextBuild"></a>
-
-```typescript
-public readonly nextBuild: NextjsBuild;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
-
-The `NextjsBuild` instance representing the built Nextjs application.
-
----
-
-##### `cachePolicies`<sup>Optional</sup> <a name="cachePolicies" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.cachePolicies"></a>
-
-```typescript
-public readonly cachePolicies: NextjsAssetsCachePolicyProps;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsAssetsCachePolicyProps">NextjsAssetsCachePolicyProps</a>
-
-Override the default S3 cache policies created internally.
-
----
-
-##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.distribution"></a>
-
-```typescript
-public readonly distribution: IDistribution;
-```
-
-- *Type:* aws-cdk-lib.aws_cloudfront.IDistribution
-
-Distribution to invalidate when assets change.
-
----
-
-##### `ephemeralStorageSize`<sup>Optional</sup> <a name="ephemeralStorageSize" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.ephemeralStorageSize"></a>
-
-```typescript
-public readonly ephemeralStorageSize: Size;
-```
-
-- *Type:* aws-cdk-lib.Size
-
-ephemeralStorageSize for lambda function which been run by BucketDeployment.
-
----
-
-##### `memoryLimit`<sup>Optional</sup> <a name="memoryLimit" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.memoryLimit"></a>
-
-```typescript
-public readonly memoryLimit: number;
-```
-
-- *Type:* number
-
-memoryLimit for lambda function which been run by BucketDeployment.
-
----
-
-##### `prune`<sup>Optional</sup> <a name="prune" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.prune"></a>
-
-```typescript
-public readonly prune: boolean;
-```
-
-- *Type:* boolean
-
-Set to true to delete old assets (defaults to false).
-
-Recommended to only set to true if you don't need the ability to roll back deployments.
-
----
-
-##### `useEfs`<sup>Optional</sup> <a name="useEfs" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.useEfs"></a>
-
-```typescript
-public readonly useEfs: boolean;
-```
-
-- *Type:* boolean
-
-In case of useEfs, vpc is required.
-
----
-
-##### `vpc`<sup>Optional</sup> <a name="vpc" id="cdk-nextjs-standalone.NextjsAssetsDeploymentProps.property.vpc"></a>
-
-```typescript
-public readonly vpc: IVpc;
-```
-
-- *Type:* aws-cdk-lib.aws_ec2.IVpc
-
-In case of useEfs, vpc is required.
-
----
-
 ### NextjsBaseProps <a name="NextjsBaseProps" id="cdk-nextjs-standalone.NextjsBaseProps"></a>
 
 Common props shared across NextJS-related CDK constructs.
@@ -3400,10 +2599,7 @@ const nextjsBaseProps: NextjsBaseProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
@@ -3433,10 +2629,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -3456,19 +2651,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsBaseProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsBaseProps.property.environment"></a>
 
 ```typescript
@@ -3478,32 +2660,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `isPlaceholder`<sup>Optional</sup> <a name="isPlaceholder" id="cdk-nextjs-standalone.NextjsBaseProps.property.isPlaceholder"></a>
-
-```typescript
-public readonly isPlaceholder: boolean;
-```
-
-- *Type:* boolean
-
-Skip building app and deploy a placeholder.
-
-Useful when using `next dev` for local development.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsBaseProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 
@@ -3576,6 +2732,144 @@ Defaults to os.tmpdir().
 
 ---
 
+### NextjsBucketDeploymentProps <a name="NextjsBucketDeploymentProps" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps"></a>
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.Initializer"></a>
+
+```typescript
+import { NextjsBucketDeploymentProps } from 'cdk-nextjs-standalone'
+
+const nextjsBucketDeploymentProps: NextjsBucketDeploymentProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.asset">asset</a></code> | <code>aws-cdk-lib.aws_s3_assets.Asset</code> | Source `Asset`. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationBucket">destinationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Destination S3 Bucket. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.debug">debug</a></code> | <code>boolean</code> | Enable verbose output of Custom Resource Lambda. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationKeyPrefix">destinationKeyPrefix</a></code> | <code>string</code> | Destination S3 Bucket Key Prefix. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | If `true`, then delete files in `destinationBucket`/`destinationKeyPrefix` before uploading new objects. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.putConfig">putConfig</a></code> | <code>{[ key: string ]: {[ key: string ]: string}}</code> | Mapping of files to PUT options for `PutObjectCommand`. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.substitutionConfig">substitutionConfig</a></code> | <code>{[ key: string ]: string}</code> | Replace placeholders in all files in `asset`. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.zip">zip</a></code> | <code>boolean</code> | If `true` then files will be zipped before writing to destination bucket. |
+
+---
+
+##### `asset`<sup>Required</sup> <a name="asset" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.asset"></a>
+
+```typescript
+public readonly asset: Asset;
+```
+
+- *Type:* aws-cdk-lib.aws_s3_assets.Asset
+
+Source `Asset`.
+
+---
+
+##### `destinationBucket`<sup>Required</sup> <a name="destinationBucket" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationBucket"></a>
+
+```typescript
+public readonly destinationBucket: IBucket;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.IBucket
+
+Destination S3 Bucket.
+
+---
+
+##### `debug`<sup>Optional</sup> <a name="debug" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.debug"></a>
+
+```typescript
+public readonly debug: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Enable verbose output of Custom Resource Lambda.
+
+---
+
+##### `destinationKeyPrefix`<sup>Optional</sup> <a name="destinationKeyPrefix" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationKeyPrefix"></a>
+
+```typescript
+public readonly destinationKeyPrefix: string;
+```
+
+- *Type:* string
+
+Destination S3 Bucket Key Prefix.
+
+---
+
+##### `prune`<sup>Optional</sup> <a name="prune" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.prune"></a>
+
+```typescript
+public readonly prune: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+If `true`, then delete files in `destinationBucket`/`destinationKeyPrefix` before uploading new objects.
+
+---
+
+##### `putConfig`<sup>Optional</sup> <a name="putConfig" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.putConfig"></a>
+
+```typescript
+public readonly putConfig: {[ key: string ]: {[ key: string ]: string}};
+```
+
+- *Type:* {[ key: string ]: {[ key: string ]: string}}
+
+Mapping of files to PUT options for `PutObjectCommand`.
+
+Keys of
+record must be a glob pattern (uses micromatch). Values of record are options
+for PUT command for AWS SDK JS V3. See [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-s3/Interface/PutObjectRequest/)
+for options. If a file matches multiple globs, configuration will be
+merged. Later entries override earlier entries.
+
+`Bucket`, `Key`, and `Body` PUT options cannot be set.
+
+---
+
+##### `substitutionConfig`<sup>Optional</sup> <a name="substitutionConfig" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.substitutionConfig"></a>
+
+```typescript
+public readonly substitutionConfig: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+Replace placeholders in all files in `asset`.
+
+Placeholder targets are
+defined by keys of record. Values to replace placeholders with are defined
+by values of record.
+
+---
+
+##### `zip`<sup>Optional</sup> <a name="zip" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.zip"></a>
+
+```typescript
+public readonly zip: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+If `true` then files will be zipped before writing to destination bucket.
+
+Useful for Lambda functions.
+
+---
+
 ### NextjsBuildProps <a name="NextjsBuildProps" id="cdk-nextjs-standalone.NextjsBuildProps"></a>
 
 #### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsBuildProps.Initializer"></a>
@@ -3593,15 +2887,13 @@ const nextjsBuildProps: NextjsBuildProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -3626,10 +2918,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -3649,19 +2940,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsBuildProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsBuildProps.property.environment"></a>
 
 ```typescript
@@ -3671,32 +2949,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `isPlaceholder`<sup>Optional</sup> <a name="isPlaceholder" id="cdk-nextjs-standalone.NextjsBuildProps.property.isPlaceholder"></a>
-
-```typescript
-public readonly isPlaceholder: boolean;
-```
-
-- *Type:* boolean
-
-Skip building app and deploy a placeholder.
-
-Useful when using `next dev` for local development.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsBuildProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 
@@ -3766,6 +3018,18 @@ public readonly tempBuildDir: string;
 Directory to store temporary build files in.
 
 Defaults to os.tmpdir().
+
+---
+
+##### `skipBuild`<sup>Optional</sup> <a name="skipBuild" id="cdk-nextjs-standalone.NextjsBuildProps.property.skipBuild"></a>
+
+```typescript
+public readonly skipBuild: boolean;
+```
+
+- *Type:* boolean
+
+> [ `NextjsProps.skipBuild`]( `NextjsProps.skipBuild`)
 
 ---
 
@@ -3853,7 +3117,6 @@ const nextjsDefaultsProps: NextjsDefaultsProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.assetDeployment">assetDeployment</a></code> | <code>any</code> | Override static file deployment settings. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.cacheBucket">cacheBucket</a></code> | <code>any</code> | Override cache bucket. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.distribution">distribution</a></code> | <code>any</code> | Override CloudFront distribution settings. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override server lambda function settings. |
 
@@ -3868,18 +3131,6 @@ public readonly assetDeployment: any;
 - *Type:* any
 
 Override static file deployment settings.
-
----
-
-##### `cacheBucket`<sup>Optional</sup> <a name="cacheBucket" id="cdk-nextjs-standalone.NextjsDefaultsProps.property.cacheBucket"></a>
-
-```typescript
-public readonly cacheBucket: any;
-```
-
-- *Type:* any
-
-Override cache bucket.
 
 ---
 
@@ -3956,10 +3207,7 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
@@ -4000,10 +3248,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -4023,19 +3270,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsDistributionProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsDistributionProps.property.environment"></a>
 
 ```typescript
@@ -4045,32 +3279,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `isPlaceholder`<sup>Optional</sup> <a name="isPlaceholder" id="cdk-nextjs-standalone.NextjsDistributionProps.property.isPlaceholder"></a>
-
-```typescript
-public readonly isPlaceholder: boolean;
-```
-
-- *Type:* boolean
-
-Skip building app and deploy a placeholder.
-
-Useful when using `next dev` for local development.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsDistributionProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 
@@ -4429,10 +3637,7 @@ const nextjsImageProps: NextjsImageProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
@@ -4440,7 +3645,7 @@ const nextjsImageProps: NextjsImageProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
+| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda_nodejs.NodejsFunctionProps</code> | Override function properties. |
 
 ---
 
@@ -4465,10 +3670,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -4488,19 +3692,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsImageProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsImageProps.property.environment"></a>
 
 ```typescript
@@ -4510,32 +3701,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `isPlaceholder`<sup>Optional</sup> <a name="isPlaceholder" id="cdk-nextjs-standalone.NextjsImageProps.property.isPlaceholder"></a>
-
-```typescript
-public readonly isPlaceholder: boolean;
-```
-
-- *Type:* boolean
-
-Skip building app and deploy a placeholder.
-
-Useful when using `next dev` for local development.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsImageProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 
@@ -4635,25 +3800,59 @@ The `NextjsBuild` instance representing the built Nextjs application.
 ##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="cdk-nextjs-standalone.NextjsImageProps.property.lambdaOptions"></a>
 
 ```typescript
-public readonly lambdaOptions: FunctionOptions;
+public readonly lambdaOptions: NodejsFunctionProps;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda.FunctionOptions
+- *Type:* aws-cdk-lib.aws_lambda_nodejs.NodejsFunctionProps
 
 Override function properties.
 
 ---
 
-### NextjsLayerProps <a name="NextjsLayerProps" id="cdk-nextjs-standalone.NextjsLayerProps"></a>
+### NextjsInvalidationProps <a name="NextjsInvalidationProps" id="cdk-nextjs-standalone.NextjsInvalidationProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsLayerProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsInvalidationProps.Initializer"></a>
 
 ```typescript
-import { NextjsLayerProps } from 'cdk-nextjs-standalone'
+import { NextjsInvalidationProps } from 'cdk-nextjs-standalone'
 
-const nextjsLayerProps: NextjsLayerProps = { ... }
+const nextjsInvalidationProps: NextjsInvalidationProps = { ... }
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps.property.dependencies">dependencies</a></code> | <code>constructs.Construct[]</code> | Constructs that should complete before invalidating CloudFront Distribution. |
+| <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | CloudFront Distribution to invalidate. |
+
+---
+
+##### `dependencies`<sup>Required</sup> <a name="dependencies" id="cdk-nextjs-standalone.NextjsInvalidationProps.property.dependencies"></a>
+
+```typescript
+public readonly dependencies: Construct[];
+```
+
+- *Type:* constructs.Construct[]
+
+Constructs that should complete before invalidating CloudFront Distribution.
+
+Useful for assets that must be deployed/updated before invalidating.
+
+---
+
+##### `distribution`<sup>Required</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsInvalidationProps.property.distribution"></a>
+
+```typescript
+public readonly distribution: IDistribution;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IDistribution
+
+CloudFront Distribution to invalidate.
+
+---
 
 ### NextjsOriginRequestPolicyProps <a name="NextjsOriginRequestPolicyProps" id="cdk-nextjs-standalone.NextjsOriginRequestPolicyProps"></a>
 
@@ -4711,10 +3910,7 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
@@ -4722,6 +3918,7 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.defaults">defaults</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps">NextjsDefaultsProps</a></code> | Allows you to override defaults for the resources created by this construct. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket">imageOptimizationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Optional S3 Bucket to use, defaults to assets bucket. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | Skips running Next.js build. Useful if you want to deploy `Nextjs` but haven't made any changes to Next.js app code. |
 
 ---
 
@@ -4746,10 +3943,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -4769,19 +3965,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsProps.property.environment"></a>
 
 ```typescript
@@ -4791,32 +3974,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `isPlaceholder`<sup>Optional</sup> <a name="isPlaceholder" id="cdk-nextjs-standalone.NextjsProps.property.isPlaceholder"></a>
-
-```typescript
-public readonly isPlaceholder: boolean;
-```
-
-- *Type:* boolean
-
-Skip building app and deploy a placeholder.
-
-Useful when using `next dev` for local development.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 
@@ -4913,41 +4070,49 @@ Optional S3 Bucket to use, defaults to assets bucket.
 
 ---
 
-### NextjsS3EnvRewriterProps <a name="NextjsS3EnvRewriterProps" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.Initializer"></a>
+##### `skipBuild`<sup>Optional</sup> <a name="skipBuild" id="cdk-nextjs-standalone.NextjsProps.property.skipBuild"></a>
 
 ```typescript
-import { NextjsS3EnvRewriterProps } from 'cdk-nextjs-standalone'
+public readonly skipBuild: boolean;
+```
 
-const nextjsS3EnvRewriterProps: NextjsS3EnvRewriterProps = { ... }
+- *Type:* boolean
+- *Default:* false
+
+Skips running Next.js build. Useful if you want to deploy `Nextjs` but haven't made any changes to Next.js app code.
+
+---
+
+### NextjsRevalidationProps <a name="NextjsRevalidationProps" id="cdk-nextjs-standalone.NextjsRevalidationProps"></a>
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsRevalidationProps.Initializer"></a>
+
+```typescript
+import { NextjsRevalidationProps } from 'cdk-nextjs-standalone'
+
+const nextjsRevalidationProps: NextjsRevalidationProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.replacementConfig">replacementConfig</a></code> | <code><a href="#cdk-nextjs-standalone.RewriteReplacementsConfig">RewriteReplacementsConfig</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.s3Bucket">s3Bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.s3keys">s3keys</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.cloudfrontDistributionId">cloudfrontDistributionId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.debug">debug</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | The main NextJS server handler lambda function. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
 
 ---
 
-##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.nextjsPath"></a>
+##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.nextjsPath"></a>
 
 ```typescript
 public readonly nextjsPath: string;
@@ -4961,21 +4126,20 @@ Can be the root of your project (`.`) or a subdirectory (`packages/web`).
 
 ---
 
-##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.buildCommand"></a>
+##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.buildCommand"></a>
 
 ```typescript
 public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
 
-It defaults to 'npx --yes open-next@2 build'
-
 ---
 
-##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.buildPath"></a>
+##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.buildPath"></a>
 
 ```typescript
 public readonly buildPath: string;
@@ -4991,20 +4155,7 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.environment"></a>
+##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.environment"></a>
 
 ```typescript
 public readonly environment: {[ key: string ]: string};
@@ -5016,33 +4167,7 @@ Custom environment variables to pass to the NextJS build and runtime.
 
 ---
 
-##### `isPlaceholder`<sup>Optional</sup> <a name="isPlaceholder" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.isPlaceholder"></a>
-
-```typescript
-public readonly isPlaceholder: boolean;
-```
-
-- *Type:* boolean
-
-Skip building app and deploy a placeholder.
-
-Useful when using `next dev` for local development.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
-
----
-
-##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.projectRoot"></a>
+##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.projectRoot"></a>
 
 ```typescript
 public readonly projectRoot: string;
@@ -5056,7 +4181,7 @@ Defaults to current working directory.
 
 ---
 
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.quiet"></a>
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.quiet"></a>
 
 ```typescript
 public readonly quiet: boolean;
@@ -5068,7 +4193,7 @@ Less build output.
 
 ---
 
-##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.sharpLayerArn"></a>
+##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.sharpLayerArn"></a>
 
 ```typescript
 public readonly sharpLayerArn: string;
@@ -5082,7 +4207,7 @@ If omitted, the layer will be created.
 
 ---
 
-##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.skipFullInvalidation"></a>
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.skipFullInvalidation"></a>
 
 ```typescript
 public readonly skipFullInvalidation: boolean;
@@ -5097,7 +4222,7 @@ could be important for some users.
 
 ---
 
-##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.tempBuildDir"></a>
+##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.tempBuildDir"></a>
 
 ```typescript
 public readonly tempBuildDir: string;
@@ -5111,53 +4236,39 @@ Defaults to os.tmpdir().
 
 ---
 
-##### `replacementConfig`<sup>Required</sup> <a name="replacementConfig" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.replacementConfig"></a>
+##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.nextBuild"></a>
 
 ```typescript
-public readonly replacementConfig: RewriteReplacementsConfig;
+public readonly nextBuild: NextjsBuild;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.RewriteReplacementsConfig">RewriteReplacementsConfig</a>
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+
+The `NextjsBuild` instance representing the built Nextjs application.
 
 ---
 
-##### `s3Bucket`<sup>Required</sup> <a name="s3Bucket" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.s3Bucket"></a>
+##### `serverFunction`<sup>Required</sup> <a name="serverFunction" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.serverFunction"></a>
 
 ```typescript
-public readonly s3Bucket: IBucket;
+public readonly serverFunction: NextjsServer;
 ```
 
-- *Type:* aws-cdk-lib.aws_s3.IBucket
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a>
+
+The main NextJS server handler lambda function.
 
 ---
 
-##### `s3keys`<sup>Required</sup> <a name="s3keys" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.s3keys"></a>
+##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.lambdaOptions"></a>
 
 ```typescript
-public readonly s3keys: string[];
+public readonly lambdaOptions: FunctionOptions;
 ```
 
-- *Type:* string[]
+- *Type:* aws-cdk-lib.aws_lambda.FunctionOptions
 
----
-
-##### `cloudfrontDistributionId`<sup>Optional</sup> <a name="cloudfrontDistributionId" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.cloudfrontDistributionId"></a>
-
-```typescript
-public readonly cloudfrontDistributionId: string;
-```
-
-- *Type:* string
-
----
-
-##### `debug`<sup>Optional</sup> <a name="debug" id="cdk-nextjs-standalone.NextjsS3EnvRewriterProps.property.debug"></a>
-
-```typescript
-public readonly debug: boolean;
-```
-
-- *Type:* boolean
+Override function properties.
 
 ---
 
@@ -5178,10 +4289,7 @@ const nextjsServerProps: NextjsServerProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
@@ -5214,10 +4322,9 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
 
 Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
 
 ---
 
@@ -5237,19 +4344,6 @@ at the root of the project.
 
 ---
 
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.NextjsServerProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsServerProps.property.environment"></a>
 
 ```typescript
@@ -5259,32 +4353,6 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `isPlaceholder`<sup>Optional</sup> <a name="isPlaceholder" id="cdk-nextjs-standalone.NextjsServerProps.property.isPlaceholder"></a>
-
-```typescript
-public readonly isPlaceholder: boolean;
-```
-
-- *Type:* boolean
-
-Skip building app and deploy a placeholder.
-
-Useful when using `next dev` for local development.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.NextjsServerProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
 
 ---
 
@@ -5395,203 +4463,27 @@ Override function properties.
 
 ---
 
-### RevalidationProps <a name="RevalidationProps" id="cdk-nextjs-standalone.RevalidationProps"></a>
+### NextjsStaticAssetsProps <a name="NextjsStaticAssetsProps" id="cdk-nextjs-standalone.NextjsStaticAssetsProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.RevalidationProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.Initializer"></a>
 
 ```typescript
-import { RevalidationProps } from 'cdk-nextjs-standalone'
+import { NextjsStaticAssetsProps } from 'cdk-nextjs-standalone'
 
-const revalidationProps: RevalidationProps = { ... }
+const nextjsStaticAssetsProps: NextjsStaticAssetsProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.compressionLevel">compressionLevel</a></code> | <code>number</code> | 0 - no compression, fastest 9 - maximum compression, slowest. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.isPlaceholder">isPlaceholder</a></code> | <code>boolean</code> | Skip building app and deploy a placeholder. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.nodeEnv">nodeEnv</a></code> | <code>string</code> | Optional value for NODE_ENV during build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | The main NextJS server handler lambda function. |
-| <code><a href="#cdk-nextjs-standalone.RevalidationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Define your own bucket to store static assets. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
 
 ---
 
-##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.RevalidationProps.property.nextjsPath"></a>
-
-```typescript
-public readonly nextjsPath: string;
-```
-
-- *Type:* string
-
-Relative path to the directory where the NextJS project is located.
-
-Can be the root of your project (`.`) or a subdirectory (`packages/web`).
-
----
-
-##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.RevalidationProps.property.buildCommand"></a>
-
-```typescript
-public readonly buildCommand: string;
-```
-
-- *Type:* string
-
-Optional value used to install NextJS node dependencies.
-
-It defaults to 'npx --yes open-next@2 build'
-
----
-
-##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.RevalidationProps.property.buildPath"></a>
-
-```typescript
-public readonly buildPath: string;
-```
-
-- *Type:* string
-
-The directory to execute `npm run build` from.
-
-By default, it is `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run
-at the root of the project.
-
----
-
-##### `compressionLevel`<sup>Optional</sup> <a name="compressionLevel" id="cdk-nextjs-standalone.RevalidationProps.property.compressionLevel"></a>
-
-```typescript
-public readonly compressionLevel: number;
-```
-
-- *Type:* number
-- *Default:* 1
-
-0 - no compression, fastest 9 - maximum compression, slowest.
-
----
-
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.RevalidationProps.property.environment"></a>
-
-```typescript
-public readonly environment: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `isPlaceholder`<sup>Optional</sup> <a name="isPlaceholder" id="cdk-nextjs-standalone.RevalidationProps.property.isPlaceholder"></a>
-
-```typescript
-public readonly isPlaceholder: boolean;
-```
-
-- *Type:* boolean
-
-Skip building app and deploy a placeholder.
-
-Useful when using `next dev` for local development.
-
----
-
-##### `nodeEnv`<sup>Optional</sup> <a name="nodeEnv" id="cdk-nextjs-standalone.RevalidationProps.property.nodeEnv"></a>
-
-```typescript
-public readonly nodeEnv: string;
-```
-
-- *Type:* string
-
-Optional value for NODE_ENV during build and runtime.
-
----
-
-##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.RevalidationProps.property.projectRoot"></a>
-
-```typescript
-public readonly projectRoot: string;
-```
-
-- *Type:* string
-
-Root of your project, if different from `nextjsPath`.
-
-Defaults to current working directory.
-
----
-
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.RevalidationProps.property.quiet"></a>
-
-```typescript
-public readonly quiet: boolean;
-```
-
-- *Type:* boolean
-
-Less build output.
-
----
-
-##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.RevalidationProps.property.sharpLayerArn"></a>
-
-```typescript
-public readonly sharpLayerArn: string;
-```
-
-- *Type:* string
-
-Optional arn for the sharp lambda layer.
-
-If omitted, the layer will be created.
-
----
-
-##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.RevalidationProps.property.skipFullInvalidation"></a>
-
-```typescript
-public readonly skipFullInvalidation: boolean;
-```
-
-- *Type:* boolean
-
-By default all CloudFront cache will be invalidated on deployment.
-
-This can be set to true to skip the full cache invalidation, which
-could be important for some users.
-
----
-
-##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.RevalidationProps.property.tempBuildDir"></a>
-
-```typescript
-public readonly tempBuildDir: string;
-```
-
-- *Type:* string
-
-Directory to store temporary build files in.
-
-Defaults to os.tmpdir().
-
----
-
-##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.RevalidationProps.property.nextBuild"></a>
+##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.nextBuild"></a>
 
 ```typescript
 public readonly nextBuild: NextjsBuild;
@@ -5603,149 +4495,27 @@ The `NextjsBuild` instance representing the built Nextjs application.
 
 ---
 
-##### `serverFunction`<sup>Required</sup> <a name="serverFunction" id="cdk-nextjs-standalone.RevalidationProps.property.serverFunction"></a>
+##### `bucket`<sup>Optional</sup> <a name="bucket" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.bucket"></a>
 
 ```typescript
-public readonly serverFunction: NextjsServer;
+public readonly bucket: IBucket;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a>
+- *Type:* aws-cdk-lib.aws_s3.IBucket
 
-The main NextJS server handler lambda function.
+Define your own bucket to store static assets.
 
 ---
 
-##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="cdk-nextjs-standalone.RevalidationProps.property.lambdaOptions"></a>
+##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment"></a>
 
 ```typescript
-public readonly lambdaOptions: FunctionOptions;
-```
-
-- *Type:* aws-cdk-lib.aws_lambda.FunctionOptions
-
-Override function properties.
-
----
-
-### RewriteReplacementsConfig <a name="RewriteReplacementsConfig" id="cdk-nextjs-standalone.RewriteReplacementsConfig"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.RewriteReplacementsConfig.Initializer"></a>
-
-```typescript
-import { RewriteReplacementsConfig } from 'cdk-nextjs-standalone'
-
-const rewriteReplacementsConfig: RewriteReplacementsConfig = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.RewriteReplacementsConfig.property.env">env</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.RewriteReplacementsConfig.property.jsonS3Bucket">jsonS3Bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.RewriteReplacementsConfig.property.jsonS3Key">jsonS3Key</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `env`<sup>Optional</sup> <a name="env" id="cdk-nextjs-standalone.RewriteReplacementsConfig.property.env"></a>
-
-```typescript
-public readonly env: {[ key: string ]: string};
+public readonly environment: {[ key: string ]: string};
 ```
 
 - *Type:* {[ key: string ]: string}
 
----
-
-##### `jsonS3Bucket`<sup>Optional</sup> <a name="jsonS3Bucket" id="cdk-nextjs-standalone.RewriteReplacementsConfig.property.jsonS3Bucket"></a>
-
-```typescript
-public readonly jsonS3Bucket: IBucket;
-```
-
-- *Type:* aws-cdk-lib.aws_s3.IBucket
-
----
-
-##### `jsonS3Key`<sup>Optional</sup> <a name="jsonS3Key" id="cdk-nextjs-standalone.RewriteReplacementsConfig.property.jsonS3Key"></a>
-
-```typescript
-public readonly jsonS3Key: string;
-```
-
-- *Type:* string
-
----
-
-### RewriterParams <a name="RewriterParams" id="cdk-nextjs-standalone.RewriterParams"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.RewriterParams.Initializer"></a>
-
-```typescript
-import { RewriterParams } from 'cdk-nextjs-standalone'
-
-const rewriterParams: RewriterParams = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.RewriterParams.property.replacementConfig">replacementConfig</a></code> | <code><a href="#cdk-nextjs-standalone.RewriteReplacementsConfig">RewriteReplacementsConfig</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.RewriterParams.property.s3Bucket">s3Bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.RewriterParams.property.s3keys">s3keys</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.RewriterParams.property.cloudfrontDistributionId">cloudfrontDistributionId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.RewriterParams.property.debug">debug</a></code> | <code>boolean</code> | *No description.* |
-
----
-
-##### `replacementConfig`<sup>Required</sup> <a name="replacementConfig" id="cdk-nextjs-standalone.RewriterParams.property.replacementConfig"></a>
-
-```typescript
-public readonly replacementConfig: RewriteReplacementsConfig;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.RewriteReplacementsConfig">RewriteReplacementsConfig</a>
-
----
-
-##### `s3Bucket`<sup>Required</sup> <a name="s3Bucket" id="cdk-nextjs-standalone.RewriterParams.property.s3Bucket"></a>
-
-```typescript
-public readonly s3Bucket: IBucket;
-```
-
-- *Type:* aws-cdk-lib.aws_s3.IBucket
-
----
-
-##### `s3keys`<sup>Required</sup> <a name="s3keys" id="cdk-nextjs-standalone.RewriterParams.property.s3keys"></a>
-
-```typescript
-public readonly s3keys: string[];
-```
-
-- *Type:* string[]
-
----
-
-##### `cloudfrontDistributionId`<sup>Optional</sup> <a name="cloudfrontDistributionId" id="cdk-nextjs-standalone.RewriterParams.property.cloudfrontDistributionId"></a>
-
-```typescript
-public readonly cloudfrontDistributionId: string;
-```
-
-- *Type:* string
-
----
-
-##### `debug`<sup>Optional</sup> <a name="debug" id="cdk-nextjs-standalone.RewriterParams.property.debug"></a>
-
-```typescript
-public readonly debug: boolean;
-```
-
-- *Type:* boolean
+Custom environment variables to pass to the NextJS build and runtime.
 
 ---
 

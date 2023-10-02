@@ -10,20 +10,25 @@ Supported NextJs versions: >=12.3.0+ (includes 13.0.0+)
 Uses the [standalone output](https://nextjs.org/docs/advanced-features/output-file-tracing) build mode.
 
 ## Quickstart
-
-Add the dependency `esbuild@0.17.16` to your project along with `cdk-nextjs-standalone`.
-
-```shell
-npm install -D esbuild@0.17.16 cdk-nextjs-standalone
-```
-
 ```ts
-import path from 'path';
+import { App, Stack, StackProps } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { Nextjs } from 'cdk-nextjs-standalone';
 
-new Nextjs(this, 'Web', {
-  nextjsPath: './web', // relative path to nextjs project root
-});
+class WebStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
+    const nextjs = new Nextjs(this, 'Nextjs', {
+      nextjsPath: './web', // relative path from your project root to NextJS
+    });
+    new CfnOutput(this, "CloudFrontDistributionDomain", {
+      value: nextjs.distribution.distributionDomain,
+    });
+  }
+}
+
+const app = new App();
+new WebStack(app, 'web');
 ```
 
 ## Important Notes
@@ -127,19 +132,4 @@ Don't manually update package.json or use npm CLI. Update dependencies in .proje
 
 ## Breaking changes
 
-- v4.0.0
-  - Renamed `NextjsLambda` to `NextjsServer`
-  - Renamed `ImageOptimizationLambda` to `NextjsImage`
-  - Renamed `NextjsCachePolicyProps.lambdaCachePolicy` to `NextjsCachePolicyProps.serverCachePolicy`
-  - Removed `NextjsOriginRequestPolicyProps.fallbackOriginRequestPolicy`
-  - Renamed `NextjsOriginRequestPolicyProps.lambdaOriginRequestPolicy` to `NextjsOriginRequestPolicyProps.serverOriginRequestPolicy`
-  - Removed `NextjsDistribution.staticCachePolicyProps`
-  - Renamed `NextjsDistribution.lambdaCachePolicyProps` to `NextjsDistribution.serverCachePolicyProps`
-  - Renamed `NextjsDistribution.lambdaOriginRequestPolicyProps` to `NextjsDistribution.serverOriginRequestPolicyProps`
-  - Removed `NextjsDistribution.fallbackOriginRequestPolicyProps`
-  - Removed `NextjsDistribution.imageOptimizationOriginRequestPolicyProps`
-  - NOTE: when upgrading to v4 from v3, the Lambda@Edge function will be renamed or removed. CloudFormation will fail to delete the function b/c they're replicated a take ~15 min to delete (more [here](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html)). You can either deploy CloudFormation with it's "no rollback" feature for a clean deployment or mark the Lambda@Edge function as "retain on delete".
-
-- v3.0.0: Using open-next for building, ARM64 architecture for image handling, new build options.
-
-- v2.0.0: SST wrapper changed, lambda/assets/distribution defaults now are in the `defaults` prop, refactored distribution settings into the new NextjsDistribution construct. If you are upgrading, you must temporarily remove the `customDomain` on your existing 1.x.x app before upgrading to >=2.x.x because the CloudFront distribution will get recreated due to refactoring, and the custom domain must be globally unique across all CloudFront distributions. Prepare for downtime.
+See [here](./docs/major-changes.md).

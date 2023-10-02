@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import * as undici_types from 'undici';
+import type * as undici_types from 'undici';
 
 declare global {
   export const { fetch, FormData, Headers, Request, Response }: typeof import('undici');

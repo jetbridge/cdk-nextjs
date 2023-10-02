@@ -57,15 +57,6 @@ export class UiStack {
     new Nextjs(this, "NextSite", {
       nextjsPath: "...",
       defaults: {
-        assetDeployment: {
-          bucket: new Bucket(this, "NextjsAssetDeploymentBucket", {
-            autoDeleteObjects: true,
-            removalPolicy: RemovalPolicy.DESTROY,
-            encryption: BucketEncryption.S3_MANAGED,
-            enforceSSL: true,
-            blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-          }),
-        },
         distribution: {
           functionUrlAuthType: FunctionUrlAuthType.AWS_IAM,
           cdk: {

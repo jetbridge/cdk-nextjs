@@ -49,7 +49,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   gitignore: ['.idea'],
   // dependency config
   jsiiVersion: '~5.0.0',
-  cdkVersion: '2.95.1',
+  cdkVersion: '2.99.1',
   bundledDeps: ['esbuild'] /* Runtime dependencies of this module. */,
   devDeps: [
     '@aws-crypto/sha256-js',

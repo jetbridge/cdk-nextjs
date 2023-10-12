@@ -4,7 +4,6 @@ import { AttributeType, Billing, TableV2 as Table } from 'aws-cdk-lib/aws-dynamo
 import { AnyPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Code, Function as LambdaFunction, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Provider } from 'aws-cdk-lib/custom-resources';
@@ -103,10 +102,9 @@ export class NextjsRevalidation extends Construct {
   }
 
   private createRevalidationTable() {
-    return new Table(this, 'RevalidationTable', {
+    return new Table(this, 'Table', {
       partitionKey: { name: 'tag', type: AttributeType.STRING },
       sortKey: { name: 'path', type: AttributeType.STRING },
-      pointInTimeRecovery: true,
       billing: Billing.onDemand(),
       globalSecondaryIndexes: [
         {
@@ -152,12 +150,12 @@ export class NextjsRevalidation extends Construct {
         },
       });
 
-      const provider = new Provider(this, 'RevalidationProvider', {
+      const provider = new Provider(this, 'DynamoDBProvider', {
         onEventHandler: insertFn,
         logRetention: RetentionDays.ONE_DAY,
       });
 
-      new CustomResource(this, 'RevalidationResource', {
+      new CustomResource(this, 'DynamoDBResource', {
         serviceToken: provider.serviceToken,
         properties: {
           version: Date.now().toString(),

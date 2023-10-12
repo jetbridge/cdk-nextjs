@@ -32,7 +32,7 @@ export class NextjsImage extends LambdaFunction {
       ...commonFnProps,
       code: Code.fromAsset(props.nextBuild.nextImageFnDir),
       handler: 'index.handler',
-      description: 'Next.js Image Optimization Function',
+      description: 'Next.js image optimization function',
       ...lambdaOptions,
       environment: {
         BUCKET_NAME: bucket.bucketName,

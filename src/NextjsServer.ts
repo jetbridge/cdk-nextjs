@@ -111,7 +111,6 @@ export class NextjsServer extends Construct {
   }
 
   private createFunction(asset: Asset) {
-    // cannot use NodejsFunction because we must wait to deploy the function
     // until after the build time env vars in code zip asset are substituted
     const fn = new Function(this, 'Fn', {
       ...getCommonFunctionProps(this),

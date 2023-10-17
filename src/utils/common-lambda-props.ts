@@ -1,8 +1,6 @@
 import { Duration, PhysicalName, Stack } from 'aws-cdk-lib';
 import { Architecture, FunctionProps, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { NodejsFunctionProps, OutputFormat } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
-import { commonBundlingOptions } from './common-build-options';
 
 export function getCommonFunctionProps(scope: Construct): Omit<FunctionProps, 'code' | 'handler'> {
   return {
@@ -18,17 +16,5 @@ export function getCommonFunctionProps(scope: Construct): Omit<FunctionProps, 'c
     // fashion, the resource's physical name must be explicit set or use
     // PhysicalName.GENERATE_IF_NEEDED."
     functionName: Stack.of(scope).region !== 'us-east-1' ? PhysicalName.GENERATE_IF_NEEDED : undefined,
-  };
-}
-
-export function getCommonNodejsFunctionProps(scope: Construct): NodejsFunctionProps {
-  return {
-    ...getCommonFunctionProps(scope),
-    bundling: {
-      ...commonBundlingOptions,
-      // https://github.com/evanw/esbuild/issues/1921
-      banner: `import { createRequire } from 'module'; const require = createRequire(import.meta.url);`,
-      format: OutputFormat.ESM,
-    },
   };
 }

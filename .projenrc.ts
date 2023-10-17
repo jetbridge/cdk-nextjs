@@ -1,6 +1,15 @@
+import { BuildOptions } from 'esbuild';
 import { awscdk } from 'projen';
 import { TypeScriptCompilerOptions, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
-import { commonBundlingOptions } from './src/utils/common-build-options';
+
+const commonBundlingOptions = {
+  bundle: true,
+  external: ['@aws-sdk/*'],
+  minify: true,
+  platform: 'node',
+  sourcemap: true,
+  target: 'node18',
+} satisfies BuildOptions;
 
 const commonTscOptions: TypeScriptCompilerOptions = {
   // isolatedModules: true, // why doesn't this work?

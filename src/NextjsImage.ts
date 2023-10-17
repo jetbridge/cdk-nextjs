@@ -1,12 +1,9 @@
-import { join } from 'path';
-import { LogLevel, NodejsFunction, NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { Code, Function as LambdaFunction, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import { NEXTJS_BUILD_INDEX_FILE } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
 import type { NextjsBuild } from './NextjsBuild';
-import { getCommonNodejsFunctionProps } from './utils/common-lambda-props';
-import { fixPath } from './utils/convert-path';
+import { getCommonFunctionProps } from './utils/common-lambda-props';
 
 export interface NextjsImageProps extends NextjsBaseProps {
   /**
@@ -16,7 +13,7 @@ export interface NextjsImageProps extends NextjsBaseProps {
   /**
    * Override function properties.
    */
-  readonly lambdaOptions?: NodejsFunctionProps;
+  readonly lambdaOptions?: FunctionOptions;
   /**
    * The `NextjsBuild` instance representing the built Nextjs application.
    */
@@ -26,28 +23,14 @@ export interface NextjsImageProps extends NextjsBaseProps {
 /**
  * This lambda handles image optimization.
  */
-export class NextjsImage extends NodejsFunction {
+export class NextjsImage extends LambdaFunction {
   constructor(scope: Construct, id: string, props: NextjsImageProps) {
     const { lambdaOptions, bucket } = props;
 
-    const nodejsFnProps = getCommonNodejsFunctionProps(scope);
+    const commonFnProps = getCommonFunctionProps(scope);
     super(scope, id, {
-      ...nodejsFnProps,
-      bundling: {
-        ...nodejsFnProps.bundling,
-        logLevel: LogLevel.SILENT, // silence error on use of `eval` in node_module
-        commandHooks: {
-          afterBundling: () => [],
-          beforeBundling: (_inputDir, outputDir) => [
-            // copy non-bundled assets into zip. use node -e so cross-os compatible
-            `node -e "fs.cpSync('${fixPath(props.nextBuild.nextImageFnDir)}', '${fixPath(
-              outputDir
-            )}', { recursive: true, filter: (src) => !src.includes('/node_modules') && !src.endsWith('index.mjs') })"`,
-          ],
-          beforeInstall: () => [],
-        },
-      },
-      entry: join(props.nextBuild.nextImageFnDir, NEXTJS_BUILD_INDEX_FILE),
+      ...commonFnProps,
+      code: Code.fromAsset(props.nextBuild.nextImageFnDir),
       handler: 'index.handler',
       description: 'Next.js Image Optimization Function',
       ...lambdaOptions,

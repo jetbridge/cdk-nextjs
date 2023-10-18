@@ -1,15 +1,17 @@
 import * as fs from 'node:fs';
 import { tmpdir } from 'node:os';
+import * as path from 'node:path';
 import { resolve } from 'node:path';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
 import { NEXTJS_CACHE_DIR } from './constants';
+import { NextjsBaseProps } from './NextjsBase';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
 
-export interface NextjsStaticAssetsProps {
+export interface NextjsStaticAssetsProps extends NextjsBaseProps {
   /**
    * Define your own bucket to store static assets.
    */
@@ -18,10 +20,6 @@ export interface NextjsStaticAssetsProps {
    * The `NextjsBuild` instance representing the built Nextjs application.
    */
   readonly nextBuild: NextjsBuild;
-  /**
-   * Custom environment variables to pass to the NextJS build and runtime.
-   */
-  readonly environment?: Record<string, string>;
 }
 
 /**
@@ -72,7 +70,11 @@ export class NextjsStaticAssets extends Construct {
 
   private createAsset(): Asset {
     // create temporary directory to join open-next's static output with cache output
-    const tmpAssetsDir = fs.mkdtempSync(resolve(tmpdir(), 'cdk-nextjs-assets-'));
+    const tmpBaseDir = fs.mkdtempSync(resolve(tmpdir(), 'cdk-nextjs-assets-'));
+    // if basePath is defined, copy static assets to a subdirectory using the basePath
+    const tmpAssetsDir = this.props.basePath ? path.join(tmpBaseDir, this.props.basePath) : tmpBaseDir;
+    fs.mkdirSync(tmpAssetsDir, { recursive: true })
+
     fs.cpSync(this.props.nextBuild.nextStaticDir, tmpAssetsDir, { recursive: true });
     fs.cpSync(this.props.nextBuild.nextCacheDir, resolve(tmpAssetsDir, NEXTJS_CACHE_DIR), { recursive: true });
     const asset = new Asset(this, 'Asset', {

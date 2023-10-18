@@ -1,6 +1,5 @@
 import * as fs from 'node:fs';
 import { tmpdir } from 'node:os';
-import * as path from 'node:path';
 import { resolve } from 'node:path';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import * as s3 from 'aws-cdk-lib/aws-s3';
@@ -70,11 +69,7 @@ export class NextjsStaticAssets extends Construct {
 
   private createAsset(): Asset {
     // create temporary directory to join open-next's static output with cache output
-    const tmpBaseDir = fs.mkdtempSync(resolve(tmpdir(), 'cdk-nextjs-assets-'));
-    // if basePath is defined, copy static assets to a subdirectory using the basePath
-    const tmpAssetsDir = this.props.basePath ? path.join(tmpBaseDir, this.props.basePath) : tmpBaseDir;
-    fs.mkdirSync(tmpAssetsDir, { recursive: true })
-
+    const tmpAssetsDir = fs.mkdtempSync(resolve(tmpdir(), 'cdk-nextjs-assets-'));
     fs.cpSync(this.props.nextBuild.nextStaticDir, tmpAssetsDir, { recursive: true });
     fs.cpSync(this.props.nextBuild.nextCacheDir, resolve(tmpAssetsDir, NEXTJS_CACHE_DIR), { recursive: true });
     const asset = new Asset(this, 'Asset', {
@@ -85,19 +80,24 @@ export class NextjsStaticAssets extends Construct {
   }
 
   private createBucketDeployment(asset: Asset) {
+    const basePath = this.props.basePath?.replace(/^\//, ''); // remove leading slash (if present)
+    const allFiles = basePath ? `${basePath}/**/*` : '**/*';
+    const staticFiles = basePath ? `${basePath}/_next/static/**/*'` : '_next/static/**/*';
+
     return new NextjsBucketDeployment(this, 'BucketDeployment', {
       asset,
       destinationBucket: this.bucket,
+      destinationKeyPrefix: basePath,
       debug: true,
       // only put env vars that are placeholders in custom resource properties
       // to be replaced. other env vars were injected at build time.
       substitutionConfig: NextjsBucketDeployment.getSubstitutionConfig(this.buildEnvVars),
       prune: true,
       putConfig: {
-        '**/*': {
+        [allFiles]: {
           CacheControl: 'public, max-age=0, must-revalidate',
         },
-        '_next/static/**/*': {
+        [staticFiles]: {
           CacheControl: 'public, max-age=31536000, immutable',
         },
       },

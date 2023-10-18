@@ -1,3 +1,5 @@
+import * as fs from 'node:fs';
+import * as path from 'path';
 import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
@@ -11,8 +13,6 @@ import * as route53Patterns from 'aws-cdk-lib/aws-route53-patterns';
 import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import * as fs from 'node:fs';
-import * as path from 'path';
 import { DEFAULT_STATIC_MAX_AGE, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
 import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
@@ -412,7 +412,6 @@ export class NextjsDistribution extends Construct {
         ? cfDistributionProps
         : this.createDefaultCloudFrontDistribution(cfDistributionProps);
 
-
     const additionalBehaviors = {
       // known dynamic routes
       'api/*': this.serverBehaviorOptions,
@@ -459,14 +458,16 @@ export class NextjsDistribution extends Construct {
     // if we don't have a static file called index.html then we should
     // redirect to the lambda handler
     const hasIndexHtml = this.props.nextBuild.readPublicFileList().includes('index.html');
-    if (hasIndexHtml) return // don't add root path behavior
+    if (hasIndexHtml) return; // don't add root path behavior
 
     const { origin, ...options } = this.serverBehaviorOptions;
-    this.distribution.addBehavior(this.getPathPattern('/'), origin, options);
 
     // when basePath is set, we emulate the "default behavior" (*) for the site as `/base-path/*`
     if (this.props.basePath) {
-      this.distribution.addBehavior(this.getPathPattern('/*'), origin, options);
+      this.distribution.addBehavior(this.getPathPattern(''), origin, options);
+      this.distribution.addBehavior(this.getPathPattern('*'), origin, options);
+    } else {
+      this.distribution.addBehavior(this.getPathPattern('/'), origin, options);
     }
   }
 
@@ -493,8 +494,8 @@ export class NextjsDistribution extends Construct {
 
   private getPathPattern(pathPattern: string) {
     if (this.props.basePath) {
-      // remove leading slash to avoid double slash in pathPattern /base-path//
-      if (pathPattern.startsWith('/')) pathPattern = pathPattern.slice(1);
+      // because we already have a basePath we don't use / instead we use /base-path
+      if (pathPattern === '') return this.props.basePath;
       return `${this.props.basePath}/${pathPattern}`;
     }
 

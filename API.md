@@ -3165,17 +3165,17 @@ const nextjsDistributionCdkProps: NextjsDistributionCdkProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.DistributionProps</code> | Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.DistributionProps \| aws-cdk-lib.aws_cloudfront.Distribution</code> | Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally. |
 
 ---
 
 ##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution"></a>
 
 ```typescript
-public readonly distribution: DistributionProps;
+public readonly distribution: DistributionProps | Distribution;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.DistributionProps
+- *Type:* aws-cdk-lib.aws_cloudfront.DistributionProps | aws-cdk-lib.aws_cloudfront.Distribution
 
 Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally.
 
@@ -3208,6 +3208,7 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built NextJS app. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps">NextjsCachePolicyProps</a></code> | Override the default CloudFront cache policies created internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cdk">cdk</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps">NextjsDistributionCdkProps</a></code> | Overrides for created CDK resources. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.customDomain">customDomain</a></code> | <code>string \| <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | The customDomain for this website. Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally. |
@@ -3393,6 +3394,18 @@ public readonly staticAssetsBucket: IBucket;
 Bucket containing static assets.
 
 Must be provided if you want to serve static files.
+
+---
+
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsDistributionProps.property.basePath"></a>
+
+```typescript
+public readonly basePath: string;
+```
+
+- *Type:* string
+
+Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path.
 
 ---
 

@@ -26,7 +26,7 @@ export interface NextjsDistributionCdkProps {
    * Pass in a value to override the default settings this construct uses to
    * create the CloudFront `Distribution` internally.
    */
-  readonly distribution?: NextjsDistributionCdkOverrideProps;
+  readonly distribution?: NextjsDistributionCdkOverrideProps | Distribution;
 }
 
 export interface NextjsCachePolicyProps {
@@ -106,6 +106,12 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
    * });
    */
   readonly customDomain?: string | NextjsDomainProps;
+
+  /**
+   * Optional value to prefix the Next.js site under a /prefix path on CloudFront.
+   * Usually used when you deploy multiple Next.js sites on same domain using /sub-path
+   */
+  readonly basePath?: string;
 
   /**
    * Include the name of your deployment stage if present.
@@ -404,16 +410,43 @@ export class NextjsDistribution extends Construct {
 
   private createCloudFrontDistribution(): cloudfront.Distribution {
     const { cdk: cdkProps } = this.props;
-    const cfDistributionProps = cdkProps?.distribution;
+    const cfDistributionProps = cdkProps?.distribution ?? ({} as NextjsDistributionCdkOverrideProps);
 
-    // build domainNames
-    const domainNames = this.buildDistributionDomainNames();
+    const distribution =
+      'node' in cfDistributionProps // if cdkProps.distribution is a cdk.cloudfront.Distribution
+        ? cfDistributionProps
+        : this.createDefaultCloudFrontDistribution(cfDistributionProps);
 
     // if we don't have a static file called index.html then we should
     // redirect to the lambda handler
     const hasIndexHtml = this.props.nextBuild.readPublicFileList().includes('index.html');
 
-    const distribution = new cloudfront.Distribution(this, 'Distribution', {
+    const additionalBehaviors = {
+      // is index.html static or dynamic?
+      ...(hasIndexHtml ? {} : { '/': this.serverBehaviorOptions }),
+      // known dynamic routes
+      'api/*': this.serverBehaviorOptions,
+      '_next/data/*': this.serverBehaviorOptions,
+      // dynamic images go to lambda
+      '_next/image*': this.imageBehaviorOptions,
+    };
+
+    // add additional behaviors
+    for (const [pathPattern, behaviorOptions] of Object.entries(additionalBehaviors)) {
+      const finalPathPattern = this.getPathPattern(pathPattern);
+      const { origin, ...options } = behaviorOptions;
+      distribution.addBehavior(finalPathPattern, origin, options);
+    }
+
+    return distribution;
+  }
+
+  private createDefaultCloudFrontDistribution(cfDistributionProps?: NextjsDistributionCdkOverrideProps) {
+    console.log('createDefaultCloudFrontDistribution', this.props.cdk?.distribution);
+    // build domainNames
+    const domainNames = this.buildDistributionDomainNames();
+
+    return new cloudfront.Distribution(this, 'Distribution', {
       // defaultRootObject: "index.html",
       defaultRootObject: '',
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
@@ -425,20 +458,7 @@ export class NextjsDistribution extends Construct {
       domainNames,
       certificate: this.certificate,
       defaultBehavior: this.serverBehaviorOptions,
-
-      additionalBehaviors: {
-        // is index.html static or dynamic?
-        ...(hasIndexHtml ? {} : { '/': this.serverBehaviorOptions }),
-
-        // known dynamic routes
-        'api/*': this.serverBehaviorOptions,
-        '_next/data/*': this.serverBehaviorOptions,
-
-        // dynamic images go to lambda
-        '_next/image*': this.imageBehaviorOptions,
-      },
     });
-    return distribution;
   }
 
   private addStaticBehaviorsToDistribution() {
@@ -457,8 +477,19 @@ export class NextjsDistribution extends Construct {
           `Invalid CloudFront Distribution Cache Behavior Path Pattern: ${pathPattern}. Please see documentation here: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern`
         );
       }
-      this.distribution.addBehavior(pathPattern, this.s3Origin, this.staticBehaviorOptions);
+      const finalPathPattern = this.getPathPattern(pathPattern);
+      this.distribution.addBehavior(finalPathPattern, this.s3Origin, this.staticBehaviorOptions);
     }
+  }
+
+  private getPathPattern(pathPattern: string) {
+    if (this.props.basePath) {
+      // when basePath is set, we emulate the "default behavior" (*) for the / as `/base-path/*`
+      if (pathPattern === '/') pathPattern = '*';
+      return `${this.props.basePath}/${pathPattern}`;
+    }
+
+    return pathPattern;
   }
 
   private buildDistributionDomainNames(): string[] {

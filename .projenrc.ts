@@ -46,6 +46,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   projenrcTs: true,
   tsconfig: { compilerOptions: { ...commonTscOptions } },
   tsconfigDev: { compilerOptions: { ...commonTscOptions } },
+  gitignore: ['.idea'],
   // dependency config
   jsiiVersion: '~5.0.0',
   cdkVersion: '2.93.0',

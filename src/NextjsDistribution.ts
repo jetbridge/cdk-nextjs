@@ -442,7 +442,6 @@ export class NextjsDistribution extends Construct {
   }
 
   private createDefaultCloudFrontDistribution(cfDistributionProps?: NextjsDistributionCdkOverrideProps) {
-    console.log('createDefaultCloudFrontDistribution', this.props.cdk?.distribution);
     // build domainNames
     const domainNames = this.buildDistributionDomainNames();
 

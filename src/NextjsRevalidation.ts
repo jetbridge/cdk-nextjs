@@ -54,7 +54,6 @@ export class NextjsRevalidation extends Construct {
     this.table = this.createRevalidationTable();
     this.tableFunction = this.createRevalidationInsertFunction(this.table);
 
-    // todo: set these things
     this.props.serverFunction.lambdaFunction.addEnvironment('CACHE_DYNAMO_TABLE', this.table.tableName);
     this.table.grantReadWriteData(this.props.serverFunction.lambdaFunction.role!);
 
@@ -94,7 +93,7 @@ export class NextjsRevalidation extends Construct {
       // see: https://github.com/serverless-stack/open-next/blob/274d446ed7e940cfbe7ce05a21108f4c854ee37a/README.md?plain=1#L65
       code: Code.fromAsset(this.props.nextBuild.nextRevalidateFnDir),
       handler: 'index.handler',
-      description: 'Next.js queue revalidation function',
+      description: 'Next.js Queue Revalidation Function',
       timeout: Duration.seconds(30),
     });
     fn.addEventSource(new SqsEventSource(this.queue, { batchSize: 5 }));
@@ -137,7 +136,7 @@ export class NextjsRevalidation extends Construct {
         // see: https://github.com/serverless-stack/open-next/blob/274d446ed7e940cfbe7ce05a21108f4c854ee37a/README.md?plain=1#L65
         code: Code.fromAsset(this.props.nextBuild.nextRevalidateDynamoDBProviderFnDir),
         handler: 'index.handler',
-        description: 'Next.js revalidation DynamoDB provider',
+        description: 'Next.js Revalidation DynamoDB Provider',
         timeout: Duration.minutes(15),
         initialPolicy: [
           new PolicyStatement({

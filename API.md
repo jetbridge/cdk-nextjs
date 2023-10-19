@@ -2174,9 +2174,9 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.queue">queue</a></code> | <code>aws-cdk-lib.aws_sqs.Queue</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.queueFunction">queueFunction</a></code> | <code>aws-cdk-lib.aws_lambda_nodejs.NodejsFunction</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.queueFunction">queueFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.table">table</a></code> | <code>aws-cdk-lib.aws_dynamodb.TableV2</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.tableFunction">tableFunction</a></code> | <code>aws-cdk-lib.aws_lambda_nodejs.NodejsFunction</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.tableFunction">tableFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
 
 ---
 
@@ -2205,10 +2205,10 @@ public readonly queue: Queue;
 ##### `queueFunction`<sup>Required</sup> <a name="queueFunction" id="cdk-nextjs-standalone.NextjsRevalidation.property.queueFunction"></a>
 
 ```typescript
-public readonly queueFunction: NodejsFunction;
+public readonly queueFunction: Function;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda_nodejs.NodejsFunction
+- *Type:* aws-cdk-lib.aws_lambda.Function
 
 ---
 
@@ -2225,10 +2225,10 @@ public readonly table: TableV2;
 ##### `tableFunction`<sup>Optional</sup> <a name="tableFunction" id="cdk-nextjs-standalone.NextjsRevalidation.property.tableFunction"></a>
 
 ```typescript
-public readonly tableFunction: NodejsFunction;
+public readonly tableFunction: Function;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda_nodejs.NodejsFunction
+- *Type:* aws-cdk-lib.aws_lambda.Function
 
 ---
 
@@ -3684,7 +3684,7 @@ const nextjsImageProps: NextjsImageProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda_nodejs.NodejsFunctionProps</code> | Override function properties. |
+| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
 
 ---
 
@@ -3839,10 +3839,10 @@ The `NextjsBuild` instance representing the built Nextjs application.
 ##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="cdk-nextjs-standalone.NextjsImageProps.property.lambdaOptions"></a>
 
 ```typescript
-public readonly lambdaOptions: NodejsFunctionProps;
+public readonly lambdaOptions: FunctionOptions;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda_nodejs.NodejsFunctionProps
+- *Type:* aws-cdk-lib.aws_lambda.FunctionOptions
 
 Override function properties.
 

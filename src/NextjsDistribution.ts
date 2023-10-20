@@ -418,6 +418,12 @@ export class NextjsDistribution extends Construct {
   private getCloudFrontDistribution(): cloudfront.Distribution {
     let distribution: cloudfront.Distribution;
     if (this.props.distribution) {
+      if (this.props.cdk?.distribution) {
+        throw new Error(
+          'You can either pass an existing "distribution" or pass configs to create one via "cdk.distribution".'
+        );
+      }
+
       distribution = this.props.distribution;
     } else {
       distribution = this.createCloudFrontDistribution();

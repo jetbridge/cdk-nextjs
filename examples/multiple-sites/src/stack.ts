@@ -24,24 +24,16 @@ export class MultipleSitesStack extends Stack {
       },
     })
 
-    const app1 = new Nextjs(this, 'app-router', {
+    new Nextjs(this, 'app-router', {
       nextjsPath: '../../open-next/examples/app-router',
       basePath: '/app-router',
-      defaults: {
-        distribution: {
-          cdk: { distribution }
-        }
-      }
+      distribution
     });
 
-    const app2 = new Nextjs(this, 'pages-router', {
+    new Nextjs(this, 'pages-router', {
       nextjsPath: '../../open-next/examples/pages-router',
       basePath: '/pages-router',
-      defaults: {
-        distribution: {
-          cdk: { distribution }
-        }
-      }
+      distribution
     });
 
     new CfnOutput(this, "CloudFrontDistributionDomain", {

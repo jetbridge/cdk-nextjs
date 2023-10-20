@@ -440,7 +440,7 @@ export class NextjsDistribution extends Construct {
       this.serverBehaviorOptions
     );
     distribution.addBehavior(
-      this.getPathPattern('_next/data/*'),
+      this.getPathPattern('_next/image*'),
       this.imageBehaviorOptions.origin,
       this.imageBehaviorOptions
     );

@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 import * as os from 'os';
 import * as path from 'path';
+import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
@@ -55,6 +56,17 @@ export interface NextjsProps extends NextjsBaseProps {
    * @default false
    */
   readonly skipBuild?: boolean;
+  /**
+   * Optional value to prefix the Next.js site under a /prefix path on CloudFront.
+   * Usually used when you deploy multiple Next.js sites on same domain using /sub-path
+   * @example "/my-base-path"
+   */
+  readonly basePath?: string;
+  /**
+   * Optional CloudFront Distribution created outside of this construct that will
+   * be used to add Next.js behaviors and origins onto. Useful with `basePath`.
+   */
+  readonly distribution?: Distribution;
 }
 
 /**
@@ -124,10 +136,10 @@ export class Nextjs extends Construct {
 
     // deploy nextjs static assets to s3
     this.staticAssets = new NextjsStaticAssets(this, 'StaticAssets', {
-      ...props,
       bucket: props.defaults?.assetDeployment?.bucket,
       environment: props.environment,
       nextBuild: this.nextBuild,
+      basePath: props.basePath,
     });
 
     this.serverFunction = new NextjsServer(this, 'Server', {

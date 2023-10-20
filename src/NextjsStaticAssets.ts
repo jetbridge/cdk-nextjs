@@ -6,11 +6,10 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
 import { NEXTJS_CACHE_DIR } from './constants';
-import { NextjsBaseProps } from './NextjsBase';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
 
-export interface NextjsStaticAssetsProps extends NextjsBaseProps {
+export interface NextjsStaticAssetsProps {
   /**
    * Define your own bucket to store static assets.
    */
@@ -19,6 +18,15 @@ export interface NextjsStaticAssetsProps extends NextjsBaseProps {
    * The `NextjsBuild` instance representing the built Nextjs application.
    */
   readonly nextBuild: NextjsBuild;
+  /**
+   * Custom environment variables to pass to the NextJS build and runtime.
+   */
+  readonly environment?: Record<string, string>;
+  /**
+   * Optional value to prefix the Next.js site under a /prefix path on CloudFront.
+   * Usually used when you deploy multiple Next.js sites on same domain using /sub-path
+   */
+  readonly basePath?: string;
 }
 
 /**

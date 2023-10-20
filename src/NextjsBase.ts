@@ -58,12 +58,6 @@ export interface NextjsBaseProps {
    * could be important for some users.
    */
   readonly skipFullInvalidation?: boolean;
-
-  /**
-   * Optional value to prefix the Next.js site under a /prefix path on CloudFront.
-   * Usually used when you deploy multiple Next.js sites on same domain using /sub-path
-   */
-  readonly basePath?: string;
 }
 
 ///// stuff below taken from https://github.com/serverless-stack/sst/blob/8d377e941467ced81d8cc31ee67d5a06550f04d4/packages/resources/src/BaseSite.ts

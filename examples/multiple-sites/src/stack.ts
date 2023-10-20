@@ -4,7 +4,15 @@ import { HttpOrigin } from "aws-cdk-lib/aws-cloudfront-origins";
 import { Construct } from 'constructs';
 import { Nextjs } from 'cdk-nextjs-standalone';
 
-export class PagesRouterStack extends Stack {
+/*
+  NOTE: in order for the below stack to work, you need to
+  - Update ../../open-next/examples/app-router/next.config.js to have a
+  `basePath: "/app-router"` and `assetPrefix: "/app-router"`
+  - Update ../../open-next/examples/pages-router/next.config.js to have a
+  `basePath: "/pages-router"` and `assetPrefix: "/app-router"`
+*/
+
+export class MultipleSitesStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 

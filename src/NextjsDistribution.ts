@@ -26,7 +26,7 @@ export interface NextjsDistributionCdkProps {
    * Pass in a value to override the default settings this construct uses to
    * create the CloudFront `Distribution` internally.
    */
-  readonly distribution?: NextjsDistributionCdkOverrideProps | Distribution;
+  readonly distribution?: NextjsDistributionCdkOverrideProps;
 }
 
 export interface NextjsCachePolicyProps {
@@ -125,6 +125,18 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
    * @default "NONE"
    */
   readonly functionUrlAuthType?: lambda.FunctionUrlAuthType;
+
+  /**
+   * Optional value to prefix the Next.js site under a /prefix path on CloudFront.
+   * Usually used when you deploy multiple Next.js sites on same domain using /sub-path
+   */
+  readonly basePath?: string;
+
+  /**
+   * Optional CloudFront Distribution created outside of this construct that will
+   * be used to add Next.js behaviors and origins onto. Useful with `basePath`.
+   */
+  readonly distribution?: Distribution;
 }
 
 /**
@@ -220,7 +232,7 @@ export class NextjsDistribution extends Construct {
     this.imageBehaviorOptions = this.createImageBehaviorOptions();
 
     // Create CloudFront Distribution
-    this.distribution = this.createCloudFrontDistribution();
+    this.distribution = this.getCloudFrontDistribution();
     this.addStaticBehaviorsToDistribution();
     this.addRootPathBehavior();
 
@@ -399,38 +411,42 @@ export class NextjsDistribution extends Construct {
     };
   }
 
-  /////////////////////
-  // CloudFront Distribution
-  /////////////////////
-
-  private createCloudFrontDistribution(): cloudfront.Distribution {
-    const { cdk: cdkProps } = this.props;
-    const cfDistributionProps = cdkProps?.distribution ?? ({} as NextjsDistributionCdkOverrideProps);
-
-    const distribution =
-      'node' in cfDistributionProps // if cdkProps.distribution is a cdk.cloudfront.Distribution
-        ? cfDistributionProps
-        : this.createDefaultCloudFrontDistribution(cfDistributionProps);
-
-    const additionalBehaviors = {
-      // known dynamic routes
-      'api/*': this.serverBehaviorOptions,
-      '_next/data/*': this.serverBehaviorOptions,
-      // dynamic images go to lambda
-      '_next/image*': this.imageBehaviorOptions,
-    };
-
-    // add additional behaviors
-    for (const [pathPattern, behaviorOptions] of Object.entries(additionalBehaviors)) {
-      const finalPathPattern = this.getPathPattern(pathPattern);
-      const { origin, ...options } = behaviorOptions;
-      distribution.addBehavior(finalPathPattern, origin, options);
+  /**
+   * Creates or uses user specified CloudFront Distribution adding behaviors
+   * needed for Next.js.
+   */
+  private getCloudFrontDistribution(): cloudfront.Distribution {
+    let distribution: cloudfront.Distribution;
+    if (this.props.distribution) {
+      distribution = this.props.distribution;
+    } else {
+      distribution = this.createCloudFrontDistribution();
     }
+
+    distribution.addBehavior(
+      this.getPathPattern('api/*'),
+      this.serverBehaviorOptions.origin,
+      this.serverBehaviorOptions
+    );
+    distribution.addBehavior(
+      this.getPathPattern('_next/data/*'),
+      this.serverBehaviorOptions.origin,
+      this.serverBehaviorOptions
+    );
+    distribution.addBehavior(
+      this.getPathPattern('_next/data/*'),
+      this.imageBehaviorOptions.origin,
+      this.imageBehaviorOptions
+    );
 
     return distribution;
   }
 
-  private createDefaultCloudFrontDistribution(cfDistributionProps?: NextjsDistributionCdkOverrideProps) {
+  /**
+   * Creates default CloudFront Distribution. Note, this construct will not
+   * create a CloudFront Distribution if one is passed in by user.
+   */
+  private createCloudFrontDistribution(cfDistributionProps?: NextjsDistributionCdkOverrideProps) {
     // build domainNames
     const domainNames = this.buildDistributionDomainNames();
 
@@ -492,6 +508,9 @@ export class NextjsDistribution extends Construct {
     }
   }
 
+  /**
+   * Optionally prepends base path to given path pattern.
+   */
   private getPathPattern(pathPattern: string) {
     if (this.props.basePath) {
       // because we already have a basePath we don't use / instead we use /base-path

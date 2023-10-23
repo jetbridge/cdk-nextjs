@@ -7,7 +7,7 @@ import { Code, Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
-import { NEXTJS_CACHE_DIR } from './constants';
+import { CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
@@ -47,7 +47,7 @@ export class NextjsServer extends Construct {
       ...this.props.lambda?.environment,
       CACHE_BUCKET_NAME: this.props.staticAssetBucket.bucketName,
       CACHE_BUCKET_REGION: Stack.of(this.props.staticAssetBucket).region,
-      CACHE_BUCKET_KEY_PREFIX: NEXTJS_CACHE_DIR,
+      CACHE_BUCKET_KEY_PREFIX,
     };
   }
 

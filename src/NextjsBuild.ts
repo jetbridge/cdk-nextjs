@@ -8,8 +8,8 @@ import {
   NEXTJS_BUILD_IMAGE_FN_DIR,
   NEXTJS_BUILD_REVALIDATE_FN_DIR,
   NEXTJS_BUILD_SERVER_FN_DIR,
-  NEXTJS_CACHE_DIR,
   NEXTJS_STATIC_DIR,
+  NEXTJS_CACHE_DIR,
 } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';

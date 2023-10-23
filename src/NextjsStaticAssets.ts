@@ -22,6 +22,16 @@ export interface NextjsStaticAssetsProps {
    * Custom environment variables to pass to the NextJS build and runtime.
    */
   readonly environment?: Record<string, string>;
+  /**
+   * Optional value to prefix the Next.js site under a /prefix path on CloudFront.
+   * Usually used when you deploy multiple Next.js sites on same domain using /sub-path
+   *
+   * Note, you'll need to set [basePath](https://nextjs.org/docs/app/api-reference/next-config-js/basePath)
+   * in your `next.config.ts` to this value and ensure any files in `public`
+   * folder have correct prefix.
+   * @example "/my-base-path"
+   */
+  readonly basePath?: string;
 }
 
 /**
@@ -83,19 +93,24 @@ export class NextjsStaticAssets extends Construct {
   }
 
   private createBucketDeployment(asset: Asset) {
+    const basePath = this.props.basePath?.replace(/^\//, ''); // remove leading slash (if present)
+    const allFiles = basePath ? `${basePath}/**/*` : '**/*';
+    const staticFiles = basePath ? `${basePath}/_next/static/**/*'` : '_next/static/**/*';
+
     return new NextjsBucketDeployment(this, 'BucketDeployment', {
       asset,
       destinationBucket: this.bucket,
+      destinationKeyPrefix: basePath,
       debug: true,
       // only put env vars that are placeholders in custom resource properties
       // to be replaced. other env vars were injected at build time.
       substitutionConfig: NextjsBucketDeployment.getSubstitutionConfig(this.buildEnvVars),
       prune: true,
       putConfig: {
-        '**/*': {
+        [allFiles]: {
           CacheControl: 'public, max-age=0, must-revalidate',
         },
-        '_next/static/**/*': {
+        [staticFiles]: {
           CacheControl: 'public, max-age=31536000, immutable',
         },
       },

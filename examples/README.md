@@ -4,7 +4,7 @@ Each example app utilizes [open-next](https://github.com/sst/open-next)'s exampl
 ## Prerequisites
 1. `git clone https://github.com/jetbridge/cdk-nextjs.git`
 1. `yarn install`
-1. `yarn build` (or faster option: `yarn compile`)
+1. `yarn build`
 
 ## Setup Example Next.js Apps
 After cloning this repository in order to run the example apps or e2e tests, run:

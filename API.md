@@ -2588,6 +2588,7 @@ const nextjsBaseProps: NextjsBaseProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
@@ -2610,6 +2611,18 @@ public readonly nextjsPath: string;
 Relative path to the directory where the NextJS project is located.
 
 Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+
+---
+
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsBaseProps.property.basePath"></a>
+
+```typescript
+public readonly basePath: string;
+```
+
+- *Type:* string
+
+Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path.
 
 ---
 
@@ -2876,6 +2889,7 @@ const nextjsBuildProps: NextjsBuildProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
@@ -2899,6 +2913,18 @@ public readonly nextjsPath: string;
 Relative path to the directory where the NextJS project is located.
 
 Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+
+---
+
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsBuildProps.property.basePath"></a>
+
+```typescript
+public readonly basePath: string;
+```
+
+- *Type:* string
+
+Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path.
 
 ---
 
@@ -3165,17 +3191,17 @@ const nextjsDistributionCdkProps: NextjsDistributionCdkProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.DistributionProps</code> | Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.DistributionProps \| aws-cdk-lib.aws_cloudfront.Distribution</code> | Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally. |
 
 ---
 
 ##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDistributionCdkProps.property.distribution"></a>
 
 ```typescript
-public readonly distribution: DistributionProps;
+public readonly distribution: DistributionProps | Distribution;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.DistributionProps
+- *Type:* aws-cdk-lib.aws_cloudfront.DistributionProps | aws-cdk-lib.aws_cloudfront.Distribution
 
 Pass in a value to override the default settings this construct uses to create the CloudFront `Distribution` internally.
 
@@ -3196,6 +3222,7 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
@@ -3229,6 +3256,18 @@ public readonly nextjsPath: string;
 Relative path to the directory where the NextJS project is located.
 
 Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+
+---
+
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsDistributionProps.property.basePath"></a>
+
+```typescript
+public readonly basePath: string;
+```
+
+- *Type:* string
+
+Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path.
 
 ---
 
@@ -3626,6 +3665,7 @@ const nextjsImageProps: NextjsImageProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
@@ -3651,6 +3691,18 @@ public readonly nextjsPath: string;
 Relative path to the directory where the NextJS project is located.
 
 Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+
+---
+
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsImageProps.property.basePath"></a>
+
+```typescript
+public readonly basePath: string;
+```
+
+- *Type:* string
+
+Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path.
 
 ---
 
@@ -3899,6 +3951,7 @@ const nextjsProps: NextjsProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
@@ -3924,6 +3977,18 @@ public readonly nextjsPath: string;
 Relative path to the directory where the NextJS project is located.
 
 Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+
+---
+
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsProps.property.basePath"></a>
+
+```typescript
+public readonly basePath: string;
+```
+
+- *Type:* string
+
+Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path.
 
 ---
 
@@ -4089,6 +4154,7 @@ const nextjsRevalidationProps: NextjsRevalidationProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
@@ -4114,6 +4180,18 @@ public readonly nextjsPath: string;
 Relative path to the directory where the NextJS project is located.
 
 Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+
+---
+
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.basePath"></a>
+
+```typescript
+public readonly basePath: string;
+```
+
+- *Type:* string
+
+Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path.
 
 ---
 
@@ -4278,6 +4356,7 @@ const nextjsServerProps: NextjsServerProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
@@ -4303,6 +4382,18 @@ public readonly nextjsPath: string;
 Relative path to the directory where the NextJS project is located.
 
 Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+
+---
+
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsServerProps.property.basePath"></a>
+
+```typescript
+public readonly basePath: string;
+```
+
+- *Type:* string
+
+Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path.
 
 ---
 
@@ -4468,9 +4559,154 @@ const nextjsStaticAssetsProps: NextjsStaticAssetsProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Define your own bucket to store static assets. |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
+
+---
+
+##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.nextjsPath"></a>
+
+```typescript
+public readonly nextjsPath: string;
+```
+
+- *Type:* string
+
+Relative path to the directory where the NextJS project is located.
+
+Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+
+---
+
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.basePath"></a>
+
+```typescript
+public readonly basePath: string;
+```
+
+- *Type:* string
+
+Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path.
+
+---
+
+##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.buildCommand"></a>
+
+```typescript
+public readonly buildCommand: string;
+```
+
+- *Type:* string
+- *Default:* 'npx --yes open-next@2 build'
+
+Optional value used to install NextJS node dependencies.
+
+---
+
+##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.buildPath"></a>
+
+```typescript
+public readonly buildPath: string;
+```
+
+- *Type:* string
+
+The directory to execute `npm run build` from.
+
+By default, it is `nextjsPath`.
+Can be overridden, particularly useful for monorepos where `build` is expected to run
+at the root of the project.
+
+---
+
+##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment"></a>
+
+```typescript
+public readonly environment: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+Custom environment variables to pass to the NextJS build and runtime.
+
+---
+
+##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.projectRoot"></a>
+
+```typescript
+public readonly projectRoot: string;
+```
+
+- *Type:* string
+
+Root of your project, if different from `nextjsPath`.
+
+Defaults to current working directory.
+
+---
+
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+Less build output.
+
+---
+
+##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.sharpLayerArn"></a>
+
+```typescript
+public readonly sharpLayerArn: string;
+```
+
+- *Type:* string
+
+Optional arn for the sharp lambda layer.
+
+If omitted, the layer will be created.
+
+---
+
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.skipFullInvalidation"></a>
+
+```typescript
+public readonly skipFullInvalidation: boolean;
+```
+
+- *Type:* boolean
+
+By default all CloudFront cache will be invalidated on deployment.
+
+This can be set to true to skip the full cache invalidation, which
+could be important for some users.
+
+---
+
+##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.tempBuildDir"></a>
+
+```typescript
+public readonly tempBuildDir: string;
+```
+
+- *Type:* string
+
+Directory to store temporary build files in.
+
+Defaults to os.tmpdir().
 
 ---
 
@@ -4495,18 +4731,6 @@ public readonly bucket: IBucket;
 - *Type:* aws-cdk-lib.aws_s3.IBucket
 
 Define your own bucket to store static assets.
-
----
-
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment"></a>
-
-```typescript
-public readonly environment: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-Custom environment variables to pass to the NextJS build and runtime.
 
 ---
 

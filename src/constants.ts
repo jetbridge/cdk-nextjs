@@ -3,7 +3,7 @@ import { Duration } from 'aws-cdk-lib';
 export const DEFAULT_STATIC_MAX_AGE = Duration.days(30).toSeconds();
 export const DEFAULT_STATIC_STALE_WHILE_REVALIDATE = Duration.days(1).toSeconds();
 
-export const CACHE_BUCKET_KEY_PREFIX = '_cache';
+export const CACHE_BUCKET_KEY_PREFIX = 'cache';
 
 export const NEXTJS_STATIC_DIR = 'assets';
 export const NEXTJS_BUILD_DIR = '.open-next';

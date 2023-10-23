@@ -5,7 +5,7 @@ import { RemovalPolicy } from 'aws-cdk-lib';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
-import { NEXTJS_CACHE_DIR } from './constants';
+import { CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
 
@@ -74,7 +74,7 @@ export class NextjsStaticAssets extends Construct {
     // create temporary directory to join open-next's static output with cache output
     const tmpAssetsDir = fs.mkdtempSync(resolve(tmpdir(), 'cdk-nextjs-assets-'));
     fs.cpSync(this.props.nextBuild.nextStaticDir, tmpAssetsDir, { recursive: true });
-    fs.cpSync(this.props.nextBuild.nextCacheDir, resolve(tmpAssetsDir, NEXTJS_CACHE_DIR), { recursive: true });
+    fs.cpSync(this.props.nextBuild.nextCacheDir, resolve(tmpAssetsDir, CACHE_BUCKET_KEY_PREFIX), { recursive: true });
     const asset = new Asset(this, 'Asset', {
       path: tmpAssetsDir,
     });

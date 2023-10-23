@@ -25,6 +25,11 @@ export interface NextjsStaticAssetsProps {
   /**
    * Optional value to prefix the Next.js site under a /prefix path on CloudFront.
    * Usually used when you deploy multiple Next.js sites on same domain using /sub-path
+   *
+   * Note, you'll need to set [basePath](https://nextjs.org/docs/app/api-reference/next-config-js/basePath)
+   * in your `next.config.ts` to this value and ensure any files in `public`
+   * folder have correct prefix.
+   * @example "/my-base-path"
    */
   readonly basePath?: string;
 }

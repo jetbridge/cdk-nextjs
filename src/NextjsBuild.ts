@@ -9,7 +9,7 @@ import {
   NEXTJS_BUILD_REVALIDATE_FN_DIR,
   NEXTJS_BUILD_SERVER_FN_DIR,
   NEXTJS_STATIC_DIR,
-  CACHE_BUCKET_KEY_PREFIX,
+  NEXTJS_CACHE_DIR,
 } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
@@ -63,7 +63,7 @@ export class NextjsBuild extends Construct {
    * Cache directory for generated data.
    */
   public get nextCacheDir(): string {
-    const dir = path.join(this.getNextBuildDir(), CACHE_BUCKET_KEY_PREFIX);
+    const dir = path.join(this.getNextBuildDir(), NEXTJS_CACHE_DIR);
     this.warnIfMissing(dir);
     return dir;
   }

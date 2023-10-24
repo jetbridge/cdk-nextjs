@@ -116,6 +116,7 @@ export class NextjsServer extends Construct {
       ...getCommonFunctionProps(this),
       code: Code.fromBucket(asset.bucket, asset.s3ObjectKey),
       handler: 'index.handler',
+      description: 'Next.js Server Handler',
       ...this.props.lambda,
       // `environment` needs to go after `this.props.lambda` b/c if
       // `this.props.lambda.environment` is defined, it will override

@@ -10,6 +10,7 @@ import {
   NEXTJS_BUILD_SERVER_FN_DIR,
   NEXTJS_STATIC_DIR,
   NEXTJS_CACHE_DIR,
+  NEXTJS_BUILD_DYNAMODB_PROVIDER_FN_DIR,
 } from './constants';
 import { NextjsBaseProps } from './NextjsBase';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
@@ -48,6 +49,14 @@ export class NextjsBuild extends Construct {
    */
   public get nextRevalidateFnDir(): string {
     const fnPath = path.join(this.getNextBuildDir(), NEXTJS_BUILD_REVALIDATE_FN_DIR);
+    this.warnIfMissing(fnPath);
+    return fnPath;
+  }
+  /**
+   * Contains function for inserting revalidation items into the table.
+   */
+  public get nextRevalidateDynamoDBProviderFnDir(): string {
+    const fnPath = path.join(this.getNextBuildDir(), NEXTJS_BUILD_DYNAMODB_PROVIDER_FN_DIR);
     this.warnIfMissing(fnPath);
     return fnPath;
   }
@@ -101,7 +110,7 @@ export class NextjsBuild extends Construct {
 
   private build() {
     const buildPath = this.props.buildPath ?? this.props.nextjsPath;
-    const buildCommand = this.props.buildCommand ?? 'npx open-next@2 build';
+    const buildCommand = this.props.buildCommand ?? 'npx open-next@^2 build';
     // run build
     if (!this.props.quiet) {
       console.debug(`├ Running "${buildCommand}" in`, buildPath);

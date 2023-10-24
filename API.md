@@ -602,6 +602,7 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir">nextCacheDir</a></code> | <code>string</code> | Cache directory for generated data. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir">nextImageFnDir</a></code> | <code>string</code> | Contains function for processessing image requests. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateDynamoDBProviderFnDir">nextRevalidateDynamoDBProviderFnDir</a></code> | <code>string</code> | Contains function for inserting revalidation items into the table. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir">nextRevalidateFnDir</a></code> | <code>string</code> | Contains function for processing items from revalidation queue. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextServerFnDir">nextServerFnDir</a></code> | <code>string</code> | Contains server code and dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir">nextStaticDir</a></code> | <code>string</code> | Static files containing client-side code. |
@@ -644,6 +645,18 @@ public readonly nextImageFnDir: string;
 Contains function for processessing image requests.
 
 Should be arm64.
+
+---
+
+##### `nextRevalidateDynamoDBProviderFnDir`<sup>Required</sup> <a name="nextRevalidateDynamoDBProviderFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateDynamoDBProviderFnDir"></a>
+
+```typescript
+public readonly nextRevalidateDynamoDBProviderFnDir: string;
+```
+
+- *Type:* string
+
+Contains function for inserting revalidation items into the table.
 
 ---
 
@@ -2075,7 +2088,7 @@ The tree node.
 
 ### NextjsRevalidation <a name="NextjsRevalidation" id="cdk-nextjs-standalone.NextjsRevalidation"></a>
 
-Builds the system for revalidating Next.js resources. This includes a Lambda function handler and queue system.
+Builds the system for revalidating Next.js resources. This includes a Lambda function handler and queue system as well as the DynamoDB table and provider function.
 
 > [{@link https://github.com/serverless-stack/open-next/blob/main/README.md?plain=1#L65}]({@link https://github.com/serverless-stack/open-next/blob/main/README.md?plain=1#L65})
 
@@ -2160,8 +2173,10 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.function">function</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.queue">queue</a></code> | <code>aws-cdk-lib.aws_sqs.Queue</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.queueFunction">queueFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.table">table</a></code> | <code>aws-cdk-lib.aws_dynamodb.TableV2</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.tableFunction">tableFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
 
 ---
 
@@ -2177,16 +2192,6 @@ The tree node.
 
 ---
 
-##### `function`<sup>Required</sup> <a name="function" id="cdk-nextjs-standalone.NextjsRevalidation.property.function"></a>
-
-```typescript
-public readonly function: Function;
-```
-
-- *Type:* aws-cdk-lib.aws_lambda.Function
-
----
-
 ##### `queue`<sup>Required</sup> <a name="queue" id="cdk-nextjs-standalone.NextjsRevalidation.property.queue"></a>
 
 ```typescript
@@ -2194,6 +2199,36 @@ public readonly queue: Queue;
 ```
 
 - *Type:* aws-cdk-lib.aws_sqs.Queue
+
+---
+
+##### `queueFunction`<sup>Required</sup> <a name="queueFunction" id="cdk-nextjs-standalone.NextjsRevalidation.property.queueFunction"></a>
+
+```typescript
+public readonly queueFunction: Function;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Function
+
+---
+
+##### `table`<sup>Required</sup> <a name="table" id="cdk-nextjs-standalone.NextjsRevalidation.property.table"></a>
+
+```typescript
+public readonly table: TableV2;
+```
+
+- *Type:* aws-cdk-lib.aws_dynamodb.TableV2
+
+---
+
+##### `tableFunction`<sup>Optional</sup> <a name="tableFunction" id="cdk-nextjs-standalone.NextjsRevalidation.property.tableFunction"></a>
+
+```typescript
+public readonly tableFunction: Function;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Function
 
 ---
 
@@ -2596,7 +2631,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 
@@ -2885,7 +2920,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 
@@ -3217,7 +3252,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 
@@ -3674,7 +3709,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 
@@ -3949,7 +3984,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 
@@ -4174,7 +4209,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 
@@ -4363,7 +4398,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 

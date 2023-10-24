@@ -2631,7 +2631,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2.2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 
@@ -2920,7 +2920,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2.2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 
@@ -3252,7 +3252,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2.2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 
@@ -3709,7 +3709,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2.2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 
@@ -3984,7 +3984,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2.2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 
@@ -4209,7 +4209,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2.2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 
@@ -4398,7 +4398,7 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@2.2 build'
+- *Default:* 'npx --yes open-next@^2 build'
 
 Optional value used to install NextJS node dependencies.
 

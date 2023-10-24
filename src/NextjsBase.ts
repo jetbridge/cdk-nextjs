@@ -37,7 +37,7 @@ export interface NextjsBaseProps {
 
   /**
    * Optional value used to install NextJS node dependencies.
-   * @default 'npx --yes open-next@2.2 build'
+   * @default 'npx --yes open-next@^2 build'
    */
   readonly buildCommand?: string;
 

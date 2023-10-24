@@ -49,13 +49,16 @@ export class NextjsRevalidation extends Construct {
     this.props = props;
 
     this.queue = this.createQueue();
-    this.queueFunction = this.createFunction();
+    this.queueFunction = this.createQueueFunction();
 
     this.table = this.createRevalidationTable();
     this.tableFunction = this.createRevalidationInsertFunction(this.table);
 
     this.props.serverFunction.lambdaFunction.addEnvironment('CACHE_DYNAMO_TABLE', this.table.tableName);
-    this.table.grantReadWriteData(this.props.serverFunction.lambdaFunction.role!);
+
+    if (this.props.serverFunction.lambdaFunction.role) {
+      this.table.grantReadWriteData(this.props.serverFunction.lambdaFunction.role);
+    }
 
     this.props.serverFunction.lambdaFunction // allow server fn to send messages to queue
       ?.addEnvironment('REVALIDATION_QUEUE_URL', this.queue.queueUrl);
@@ -85,7 +88,7 @@ export class NextjsRevalidation extends Construct {
     return queue;
   }
 
-  private createFunction(): LambdaFunction {
+  private createQueueFunction(): LambdaFunction {
     const commonFnProps = getCommonFunctionProps(this);
     const fn = new LambdaFunction(this, 'QueueFn', {
       ...commonFnProps,
@@ -137,17 +140,13 @@ export class NextjsRevalidation extends Construct {
         code: Code.fromAsset(this.props.nextBuild.nextRevalidateDynamoDBProviderFnDir),
         handler: 'index.handler',
         description: 'Next.js Revalidation DynamoDB Provider',
-        timeout: Duration.minutes(15),
-        initialPolicy: [
-          new PolicyStatement({
-            actions: ['dynamodb:BatchWriteItem', 'dynamodb:PutItem', 'dynamodb:DescribeTable'],
-            resources: [revalidationTable.tableArn],
-          }),
-        ],
+        timeout: Duration.minutes(1),
         environment: {
           CACHE_DYNAMO_TABLE: revalidationTable.tableName,
         },
       });
+
+      revalidationTable.grantReadWriteData(insertFn);
 
       const provider = new Provider(this, 'DynamoDBProvider', {
         onEventHandler: insertFn,

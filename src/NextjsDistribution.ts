@@ -30,6 +30,7 @@ export interface NextjsDistributionCdkProps {
 }
 
 export interface NextjsCachePolicyProps {
+  readonly staticResponseHeaderPolicy?: ResponseHeadersPolicy;
   readonly staticCachePolicy?: cloudfront.ICachePolicy;
   readonly serverCachePolicy?: cloudfront.ICachePolicy;
   readonly imageCachePolicy?: cloudfront.ICachePolicy;
@@ -296,20 +297,22 @@ export class NextjsDistribution extends Construct {
   private createStaticBehaviorOptions(): cloudfront.BehaviorOptions {
     const staticClientMaxAge = this.props.cachePolicies?.staticClientMaxAgeDefault || DEFAULT_STATIC_MAX_AGE;
     // TODO: remove this response headers policy once S3 files have correct cache control headers with new asset deployment technique
-    const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
-      // add default header for static assets
-      customHeadersBehavior: {
-        customHeaders: [
-          {
-            header: 'cache-control',
-            override: false,
-            // by default tell browser to cache static files for this long
-            // this is separate from the origin cache policy
-            value: `public,max-age=${staticClientMaxAge},immutable`,
-          },
-        ],
-      },
-    });
+    const responseHeadersPolicy =
+      this.props.cachePolicies?.staticResponseHeaderPolicy ??
+      new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
+        // add default header for static assets
+        customHeadersBehavior: {
+          customHeaders: [
+            {
+              header: 'cache-control',
+              override: false,
+              // by default tell browser to cache static files for this long
+              // this is separate from the origin cache policy
+              value: `public,max-age=${staticClientMaxAge},immutable`,
+            },
+          ],
+        },
+      });
     const cachePolicy = this.props.cachePolicies?.staticCachePolicy ?? cloudfront.CachePolicy.CACHING_OPTIMIZED;
     return {
       ...this.commonBehaviorOptions,

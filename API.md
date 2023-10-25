@@ -3053,6 +3053,7 @@ const nextjsCachePolicyProps: NextjsCachePolicyProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.serverCachePolicy">serverCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticCachePolicy">staticCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticClientMaxAgeDefault">staticClientMaxAgeDefault</a></code> | <code>aws-cdk-lib.Duration</code> | Cache-control max-age default for static assets (/_next/*). |
+| <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticResponseHeaderPolicy">staticResponseHeaderPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicy</code> | *No description.* |
 
 ---
 
@@ -3097,6 +3098,16 @@ public readonly staticClientMaxAgeDefault: Duration;
 Cache-control max-age default for static assets (/_next/*).
 
 Default: 30 days.
+
+---
+
+##### `staticResponseHeaderPolicy`<sup>Optional</sup> <a name="staticResponseHeaderPolicy" id="cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticResponseHeaderPolicy"></a>
+
+```typescript
+public readonly staticResponseHeaderPolicy: ResponseHeadersPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicy
 
 ---
 

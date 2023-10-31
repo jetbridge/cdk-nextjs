@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
-import { RemovalPolicy } from 'aws-cdk-lib';
+import { RemovalPolicy, Stack } from 'aws-cdk-lib';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
@@ -63,8 +63,12 @@ export class NextjsStaticAssets extends Construct {
     this.props = props;
 
     this.bucket = this.createBucket();
-    const asset = this.createAsset();
-    this.createBucketDeployment(asset);
+
+    // when `cdk deploy "NonNextjsStack" --exclusively` is run, don't bundle assets since they will not exist
+    if (Stack.of(this).bundlingRequired) {
+      const asset = this.createAsset();
+      this.createBucketDeployment(asset);
+    }
   }
 
   private createBucket(): s3.IBucket {

@@ -434,7 +434,7 @@ export class NextjsDistribution extends Construct {
 
       distribution = this.props.distribution;
     } else {
-      distribution = this.createCloudFrontDistribution();
+      distribution = this.createCloudFrontDistribution(this.props.cdk?.distribution);
     }
 
     distribution.addBehavior(

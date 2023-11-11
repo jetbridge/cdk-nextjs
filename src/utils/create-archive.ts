@@ -31,6 +31,7 @@ export function createArchive({ directory, zipFileName, fileGlob = '.', quiet }:
     // TODO: test on windows
     execSync(`Compress-Archive -Path '${directory}\\*' -DestinationPath '${zipFilePath}' -CompressionLevel Optimal`, {
       stdio: 'inherit',
+      shell: 'powershell.exe'
     });
   } else {
     execSync(`zip -ryq9 '${zipFilePath}' ${fileGlob}`, {

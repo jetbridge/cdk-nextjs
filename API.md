@@ -215,6 +215,7 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.revalidation">revalidation</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation">NextjsRevalidation</a></code> | Revalidation handler and queue. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | The main NextJS server handler lambda function. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.staticAssets">staticAssets</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets">NextjsStaticAssets</a></code> | Asset deployment to S3. |
+| <code><a href="#cdk-nextjs-standalone.Nextjs.property.domain">domain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | Optional Route53 Hosted Zone, ACM Certificate, and Route53 DNS Records. |
 
 ---
 
@@ -343,6 +344,18 @@ public readonly staticAssets: NextjsStaticAssets;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsStaticAssets">NextjsStaticAssets</a>
 
 Asset deployment to S3.
+
+---
+
+##### `domain`<sup>Optional</sup> <a name="domain" id="cdk-nextjs-standalone.Nextjs.property.domain"></a>
+
+```typescript
+public readonly domain: NextjsDomain;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a>
+
+Optional Route53 Hosted Zone, ACM Certificate, and Route53 DNS Records.
 
 ---
 
@@ -784,8 +797,6 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.distributionDomain">distributionDomain</a></code> | <code>string</code> | The domain name of the internally created CloudFront Distribution. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.distributionId">distributionId</a></code> | <code>string</code> | The ID of the internally created CloudFront Distribution. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.url">url</a></code> | <code>string</code> | The CloudFront URL of the website. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.customDomainName">customDomainName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.customDomainUrl">customDomainUrl</a></code> | <code>string</code> | If the custom domain is enabled, this is the URL of the website with the custom domain. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | The internally created CloudFront `Distribution` instance. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | The AWS Certificate Manager certificate for the custom domain. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | The Route 53 hosted zone for the custom domain. |
@@ -864,28 +875,6 @@ The CloudFront URL of the website.
 
 ---
 
-##### `customDomainName`<sup>Optional</sup> <a name="customDomainName" id="cdk-nextjs-standalone.NextjsDistribution.property.customDomainName"></a>
-
-```typescript
-public readonly customDomainName: string;
-```
-
-- *Type:* string
-
----
-
-##### `customDomainUrl`<sup>Optional</sup> <a name="customDomainUrl" id="cdk-nextjs-standalone.NextjsDistribution.property.customDomainUrl"></a>
-
-```typescript
-public readonly customDomainUrl: string;
-```
-
-- *Type:* string
-
-If the custom domain is enabled, this is the URL of the website with the custom domain.
-
----
-
 ##### `distribution`<sup>Required</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDistribution.property.distribution"></a>
 
 ```typescript
@@ -919,6 +908,163 @@ public readonly hostedZone: IHostedZone;
 - *Type:* aws-cdk-lib.aws_route53.IHostedZone
 
 The Route 53 hosted zone for the custom domain.
+
+---
+
+
+### NextjsDomain <a name="NextjsDomain" id="cdk-nextjs-standalone.NextjsDomain"></a>
+
+#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsDomain.Initializer"></a>
+
+```typescript
+import { NextjsDomain } from 'cdk-nextjs-standalone'
+
+new NextjsDomain(scope: Construct, id: string, props: NextjsDomainProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomain.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomain.createDnsRecords">createDnsRecords</a></code> | *No description.* |
+
+---
+
+##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsDomain.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `createDnsRecords` <a name="createDnsRecords" id="cdk-nextjs-standalone.NextjsDomain.createDnsRecords"></a>
+
+```typescript
+public createDnsRecords(distribution: Distribution): void
+```
+
+###### `distribution`<sup>Required</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDomain.createDnsRecords.parameter.distribution"></a>
+
+- *Type:* aws-cdk-lib.aws_cloudfront.Distribution
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomain.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsDomain.isConstruct"></a>
+
+```typescript
+import { NextjsDomain } from 'cdk-nextjs-standalone'
+
+NextjsDomain.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsDomain.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomain.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomain.property.domainNames">domainNames</a></code> | <code>string[]</code> | Concatentation of {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.alternateNames}. Used in instantiation of CloudFront Distribution in NextjsDistribution. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomain.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | ACM Certificate. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomain.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | Route53 Hosted Zone. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsDomain.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `domainNames`<sup>Required</sup> <a name="domainNames" id="cdk-nextjs-standalone.NextjsDomain.property.domainNames"></a>
+
+```typescript
+public readonly domainNames: string[];
+```
+
+- *Type:* string[]
+
+Concatentation of {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.alternateNames}. Used in instantiation of CloudFront Distribution in NextjsDistribution.
+
+---
+
+##### `certificate`<sup>Optional</sup> <a name="certificate" id="cdk-nextjs-standalone.NextjsDomain.property.certificate"></a>
+
+```typescript
+public readonly certificate: ICertificate;
+```
+
+- *Type:* aws-cdk-lib.aws_certificatemanager.ICertificate
+
+ACM Certificate.
+
+If {@link NextjsDomainProps.isExternalDomain} is `true`,
+then it will be undefined.
+
+---
+
+##### `hostedZone`<sup>Optional</sup> <a name="hostedZone" id="cdk-nextjs-standalone.NextjsDomain.property.hostedZone"></a>
+
+```typescript
+public readonly hostedZone: IHostedZone;
+```
+
+- *Type:* aws-cdk-lib.aws_route53.IHostedZone
+
+Route53 Hosted Zone.
+
+If {@link NextjsDomainProps.isExternalDomain} is `true`,
+then it will be undefined.
 
 ---
 
@@ -2477,113 +2623,6 @@ Bucket containing assets.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### BaseSiteDomainProps <a name="BaseSiteDomainProps" id="cdk-nextjs-standalone.BaseSiteDomainProps"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.BaseSiteDomainProps.Initializer"></a>
-
-```typescript
-import { BaseSiteDomainProps } from 'cdk-nextjs-standalone'
-
-const baseSiteDomainProps: BaseSiteDomainProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteDomainProps.property.domainName">domainName</a></code> | <code>string</code> | The domain to be assigned to the website URL (ie. domain.com). |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteDomainProps.property.alternateNames">alternateNames</a></code> | <code>string[]</code> | Specify additional names that should route to the Cloudfront Distribution. |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteDomainProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | Import the certificate for the domain. |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteDomainProps.property.domainAlias">domainAlias</a></code> | <code>string</code> | An alternative domain to be assigned to the website URL. |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | Import the underlying Route 53 hosted zone. |
-| <code><a href="#cdk-nextjs-standalone.BaseSiteDomainProps.property.isExternalDomain">isExternalDomain</a></code> | <code>boolean</code> | Set this option if the domain is not hosted on Amazon Route 53. |
-
----
-
-##### `domainName`<sup>Required</sup> <a name="domainName" id="cdk-nextjs-standalone.BaseSiteDomainProps.property.domainName"></a>
-
-```typescript
-public readonly domainName: string;
-```
-
-- *Type:* string
-
-The domain to be assigned to the website URL (ie. domain.com).
-
-Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally.
-
----
-
-##### `alternateNames`<sup>Optional</sup> <a name="alternateNames" id="cdk-nextjs-standalone.BaseSiteDomainProps.property.alternateNames"></a>
-
-```typescript
-public readonly alternateNames: string[];
-```
-
-- *Type:* string[]
-
-Specify additional names that should route to the Cloudfront Distribution.
-
-Note, certificates for these names will not be automatically generated so the `certificate` option must be specified.
-
----
-
-##### `certificate`<sup>Optional</sup> <a name="certificate" id="cdk-nextjs-standalone.BaseSiteDomainProps.property.certificate"></a>
-
-```typescript
-public readonly certificate: ICertificate;
-```
-
-- *Type:* aws-cdk-lib.aws_certificatemanager.ICertificate
-
-Import the certificate for the domain.
-
-By default, SST will create a certificate with the domain name. The certificate will be created in the `us-east-1`(N. Virginia) region as required by AWS CloudFront.
-
-Set this option if you have an existing certificate in the `us-east-1` region in AWS Certificate Manager you want to use.
-
----
-
-##### `domainAlias`<sup>Optional</sup> <a name="domainAlias" id="cdk-nextjs-standalone.BaseSiteDomainProps.property.domainAlias"></a>
-
-```typescript
-public readonly domainAlias: string;
-```
-
-- *Type:* string
-
-An alternative domain to be assigned to the website URL.
-
-Visitors to the alias will be redirected to the main domain. (ie. `www.domain.com`).
-
-Use this to create a `www.` version of your domain and redirect visitors to the root domain.
-
----
-
-##### `hostedZone`<sup>Optional</sup> <a name="hostedZone" id="cdk-nextjs-standalone.BaseSiteDomainProps.property.hostedZone"></a>
-
-```typescript
-public readonly hostedZone: IHostedZone;
-```
-
-- *Type:* aws-cdk-lib.aws_route53.IHostedZone
-
-Import the underlying Route 53 hosted zone.
-
----
-
-##### `isExternalDomain`<sup>Optional</sup> <a name="isExternalDomain" id="cdk-nextjs-standalone.BaseSiteDomainProps.property.isExternalDomain"></a>
-
-```typescript
-public readonly isExternalDomain: boolean;
-```
-
-- *Type:* boolean
-
-Set this option if the domain is not hosted on Amazon Route 53.
-
----
-
 ### NextjsBucketDeploymentProps <a name="NextjsBucketDeploymentProps" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps"></a>
 
 #### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.Initializer"></a>
@@ -3007,8 +3046,8 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps">NextjsCachePolicyProps</a></code> | Override the default CloudFront cache policies created internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cdk">cdk</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps">NextjsDistributionCdkProps</a></code> | Overrides for created CDK resources. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.customDomain">customDomain</a></code> | <code>string \| <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | The customDomain for this website. Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.domainNames">domainNames</a></code> | <code>string[]</code> | Alternative domain names for CloudFront Distribution. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.originRequestPolicies">originRequestPolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps">NextjsOriginRequestPolicyProps</a></code> | Override the default CloudFront origin request policies created internally. |
 
@@ -3116,38 +3155,6 @@ Overrides for created CDK resources.
 
 ---
 
-##### `customDomain`<sup>Optional</sup> <a name="customDomain" id="cdk-nextjs-standalone.NextjsDistributionProps.property.customDomain"></a>
-
-```typescript
-public readonly customDomain: string | NextjsDomainProps;
-```
-
-- *Type:* string | <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a>
-
-The customDomain for this website. Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally.
-
-Note that you can also migrate externally hosted domains to Route 53 by
-[following this guide](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/MigratingDNS.html).
-
----
-
-*Example*
-
-```typescript
-new NextjsDistribution(this, "Dist", {
-  customDomain: "domain.com",
-});
-
-new NextjsDistribution(this, "Dist", {
-  customDomain: {
-    domainName: "domain.com",
-    domainAlias: "www.domain.com",
-    hostedZone: "domain.com"
-  },
-});
-```
-
-
 ##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDistributionProps.property.distribution"></a>
 
 ```typescript
@@ -3157,6 +3164,18 @@ public readonly distribution: Distribution;
 - *Type:* aws-cdk-lib.aws_cloudfront.Distribution
 
 > [{@link NextjsProps.distribution }]({@link NextjsProps.distribution })
+
+---
+
+##### `domainNames`<sup>Optional</sup> <a name="domainNames" id="cdk-nextjs-standalone.NextjsDistributionProps.property.domainNames"></a>
+
+```typescript
+public readonly domainNames: string[];
+```
+
+- *Type:* string[]
+
+Alternative domain names for CloudFront Distribution.
 
 ---
 
@@ -3199,11 +3218,11 @@ const nextjsDomainProps: NextjsDomainProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.domainName">domainName</a></code> | <code>string</code> | The domain to be assigned to the website URL (ie. domain.com). |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.domainName">domainName</a></code> | <code>string</code> | The domain to be assigned to the website URL (ie. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.alternateNames">alternateNames</a></code> | <code>string[]</code> | Specify additional names that should route to the Cloudfront Distribution. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | Import the certificate for the domain. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.domainAlias">domainAlias</a></code> | <code>string</code> | An alternative domain to be assigned to the website URL. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | Import the underlying Route 53 hosted zone. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.domainAliases">domainAliases</a></code> | <code>string[]</code> | An alternative domain to be assigned to the website URL. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | Optionally provide Route53 Hosted Zone. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.isExternalDomain">isExternalDomain</a></code> | <code>boolean</code> | Set this option if the domain is not hosted on Amazon Route 53. |
 
 ---
@@ -3216,8 +3235,9 @@ public readonly domainName: string;
 
 - *Type:* string
 
-The domain to be assigned to the website URL (ie. domain.com).
+The domain to be assigned to the website URL (ie.
 
+domain.com).
 Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally.
 
 ---
@@ -3246,24 +3266,22 @@ public readonly certificate: ICertificate;
 
 Import the certificate for the domain.
 
-By default, SST will create a certificate with the domain name. The certificate will be created in the `us-east-1`(N. Virginia) region as required by AWS CloudFront.
-
+By default, SST will create a certificate with the domain name. The certificate will be created in the `us-east-1` (N. Virginia) region as required by AWS CloudFront.
 Set this option if you have an existing certificate in the `us-east-1` region in AWS Certificate Manager you want to use.
 
 ---
 
-##### `domainAlias`<sup>Optional</sup> <a name="domainAlias" id="cdk-nextjs-standalone.NextjsDomainProps.property.domainAlias"></a>
+##### `domainAliases`<sup>Optional</sup> <a name="domainAliases" id="cdk-nextjs-standalone.NextjsDomainProps.property.domainAliases"></a>
 
 ```typescript
-public readonly domainAlias: string;
+public readonly domainAliases: string[];
 ```
 
-- *Type:* string
+- *Type:* string[]
 
 An alternative domain to be assigned to the website URL.
 
 Visitors to the alias will be redirected to the main domain. (ie. `www.domain.com`).
-
 Use this to create a `www.` version of your domain and redirect visitors to the root domain.
 
 ---
@@ -3276,7 +3294,11 @@ public readonly hostedZone: IHostedZone;
 
 - *Type:* aws-cdk-lib.aws_route53.IHostedZone
 
-Import the underlying Route 53 hosted zone.
+Optionally provide Route53 Hosted Zone.
+
+If not provided, then hosted zone
+will be looked up via `HostedZone.fromLookup` with {@link NextjsDomainProps.domainName}
+unless {@link NextjsDomainProps.isExternalDomain} is passed.
 
 ---
 
@@ -3452,6 +3474,7 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.defaults">defaults</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps">NextjsDefaultsProps</a></code> | Allows you to override defaults for the resources created by this construct. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | Optional CloudFront Distribution created outside of this construct that will be used to add Next.js behaviors and origins onto. Useful with `basePath`. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.domainProps">domainProps</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | Props to configure {@link NextjsDomain}. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build **and** runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket">imageOptimizationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Optional S3 Bucket to use, defaults to assets bucket. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
@@ -3547,6 +3570,18 @@ public readonly distribution: Distribution;
 - *Type:* aws-cdk-lib.aws_cloudfront.Distribution
 
 Optional CloudFront Distribution created outside of this construct that will be used to add Next.js behaviors and origins onto. Useful with `basePath`.
+
+---
+
+##### `domainProps`<sup>Optional</sup> <a name="domainProps" id="cdk-nextjs-standalone.NextjsProps.property.domainProps"></a>
+
+```typescript
+public readonly domainProps: NextjsDomainProps;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a>
+
+Props to configure {@link NextjsDomain}.
 
 ---
 

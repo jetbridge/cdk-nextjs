@@ -206,7 +206,6 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Convenience method to access `Nextjs.staticAssets.bucket`. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Where build-time assets for deployment are stored. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.url">url</a></code> | <code>string</code> | URL of Next.js App. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.distribution">distribution</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistribution">NextjsDistribution</a></code> | CloudFront distribution. |
 | <code><a href="#cdk-nextjs-standalone.Nextjs.property.imageOptimizationFunction">imageOptimizationFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsImage">NextjsImage</a></code> | The image optimization handler lambda function. |
@@ -240,18 +239,6 @@ public readonly bucket: IBucket;
 - *Type:* aws-cdk-lib.aws_s3.IBucket
 
 Convenience method to access `Nextjs.staticAssets.bucket`.
-
----
-
-##### `tempBuildDir`<sup>Required</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.Nextjs.property.tempBuildDir"></a>
-
-```typescript
-public readonly tempBuildDir: string;
-```
-
-- *Type:* string
-
-Where build-time assets for deployment are stored.
 
 ---
 
@@ -2597,158 +2584,6 @@ Set this option if the domain is not hosted on Amazon Route 53.
 
 ---
 
-### NextjsBaseProps <a name="NextjsBaseProps" id="cdk-nextjs-standalone.NextjsBaseProps"></a>
-
-Common props shared across NextJS-related CDK constructs.
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsBaseProps.Initializer"></a>
-
-```typescript
-import { NextjsBaseProps } from 'cdk-nextjs-standalone'
-
-const nextjsBaseProps: NextjsBaseProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBaseProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-
----
-
-##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsBaseProps.property.nextjsPath"></a>
-
-```typescript
-public readonly nextjsPath: string;
-```
-
-- *Type:* string
-
-Relative path to the directory where the NextJS project is located.
-
-Can be the root of your project (`.`) or a subdirectory (`packages/web`).
-
----
-
-##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.NextjsBaseProps.property.buildCommand"></a>
-
-```typescript
-public readonly buildCommand: string;
-```
-
-- *Type:* string
-- *Default:* 'npx --yes open-next@^2 build'
-
-Optional value used to install NextJS node dependencies.
-
----
-
-##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.NextjsBaseProps.property.buildPath"></a>
-
-```typescript
-public readonly buildPath: string;
-```
-
-- *Type:* string
-
-The directory to execute `npm run build` from.
-
-By default, it is `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run
-at the root of the project.
-
----
-
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsBaseProps.property.environment"></a>
-
-```typescript
-public readonly environment: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsBaseProps.property.projectRoot"></a>
-
-```typescript
-public readonly projectRoot: string;
-```
-
-- *Type:* string
-
-Root of your project, if different from `nextjsPath`.
-
-Defaults to current working directory.
-
----
-
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsBaseProps.property.quiet"></a>
-
-```typescript
-public readonly quiet: boolean;
-```
-
-- *Type:* boolean
-
-Less build output.
-
----
-
-##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsBaseProps.property.sharpLayerArn"></a>
-
-```typescript
-public readonly sharpLayerArn: string;
-```
-
-- *Type:* string
-
-Optional arn for the sharp lambda layer.
-
-If omitted, the layer will be created.
-
----
-
-##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsBaseProps.property.skipFullInvalidation"></a>
-
-```typescript
-public readonly skipFullInvalidation: boolean;
-```
-
-- *Type:* boolean
-
-By default all CloudFront cache will be invalidated on deployment.
-
-This can be set to true to skip the full cache invalidation, which
-could be important for some users.
-
----
-
-##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsBaseProps.property.tempBuildDir"></a>
-
-```typescript
-public readonly tempBuildDir: string;
-```
-
-- *Type:* string
-
-Directory to store temporary build files in.
-
-Defaults to os.tmpdir().
-
----
-
 ### NextjsBucketDeploymentProps <a name="NextjsBucketDeploymentProps" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps"></a>
 
 #### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.Initializer"></a>
@@ -2901,15 +2736,11 @@ const nextjsBuildProps: NextjsBuildProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildPath">buildPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | *No description.* |
 
 ---
@@ -2922,9 +2753,7 @@ public readonly nextjsPath: string;
 
 - *Type:* string
 
-Relative path to the directory where the NextJS project is located.
-
-Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+> [{@link NextjsProps.nextjsPath }]({@link NextjsProps.nextjsPath })
 
 ---
 
@@ -2935,9 +2764,8 @@ public readonly buildCommand: string;
 ```
 
 - *Type:* string
-- *Default:* 'npx --yes open-next@^2 build'
 
-Optional value used to install NextJS node dependencies.
+> [{@link NextjsProps.buildCommand }]({@link NextjsProps.buildCommand })
 
 ---
 
@@ -2949,11 +2777,7 @@ public readonly buildPath: string;
 
 - *Type:* string
 
-The directory to execute `npm run build` from.
-
-By default, it is `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run
-at the root of the project.
+> [{@link NextjsProps.buildPath }]({@link NextjsProps.buildPath })
 
 ---
 
@@ -2965,21 +2789,7 @@ public readonly environment: {[ key: string ]: string};
 
 - *Type:* {[ key: string ]: string}
 
-Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsBuildProps.property.projectRoot"></a>
-
-```typescript
-public readonly projectRoot: string;
-```
-
-- *Type:* string
-
-Root of your project, if different from `nextjsPath`.
-
-Defaults to current working directory.
+> [{@link NextjsProps.environment }]({@link NextjsProps.environment })
 
 ---
 
@@ -2991,50 +2801,7 @@ public readonly quiet: boolean;
 
 - *Type:* boolean
 
-Less build output.
-
----
-
-##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsBuildProps.property.sharpLayerArn"></a>
-
-```typescript
-public readonly sharpLayerArn: string;
-```
-
-- *Type:* string
-
-Optional arn for the sharp lambda layer.
-
-If omitted, the layer will be created.
-
----
-
-##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsBuildProps.property.skipFullInvalidation"></a>
-
-```typescript
-public readonly skipFullInvalidation: boolean;
-```
-
-- *Type:* boolean
-
-By default all CloudFront cache will be invalidated on deployment.
-
-This can be set to true to skip the full cache invalidation, which
-could be important for some users.
-
----
-
-##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsBuildProps.property.tempBuildDir"></a>
-
-```typescript
-public readonly tempBuildDir: string;
-```
-
-- *Type:* string
-
-Directory to store temporary build files in.
-
-Defaults to os.tmpdir().
+> [{@link NextjsProps.quiet }]({@link NextjsProps.quiet })
 
 ---
 
@@ -3046,7 +2813,7 @@ public readonly skipBuild: boolean;
 
 - *Type:* boolean
 
-> [ `NextjsProps.skipBuild`]( `NextjsProps.skipBuild`)
+> [{@link NextjsProps.skipBuild }]({@link NextjsProps.skipBuild })
 
 ---
 
@@ -3232,152 +2999,18 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.imageOptFunction">imageOptFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to optimize images. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built NextJS app. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps">NextjsCachePolicyProps</a></code> | Override the default CloudFront cache policies created internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cdk">cdk</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps">NextjsDistributionCdkProps</a></code> | Overrides for created CDK resources. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.customDomain">customDomain</a></code> | <code>string \| <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | The customDomain for this website. Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | Optional CloudFront Distribution created outside of this construct that will be used to add Next.js behaviors and origins onto. Useful with `basePath`. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.originRequestPolicies">originRequestPolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps">NextjsOriginRequestPolicyProps</a></code> | Override the default CloudFront origin request policies created internally. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.stackPrefix">stackPrefix</a></code> | <code>string</code> | Optional value to prefix the edge function stack It defaults to "Nextjs". |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.stageName">stageName</a></code> | <code>string</code> | Include the name of your deployment stage if present. |
-
----
-
-##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath"></a>
-
-```typescript
-public readonly nextjsPath: string;
-```
-
-- *Type:* string
-
-Relative path to the directory where the NextJS project is located.
-
-Can be the root of your project (`.`) or a subdirectory (`packages/web`).
-
----
-
-##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.NextjsDistributionProps.property.buildCommand"></a>
-
-```typescript
-public readonly buildCommand: string;
-```
-
-- *Type:* string
-- *Default:* 'npx --yes open-next@^2 build'
-
-Optional value used to install NextJS node dependencies.
-
----
-
-##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.NextjsDistributionProps.property.buildPath"></a>
-
-```typescript
-public readonly buildPath: string;
-```
-
-- *Type:* string
-
-The directory to execute `npm run build` from.
-
-By default, it is `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run
-at the root of the project.
-
----
-
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsDistributionProps.property.environment"></a>
-
-```typescript
-public readonly environment: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsDistributionProps.property.projectRoot"></a>
-
-```typescript
-public readonly projectRoot: string;
-```
-
-- *Type:* string
-
-Root of your project, if different from `nextjsPath`.
-
-Defaults to current working directory.
-
----
-
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsDistributionProps.property.quiet"></a>
-
-```typescript
-public readonly quiet: boolean;
-```
-
-- *Type:* boolean
-
-Less build output.
-
----
-
-##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsDistributionProps.property.sharpLayerArn"></a>
-
-```typescript
-public readonly sharpLayerArn: string;
-```
-
-- *Type:* string
-
-Optional arn for the sharp lambda layer.
-
-If omitted, the layer will be created.
-
----
-
-##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsDistributionProps.property.skipFullInvalidation"></a>
-
-```typescript
-public readonly skipFullInvalidation: boolean;
-```
-
-- *Type:* boolean
-
-By default all CloudFront cache will be invalidated on deployment.
-
-This can be set to true to skip the full cache invalidation, which
-could be important for some users.
-
----
-
-##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsDistributionProps.property.tempBuildDir"></a>
-
-```typescript
-public readonly tempBuildDir: string;
-```
-
-- *Type:* string
-
-Directory to store temporary build files in.
-
-Defaults to os.tmpdir().
 
 ---
 
@@ -3403,7 +3036,19 @@ public readonly nextBuild: NextjsBuild;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
-Built NextJS app.
+> [{@link NextjsBuild }]({@link NextjsBuild })
+
+---
+
+##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath"></a>
+
+```typescript
+public readonly nextjsPath: string;
+```
+
+- *Type:* string
+
+> [{@link NextjsProps.nextjsPath }]({@link NextjsProps.nextjsPath })
 
 ---
 
@@ -3443,20 +3088,9 @@ public readonly basePath: string;
 
 - *Type:* string
 
-Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path.
-
-Note, you'll need to set [basePath](https://nextjs.org/docs/app/api-reference/next-config-js/basePath)
-in your `next.config.ts` to this value and ensure any files in `public`
-folder have correct prefix.
+> [{@link NextjsProps.basePath }]({@link NextjsProps.basePath })
 
 ---
-
-*Example*
-
-```typescript
-"/my-base-path"
-```
-
 
 ##### `cachePolicies`<sup>Optional</sup> <a name="cachePolicies" id="cdk-nextjs-standalone.NextjsDistributionProps.property.cachePolicies"></a>
 
@@ -3522,7 +3156,7 @@ public readonly distribution: Distribution;
 
 - *Type:* aws-cdk-lib.aws_cloudfront.Distribution
 
-Optional CloudFront Distribution created outside of this construct that will be used to add Next.js behaviors and origins onto. Useful with `basePath`.
+> [{@link NextjsProps.distribution }]({@link NextjsProps.distribution })
 
 ---
 
@@ -3548,33 +3182,6 @@ public readonly originRequestPolicies: NextjsOriginRequestPolicyProps;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps">NextjsOriginRequestPolicyProps</a>
 
 Override the default CloudFront origin request policies created internally.
-
----
-
-##### `stackPrefix`<sup>Optional</sup> <a name="stackPrefix" id="cdk-nextjs-standalone.NextjsDistributionProps.property.stackPrefix"></a>
-
-```typescript
-public readonly stackPrefix: string;
-```
-
-- *Type:* string
-
-Optional value to prefix the edge function stack It defaults to "Nextjs".
-
----
-
-##### `stageName`<sup>Optional</sup> <a name="stageName" id="cdk-nextjs-standalone.NextjsDistributionProps.property.stageName"></a>
-
-```typescript
-public readonly stageName: string;
-```
-
-- *Type:* string
-
-Include the name of your deployment stage if present.
-
-Used to name the edge functions stack.
-Required if using SST.
 
 ---
 
@@ -3699,142 +3306,9 @@ const nextjsImageProps: NextjsImageProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
+| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
-
----
-
-##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsImageProps.property.nextjsPath"></a>
-
-```typescript
-public readonly nextjsPath: string;
-```
-
-- *Type:* string
-
-Relative path to the directory where the NextJS project is located.
-
-Can be the root of your project (`.`) or a subdirectory (`packages/web`).
-
----
-
-##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.NextjsImageProps.property.buildCommand"></a>
-
-```typescript
-public readonly buildCommand: string;
-```
-
-- *Type:* string
-- *Default:* 'npx --yes open-next@^2 build'
-
-Optional value used to install NextJS node dependencies.
-
----
-
-##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.NextjsImageProps.property.buildPath"></a>
-
-```typescript
-public readonly buildPath: string;
-```
-
-- *Type:* string
-
-The directory to execute `npm run build` from.
-
-By default, it is `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run
-at the root of the project.
-
----
-
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsImageProps.property.environment"></a>
-
-```typescript
-public readonly environment: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsImageProps.property.projectRoot"></a>
-
-```typescript
-public readonly projectRoot: string;
-```
-
-- *Type:* string
-
-Root of your project, if different from `nextjsPath`.
-
-Defaults to current working directory.
-
----
-
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsImageProps.property.quiet"></a>
-
-```typescript
-public readonly quiet: boolean;
-```
-
-- *Type:* boolean
-
-Less build output.
-
----
-
-##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsImageProps.property.sharpLayerArn"></a>
-
-```typescript
-public readonly sharpLayerArn: string;
-```
-
-- *Type:* string
-
-Optional arn for the sharp lambda layer.
-
-If omitted, the layer will be created.
-
----
-
-##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsImageProps.property.skipFullInvalidation"></a>
-
-```typescript
-public readonly skipFullInvalidation: boolean;
-```
-
-- *Type:* boolean
-
-By default all CloudFront cache will be invalidated on deployment.
-
-This can be set to true to skip the full cache invalidation, which
-could be important for some users.
-
----
-
-##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsImageProps.property.tempBuildDir"></a>
-
-```typescript
-public readonly tempBuildDir: string;
-```
-
-- *Type:* string
-
-Directory to store temporary build files in.
-
-Defaults to os.tmpdir().
 
 ---
 
@@ -3858,7 +3332,7 @@ public readonly nextBuild: NextjsBuild;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
-The `NextjsBuild` instance representing the built Nextjs application.
+> [{@link NextjsBuild }]({@link NextjsBuild })
 
 ---
 
@@ -3973,19 +3447,16 @@ const nextjsProps: NextjsProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.defaults">defaults</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDefaultsProps">NextjsDefaultsProps</a></code> | Allows you to override defaults for the resources created by this construct. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | Optional CloudFront Distribution created outside of this construct that will be used to add Next.js behaviors and origins onto. Useful with `basePath`. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build **and** runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket">imageOptimizationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Optional S3 Bucket to use, defaults to assets bucket. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | Skips running Next.js build. Useful if you want to deploy `Nextjs` but haven't made any changes to Next.js app code. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
 
 ---
 
@@ -4002,6 +3473,29 @@ Relative path to the directory where the NextJS project is located.
 Can be the root of your project (`.`) or a subdirectory (`packages/web`).
 
 ---
+
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsProps.property.basePath"></a>
+
+```typescript
+public readonly basePath: string;
+```
+
+- *Type:* string
+
+Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path.
+
+Note, you'll need to set [basePath](https://nextjs.org/docs/app/api-reference/next-config-js/basePath)
+in your `next.config.ts` to this value and ensure any files in `public`
+folder have correct prefix.
+
+---
+
+*Example*
+
+```typescript
+"/my-base-path"
+```
+
 
 ##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.NextjsProps.property.buildCommand"></a>
 
@@ -4032,110 +3526,6 @@ at the root of the project.
 
 ---
 
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsProps.property.environment"></a>
-
-```typescript
-public readonly environment: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsProps.property.projectRoot"></a>
-
-```typescript
-public readonly projectRoot: string;
-```
-
-- *Type:* string
-
-Root of your project, if different from `nextjsPath`.
-
-Defaults to current working directory.
-
----
-
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsProps.property.quiet"></a>
-
-```typescript
-public readonly quiet: boolean;
-```
-
-- *Type:* boolean
-
-Less build output.
-
----
-
-##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsProps.property.sharpLayerArn"></a>
-
-```typescript
-public readonly sharpLayerArn: string;
-```
-
-- *Type:* string
-
-Optional arn for the sharp lambda layer.
-
-If omitted, the layer will be created.
-
----
-
-##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation"></a>
-
-```typescript
-public readonly skipFullInvalidation: boolean;
-```
-
-- *Type:* boolean
-
-By default all CloudFront cache will be invalidated on deployment.
-
-This can be set to true to skip the full cache invalidation, which
-could be important for some users.
-
----
-
-##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsProps.property.tempBuildDir"></a>
-
-```typescript
-public readonly tempBuildDir: string;
-```
-
-- *Type:* string
-
-Directory to store temporary build files in.
-
-Defaults to os.tmpdir().
-
----
-
-##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsProps.property.basePath"></a>
-
-```typescript
-public readonly basePath: string;
-```
-
-- *Type:* string
-
-Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path.
-
-Note, you'll need to set [basePath](https://nextjs.org/docs/app/api-reference/next-config-js/basePath)
-in your `next.config.ts` to this value and ensure any files in `public`
-folder have correct prefix.
-
----
-
-*Example*
-
-```typescript
-"/my-base-path"
-```
-
-
 ##### `defaults`<sup>Optional</sup> <a name="defaults" id="cdk-nextjs-standalone.NextjsProps.property.defaults"></a>
 
 ```typescript
@@ -4160,6 +3550,18 @@ Optional CloudFront Distribution created outside of this construct that will be 
 
 ---
 
+##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsProps.property.environment"></a>
+
+```typescript
+public readonly environment: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+Custom environment variables to pass to the NextJS build **and** runtime.
+
+---
+
 ##### `imageOptimizationBucket`<sup>Optional</sup> <a name="imageOptimizationBucket" id="cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket"></a>
 
 ```typescript
@@ -4169,6 +3571,18 @@ public readonly imageOptimizationBucket: IBucket;
 - *Type:* aws-cdk-lib.aws_s3.IBucket
 
 Optional S3 Bucket to use, defaults to assets bucket.
+
+---
+
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsProps.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+Less build output.
 
 ---
 
@@ -4182,6 +3596,21 @@ public readonly skipBuild: boolean;
 - *Default:* false
 
 Skips running Next.js build. Useful if you want to deploy `Nextjs` but haven't made any changes to Next.js app code.
+
+---
+
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation"></a>
+
+```typescript
+public readonly skipFullInvalidation: boolean;
+```
+
+- *Type:* boolean
+
+By default all CloudFront cache will be invalidated on deployment.
+
+This can be set to true to skip the full cache invalidation, which
+could be important for some users.
 
 ---
 
@@ -4199,142 +3628,9 @@ const nextjsRevalidationProps: NextjsRevalidationProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | The main NextJS server handler lambda function. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
-
----
-
-##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.nextjsPath"></a>
-
-```typescript
-public readonly nextjsPath: string;
-```
-
-- *Type:* string
-
-Relative path to the directory where the NextJS project is located.
-
-Can be the root of your project (`.`) or a subdirectory (`packages/web`).
-
----
-
-##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.buildCommand"></a>
-
-```typescript
-public readonly buildCommand: string;
-```
-
-- *Type:* string
-- *Default:* 'npx --yes open-next@^2 build'
-
-Optional value used to install NextJS node dependencies.
-
----
-
-##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.buildPath"></a>
-
-```typescript
-public readonly buildPath: string;
-```
-
-- *Type:* string
-
-The directory to execute `npm run build` from.
-
-By default, it is `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run
-at the root of the project.
-
----
-
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.environment"></a>
-
-```typescript
-public readonly environment: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.projectRoot"></a>
-
-```typescript
-public readonly projectRoot: string;
-```
-
-- *Type:* string
-
-Root of your project, if different from `nextjsPath`.
-
-Defaults to current working directory.
-
----
-
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.quiet"></a>
-
-```typescript
-public readonly quiet: boolean;
-```
-
-- *Type:* boolean
-
-Less build output.
-
----
-
-##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.sharpLayerArn"></a>
-
-```typescript
-public readonly sharpLayerArn: string;
-```
-
-- *Type:* string
-
-Optional arn for the sharp lambda layer.
-
-If omitted, the layer will be created.
-
----
-
-##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.skipFullInvalidation"></a>
-
-```typescript
-public readonly skipFullInvalidation: boolean;
-```
-
-- *Type:* boolean
-
-By default all CloudFront cache will be invalidated on deployment.
-
-This can be set to true to skip the full cache invalidation, which
-could be important for some users.
-
----
-
-##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.tempBuildDir"></a>
-
-```typescript
-public readonly tempBuildDir: string;
-```
-
-- *Type:* string
-
-Directory to store temporary build files in.
-
-Defaults to os.tmpdir().
 
 ---
 
@@ -4346,7 +3642,7 @@ public readonly nextBuild: NextjsBuild;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
-The `NextjsBuild` instance representing the built Nextjs application.
+> [{@link NextjsBuild }]({@link NextjsBuild })
 
 ---
 
@@ -4358,7 +3654,7 @@ public readonly serverFunction: NextjsServer;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a>
 
-The main NextJS server handler lambda function.
+> [{@link NextjsServer }]({@link NextjsServer })
 
 ---
 
@@ -4388,142 +3684,11 @@ const nextjsServerProps: NextjsServerProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional value used to install NextJS node dependencies. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.projectRoot">projectRoot</a></code> | <code>string</code> | Root of your project, if different from `nextjsPath`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.sharpLayerArn">sharpLayerArn</a></code> | <code>string</code> | Optional arn for the sharp lambda layer. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.tempBuildDir">tempBuildDir</a></code> | <code>string</code> | Directory to store temporary build files in. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built nextJS application. |
+| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.staticAssetBucket">staticAssetBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Static asset bucket. |
+| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
-
----
-
-##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsServerProps.property.nextjsPath"></a>
-
-```typescript
-public readonly nextjsPath: string;
-```
-
-- *Type:* string
-
-Relative path to the directory where the NextJS project is located.
-
-Can be the root of your project (`.`) or a subdirectory (`packages/web`).
-
----
-
-##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.NextjsServerProps.property.buildCommand"></a>
-
-```typescript
-public readonly buildCommand: string;
-```
-
-- *Type:* string
-- *Default:* 'npx --yes open-next@^2 build'
-
-Optional value used to install NextJS node dependencies.
-
----
-
-##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.NextjsServerProps.property.buildPath"></a>
-
-```typescript
-public readonly buildPath: string;
-```
-
-- *Type:* string
-
-The directory to execute `npm run build` from.
-
-By default, it is `nextjsPath`.
-Can be overridden, particularly useful for monorepos where `build` is expected to run
-at the root of the project.
-
----
-
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsServerProps.property.environment"></a>
-
-```typescript
-public readonly environment: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-Custom environment variables to pass to the NextJS build and runtime.
-
----
-
-##### `projectRoot`<sup>Optional</sup> <a name="projectRoot" id="cdk-nextjs-standalone.NextjsServerProps.property.projectRoot"></a>
-
-```typescript
-public readonly projectRoot: string;
-```
-
-- *Type:* string
-
-Root of your project, if different from `nextjsPath`.
-
-Defaults to current working directory.
-
----
-
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsServerProps.property.quiet"></a>
-
-```typescript
-public readonly quiet: boolean;
-```
-
-- *Type:* boolean
-
-Less build output.
-
----
-
-##### `sharpLayerArn`<sup>Optional</sup> <a name="sharpLayerArn" id="cdk-nextjs-standalone.NextjsServerProps.property.sharpLayerArn"></a>
-
-```typescript
-public readonly sharpLayerArn: string;
-```
-
-- *Type:* string
-
-Optional arn for the sharp lambda layer.
-
-If omitted, the layer will be created.
-
----
-
-##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsServerProps.property.skipFullInvalidation"></a>
-
-```typescript
-public readonly skipFullInvalidation: boolean;
-```
-
-- *Type:* boolean
-
-By default all CloudFront cache will be invalidated on deployment.
-
-This can be set to true to skip the full cache invalidation, which
-could be important for some users.
-
----
-
-##### `tempBuildDir`<sup>Optional</sup> <a name="tempBuildDir" id="cdk-nextjs-standalone.NextjsServerProps.property.tempBuildDir"></a>
-
-```typescript
-public readonly tempBuildDir: string;
-```
-
-- *Type:* string
-
-Directory to store temporary build files in.
-
-Defaults to os.tmpdir().
+| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -4535,7 +3700,7 @@ public readonly nextBuild: NextjsBuild;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
-Built nextJS application.
+> [{@link NextjsBuild }]({@link NextjsBuild })
 
 ---
 
@@ -4553,6 +3718,18 @@ Function needs bucket to read from cache.
 
 ---
 
+##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsServerProps.property.environment"></a>
+
+```typescript
+public readonly environment: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+> [{@link NextjsProps.environment }]({@link NextjsProps.environment })
+
+---
+
 ##### `lambda`<sup>Optional</sup> <a name="lambda" id="cdk-nextjs-standalone.NextjsServerProps.property.lambda"></a>
 
 ```typescript
@@ -4562,6 +3739,18 @@ public readonly lambda: FunctionOptions;
 - *Type:* aws-cdk-lib.aws_lambda.FunctionOptions
 
 Override function properties.
+
+---
+
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsServerProps.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+> [{@link NextjsProps.quiet }]({@link NextjsProps.quiet })
 
 ---
 

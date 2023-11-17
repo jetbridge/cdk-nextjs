@@ -1,12 +1,9 @@
-import * as fs from 'node:fs';
-import * as os from 'os';
-import * as path from 'path';
 import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
+import { BaseSiteDomainProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
 import { NextjsImage } from './NextjsImage';
@@ -40,22 +37,7 @@ export interface NextjsDefaultsProps {
   readonly distribution?: NextjsDistributionProps | any;
 }
 
-export interface NextjsProps extends NextjsBaseProps {
-  /**
-   * Optional S3 Bucket to use, defaults to assets bucket
-   */
-  readonly imageOptimizationBucket?: s3.IBucket;
-  /**
-   * Allows you to override defaults for the resources created by this
-   * construct.
-   */
-  readonly defaults?: NextjsDefaultsProps;
-  /**
-   * Skips running Next.js build. Useful if you want to deploy `Nextjs` but
-   * haven't made any changes to Next.js app code.
-   * @default false
-   */
-  readonly skipBuild?: boolean;
+export interface NextjsProps {
   /**
    * Optional value to prefix the Next.js site under a /prefix path on CloudFront.
    * Usually used when you deploy multiple Next.js sites on same domain using /sub-path
@@ -67,10 +49,55 @@ export interface NextjsProps extends NextjsBaseProps {
    */
   readonly basePath?: string;
   /**
+   * Optional value used to install NextJS node dependencies.
+   * @default 'npx --yes open-next@^2 build'
+   */
+  readonly buildCommand?: string;
+  /**
+   * The directory to execute `npm run build` from. By default, it is `nextjsPath`.
+   * Can be overridden, particularly useful for monorepos where `build` is expected to run
+   * at the root of the project.
+   */
+  readonly buildPath?: string;
+  /**
+   * Allows you to override defaults for the resources created by this
+   * construct.
+   */
+  readonly defaults?: NextjsDefaultsProps;
+  /**
    * Optional CloudFront Distribution created outside of this construct that will
    * be used to add Next.js behaviors and origins onto. Useful with `basePath`.
    */
   readonly distribution?: Distribution;
+  /**
+   * Custom environment variables to pass to the NextJS build **and** runtime.
+   */
+  readonly environment?: Record<string, string>;
+  /**
+   * Optional S3 Bucket to use, defaults to assets bucket
+   */
+  readonly imageOptimizationBucket?: s3.IBucket;
+  /**
+   * Relative path to the directory where the NextJS project is located.
+   * Can be the root of your project (`.`) or a subdirectory (`packages/web`).
+   */
+  readonly nextjsPath: string;
+  /**
+   * Less build output.
+   */
+  readonly quiet?: boolean;
+  /**
+   * Skips running Next.js build. Useful if you want to deploy `Nextjs` but
+   * haven't made any changes to Next.js app code.
+   * @default false
+   */
+  readonly skipBuild?: boolean;
+  /**
+   * By default all CloudFront cache will be invalidated on deployment.
+   * This can be set to true to skip the full cache invalidation, which
+   * could be important for some users.
+   */
+  readonly skipFullInvalidation?: boolean;
 }
 
 /**
@@ -114,17 +141,6 @@ export class Nextjs extends Construct {
   public distribution: NextjsDistribution;
 
   /**
-   * Where build-time assets for deployment are stored.
-   */
-  public get tempBuildDir(): string {
-    return this.props.tempBuildDir
-      ? path.resolve(
-          path.join(this.props.tempBuildDir, `nextjs-cdk-build-${this.node.id}-${this.node.addr.substring(0, 4)}`)
-        )
-      : fs.mkdtempSync(path.join(os.tmpdir(), 'nextjs-cdk-build-'));
-  }
-
-  /**
    * Revalidation handler and queue.
    */
   public revalidation: NextjsRevalidation;
@@ -136,7 +152,7 @@ export class Nextjs extends Construct {
     super(scope, id);
 
     // build nextjs app
-    this.nextBuild = new NextjsBuild(this, id, { ...props, tempBuildDir: this.tempBuildDir });
+    this.nextBuild = new NextjsBuild(this, id, props);
 
     // deploy nextjs static assets to s3
     this.staticAssets = new NextjsStaticAssets(this, 'StaticAssets', {
@@ -148,7 +164,6 @@ export class Nextjs extends Construct {
 
     this.serverFunction = new NextjsServer(this, 'Server', {
       ...props,
-      tempBuildDir: this.tempBuildDir,
       nextBuild: this.nextBuild,
       lambda: props.defaults?.lambda,
       staticAssetBucket: this.staticAssets.bucket,
@@ -172,7 +187,6 @@ export class Nextjs extends Construct {
       ...props,
       ...props.defaults?.distribution,
       staticAssetsBucket: this.staticAssets.bucket,
-      tempBuildDir: this.tempBuildDir,
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction.lambdaFunction,
       imageOptFunction: this.imageOptimizationFunction,

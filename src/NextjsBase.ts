@@ -1,65 +1,6 @@
 import { ICertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { IHostedZone } from 'aws-cdk-lib/aws-route53';
 
-/**
- * Common props shared across NextJS-related CDK constructs.
- */
-export interface NextjsBaseProps {
-  /**
-   * Relative path to the directory where the NextJS project is located.
-   * Can be the root of your project (`.`) or a subdirectory (`packages/web`).
-   */
-  readonly nextjsPath: string;
-
-  /**
-   * The directory to execute `npm run build` from. By default, it is `nextjsPath`.
-   * Can be overridden, particularly useful for monorepos where `build` is expected to run
-   * at the root of the project.
-   */
-  readonly buildPath?: string;
-
-  /**
-   * Root of your project, if different from `nextjsPath`.
-   * Defaults to current working directory.
-   */
-  readonly projectRoot?: string;
-
-  /**
-   * Custom environment variables to pass to the NextJS build and runtime.
-   */
-  readonly environment?: Record<string, string>;
-
-  /**
-   * Directory to store temporary build files in.
-   * Defaults to os.tmpdir().
-   */
-  readonly tempBuildDir?: string; // move to NextjsBuildProps?
-
-  /**
-   * Optional value used to install NextJS node dependencies.
-   * @default 'npx --yes open-next@^2 build'
-   */
-  readonly buildCommand?: string;
-
-  /**
-   * Less build output.
-   */
-  readonly quiet?: boolean;
-
-  /**
-   * Optional arn for the sharp lambda layer.
-   * If omitted, the layer will be created.
-   */
-  readonly sharpLayerArn?: string;
-
-  /**
-   * By default all CloudFront cache will be invalidated on deployment.
-   * This can be set to true to skip the full cache invalidation, which
-   * could be important for some users.
-   */
-  readonly skipFullInvalidation?: boolean;
-}
-
 ///// stuff below taken from https://github.com/serverless-stack/sst/blob/8d377e941467ced81d8cc31ee67d5a06550f04d4/packages/resources/src/BaseSite.ts
 
 export interface BaseSiteDomainProps {

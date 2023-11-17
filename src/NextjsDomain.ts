@@ -94,7 +94,7 @@ export class NextjsDomain extends Construct {
     }
   }
 
-  protected getHostedZone(): IHostedZone | undefined {
+  private getHostedZone(): IHostedZone | undefined {
     if (this.props.isExternalDomain) {
       return;
     } else {

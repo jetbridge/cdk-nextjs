@@ -16,6 +16,11 @@
 - Remove `BaseSiteEnvironmentOutputsInfo, BaseSiteReplaceProps` exports as not used anymore
 - Remove `compressionLevel` to simplify configuration. We use optimal for windows or max compression for unix
 - Remove `nodeEnv` because it can be configured through `environment` prop.
+- Remove `sharpLayerArn` because it's not used
+- Remove `projectRoot` because it's not used
+- Remove `NextjsBaseProps` to simplify props
+- Remove `projectRoot` as it's not being used
+- Remove `tempBuildDir` as it's not being used
 
 
 ## v3

@@ -12,15 +12,35 @@ import {
   NEXTJS_CACHE_DIR,
   NEXTJS_BUILD_DYNAMODB_PROVIDER_FN_DIR,
 } from './constants';
-import { NextjsBaseProps } from './NextjsBase';
+import type { NextjsProps } from './Nextjs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { listDirectory } from './utils/list-directories';
 
-export interface NextjsBuildProps extends NextjsBaseProps {
+export interface NextjsBuildProps {
   /**
-   * @see `NextjsProps.skipBuild`
+   * @see {@link NextjsProps.buildCommand}
    */
-  readonly skipBuild?: boolean;
+  readonly buildCommand?: NextjsProps['buildCommand'];
+  /**
+   * @see {@link NextjsProps.buildPath}
+   */
+  readonly buildPath?: NextjsProps['buildPath'];
+  /**
+   * @see {@link NextjsProps.environment}
+   */
+  readonly environment?: NextjsProps['environment'];
+  /**
+   * @see {@link NextjsProps.nextjsPath}
+   */
+  readonly nextjsPath: NextjsProps['nextjsPath'];
+  /**
+   * @see {@link NextjsProps.quiet}
+   */
+  readonly quiet?: NextjsProps['quiet'];
+  /**
+   * @see {@link NextjsProps.skipBuild}
+   */
+  readonly skipBuild?: NextjsProps['skipBuild'];
 }
 
 /**
@@ -113,7 +133,7 @@ export class NextjsBuild extends Construct {
     const buildCommand = this.props.buildCommand ?? 'npx open-next@^2 build';
     // run build
     if (!this.props.quiet) {
-      console.debug(`├ Running "${buildCommand}" in`, buildPath);
+      console.debug(`Running "${buildCommand}" in`, buildPath);
     }
     // will throw if build fails - which is desired
     execSync(buildCommand, {

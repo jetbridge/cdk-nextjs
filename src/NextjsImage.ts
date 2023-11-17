@@ -1,11 +1,10 @@
 import { Code, Function as LambdaFunction, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import { NextjsBaseProps } from './NextjsBase';
 import type { NextjsBuild } from './NextjsBuild';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 
-export interface NextjsImageProps extends NextjsBaseProps {
+export interface NextjsImageProps {
   /**
    * The S3 bucket holding application images.
    */
@@ -15,7 +14,7 @@ export interface NextjsImageProps extends NextjsBaseProps {
    */
   readonly lambdaOptions?: FunctionOptions;
   /**
-   * The `NextjsBuild` instance representing the built Nextjs application.
+   * @see {@link NextjsBuild}
    */
   readonly nextBuild: NextjsBuild;
 }

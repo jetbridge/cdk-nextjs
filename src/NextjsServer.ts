@@ -8,7 +8,7 @@ import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
 import { CACHE_BUCKET_KEY_PREFIX } from './constants';
-import { NextjsBaseProps } from './NextjsBase';
+import { NextjsProps } from './Nextjs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
@@ -16,17 +16,23 @@ import { createArchive } from './utils/create-archive';
 
 export type EnvironmentVars = Record<string, string>;
 
-export interface NextjsServerProps extends NextjsBaseProps {
+export interface NextjsServerProps {
   /**
-   * Built nextJS application.
+   * @see {@link NextjsProps.environment}
    */
-  readonly nextBuild: NextjsBuild;
-
+  readonly environment?: NextjsProps['environment'];
   /**
    * Override function properties.
    */
   readonly lambda?: FunctionOptions;
-
+  /**
+   * @see {@link NextjsBuild}
+   */
+  readonly nextBuild: NextjsBuild;
+  /**
+   * @see {@link NextjsProps.quiet}
+   */
+  readonly quiet?: NextjsProps['quiet'];
   /**
    * Static asset bucket. Function needs bucket to read from cache.
    */

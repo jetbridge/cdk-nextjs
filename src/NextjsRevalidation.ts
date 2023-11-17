@@ -8,24 +8,21 @@ import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
-import { NextjsBaseProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsServer } from './NextjsServer';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 
-export interface NextjsRevalidationProps extends NextjsBaseProps {
+export interface NextjsRevalidationProps {
   /**
    * Override function properties.
    */
   readonly lambdaOptions?: FunctionOptions;
-
   /**
-   * The `NextjsBuild` instance representing the built Nextjs application.
+   * @see {@link NextjsBuild}
    */
   readonly nextBuild: NextjsBuild;
-
   /**
-   * The main NextJS server handler lambda function.
+   * @see {@link NextjsServer}
    */
   readonly serverFunction: NextjsServer;
 }

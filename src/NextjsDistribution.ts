@@ -14,7 +14,8 @@ import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { DEFAULT_STATIC_MAX_AGE, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
-import { BaseSiteDomainProps, NextjsBaseProps } from './NextjsBase';
+import { NextjsProps } from './Nextjs';
+import { BaseSiteDomainProps } from './NextjsBase';
 import { NextjsBuild } from './NextjsBuild';
 
 export interface NextjsDomainProps extends BaseSiteDomainProps {}
@@ -47,45 +48,19 @@ export interface NextjsOriginRequestPolicyProps {
   readonly imageOptimizationOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
 }
 
-export interface NextjsDistributionProps extends NextjsBaseProps {
+export interface NextjsDistributionProps {
   /**
-   * Bucket containing static assets.
-   * Must be provided if you want to serve static files.
+   * @see {@link NextjsProps.basePath}
    */
-  readonly staticAssetsBucket: s3.IBucket;
-
-  /**
-   * Lambda function to route all non-static requests to.
-   * Must be provided if you want to serve dynamic requests.
-   */
-  readonly serverFunction: lambda.IFunction;
-
-  /**
-   * Lambda function to optimize images.
-   * Must be provided if you want to serve dynamic requests.
-   */
-  readonly imageOptFunction: lambda.IFunction;
-
-  /**
-   * Overrides for created CDK resources.
-   */
-  readonly cdk?: NextjsDistributionCdkProps;
-
-  /**
-   * Built NextJS app.
-   */
-  readonly nextBuild: NextjsBuild;
-
+  readonly basePath?: NextjsProps['basePath'];
   /**
    * Override the default CloudFront cache policies created internally.
    */
   readonly cachePolicies?: NextjsCachePolicyProps;
-
   /**
-   * Override the default CloudFront origin request policies created internally.
+   * Overrides for created CDK resources.
    */
-  readonly originRequestPolicies?: NextjsOriginRequestPolicyProps;
-
+  readonly cdk?: NextjsDistributionCdkProps;
   /**
    * The customDomain for this website. Supports domains that are hosted
    * either on [Route 53](https://aws.amazon.com/route53/) or externally.
@@ -107,42 +82,42 @@ export interface NextjsDistributionProps extends NextjsBaseProps {
    * });
    */
   readonly customDomain?: string | NextjsDomainProps;
-
   /**
-   * Include the name of your deployment stage if present.
-   * Used to name the edge functions stack.
-   * Required if using SST.
+   * @see {@link NextjsProps.distribution}
    */
-  readonly stageName?: string;
-
-  /**
-   * Optional value to prefix the edge function stack
-   * It defaults to "Nextjs"
-   */
-  readonly stackPrefix?: string;
-
+  readonly distribution?: NextjsProps['distribution'];
   /**
    * Override lambda function url auth type
    * @default "NONE"
    */
   readonly functionUrlAuthType?: lambda.FunctionUrlAuthType;
-
   /**
-   * Optional value to prefix the Next.js site under a /prefix path on CloudFront.
-   * Usually used when you deploy multiple Next.js sites on same domain using /sub-path
-   *
-   * Note, you'll need to set [basePath](https://nextjs.org/docs/app/api-reference/next-config-js/basePath)
-   * in your `next.config.ts` to this value and ensure any files in `public`
-   * folder have correct prefix.
-   * @example "/my-base-path"
+   * Lambda function to optimize images.
+   * Must be provided if you want to serve dynamic requests.
    */
-  readonly basePath?: string;
-
+  readonly imageOptFunction: lambda.IFunction;
   /**
-   * Optional CloudFront Distribution created outside of this construct that will
-   * be used to add Next.js behaviors and origins onto. Useful with `basePath`.
+   * @see {@link NextjsBuild}
    */
-  readonly distribution?: Distribution;
+  readonly nextBuild: NextjsBuild;
+  /**
+   * @see {@link NextjsProps.nextjsPath}
+   */
+  readonly nextjsPath: NextjsProps['nextjsPath'];
+  /**
+   * Override the default CloudFront origin request policies created internally.
+   */
+  readonly originRequestPolicies?: NextjsOriginRequestPolicyProps;
+  /**
+   * Lambda function to route all non-static requests to.
+   * Must be provided if you want to serve dynamic requests.
+   */
+  readonly serverFunction: lambda.IFunction;
+  /**
+   * Bucket containing static assets.
+   * Must be provided if you want to serve static files.
+   */
+  readonly staticAssetsBucket: s3.IBucket;
 }
 
 /**

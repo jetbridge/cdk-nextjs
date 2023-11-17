@@ -3,16 +3,15 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import { BaseSiteDomainProps } from './NextjsBase';
+import { NextjsDomainProps } from '.';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
+import { NextjsDomain } from './NextjsDomain';
 import { NextjsImage } from './NextjsImage';
 import { NextjsInvalidation } from './NextjsInvalidation';
 import { NextjsRevalidation } from './NextjsRevalidation';
 import { NextjsServer } from './NextjsServer';
 import { NextjsStaticAssets, NextjsStaticAssetsProps } from './NextjsStaticAssets';
-
-export interface NextjsDomainProps extends BaseSiteDomainProps {}
 
 /**
  * Defaults for created resources.
@@ -70,6 +69,10 @@ export interface NextjsProps {
    */
   readonly distribution?: Distribution;
   /**
+   * Props to configure {@link NextjsDomain}
+   */
+  readonly domainProps?: NextjsDomainProps;
+  /**
    * Custom environment variables to pass to the NextJS build **and** runtime.
    */
   readonly environment?: Record<string, string>;
@@ -119,27 +122,26 @@ export class Nextjs extends Construct {
    * The main NextJS server handler lambda function.
    */
   public serverFunction: NextjsServer;
-
   /**
    * The image optimization handler lambda function.
    */
   public imageOptimizationFunction: NextjsImage;
-
   /**
    * Built NextJS project output.
    */
   public nextBuild: NextjsBuild;
-
   /**
    * Asset deployment to S3.
    */
   public staticAssets: NextjsStaticAssets;
-
+  /**
+   * Optional Route53 Hosted Zone, ACM Certificate, and Route53 DNS Records
+   */
+  public domain?: NextjsDomain;
   /**
    * CloudFront distribution.
    */
   public distribution: NextjsDistribution;
-
   /**
    * Revalidation handler and queue.
    */
@@ -156,41 +158,47 @@ export class Nextjs extends Construct {
 
     // deploy nextjs static assets to s3
     this.staticAssets = new NextjsStaticAssets(this, 'StaticAssets', {
+      basePath: props.basePath,
       bucket: props.defaults?.assetDeployment?.bucket,
       environment: props.environment,
       nextBuild: this.nextBuild,
-      basePath: props.basePath,
     });
 
     this.serverFunction = new NextjsServer(this, 'Server', {
-      ...props,
       nextBuild: this.nextBuild,
       lambda: props.defaults?.lambda,
       staticAssetBucket: this.staticAssets.bucket,
     });
     // build image optimization
     this.imageOptimizationFunction = new NextjsImage(this, 'ImgOptFn', {
-      ...props,
-      nextBuild: this.nextBuild,
       bucket: props.imageOptimizationBucket || this.bucket,
       lambdaOptions: props.defaults?.lambda,
+      nextBuild: this.nextBuild,
     });
 
     // build revalidation queue and handler function
     this.revalidation = new NextjsRevalidation(this, 'Revalidation', {
-      ...props,
+      lambdaOptions: props.defaults?.lambda,
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction,
     });
 
+    if (this.props.domainProps) {
+      this.domain = new NextjsDomain(this, 'Domain', this.props.domainProps);
+    }
     this.distribution = new NextjsDistribution(this, 'Distribution', {
-      ...props,
+      basePath: props.basePath,
+      distribution: props.distribution,
       ...props.defaults?.distribution,
       staticAssetsBucket: this.staticAssets.bucket,
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction.lambdaFunction,
       imageOptFunction: this.imageOptimizationFunction,
+      domainNames: this.domain?.domainNames,
     });
+    if (this.domain) {
+      this.domain.createDnsRecords(this.distribution.distribution);
+    }
 
     if (!this.props.skipFullInvalidation) {
       new NextjsInvalidation(this, 'Invalidation', {
@@ -204,7 +212,7 @@ export class Nextjs extends Construct {
    * URL of Next.js App.
    */
   public get url(): string {
-    const customDomain = this.distribution.customDomainName;
+    const customDomain = this.props.domainProps?.domainName;
     return customDomain ? `https://${customDomain}` : this.distribution.url;
   }
 

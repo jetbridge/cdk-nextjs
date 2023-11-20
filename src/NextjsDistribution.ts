@@ -1,19 +1,18 @@
 import * as fs from 'node:fs';
 import * as path from 'path';
 import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
-import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import { Distribution, ResponseHeadersPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import { PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
-import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { DEFAULT_STATIC_MAX_AGE, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
 import { NextjsProps } from './Nextjs';
 import { NextjsBuild } from './NextjsBuild';
+import { NextjsDomain } from './NextjsDomain';
 
 export type NextjsDistributionCdkOverrideProps = cloudfront.DistributionProps;
 
@@ -61,10 +60,6 @@ export interface NextjsDistributionProps {
    */
   readonly distribution?: NextjsProps['distribution'];
   /**
-   * Alternative domain names for CloudFront Distribution
-   */
-  readonly domainNames?: string[];
-  /**
    * Override lambda function url auth type
    * @default "NONE"
    */
@@ -78,6 +73,10 @@ export interface NextjsDistributionProps {
    * @see {@link NextjsBuild}
    */
   readonly nextBuild: NextjsBuild;
+  /**
+   * @see {@link NextjsDomain}
+   */
+  readonly nextDomain: NextjsDomain;
   /**
    * @see {@link NextjsProps.nextjsPath}
    */
@@ -138,7 +137,7 @@ export class NextjsDistribution extends Construct {
     comment: 'Nextjs Image Default Cache Policy',
   };
 
-  protected props: NextjsDistributionProps;
+  private props: NextjsDistributionProps;
 
   /////////////////////
   // Public Properties
@@ -147,14 +146,6 @@ export class NextjsDistribution extends Construct {
    * The internally created CloudFront `Distribution` instance.
    */
   public distribution: Distribution;
-  /**
-   * The Route 53 hosted zone for the custom domain.
-   */
-  hostedZone?: route53.IHostedZone;
-  /**
-   * The AWS Certificate Manager certificate for the custom domain.
-   */
-  certificate?: acm.ICertificate;
 
   private commonBehaviorOptions: Pick<cloudfront.BehaviorOptions, 'viewerProtocolPolicy' | 'compress'> = {
     viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -392,8 +383,8 @@ export class NextjsDistribution extends Construct {
       ...cfDistributionProps,
 
       // these values can NOT be overwritten by cfDistributionProps
-      domainNames: this.props.domainNames,
-      certificate: this.certificate,
+      domainNames: this.props.nextDomain.domainNames,
+      certificate: this.props.nextDomain.certificate,
       defaultBehavior: this.serverBehaviorOptions,
     });
   }

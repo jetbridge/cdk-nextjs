@@ -187,14 +187,15 @@ export class Nextjs extends Construct {
       this.domain = new NextjsDomain(this, 'Domain', this.props.domainProps);
     }
     this.distribution = new NextjsDistribution(this, 'Distribution', {
+      nextjsPath: props.nextjsPath,
       basePath: props.basePath,
       distribution: props.distribution,
       ...props.defaults?.distribution,
       staticAssetsBucket: this.staticAssets.bucket,
       nextBuild: this.nextBuild,
+      nextDomain: this.domain,
       serverFunction: this.serverFunction.lambdaFunction,
       imageOptFunction: this.imageOptimizationFunction,
-      domainNames: this.domain?.domainNames,
     });
     if (this.domain) {
       this.domain.createDnsRecords(this.distribution.distribution);

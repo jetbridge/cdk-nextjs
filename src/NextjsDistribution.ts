@@ -76,7 +76,7 @@ export interface NextjsDistributionProps {
   /**
    * @see {@link NextjsDomain}
    */
-  readonly nextDomain: NextjsDomain;
+  readonly nextDomain?: NextjsDomain;
   /**
    * @see {@link NextjsProps.nextjsPath}
    */
@@ -383,8 +383,8 @@ export class NextjsDistribution extends Construct {
       ...cfDistributionProps,
 
       // these values can NOT be overwritten by cfDistributionProps
-      domainNames: this.props.nextDomain.domainNames,
-      certificate: this.props.nextDomain.certificate,
+      domainNames: this.props.nextDomain?.domainNames,
+      certificate: this.props.nextDomain?.certificate,
       defaultBehavior: this.serverBehaviorOptions,
     });
   }

@@ -798,8 +798,6 @@ Any object.
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.distributionId">distributionId</a></code> | <code>string</code> | The ID of the internally created CloudFront Distribution. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.url">url</a></code> | <code>string</code> | The CloudFront URL of the website. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | The internally created CloudFront `Distribution` instance. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | The AWS Certificate Manager certificate for the custom domain. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | The Route 53 hosted zone for the custom domain. |
 
 ---
 
@@ -884,30 +882,6 @@ public readonly distribution: Distribution;
 - *Type:* aws-cdk-lib.aws_cloudfront.Distribution
 
 The internally created CloudFront `Distribution` instance.
-
----
-
-##### `certificate`<sup>Optional</sup> <a name="certificate" id="cdk-nextjs-standalone.NextjsDistribution.property.certificate"></a>
-
-```typescript
-public readonly certificate: ICertificate;
-```
-
-- *Type:* aws-cdk-lib.aws_certificatemanager.ICertificate
-
-The AWS Certificate Manager certificate for the custom domain.
-
----
-
-##### `hostedZone`<sup>Optional</sup> <a name="hostedZone" id="cdk-nextjs-standalone.NextjsDistribution.property.hostedZone"></a>
-
-```typescript
-public readonly hostedZone: IHostedZone;
-```
-
-- *Type:* aws-cdk-lib.aws_route53.IHostedZone
-
-The Route 53 hosted zone for the custom domain.
 
 ---
 
@@ -3040,6 +3014,7 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.imageOptFunction">imageOptFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to optimize images. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
@@ -3047,7 +3022,6 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps">NextjsCachePolicyProps</a></code> | Override the default CloudFront cache policies created internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cdk">cdk</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps">NextjsDistributionCdkProps</a></code> | Overrides for created CDK resources. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.domainNames">domainNames</a></code> | <code>string[]</code> | Alternative domain names for CloudFront Distribution. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.originRequestPolicies">originRequestPolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps">NextjsOriginRequestPolicyProps</a></code> | Override the default CloudFront origin request policies created internally. |
 
@@ -3076,6 +3050,18 @@ public readonly nextBuild: NextjsBuild;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 > [{@link NextjsBuild }]({@link NextjsBuild })
+
+---
+
+##### `nextDomain`<sup>Required</sup> <a name="nextDomain" id="cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain"></a>
+
+```typescript
+public readonly nextDomain: NextjsDomain;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a>
+
+> [{@link NextjsDomain }]({@link NextjsDomain })
 
 ---
 
@@ -3164,18 +3150,6 @@ public readonly distribution: Distribution;
 - *Type:* aws-cdk-lib.aws_cloudfront.Distribution
 
 > [{@link NextjsProps.distribution }]({@link NextjsProps.distribution })
-
----
-
-##### `domainNames`<sup>Optional</sup> <a name="domainNames" id="cdk-nextjs-standalone.NextjsDistributionProps.property.domainNames"></a>
-
-```typescript
-public readonly domainNames: string[];
-```
-
-- *Type:* string[]
-
-Alternative domain names for CloudFront Distribution.
 
 ---
 

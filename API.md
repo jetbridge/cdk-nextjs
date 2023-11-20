@@ -3014,7 +3014,6 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.imageOptFunction">imageOptFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to optimize images. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
@@ -3023,6 +3022,7 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cdk">cdk</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionCdkProps">NextjsDistributionCdkProps</a></code> | Overrides for created CDK resources. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.originRequestPolicies">originRequestPolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps">NextjsOriginRequestPolicyProps</a></code> | Override the default CloudFront origin request policies created internally. |
 
 ---
@@ -3050,18 +3050,6 @@ public readonly nextBuild: NextjsBuild;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 > [{@link NextjsBuild }]({@link NextjsBuild })
-
----
-
-##### `nextDomain`<sup>Required</sup> <a name="nextDomain" id="cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain"></a>
-
-```typescript
-public readonly nextDomain: NextjsDomain;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a>
-
-> [{@link NextjsDomain }]({@link NextjsDomain })
 
 ---
 
@@ -3163,6 +3151,18 @@ public readonly functionUrlAuthType: FunctionUrlAuthType;
 - *Default:* "NONE"
 
 Override lambda function url auth type.
+
+---
+
+##### `nextDomain`<sup>Optional</sup> <a name="nextDomain" id="cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain"></a>
+
+```typescript
+public readonly nextDomain: NextjsDomain;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a>
+
+> [{@link NextjsDomain }]({@link NextjsDomain })
 
 ---
 

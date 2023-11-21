@@ -378,13 +378,13 @@ export class NextjsDistribution extends Construct {
       // defaultRootObject: "index.html",
       defaultRootObject: '',
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+      domainNames: this.props.nextDomain?.domainNames,
+      certificate: this.props.nextDomain?.certificate,
 
       // Override props.
       ...cfDistributionProps,
 
       // these values can NOT be overwritten by cfDistributionProps
-      domainNames: this.props.nextDomain?.domainNames,
-      certificate: this.props.nextDomain?.certificate,
       defaultBehavior: this.serverBehaviorOptions,
     });
   }

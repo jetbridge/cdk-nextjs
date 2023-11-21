@@ -29,7 +29,7 @@ export interface NextjsDomainProps {
    */
   readonly alternateNames?: string[];
   /**
-   * Set this option if the domain is not hosted on Amazon Route 53.
+   * Set this option if the domain is not hosted on Amazon Route 53 or is hosted on Route53 but in a different account or otherwise in a way it is unaccessible. If false, the certificate and DNS will not be automatically created.
    */
   readonly isExternalDomain?: boolean;
   /**

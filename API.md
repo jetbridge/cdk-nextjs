@@ -3197,7 +3197,7 @@ const nextjsDomainProps: NextjsDomainProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | Import the certificate for the domain. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.domainAliases">domainAliases</a></code> | <code>string[]</code> | An alternative domain to be assigned to the website URL. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | Optionally provide Route53 Hosted Zone. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.isExternalDomain">isExternalDomain</a></code> | <code>boolean</code> | Set this option if the domain is not hosted on Amazon Route 53. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.isExternalDomain">isExternalDomain</a></code> | <code>boolean</code> | Set this option if the domain is not hosted on Amazon Route 53 or is hosted on Route53 but in a different account or otherwise in a way it is unaccessible. |
 
 ---
 
@@ -3284,7 +3284,9 @@ public readonly isExternalDomain: boolean;
 
 - *Type:* boolean
 
-Set this option if the domain is not hosted on Amazon Route 53.
+Set this option if the domain is not hosted on Amazon Route 53 or is hosted on Route53 but in a different account or otherwise in a way it is unaccessible.
+
+If false, the certificate and DNS will not be automatically created.
 
 ---
 

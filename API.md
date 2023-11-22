@@ -927,7 +927,7 @@ new NextjsDomain(scope: Construct, id: string, props: NextjsDomainProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomain.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomain.createDnsRecords">createDnsRecords</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomain.createDnsRecords">createDnsRecords</a></code> | Creates DNS records (A and AAAA) records for {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.alternateNames} if defined. |
 
 ---
 
@@ -944,6 +944,8 @@ Returns a string representation of this construct.
 ```typescript
 public createDnsRecords(distribution: Distribution): void
 ```
+
+Creates DNS records (A and AAAA) records for {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.alternateNames} if defined.
 
 ###### `distribution`<sup>Required</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDomain.createDnsRecords.parameter.distribution"></a>
 
@@ -1012,7 +1014,7 @@ Concatentation of {@link NextjsDomainProps.domainName} and {@link NextjsDomainPr
 
 ---
 
-##### `certificate`<sup>Optional</sup> <a name="certificate" id="cdk-nextjs-standalone.NextjsDomain.property.certificate"></a>
+##### `certificate`<sup>Required</sup> <a name="certificate" id="cdk-nextjs-standalone.NextjsDomain.property.certificate"></a>
 
 ```typescript
 public readonly certificate: ICertificate;
@@ -1022,12 +1024,9 @@ public readonly certificate: ICertificate;
 
 ACM Certificate.
 
-If {@link NextjsDomainProps.isExternalDomain} is `true`,
-then it will be undefined.
-
 ---
 
-##### `hostedZone`<sup>Optional</sup> <a name="hostedZone" id="cdk-nextjs-standalone.NextjsDomain.property.hostedZone"></a>
+##### `hostedZone`<sup>Required</sup> <a name="hostedZone" id="cdk-nextjs-standalone.NextjsDomain.property.hostedZone"></a>
 
 ```typescript
 public readonly hostedZone: IHostedZone;
@@ -1036,9 +1035,6 @@ public readonly hostedZone: IHostedZone;
 - *Type:* aws-cdk-lib.aws_route53.IHostedZone
 
 Route53 Hosted Zone.
-
-If {@link NextjsDomainProps.isExternalDomain} is `true`,
-then it will be undefined.
 
 ---
 
@@ -3192,12 +3188,11 @@ const nextjsDomainProps: NextjsDomainProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.domainName">domainName</a></code> | <code>string</code> | The domain to be assigned to the website URL (ie. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.domainName">domainName</a></code> | <code>string</code> | An easy to remember address of your website. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.isWildcardCertificate">isWildcardCertificate</a></code> | <code>boolean</code> | If {@link NextjsDomainProps.certificate} is `undefined` and therefore `NextjsDomain` creates a certificate, controls whether a wildcard certificate is created. For example, if `"example.com"` is passed for {@link NextjsDomainProps.domainName}, then a certificate with domain name, `"*.example.com"`, would be created if `true` (default). |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.alternateNames">alternateNames</a></code> | <code>string[]</code> | Specify additional names that should route to the Cloudfront Distribution. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | Import the certificate for the domain. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.domainAliases">domainAliases</a></code> | <code>string[]</code> | An alternative domain to be assigned to the website URL. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | Optionally provide Route53 Hosted Zone. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.isExternalDomain">isExternalDomain</a></code> | <code>boolean</code> | Set this option if the domain is not hosted on Amazon Route 53 or is hosted on Route53 but in a different account or otherwise in a way it is unaccessible. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | If this prop is `undefined` then a certificate will be created based on {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.isWildcardCertificate} with DNS Validation. This prop allows you to control the TLS/SSL certificate created. The certificate you create must be in the `us-east-1` (N. Virginia) region as required by AWS CloudFront. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | You must create the hosted zone out-of-band. |
 
 ---
 
@@ -3209,10 +3204,29 @@ public readonly domainName: string;
 
 - *Type:* string
 
-The domain to be assigned to the website URL (ie.
+An easy to remember address of your website.
 
-domain.com).
-Supports domains that are hosted either on [Route 53](https://aws.amazon.com/route53/) or externally.
+Only supports domains hosted on [Route 53](https://aws.amazon.com/route53/).
+
+---
+
+*Example*
+
+```typescript
+"example.com"
+```
+
+
+##### `isWildcardCertificate`<sup>Required</sup> <a name="isWildcardCertificate" id="cdk-nextjs-standalone.NextjsDomainProps.property.isWildcardCertificate"></a>
+
+```typescript
+public readonly isWildcardCertificate: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+If {@link NextjsDomainProps.certificate} is `undefined` and therefore `NextjsDomain` creates a certificate, controls whether a wildcard certificate is created. For example, if `"example.com"` is passed for {@link NextjsDomainProps.domainName}, then a certificate with domain name, `"*.example.com"`, would be created if `true` (default).
 
 ---
 
@@ -3226,9 +3240,18 @@ public readonly alternateNames: string[];
 
 Specify additional names that should route to the Cloudfront Distribution.
 
-Note, certificates for these names will not be automatically generated so the `certificate` option must be specified.
+For example, if you specificied `"example.com"` as your `domainName`, you can specify `["www.example.com", "api.example.com"]`.
+
+Note if you create your own certificate, you'll need to ensure it has a wildcard (*.example.com) or uses subject alternative names including the alternative names specified here.
 
 ---
+
+*Example*
+
+```typescript
+["www.example.com", "api.example.com"]
+```
+
 
 ##### `certificate`<sup>Optional</sup> <a name="certificate" id="cdk-nextjs-standalone.NextjsDomainProps.property.certificate"></a>
 
@@ -3238,25 +3261,9 @@ public readonly certificate: ICertificate;
 
 - *Type:* aws-cdk-lib.aws_certificatemanager.ICertificate
 
-Import the certificate for the domain.
+If this prop is `undefined` then a certificate will be created based on {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.isWildcardCertificate} with DNS Validation. This prop allows you to control the TLS/SSL certificate created. The certificate you create must be in the `us-east-1` (N. Virginia) region as required by AWS CloudFront.
 
-By default, SST will create a certificate with the domain name. The certificate will be created in the `us-east-1` (N. Virginia) region as required by AWS CloudFront.
 Set this option if you have an existing certificate in the `us-east-1` region in AWS Certificate Manager you want to use.
-
----
-
-##### `domainAliases`<sup>Optional</sup> <a name="domainAliases" id="cdk-nextjs-standalone.NextjsDomainProps.property.domainAliases"></a>
-
-```typescript
-public readonly domainAliases: string[];
-```
-
-- *Type:* string[]
-
-An alternative domain to be assigned to the website URL.
-
-Visitors to the alias will be redirected to the main domain. (ie. `www.domain.com`).
-Use this to create a `www.` version of your domain and redirect visitors to the root domain.
 
 ---
 
@@ -3268,25 +3275,10 @@ public readonly hostedZone: IHostedZone;
 
 - *Type:* aws-cdk-lib.aws_route53.IHostedZone
 
-Optionally provide Route53 Hosted Zone.
+You must create the hosted zone out-of-band.
 
-If not provided, then hosted zone
-will be looked up via `HostedZone.fromLookup` with {@link NextjsDomainProps.domainName}
-unless {@link NextjsDomainProps.isExternalDomain} is passed.
-
----
-
-##### `isExternalDomain`<sup>Optional</sup> <a name="isExternalDomain" id="cdk-nextjs-standalone.NextjsDomainProps.property.isExternalDomain"></a>
-
-```typescript
-public readonly isExternalDomain: boolean;
-```
-
-- *Type:* boolean
-
-Set this option if the domain is not hosted on Amazon Route 53 or is hosted on Route53 but in a different account or otherwise in a way it is unaccessible.
-
-If false, the certificate and DNS will not be automatically created.
+You can lookup the hosted zone outside this construct and pass it in via this prop.
+Alternatively if this prop is `undefined`, then the hosted zone will be **looked up** (not created) via `HostedZone.fromLookup` with {@link NextjsDomainProps.domainName}.
 
 ---
 

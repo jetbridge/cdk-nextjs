@@ -61,17 +61,20 @@ export class NextjsServer extends Construct {
     super(scope, id);
     this.props = props;
 
-    // must create code asset separately (typically it is implicitly created in
-    //`Function` construct) b/c we need to substitute unresolve env vars
-    const sourceAsset = this.createSourceCodeAsset();
     // source and destination assets are defined separately so that source
     // assets are immutable (easier debugging). Technically we could overwrite
     // source asset
     const destinationAsset = this.createDestinationCodeAsset();
-    const bucketDeployment = this.createBucketDeployment(sourceAsset, destinationAsset);
     this.lambdaFunction = this.createFunction(destinationAsset);
-    // don't update lambda function until bucket deployment is complete
-    this.lambdaFunction.node.addDependency(bucketDeployment);
+
+    if (Stack.of(this).bundlingRequired) {
+      // must create code asset separately (typically it is implicitly created in
+      //`Function` construct) b/c we need to substitute unresolve env vars
+      const sourceAsset = this.createSourceCodeAsset();
+      const bucketDeployment = this.createBucketDeployment(sourceAsset, destinationAsset);
+      // don't update lambda function until bucket deployment is complete
+      this.lambdaFunction.node.addDependency(bucketDeployment);
+    }
   }
 
   private createSourceCodeAsset() {

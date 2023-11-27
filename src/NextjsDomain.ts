@@ -11,6 +11,7 @@ import {
 } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Construct } from 'constructs';
+import { NextjsProps } from '.';
 
 export interface NextjsDomainProps {
   /**
@@ -19,8 +20,9 @@ export interface NextjsDomainProps {
    */
   readonly domainName: string;
   /**
-   * Specify additional names that should route to the Cloudfront Distribution.
+   * Alternate domain names that should route to the Cloudfront Distribution.
    * For example, if you specificied `"example.com"` as your `domainName`, you can specify `["www.example.com", "api.example.com"]`.
+   * Learn more about the [requirements](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html#alternate-domain-names-requirements) and [restrictions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html#alternate-domain-names-restrictions) for using alternate domain names with CloudFront.
    *
    * Note if you create your own certificate, you'll need to ensure it has a wildcard (*.example.com) or uses subject alternative names including the alternative names specified here.
    * @example ["www.example.com", "api.example.com"]
@@ -48,6 +50,16 @@ export interface NextjsDomainProps {
   readonly isWildcardCertificate: boolean;
 }
 
+/**
+ * Use a custom domain with `Nextjs`. Requires a Route53 hosted zone to have been
+ * created within the same AWS account. For DNS setups where you cannot use a
+ * Route53 hosted zone in the same AWS account, use the `defaults.distribution`
+ * prop of {@link NextjsProps}.
+ *
+ * See {@link NextjsDomainProps} TS Doc comments for detailed docs on how to customize.
+ * This construct is helpful to user to not have to worry about interdependencies
+ * between Route53 Hosted Zone, CloudFront Distribution, and Route53 Hosted Zone Records.
+ */
 export class NextjsDomain extends Construct {
   /**
    * Concatentation of {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.alternateNames}. Used in instantiation of CloudFront Distribution in NextjsDistribution

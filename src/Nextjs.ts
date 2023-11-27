@@ -3,10 +3,9 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import { NextjsDomainProps } from '.';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
-import { NextjsDomain } from './NextjsDomain';
+import { NextjsDomain, NextjsDomainProps } from './NextjsDomain';
 import { NextjsImage } from './NextjsImage';
 import { NextjsInvalidation } from './NextjsInvalidation';
 import { NextjsRevalidation } from './NextjsRevalidation';
@@ -69,7 +68,8 @@ export interface NextjsProps {
    */
   readonly distribution?: Distribution;
   /**
-   * Props to configure {@link NextjsDomain}
+   * Props to configure {@link NextjsDomain}. See details on how to customize at
+   * {@link NextjsDomainProps}
    */
   readonly domainProps?: NextjsDomainProps;
   /**

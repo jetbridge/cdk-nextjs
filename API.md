@@ -888,6 +888,17 @@ The internally created CloudFront `Distribution` instance.
 
 ### NextjsDomain <a name="NextjsDomain" id="cdk-nextjs-standalone.NextjsDomain"></a>
 
+Use a custom domain with `Nextjs`.
+
+Requires a Route53 hosted zone to have been
+created within the same AWS account. For DNS setups where you cannot use a
+Route53 hosted zone in the same AWS account, use the `defaults.distribution`
+prop of {@link NextjsProps}.
+
+See {@link NextjsDomainProps} TS Doc comments for detailed docs on how to customize.
+This construct is helpful to user to not have to worry about interdependencies
+between Route53 Hosted Zone, CloudFront Distribution, and Route53 Hosted Zone Records.
+
 #### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsDomain.Initializer"></a>
 
 ```typescript
@@ -3190,7 +3201,7 @@ const nextjsDomainProps: NextjsDomainProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.domainName">domainName</a></code> | <code>string</code> | An easy to remember address of your website. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.isWildcardCertificate">isWildcardCertificate</a></code> | <code>boolean</code> | If {@link NextjsDomainProps.certificate} is `undefined` and therefore `NextjsDomain` creates a certificate, controls whether a wildcard certificate is created. For example, if `"example.com"` is passed for {@link NextjsDomainProps.domainName}, then a certificate with domain name, `"*.example.com"`, would be created if `true` (default). |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.alternateNames">alternateNames</a></code> | <code>string[]</code> | Specify additional names that should route to the Cloudfront Distribution. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.alternateNames">alternateNames</a></code> | <code>string[]</code> | Alternate domain names that should route to the Cloudfront Distribution. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | If this prop is `undefined` then a certificate will be created based on {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.isWildcardCertificate} with DNS Validation. This prop allows you to control the TLS/SSL certificate created. The certificate you create must be in the `us-east-1` (N. Virginia) region as required by AWS CloudFront. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | You must create the hosted zone out-of-band. |
 
@@ -3238,9 +3249,10 @@ public readonly alternateNames: string[];
 
 - *Type:* string[]
 
-Specify additional names that should route to the Cloudfront Distribution.
+Alternate domain names that should route to the Cloudfront Distribution.
 
 For example, if you specificied `"example.com"` as your `domainName`, you can specify `["www.example.com", "api.example.com"]`.
+Learn more about the [requirements](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html#alternate-domain-names-requirements) and [restrictions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html#alternate-domain-names-restrictions) for using alternate domain names with CloudFront.
 
 Note if you create your own certificate, you'll need to ensure it has a wildcard (*.example.com) or uses subject alternative names including the alternative names specified here.
 
@@ -3550,6 +3562,9 @@ public readonly domainProps: NextjsDomainProps;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a>
 
 Props to configure {@link NextjsDomain}.
+
+See details on how to customize at
+{@link NextjsDomainProps}
 
 ---
 

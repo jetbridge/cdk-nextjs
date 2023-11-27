@@ -59,6 +59,10 @@ export interface NextjsDomainProps {
  * See {@link NextjsDomainProps} TS Doc comments for detailed docs on how to customize.
  * This construct is helpful to user to not have to worry about interdependencies
  * between Route53 Hosted Zone, CloudFront Distribution, and Route53 Hosted Zone Records.
+ *
+ * Note, if you're using another service for domain name registration, you can
+ * still create a Route53 hosted zone. Please see [Configuring DNS Delegation from CloudFlare to AWS Route53](https://veducate.co.uk/dns-delegation-route53/)
+ * as an example.
  */
 export class NextjsDomain extends Construct {
   /**

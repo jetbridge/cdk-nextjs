@@ -1,6 +1,3 @@
-export { BaseSiteDomainProps } from './NextjsBase';
-
-// L2 constructs
 export { NextjsStaticAssets, NextjsStaticAssetsProps } from './NextjsStaticAssets';
 export { NextjsRevalidation, NextjsRevalidationProps } from './NextjsRevalidation';
 export { NextjsBuild, NextjsBuildProps } from './NextjsBuild';
@@ -12,11 +9,9 @@ export {
   NextjsDistributionCdkProps,
   NextjsDistributionCdkOverrideProps,
   NextjsDistributionProps,
-  NextjsDomainProps,
   NextjsCachePolicyProps,
   NextjsOriginRequestPolicyProps,
 } from './NextjsDistribution';
 export { NextjsInvalidation, NextjsInvalidationProps } from './NextjsInvalidation';
-
-// L3 constructs
+export { NextjsDomain, NextjsDomainProps } from './NextjsDomain';
 export { Nextjs, NextjsProps, NextjsDefaultsProps } from './Nextjs';

@@ -21,6 +21,7 @@
 - Remove `NextjsBaseProps` to simplify props
 - Remove `projectRoot` as it's not being used
 - Remove `tempBuildDir` as it's not being used
+- Create `NextjsDomain`. Remove custom domain related props from `NextjsDistribution`.
 
 
 ## v3

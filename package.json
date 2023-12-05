@@ -82,12 +82,6 @@
     "aws-cdk-lib": "^2.110.0",
     "constructs": "^10.0.5"
   },
-  "dependencies": {
-    "esbuild": "^0.19.8"
-  },
-  "bundledDependencies": [
-    "esbuild"
-  ],
   "keywords": [
     "aws",
     "aws-cdk",

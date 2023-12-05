@@ -50,7 +50,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   // dependency config
   jsiiVersion: '~5.0.0',
   cdkVersion: '2.110.0',
-  bundledDeps: ['esbuild'] /* Runtime dependencies of this module. */,
+  bundledDeps: [] /* Runtime dependencies of this module. */,
   devDeps: [
     '@aws-crypto/sha256-js',
     '@aws-sdk/client-s3',

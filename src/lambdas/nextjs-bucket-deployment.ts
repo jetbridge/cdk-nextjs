@@ -56,7 +56,7 @@ export const handler: CloudFormationCustomResourceHandler = async (event, contex
       await extractZip({ sourceZipFilePath, destinationDirPath: sourceDirPath });
       const filePaths = listFilePaths(sourceDirPath);
       if (props.substitutionConfig && Object.keys(props.substitutionConfig).length) {
-        console.log('Replacing environment variables: ' + JSON.stringify(props.substitutionConfig));
+        debug('Replacing environment variables: ' + JSON.stringify(props.substitutionConfig));
         substitute({ config: props.substitutionConfig, filePaths });
       }
       // must find old object keys before uploading new objects so we know which objects to prune
@@ -70,7 +70,7 @@ export const handler: CloudFormationCustomResourceHandler = async (event, contex
           bucket: props.destinationBucketName,
           keyPrefix: props.destinationKeyPrefix,
           filePaths,
-          tmpDir: sourceDirPath,
+          baseLocalDir: sourceDirPath,
           putConfig: props.putConfig,
         });
         if (props.prune) {
@@ -78,7 +78,7 @@ export const handler: CloudFormationCustomResourceHandler = async (event, contex
           await pruneBucket({
             bucketName: props.destinationBucketName,
             filePaths,
-            tmpDir,
+            baseLocalDir: sourceDirPath,
             keyPrefix: props.destinationKeyPrefix,
             oldObjectKeys,
           });
@@ -249,30 +249,38 @@ async function listOldObjectKeys({
   return oldObjectKeys;
 }
 
+/**
+ * Create S3 Key given local path
+ */
+function createS3Key({ keyPrefix, path, baseLocalDir }: { keyPrefix?: string; path: string; baseLocalDir: string }) {
+  const objectKeyParts: string[] = [];
+  if (keyPrefix) objectKeyParts.push(keyPrefix);
+  objectKeyParts.push(relative(baseLocalDir, path));
+  return join(...objectKeyParts);
+}
+
 function uploadObjects({
   bucket,
   keyPrefix,
   filePaths,
-  tmpDir,
+  baseLocalDir,
   putConfig = {},
 }: {
   bucket: CustomResourceProperties['destinationBucketName'];
   keyPrefix?: CustomResourceProperties['destinationKeyPrefix'];
   filePaths: string[];
-  tmpDir: string;
+  baseLocalDir: string;
   putConfig: CustomResourceProperties['putConfig'];
 }) {
   const putObjectInputs: PutObjectCommandInput[] = filePaths.map((path) => {
     const contentType = mime.lookup(path) || undefined;
     const putObjectOptions = getPutObjectOptions({ path, putConfig });
-    const objectKeyParts: string[] = [];
-    if (keyPrefix) objectKeyParts.push(keyPrefix);
-    objectKeyParts.push(relative(tmpDir, path));
+    const key = createS3Key({ keyPrefix, path, baseLocalDir });
     return {
       ContentType: contentType,
       ...putObjectOptions,
       Bucket: bucket,
-      Key: join(...objectKeyParts),
+      Key: key,
       Body: createReadStream(path),
     };
   });
@@ -343,23 +351,17 @@ function getPutObjectOptions({
 async function pruneBucket({
   bucketName,
   filePaths,
-  tmpDir,
+  baseLocalDir,
   keyPrefix,
   oldObjectKeys,
 }: {
   bucketName: string;
   filePaths: string[];
-  tmpDir: string;
+  baseLocalDir: string;
   keyPrefix?: string;
   oldObjectKeys: string[];
 }) {
-  const newObjectKeys: string[] = [];
-  for (const filePath of filePaths) {
-    const objectKeyParts: string[] = [];
-    if (keyPrefix) objectKeyParts.push(keyPrefix);
-    objectKeyParts.push(relative(tmpDir, filePath));
-    newObjectKeys.push(join(...objectKeyParts));
-  }
+  const newObjectKeys = filePaths.map((path) => createS3Key({ keyPrefix, path, baseLocalDir }));
   // find old objects that are not currently in new objects to prune.
   const oldObjectKeysToBeDeleted: string[] = [];
   for (const key of oldObjectKeys) {

@@ -14,7 +14,7 @@ export class HighSecurityStack extends Stack {
 
     this.nextjs = new Nextjs(this, 'nextjs', {
       nextjsPath: '../../open-next/examples/app-router',
-      skipBuild: true,
+      skipBuild: false,
       defaults: {
         distribution: {
           functionUrlAuthType: FunctionUrlAuthType.AWS_IAM,

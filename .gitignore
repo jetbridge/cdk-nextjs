@@ -52,3 +52,9 @@ junit.xml
 tsconfig.json
 !/API.md
 /assets/
+!/src/optional-cdk-props/OptionalFunctionProps.ts
+!/src/optional-cdk-props/OptionalCustomResourceProps.ts
+!/src/optional-cdk-props/OptionalS3OriginProps.ts
+!/src/optional-cdk-props/OptionalEdgeFunctionProps.ts
+!/src/optional-cdk-props/OptionalCloudFrontFunctionProps.ts
+!/src/optional-cdk-props/OptionalDistributionProps.ts

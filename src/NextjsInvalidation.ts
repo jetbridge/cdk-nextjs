@@ -8,6 +8,7 @@ import {
   PhysicalResourceId,
 } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
+import { NextjsOverrides } from './NextjsOverrides';
 
 export interface NextjsInvalidationProps {
   /**
@@ -20,6 +21,10 @@ export interface NextjsInvalidationProps {
    * Useful for assets that must be deployed/updated before invalidating.
    */
   readonly dependencies: Construct[];
+  /**
+   * Overrides
+   */
+  readonly overrides?: NextjsOverrides['nextjsInvalidation'];
 }
 
 export class NextjsInvalidation extends Construct {

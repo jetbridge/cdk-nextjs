@@ -13,6 +13,7 @@ import { DEFAULT_STATIC_MAX_AGE, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './c
 import { NextjsProps } from './Nextjs';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDomain } from './NextjsDomain';
+import { NextjsOverrides } from './NextjsOverrides';
 
 export type NextjsDistributionCdkOverrideProps = cloudfront.DistributionProps;
 
@@ -86,6 +87,10 @@ export interface NextjsDistributionProps {
    */
   readonly originRequestPolicies?: NextjsOriginRequestPolicyProps;
   /**
+   * Overrides
+   */
+  readonly overrides?: NextjsOverrides['nextjsDistribution'];
+  /**
    * Lambda function to route all non-static requests to.
    * Must be provided if you want to serve dynamic requests.
    */
@@ -101,47 +106,7 @@ export interface NextjsDistributionProps {
  * Create a CloudFront distribution to serve a Next.js application.
  */
 export class NextjsDistribution extends Construct {
-  /**
-   * The default CloudFront cache policy properties for dynamic requests to server handler.
-   */
-  public static serverCachePolicyProps: cloudfront.CachePolicyProps = {
-    queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-    headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
-      'accept',
-      'rsc',
-      'next-router-prefetch',
-      'next-router-state-tree',
-      'next-url'
-    ),
-    cookieBehavior: cloudfront.CacheCookieBehavior.all(),
-    defaultTtl: Duration.seconds(0),
-    maxTtl: Duration.days(365),
-    minTtl: Duration.seconds(0),
-    enableAcceptEncodingBrotli: true,
-    enableAcceptEncodingGzip: true,
-    comment: 'Nextjs Server Default Cache Policy',
-  };
-
-  /**
-   * The default CloudFront Cache Policy properties for images.
-   */
-  public static imageCachePolicyProps: cloudfront.CachePolicyProps = {
-    queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-    headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
-    cookieBehavior: cloudfront.CacheCookieBehavior.all(),
-    defaultTtl: Duration.days(1),
-    maxTtl: Duration.days(365),
-    minTtl: Duration.days(0),
-    enableAcceptEncodingBrotli: true,
-    enableAcceptEncodingGzip: true,
-    comment: 'Nextjs Image Default Cache Policy',
-  };
-
   private props: NextjsDistributionProps;
-
-  /////////////////////
-  // Public Properties
-  /////////////////////
   /**
    * The internally created CloudFront `Distribution` instance.
    */
@@ -168,7 +133,7 @@ export class NextjsDistribution extends Construct {
     this.props = props;
 
     // Create Behaviors
-    this.s3Origin = new origins.S3Origin(this.props.staticAssetsBucket);
+    this.s3Origin = new origins.S3Origin(this.props.staticAssetsBucket, this.props.overrides?.s3OriginProps);
     this.staticBehaviorOptions = this.createStaticBehaviorOptions();
     if (this.isFnUrlIamAuth) {
       this.edgeLambdas.push(this.createEdgeLambda());
@@ -226,14 +191,14 @@ export class NextjsDistribution extends Construct {
           ],
         },
       });
-    const cachePolicy = this.props.cachePolicies?.staticCachePolicy ?? cloudfront.CachePolicy.CACHING_OPTIMIZED;
     return {
       ...this.commonBehaviorOptions,
       origin: this.s3Origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
-      cachePolicy,
+      cachePolicy: this.props.cachePolicies?.staticCachePolicy ?? cloudfront.CachePolicy.CACHING_OPTIMIZED,
       responseHeadersPolicy,
+      ...this.props.overrides?.staticBehaviorOptions,
     };
   }
 
@@ -254,6 +219,7 @@ export class NextjsDistribution extends Construct {
         removalPolicy: RemovalPolicy.DESTROY, // destroy old versions
         retryAttempts: 1, // async retry attempts
       },
+      ...this.props.overrides?.edgeFunctionProps,
     });
     originRequestEdgeFn.currentVersion.grantInvoke(new ServicePrincipal('edgelambda.amazonaws.com'));
     originRequestEdgeFn.currentVersion.grantInvoke(new ServicePrincipal('lambda.amazonaws.com'));
@@ -277,13 +243,30 @@ export class NextjsDistribution extends Construct {
 
   private createServerBehaviorOptions(): cloudfront.BehaviorOptions {
     const fnUrl = this.props.serverFunction.addFunctionUrl({ authType: this.fnUrlAuthType });
-    const origin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url));
+    const origin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), this.props.overrides?.serverHttpOriginProps);
     const originRequestPolicy =
       this.props.originRequestPolicies?.serverOriginRequestPolicy ??
       cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER;
     const cachePolicy =
       this.props.cachePolicies?.serverCachePolicy ??
-      new cloudfront.CachePolicy(this, 'ServerCachePolicy', NextjsDistribution.serverCachePolicyProps);
+      new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
+        queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+        headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
+          'accept',
+          'rsc',
+          'next-router-prefetch',
+          'next-router-state-tree',
+          'next-url'
+        ),
+        cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+        defaultTtl: Duration.seconds(0),
+        maxTtl: Duration.days(365),
+        minTtl: Duration.seconds(0),
+        enableAcceptEncodingBrotli: true,
+        enableAcceptEncodingGzip: true,
+        comment: 'Nextjs Server Default Cache Policy',
+        ...this.props.overrides?.serverCachePolicyProps,
+      });
     return {
       ...this.commonBehaviorOptions,
       origin,
@@ -292,6 +275,7 @@ export class NextjsDistribution extends Construct {
       cachePolicy,
       edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
       functionAssociations: this.createCloudFrontFnAssociations(),
+      ...this.props.overrides?.serverBehaviorOptions,
     };
   }
 
@@ -314,13 +298,27 @@ export class NextjsDistribution extends Construct {
 
   private createImageBehaviorOptions(): cloudfront.BehaviorOptions {
     const imageOptFnUrl = this.props.imageOptFunction.addFunctionUrl({ authType: this.fnUrlAuthType });
-    const origin = new origins.HttpOrigin(Fn.parseDomainName(imageOptFnUrl.url));
+    const origin = new origins.HttpOrigin(
+      Fn.parseDomainName(imageOptFnUrl.url),
+      this.props.overrides?.imageHttpOriginProps
+    );
     const originRequestPolicy =
       this.props.originRequestPolicies?.imageOptimizationOriginRequestPolicy ??
       cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER;
     const cachePolicy =
       this.props.cachePolicies?.imageCachePolicy ??
-      new cloudfront.CachePolicy(this, 'ImageCachePolicy', NextjsDistribution.imageCachePolicyProps);
+      new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
+        queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+        headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
+        cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+        defaultTtl: Duration.days(1),
+        maxTtl: Duration.days(365),
+        minTtl: Duration.days(0),
+        enableAcceptEncodingBrotli: true,
+        enableAcceptEncodingGzip: true,
+        comment: 'Nextjs Image Default Cache Policy',
+        ...this.props.overrides?.imageCachePolicyProps,
+      });
     return {
       ...this.commonBehaviorOptions,
       origin,
@@ -329,6 +327,7 @@ export class NextjsDistribution extends Construct {
       cachePolicy,
       originRequestPolicy,
       edgeLambdas: this.edgeLambdas,
+      ...this.props.overrides?.imageBehaviorOptions,
     };
   }
 
@@ -380,12 +379,11 @@ export class NextjsDistribution extends Construct {
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
       domainNames: this.props.nextDomain?.domainNames,
       certificate: this.props.nextDomain?.certificate,
-
       // Override props.
       ...cfDistributionProps,
-
       // these values can NOT be overwritten by cfDistributionProps
       defaultBehavior: this.serverBehaviorOptions,
+      ...this.props.overrides?.distributionProps,
     });
   }
 

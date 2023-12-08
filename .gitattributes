@@ -18,5 +18,11 @@
 /API.md linguist-generated
 /LICENSE linguist-generated
 /package.json linguist-generated
+/src/optional-cdk-props/OptionalCloudFrontFunctionProps.ts linguist-generated
+/src/optional-cdk-props/OptionalCustomResourceProps.ts linguist-generated
+/src/optional-cdk-props/OptionalDistributionProps.ts linguist-generated
+/src/optional-cdk-props/OptionalEdgeFunctionProps.ts linguist-generated
+/src/optional-cdk-props/OptionalFunctionProps.ts linguist-generated
+/src/optional-cdk-props/OptionalS3OriginProps.ts linguist-generated
 /tsconfig.dev.json linguist-generated
 /yarn.lock linguist-generated

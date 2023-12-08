@@ -8,6 +8,7 @@ import { Construct } from 'constructs';
 import { CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
+import { NextjsOverrides } from './NextjsOverrides';
 
 export interface NextjsStaticAssetsProps {
   /**
@@ -29,14 +30,18 @@ export interface NextjsStaticAssetsProps {
    */
   readonly environment?: Record<string, string>;
   /**
+   * The `NextjsBuild` instance representing the built Nextjs application.
+   */
+  readonly nextBuild: NextjsBuild;
+  /**
+   * Overrides
+   */
+  readonly overrides?: NextjsOverrides['nextjsStaticAssets'];
+  /**
    * If `true` (default), then removes old static assets after upload new static assets.
    * @default true
    */
   readonly prune?: boolean;
-  /**
-   * The `NextjsBuild` instance representing the built Nextjs application.
-   */
-  readonly nextBuild: NextjsBuild;
 }
 
 /**

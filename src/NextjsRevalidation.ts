@@ -9,6 +9,7 @@ import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import { NextjsBuild } from './NextjsBuild';
+import { NextjsOverrides } from './NextjsOverrides';
 import { NextjsServer } from './NextjsServer';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 
@@ -21,6 +22,10 @@ export interface NextjsRevalidationProps {
    * @see {@link NextjsBuild}
    */
   readonly nextBuild: NextjsBuild;
+  /**
+   * Overrides
+   */
+  readonly overrides?: NextjsOverrides['nextjsRevalidation'];
   /**
    * @see {@link NextjsServer}
    */

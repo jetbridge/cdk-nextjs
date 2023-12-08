@@ -11,6 +11,7 @@ import { CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { NextjsProps } from './Nextjs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
+import { NextjsOverrides } from './NextjsOverrides';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 import { createArchive } from './utils/create-archive';
 
@@ -29,6 +30,10 @@ export interface NextjsServerProps {
    * @see {@link NextjsBuild}
    */
   readonly nextBuild: NextjsBuild;
+  /**
+   * Overrides
+   */
+  readonly overrides?: NextjsOverrides['nextjsServer'];
   /**
    * @see {@link NextjsProps.quiet}
    */

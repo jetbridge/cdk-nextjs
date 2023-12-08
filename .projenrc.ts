@@ -1,3 +1,4 @@
+import { ProjenStruct, Struct } from '@mrgrain/jsii-struct-builder';
 import { BuildOptions } from 'esbuild';
 import { awscdk } from 'projen';
 import { TypeScriptCompilerOptions, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
@@ -54,6 +55,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   devDeps: [
     '@aws-crypto/sha256-js',
     '@aws-sdk/client-s3',
+    '@mrgrain/jsii-struct-builder',
     '@smithy/signature-v4',
     '@types/adm-zip',
     '@types/aws-lambda',
@@ -73,6 +75,32 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
 project.bundler.addBundle('./src/lambdas/nextjs-bucket-deployment.ts', commonBundlingOptions);
 project.bundler.addBundle('./src/lambdas/sign-fn-url.ts', commonBundlingOptions);
+
+const getFilePath = (fileName: string) => 'src/optional-cdk-props/' + fileName + '.ts';
+new ProjenStruct(project, { name: 'OptionalFunctionProps', filePath: getFilePath('OptionalFunctionProps') })
+  .mixin(Struct.fromFqn('aws-cdk-lib.aws_lambda.FunctionProps'))
+  .allOptional();
+new ProjenStruct(project, { name: 'OptionalCustomResourceProps', filePath: getFilePath('OptionalCustomResourceProps') })
+  .mixin(Struct.fromFqn('aws-cdk-lib.CustomResourceProps'))
+  .allOptional();
+new ProjenStruct(project, { name: 'OptionalS3OriginProps', filePath: getFilePath('OptionalS3OriginProps') })
+  .mixin(Struct.fromFqn('aws-cdk-lib.aws_cloudfront_origins.S3OriginProps'))
+  .allOptional();
+new ProjenStruct(project, { name: 'OptionalEdgeFunctionProps', filePath: getFilePath('OptionalEdgeFunctionProps') })
+  .mixin(Struct.fromFqn('aws-cdk-lib.aws_cloudfront.experimental.EdgeFunctionProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalCloudFrontFunctionProps',
+  filePath: getFilePath('OptionalCloudFrontFunctionProps'),
+})
+  .mixin(Struct.fromFqn('aws-cdk-lib.aws_cloudfront.FunctionProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalDistributionProps',
+  filePath: getFilePath('OptionalDistributionProps'),
+})
+  .mixin(Struct.fromFqn('aws-cdk-lib.aws_cloudfront.DistributionProps'))
+  .allOptional();
 
 // const e2eTestsWorkflow = project.github?.addWorkflow('e2e-tests');
 // e2eTestsWorkflow?.on({ pullRequest: { branches: ['main'] } });

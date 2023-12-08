@@ -12,6 +12,7 @@ import {
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Construct } from 'constructs';
 import { NextjsProps } from '.';
+import { NextjsOverrides } from './NextjsOverrides';
 
 export interface NextjsDomainProps {
   /**
@@ -67,6 +68,10 @@ export interface NextjsDomainProps {
    * If {@link NextjsDomainProps.certificate} is passed, then this prop is ignored.
    */
   readonly certificateDomainName?: string;
+  /**
+   * Overrides
+   */
+  readonly overrides?: NextjsOverrides['nextjsDomain'];
 }
 
 /**

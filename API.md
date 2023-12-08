@@ -2627,7 +2627,7 @@ const nextjsBucketDeploymentProps: NextjsBucketDeploymentProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationBucket">destinationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Destination S3 Bucket. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.debug">debug</a></code> | <code>boolean</code> | Enable verbose output of Custom Resource Lambda. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationKeyPrefix">destinationKeyPrefix</a></code> | <code>string</code> | Destination S3 Bucket Key Prefix. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | If `true`, then delete files in `destinationBucket`/`destinationKeyPrefix` before uploading new objects. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects. Only applies if `zip` is `false`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.putConfig">putConfig</a></code> | <code>{[ key: string ]: {[ key: string ]: string}}</code> | Mapping of files to PUT options for `PutObjectCommand`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.substitutionConfig">substitutionConfig</a></code> | <code>{[ key: string ]: string}</code> | Replace placeholders in all files in `asset`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.zip">zip</a></code> | <code>boolean</code> | If `true` then files will be zipped before writing to destination bucket. |
@@ -2692,7 +2692,11 @@ public readonly prune: boolean;
 - *Type:* boolean
 - *Default:* true
 
-If `true`, then delete files in `destinationBucket`/`destinationKeyPrefix` before uploading new objects.
+If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects. Only applies if `zip` is `false`.
+
+Old objects are determined by listing objects
+in bucket before creating new objects and finding the objects that aren't in
+the new objects.
 
 ---
 
@@ -3816,6 +3820,7 @@ const nextjsStaticAssetsProps: NextjsStaticAssetsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Define your own bucket to store static assets. |
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.prune">prune</a></code> | <code>boolean</code> | If `true` (default), then removes old static assets after upload new static assets. |
 
 ---
 
@@ -3875,6 +3880,19 @@ public readonly environment: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 Custom environment variables to pass to the NextJS build and runtime.
+
+---
+
+##### `prune`<sup>Optional</sup> <a name="prune" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.prune"></a>
+
+```typescript
+public readonly prune: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+If `true` (default), then removes old static assets after upload new static assets.
 
 ---
 

@@ -11,18 +11,6 @@ import { NextjsBuild } from './NextjsBuild';
 
 export interface NextjsStaticAssetsProps {
   /**
-   * Define your own bucket to store static assets.
-   */
-  readonly bucket?: s3.IBucket | undefined;
-  /**
-   * The `NextjsBuild` instance representing the built Nextjs application.
-   */
-  readonly nextBuild: NextjsBuild;
-  /**
-   * Custom environment variables to pass to the NextJS build and runtime.
-   */
-  readonly environment?: Record<string, string>;
-  /**
    * Optional value to prefix the Next.js site under a /prefix path on CloudFront.
    * Usually used when you deploy multiple Next.js sites on same domain using /sub-path
    *
@@ -32,6 +20,23 @@ export interface NextjsStaticAssetsProps {
    * @example "/my-base-path"
    */
   readonly basePath?: string;
+  /**
+   * Define your own bucket to store static assets.
+   */
+  readonly bucket?: s3.IBucket | undefined;
+  /**
+   * Custom environment variables to pass to the NextJS build and runtime.
+   */
+  readonly environment?: Record<string, string>;
+  /**
+   * If `true` (default), then removes old static assets after upload new static assets.
+   * @default true
+   */
+  readonly prune?: boolean;
+  /**
+   * The `NextjsBuild` instance representing the built Nextjs application.
+   */
+  readonly nextBuild: NextjsBuild;
 }
 
 /**
@@ -109,7 +114,7 @@ export class NextjsStaticAssets extends Construct {
       // only put env vars that are placeholders in custom resource properties
       // to be replaced. other env vars were injected at build time.
       substitutionConfig: NextjsBucketDeployment.getSubstitutionConfig(this.buildEnvVars),
-      prune: true,
+      prune: this.props.prune === false ? false : true, // default to true
       putConfig: {
         [allFiles]: {
           CacheControl: 'public, max-age=0, must-revalidate',

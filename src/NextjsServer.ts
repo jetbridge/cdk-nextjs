@@ -62,7 +62,7 @@ export class NextjsServer extends Construct {
     this.props = props;
 
     // must create code asset separately (typically it is implicitly created in
-    //`Function` construct) b/c we need to substitute unresolve env vars
+    //`Function` construct) b/c we need to substitute unresolved env vars
     const sourceAsset = this.createSourceCodeAsset();
     // source and destination assets are defined separately so that source
     // assets are immutable (easier debugging). Technically we could overwrite
@@ -108,7 +108,7 @@ export class NextjsServer extends Construct {
       debug: true,
       destinationBucket: destinationAsset.bucket,
       destinationKeyPrefix: destinationAsset.s3ObjectKey,
-      prune: true,
+      prune: false, // not applicable b/c zip: true
       // this.props.environment is for build time, not this.environment which is for runtime
       substitutionConfig: NextjsBucketDeployment.getSubstitutionConfig(this.props.environment || {}),
       zip: true,

@@ -56,22 +56,33 @@ export const handler: CloudFormationCustomResourceHandler = async (event, contex
       await extractZip({ sourceZipFilePath, destinationDirPath: sourceDirPath });
       const filePaths = listFilePaths(sourceDirPath);
       if (props.substitutionConfig && Object.keys(props.substitutionConfig).length) {
-        console.log('Replacing environment variables: ' + JSON.stringify(props.substitutionConfig));
+        debug('Replacing environment variables: ' + JSON.stringify(props.substitutionConfig));
         substitute({ config: props.substitutionConfig, filePaths });
       }
-      if (props.prune) {
-        debug('Emptying/pruning bucket: ' + props.destinationBucketName);
-        await pruneBucket({ bucketName: props.destinationBucketName, keyPrefix: props.destinationKeyPrefix });
-      }
+      // must find old object keys before uploading new objects so we know which objects to prune
+      const oldObjectKeys = await listOldObjectKeys({
+        bucketName: props.destinationBucketName,
+        keyPrefix: props.destinationKeyPrefix,
+      });
       if (!props.zip) {
         debug('Uploading objects to: ' + props.destinationBucketName);
         await uploadObjects({
           bucket: props.destinationBucketName,
           keyPrefix: props.destinationKeyPrefix,
           filePaths,
-          tmpDir: sourceDirPath,
+          baseLocalDir: sourceDirPath,
           putConfig: props.putConfig,
         });
+        if (props.prune) {
+          debug('Emptying/pruning bucket: ' + props.destinationBucketName);
+          await pruneBucket({
+            bucketName: props.destinationBucketName,
+            filePaths,
+            baseLocalDir: sourceDirPath,
+            keyPrefix: props.destinationKeyPrefix,
+            oldObjectKeys,
+          });
+        }
       } else {
         debug('Uploading zip to: ' + props.destinationBucketName);
         const zipBuffer = await zipObjects({ tmpDir: sourceDirPath });
@@ -210,9 +221,14 @@ function substitute({ filePaths, config }: { filePaths: string[]; config: Record
   }
 }
 
-async function pruneBucket({ bucketName, keyPrefix }: { bucketName: string; keyPrefix?: string }) {
-  const deleteObjectPromises: Promise<unknown>[] = [];
-  let numObjectsDeleted = 0;
+async function listOldObjectKeys({
+  bucketName,
+  keyPrefix,
+}: {
+  bucketName: string;
+  keyPrefix?: string;
+}): Promise<string[]> {
+  const oldObjectKeys: string[] = [];
   let nextToken: string | undefined = undefined;
   do {
     const cmd: ListObjectsV2CommandInput = { Bucket: bucketName, Prefix: keyPrefix };
@@ -223,47 +239,48 @@ async function pruneBucket({ bucketName, keyPrefix }: { bucketName: string; keyP
     const contents = res.Contents;
     nextToken = res.NextContinuationToken;
     if (contents?.length) {
-      const objects = contents?.map((o) => ({ Key: o.Key }));
-      numObjectsDeleted += objects?.length;
-      deleteObjectPromises.push(
-        s3.send(
-          new DeleteObjectsCommand({
-            Bucket: bucketName,
-            Delete: { Objects: objects },
-          })
-        )
-      );
+      for (const { Key: key } of contents) {
+        if (key) {
+          oldObjectKeys.push(key);
+        }
+      }
     }
   } while (nextToken);
-  await Promise.all(deleteObjectPromises);
-  console.log(`Number of objects deleted for bucket ${bucketName}: ${numObjectsDeleted}`);
+  return oldObjectKeys;
+}
+
+/**
+ * Create S3 Key given local path
+ */
+function createS3Key({ keyPrefix, path, baseLocalDir }: { keyPrefix?: string; path: string; baseLocalDir: string }) {
+  const objectKeyParts: string[] = [];
+  if (keyPrefix) objectKeyParts.push(keyPrefix);
+  objectKeyParts.push(relative(baseLocalDir, path));
+  return join(...objectKeyParts);
 }
 
 function uploadObjects({
   bucket,
   keyPrefix,
   filePaths,
-  tmpDir,
+  baseLocalDir,
   putConfig = {},
 }: {
   bucket: CustomResourceProperties['destinationBucketName'];
   keyPrefix?: CustomResourceProperties['destinationKeyPrefix'];
   filePaths: string[];
-  tmpDir: string;
+  baseLocalDir: string;
   putConfig: CustomResourceProperties['putConfig'];
 }) {
   const putObjectInputs: PutObjectCommandInput[] = filePaths.map((path) => {
     const contentType = mime.lookup(path) || undefined;
     const putObjectOptions = getPutObjectOptions({ path, putConfig });
-    const keyPaths: string[] = [];
-    if (keyPrefix) keyPaths.push(keyPrefix);
-    keyPaths.push(relative(tmpDir, path));
+    const key = createS3Key({ keyPrefix, path, baseLocalDir });
     return {
       ContentType: contentType,
       ...putObjectOptions,
       Bucket: bucket,
-      // .slice(1) to remove leading slash b/c s3 will create top level / folder
-      Key: join(...keyPaths),
+      Key: key,
       Body: createReadStream(path),
     };
   });
@@ -329,6 +346,40 @@ function getPutObjectOptions({
     }
   }
   return putObjectOptions;
+}
+
+async function pruneBucket({
+  bucketName,
+  filePaths,
+  baseLocalDir,
+  keyPrefix,
+  oldObjectKeys,
+}: {
+  bucketName: string;
+  filePaths: string[];
+  baseLocalDir: string;
+  keyPrefix?: string;
+  oldObjectKeys: string[];
+}) {
+  const newObjectKeys = filePaths.map((path) => createS3Key({ keyPrefix, path, baseLocalDir }));
+  // find old objects that are not currently in new objects to prune.
+  const oldObjectKeysToBeDeleted: string[] = [];
+  for (const key of oldObjectKeys) {
+    if (!newObjectKeys.includes(key)) {
+      oldObjectKeysToBeDeleted.push(key);
+    }
+  }
+  if (oldObjectKeysToBeDeleted.length) {
+    await s3.send(
+      new DeleteObjectsCommand({
+        Bucket: bucketName,
+        Delete: { Objects: oldObjectKeysToBeDeleted.map((k) => ({ Key: k })) },
+      })
+    );
+    debug(`Objects pruned in ${bucketName}: ${oldObjectKeysToBeDeleted.join(', ')}`);
+  } else {
+    debug(`No objects to prune`);
+  }
 }
 
 interface CfnResponseProps {

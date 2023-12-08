@@ -7,15 +7,15 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@types/node": "20.5.7",
-    "aws-cdk": "2.94.0",
-    "esbuild": "^0.19.3",
-    "tsx": "^3.12.10",
-    "typescript": "~5.2.2"
+    "@types/node": "20.10.4",
+    "aws-cdk": "2.114.1",
+    "esbuild": "^0.19.8",
+    "tsx": "^4.6.2",
+    "typescript": "~5.3.3"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.94.0",
+    "aws-cdk-lib": "2.114.1",
     "cdk-nextjs-standalone": "link:../..",
-    "constructs": "^10.0.0"
+    "constructs": "^10.3.0"
   }
 }

@@ -17,8 +17,12 @@ export interface NextjsBucketDeploymentProps {
    */
   readonly debug?: boolean | undefined;
   /**
-   * If `true`, then delete files in `destinationBucket`/`destinationKeyPrefix`
-   * before uploading new objects
+   * If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix`
+   * **after** uploading new objects. Only applies if `zip` is `false`.
+   *
+   * Old objects are determined by listing objects
+   * in bucket before creating new objects and finding the objects that aren't in
+   * the new objects.
    * @default true
    */
   readonly prune?: boolean | undefined;

@@ -73,6 +73,16 @@ export const handler: CloudFormationCustomResourceHandler = async (event, contex
           tmpDir: sourceDirPath,
           putConfig: props.putConfig,
         });
+        if (props.prune) {
+          debug('Emptying/pruning bucket: ' + props.destinationBucketName);
+          await pruneBucket({
+            bucketName: props.destinationBucketName,
+            filePaths,
+            tmpDir,
+            keyPrefix: props.destinationKeyPrefix,
+            oldObjectKeys,
+          });
+        }
       } else {
         debug('Uploading zip to: ' + props.destinationBucketName);
         const zipBuffer = await zipObjects({ tmpDir: sourceDirPath });
@@ -80,16 +90,6 @@ export const handler: CloudFormationCustomResourceHandler = async (event, contex
           zipBuffer,
           bucket: props.destinationBucketName,
           keyPrefix: props.destinationKeyPrefix,
-        });
-      }
-      if (props.prune) {
-        debug('Emptying/pruning bucket: ' + props.destinationBucketName);
-        await pruneBucket({
-          bucketName: props.destinationBucketName,
-          filePaths,
-          tmpDir,
-          keyPrefix: props.destinationKeyPrefix,
-          oldObjectKeys,
         });
       }
       if (tmpDir.length) {
@@ -272,7 +272,6 @@ function uploadObjects({
       ContentType: contentType,
       ...putObjectOptions,
       Bucket: bucket,
-      // .slice(1) to remove leading slash b/c s3 will create top level / folder
       Key: join(...objectKeyParts),
       Body: createReadStream(path),
     };

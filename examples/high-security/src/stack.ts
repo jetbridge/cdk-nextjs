@@ -1,17 +1,18 @@
-import { CfnOutput, Stack, StackProps } from 'aws-cdk-lib';
+import { CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Nextjs, NextjsDistributionProps } from 'cdk-nextjs-standalone';
 import { CfnWebACL } from 'aws-cdk-lib/aws-wafv2';
-import { FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
+import { Function as CdkFunction, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
 import { DistributionProps, SecurityPolicyProtocol } from 'aws-cdk-lib/aws-cloudfront';
 
 export class HighSecurityStack extends Stack {
+  private nextjs: Nextjs;
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const webAcl = this.createWebAcl();
 
-    const nextjs = new Nextjs(this, 'nextjs', {
+    this.nextjs = new Nextjs(this, 'nextjs', {
       nextjsPath: '../../open-next/examples/app-router',
       skipBuild: true,
       defaults: {
@@ -25,10 +26,24 @@ export class HighSecurityStack extends Stack {
         } satisfies Partial<NextjsDistributionProps>,
       }
     });
+    this.retainEdgeFnOnDelete();
 
     new CfnOutput(this, "CloudFrontDistributionDomain", {
-      value: nextjs.distribution.distributionDomain,
+      value: this.nextjs.distribution.distributionDomain,
     });
+  }
+
+  /**
+   * Don't fail on CloudFormation delete due to replicated function
+   * @link https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html
+   */
+  private retainEdgeFnOnDelete() {
+    const edgeFn = this.nextjs.distribution?.node
+      .tryFindChild("EdgeFn")
+      ?.node.tryFindChild("Fn");
+    if (edgeFn instanceof CdkFunction) {
+      edgeFn.applyRemovalPolicy(RemovalPolicy.RETAIN);
+    }
   }
 
   private createWebAcl() {

@@ -17,5 +17,5 @@ export {
 } from './NextjsDistribution';
 export { NextjsInvalidation, NextjsInvalidationProps, NextjsInvalidationOverrides } from './NextjsInvalidation';
 export { NextjsDomain, NextjsDomainProps, NextjsDomainOverrides } from './NextjsDomain';
-export { Nextjs, NextjsProps, NextjsDefaultsProps } from './Nextjs';
+export { Nextjs, NextjsProps } from './Nextjs';
 export * from './optional-cdk-props';

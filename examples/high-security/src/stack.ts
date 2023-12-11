@@ -15,22 +15,17 @@ export class HighSecurityStack extends Stack {
       nextjsPath: '../../open-next/examples/app-router',
       skipBuild: false,
       overrides: {
+        nextjs: {
+          nextjsDistributionProps: {
+            functionUrlAuthType: FunctionUrlAuthType.AWS_IAM,
+          }
+        },
         nextjsDistribution: {
           distributionProps: {
             webAclId: webAcl.attrArn
           }
         }
       }
-      // defaults: {
-      //   distribution: {
-      //     functionUrlAuthType: FunctionUrlAuthType.AWS_IAM,
-      //     cdk: {
-      //       distribution: {
-      //         webAclId: webAcl.attrArn,
-      //       } as unknown as DistributionProps,
-      //     },
-      //   } satisfies Partial<NextjsDistributionProps>,
-      // }
     });
     this.retainEdgeFnOnDelete();
 

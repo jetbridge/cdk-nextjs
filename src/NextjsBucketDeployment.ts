@@ -4,8 +4,14 @@ import { Code, Function } from 'aws-cdk-lib/aws-lambda';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
-import { NextjsOverrides } from './NextjsOverrides';
+import { OptionalCustomResourceProps } from './optional-cdk-props/OptionalCustomResourceProps';
+import { OptionalFunctionProps } from './optional-cdk-props/OptionalFunctionProps';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
+
+export interface NextjsBucketDeploymentOverrides {
+  readonly functionProps?: OptionalFunctionProps;
+  readonly customResourceProps?: OptionalCustomResourceProps;
+}
 
 export interface NextjsBucketDeploymentProps {
   /**
@@ -48,7 +54,7 @@ export interface NextjsBucketDeploymentProps {
   /**
    * Overrides
    */
-  readonly overrides?: NextjsOverrides['nextjsBucketDeployment'];
+  readonly overrides?: NextjsBucketDeploymentOverrides;
   /**
    * Replace placeholders in all files in `asset`. Placeholder targets are
    * defined by keys of record. Values to replace placeholders with are defined

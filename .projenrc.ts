@@ -101,6 +101,48 @@ new ProjenStruct(project, {
 })
   .mixin(Struct.fromFqn('aws-cdk-lib.aws_cloudfront.DistributionProps'))
   .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalHostedZoneProviderProps',
+  filePath: getFilePath('OptionalHostedZoneProviderProps'),
+})
+  .mixin(Struct.fromFqn('aws-cdk-lib.aws_route53.HostedZoneProviderProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalCertificateProps',
+  filePath: getFilePath('OptionalCertificateProps'),
+})
+  .mixin(Struct.fromFqn('aws-cdk-lib.aws_certificatemanager.CertificateProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalARecordProps',
+  filePath: getFilePath('OptionalARecordProps'),
+})
+  .mixin(Struct.fromFqn('aws-cdk-lib.aws_route53.ARecordProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalAaaaRecordProps',
+  filePath: getFilePath('OptionalAaaaRecordProps'),
+})
+  .mixin(Struct.fromFqn('aws-cdk-lib.aws_route53.AaaaRecordProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalTablePropsV2',
+  filePath: getFilePath('OptionalTablePropsV2'),
+})
+  .mixin(Struct.fromFqn('aws-cdk-lib.aws_dynamodb.TablePropsV2'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalProviderProps',
+  filePath: getFilePath('OptionalProviderProps'),
+})
+  .mixin(Struct.fromFqn('aws-cdk-lib.custom_resources.ProviderProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalAssetProps',
+  filePath: getFilePath('OptionalAssetProps'),
+})
+  .mixin(Struct.fromFqn('aws-cdk-lib.aws_s3_assets.AssetProps'))
+  .allOptional();
 
 // const e2eTestsWorkflow = project.github?.addWorkflow('e2e-tests');
 // e2eTestsWorkflow?.on({ pullRequest: { branches: ['main'] } });

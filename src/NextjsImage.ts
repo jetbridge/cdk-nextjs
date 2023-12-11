@@ -2,8 +2,12 @@ import { Code, Function as LambdaFunction, FunctionOptions } from 'aws-cdk-lib/a
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import type { NextjsBuild } from './NextjsBuild';
-import { NextjsOverrides } from './NextjsOverrides';
+import { OptionalFunctionProps } from './optional-cdk-props/OptionalFunctionProps';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
+
+export interface NextjsImageOverrides {
+  readonly functionProps?: OptionalFunctionProps;
+}
 
 export interface NextjsImageProps {
   /**
@@ -21,7 +25,7 @@ export interface NextjsImageProps {
   /**
    * Overrides
    */
-  readonly overrides?: NextjsOverrides['nextjsImage'];
+  readonly overrides?: NextjsImageOverrides;
 }
 
 /**
@@ -42,6 +46,7 @@ export class NextjsImage extends LambdaFunction {
         BUCKET_NAME: bucket.bucketName,
         ...lambdaOptions?.environment,
       },
+      ...props.overrides?.functionProps,
     });
 
     bucket.grantRead(this);

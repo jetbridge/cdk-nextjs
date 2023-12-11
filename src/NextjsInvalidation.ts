@@ -6,9 +6,13 @@ import {
   AwsSdkCall,
   AwsCustomResourcePolicy,
   PhysicalResourceId,
+  AwsCustomResourceProps,
 } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
-import { NextjsOverrides } from './NextjsOverrides';
+
+export interface NextjsInvalidationOverrides {
+  readonly awsCustomResourceProps?: AwsCustomResourceProps;
+}
 
 export interface NextjsInvalidationProps {
   /**
@@ -24,7 +28,7 @@ export interface NextjsInvalidationProps {
   /**
    * Overrides
    */
-  readonly overrides?: NextjsOverrides['nextjsInvalidation'];
+  readonly overrides?: NextjsInvalidationOverrides;
 }
 
 export class NextjsInvalidation extends Construct {
@@ -62,6 +66,7 @@ export class NextjsInvalidation extends Construct {
           ],
         }),
       ]),
+      ...props.overrides?.awsCustomResourceProps,
     });
     for (const dependency of props.dependencies) {
       dependency.node.addDependency(awsCustomResource);

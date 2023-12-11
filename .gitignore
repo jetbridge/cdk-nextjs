@@ -58,3 +58,10 @@ tsconfig.json
 !/src/optional-cdk-props/OptionalEdgeFunctionProps.ts
 !/src/optional-cdk-props/OptionalCloudFrontFunctionProps.ts
 !/src/optional-cdk-props/OptionalDistributionProps.ts
+!/src/optional-cdk-props/OptionalHostedZoneProviderProps.ts
+!/src/optional-cdk-props/OptionalCertificateProps.ts
+!/src/optional-cdk-props/OptionalARecordProps.ts
+!/src/optional-cdk-props/OptionalAaaaRecordProps.ts
+!/src/optional-cdk-props/OptionalTablePropsV2.ts
+!/src/optional-cdk-props/OptionalProviderProps.ts
+!/src/optional-cdk-props/OptionalAssetProps.ts

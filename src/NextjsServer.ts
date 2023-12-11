@@ -11,9 +11,16 @@ import { CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { NextjsProps } from './Nextjs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
-import { NextjsOverrides } from './NextjsOverrides';
+import { OptionalAssetProps } from './optional-cdk-props/OptionalAssetProps';
+import { OptionalFunctionProps } from './optional-cdk-props/OptionalFunctionProps';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 import { createArchive } from './utils/create-archive';
+
+export interface NextjsServerOverrides {
+  readonly sourceCodeAsset?: OptionalAssetProps;
+  readonly destinationCodeAsset?: OptionalAssetProps;
+  readonly functionProps?: OptionalFunctionProps;
+}
 
 export type EnvironmentVars = Record<string, string>;
 
@@ -33,7 +40,7 @@ export interface NextjsServerProps {
   /**
    * Overrides
    */
-  readonly overrides?: NextjsOverrides['nextjsServer'];
+  readonly overrides?: NextjsServerOverrides;
   /**
    * @see {@link NextjsProps.quiet}
    */
@@ -87,6 +94,7 @@ export class NextjsServer extends Construct {
     });
     const asset = new Asset(this, 'SourceCodeAsset', {
       path: archivePath,
+      ...this.props.overrides?.sourceCodeAsset,
     });
     // new Asset() creates copy of zip into cdk.out/. This cleans up tmp folder
     rmSync(archivePath, { recursive: true });
@@ -102,6 +110,7 @@ export class NextjsServer extends Construct {
     writeFileSync(resolve(assetsTmpDir, 'index.mjs'), `export function handler() { return '${randomUUID()}' }`);
     const destinationAsset = new Asset(this, 'DestinationCodeAsset', {
       path: assetsTmpDir,
+      ...this.props.overrides?.destinationCodeAsset,
     });
     rmSync(assetsTmpDir, { recursive: true });
     return destinationAsset;
@@ -133,6 +142,7 @@ export class NextjsServer extends Construct {
       // `this.props.lambda.environment` is defined, it will override
       // CACHE_* environment variables which are required
       environment: { ...this.environment, ...this.props.lambda?.environment },
+      ...this.props.overrides?.functionProps,
     });
     this.props.staticAssetBucket.grantReadWrite(fn);
 

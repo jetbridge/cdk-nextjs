@@ -2,8 +2,9 @@ import * as fs from 'node:fs';
 import * as path from 'path';
 import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
-import { Distribution, ResponseHeadersPolicy } from 'aws-cdk-lib/aws-cloudfront';
+import { BehaviorOptions, CachePolicyProps, Distribution, ResponseHeadersPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
+import { HttpOriginProps } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
@@ -13,16 +14,23 @@ import { DEFAULT_STATIC_MAX_AGE, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './c
 import { NextjsProps } from './Nextjs';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDomain } from './NextjsDomain';
-import { NextjsOverrides } from './NextjsOverrides';
+import { OptionalCloudFrontFunctionProps } from './optional-cdk-props/OptionalCloudFrontFunctionProps';
+import { OptionalDistributionProps } from './optional-cdk-props/OptionalDistributionProps';
+import { OptionalEdgeFunctionProps } from './optional-cdk-props/OptionalEdgeFunctionProps';
+import { OptionalS3OriginProps } from './optional-cdk-props/OptionalS3OriginProps';
 
-export type NextjsDistributionCdkOverrideProps = cloudfront.DistributionProps;
-
-export interface NextjsDistributionCdkProps {
-  /**
-   * Pass in a value to override the default settings this construct uses to
-   * create the CloudFront `Distribution` internally.
-   */
-  readonly distribution?: NextjsDistributionCdkOverrideProps;
+export interface NextjsDistributionOverrides {
+  readonly cloudFrontFunctionProps?: OptionalCloudFrontFunctionProps;
+  readonly distributionProps?: OptionalDistributionProps;
+  readonly edgeFunctionProps?: OptionalEdgeFunctionProps;
+  readonly imageBehaviorOptions?: BehaviorOptions;
+  readonly imageCachePolicyProps?: CachePolicyProps;
+  readonly imageHttpOriginProps?: HttpOriginProps;
+  readonly serverBehaviorOptions?: BehaviorOptions;
+  readonly serverCachePolicyProps?: CachePolicyProps;
+  readonly serverHttpOriginProps?: HttpOriginProps;
+  readonly staticBehaviorOptions?: BehaviorOptions;
+  readonly s3OriginProps?: OptionalS3OriginProps;
 }
 
 export interface NextjsCachePolicyProps {
@@ -52,10 +60,6 @@ export interface NextjsDistributionProps {
    * Override the default CloudFront cache policies created internally.
    */
   readonly cachePolicies?: NextjsCachePolicyProps;
-  /**
-   * Overrides for created CDK resources.
-   */
-  readonly cdk?: NextjsDistributionCdkProps;
   /**
    * @see {@link NextjsProps.distribution}
    */
@@ -89,7 +93,7 @@ export interface NextjsDistributionProps {
   /**
    * Overrides
    */
-  readonly overrides?: NextjsOverrides['nextjsDistribution'];
+  readonly overrides?: NextjsDistributionOverrides;
   /**
    * Lambda function to route all non-static requests to.
    * Must be provided if you want to serve dynamic requests.
@@ -338,15 +342,9 @@ export class NextjsDistribution extends Construct {
   private getCloudFrontDistribution(): cloudfront.Distribution {
     let distribution: cloudfront.Distribution;
     if (this.props.distribution) {
-      if (this.props.cdk?.distribution) {
-        throw new Error(
-          'You can either pass an existing "distribution" or pass configs to create one via "cdk.distribution".'
-        );
-      }
-
       distribution = this.props.distribution;
     } else {
-      distribution = this.createCloudFrontDistribution(this.props.cdk?.distribution);
+      distribution = this.createCloudFrontDistribution();
     }
 
     distribution.addBehavior(
@@ -372,15 +370,13 @@ export class NextjsDistribution extends Construct {
    * Creates default CloudFront Distribution. Note, this construct will not
    * create a CloudFront Distribution if one is passed in by user.
    */
-  private createCloudFrontDistribution(cfDistributionProps?: NextjsDistributionCdkOverrideProps) {
+  private createCloudFrontDistribution() {
     return new cloudfront.Distribution(this, 'Distribution', {
       // defaultRootObject: "index.html",
       defaultRootObject: '',
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
       domainNames: this.props.nextDomain?.domainNames,
       certificate: this.props.nextDomain?.certificate,
-      // Override props.
-      ...cfDistributionProps,
       // these values can NOT be overwritten by cfDistributionProps
       defaultBehavior: this.serverBehaviorOptions,
       ...this.props.overrides?.distributionProps,

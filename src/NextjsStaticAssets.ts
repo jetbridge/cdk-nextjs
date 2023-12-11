@@ -8,7 +8,12 @@ import { Construct } from 'constructs';
 import { CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
-import { NextjsOverrides } from './NextjsOverrides';
+import { OptionalAssetProps } from './optional-cdk-props/OptionalAssetProps';
+
+export interface NextjsStaticAssetOverrides {
+  readonly bucketProps?: s3.BucketProps;
+  readonly assetProps?: OptionalAssetProps;
+}
 
 export interface NextjsStaticAssetsProps {
   /**
@@ -36,7 +41,7 @@ export interface NextjsStaticAssetsProps {
   /**
    * Overrides
    */
-  readonly overrides?: NextjsOverrides['nextjsStaticAssets'];
+  readonly overrides?: NextjsStaticAssetOverrides;
   /**
    * If `true` (default), then removes old static assets after upload new static assets.
    * @default true
@@ -90,6 +95,7 @@ export class NextjsStaticAssets extends Construct {
         enforceSSL: true,
         blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
         encryption: s3.BucketEncryption.S3_MANAGED,
+        ...this.props.overrides?.bucketProps,
       })
     );
   }
@@ -101,6 +107,7 @@ export class NextjsStaticAssets extends Construct {
     fs.cpSync(this.props.nextBuild.nextCacheDir, resolve(tmpAssetsDir, CACHE_BUCKET_KEY_PREFIX), { recursive: true });
     const asset = new Asset(this, 'Asset', {
       path: tmpAssetsDir,
+      ...this.props.overrides?.assetProps,
     });
     fs.rmSync(tmpAssetsDir, { recursive: true });
     return asset;

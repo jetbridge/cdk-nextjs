@@ -12,7 +12,17 @@ import {
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Construct } from 'constructs';
 import { NextjsProps } from '.';
-import { NextjsOverrides } from './NextjsOverrides';
+import { OptionalAaaaRecordProps } from './optional-cdk-props/OptionalAaaaRecordProps';
+import { OptionalARecordProps } from './optional-cdk-props/OptionalARecordProps';
+import { OptionalCertificateProps } from './optional-cdk-props/OptionalCertificateProps';
+import { OptionalHostedZoneProviderProps } from './optional-cdk-props/OptionalHostedZoneProviderProps';
+
+export interface NextjsDomainOverrides {
+  readonly certificateProps?: OptionalCertificateProps;
+  readonly hostedZoneProviderProps?: OptionalHostedZoneProviderProps;
+  readonly aRecordProps?: OptionalARecordProps;
+  readonly aaaaRecordProps?: OptionalAaaaRecordProps;
+}
 
 export interface NextjsDomainProps {
   /**
@@ -71,7 +81,7 @@ export interface NextjsDomainProps {
   /**
    * Overrides
    */
-  readonly overrides?: NextjsOverrides['nextjsDomain'];
+  readonly overrides?: NextjsDomainOverrides;
 }
 
 /**
@@ -123,6 +133,7 @@ export class NextjsDomain extends Construct {
     if (!this.props.hostedZone) {
       return HostedZone.fromLookup(this, 'HostedZone', {
         domainName: this.props.domainName,
+        ...this.props.overrides?.hostedZoneProviderProps,
       });
     } else {
       return this.props.hostedZone;
@@ -134,6 +145,7 @@ export class NextjsDomain extends Construct {
       return new Certificate(this, 'Certificate', {
         domainName: this.props.certificateDomainName ?? this.props.domainName,
         validation: CertificateValidation.fromDns(this.hostedZone),
+        ...this.props.overrides?.certificateProps,
       });
     } else {
       return this.props.certificate;
@@ -159,10 +171,12 @@ export class NextjsDomain extends Construct {
         new ARecord(this, 'ARecordAlt' + i, {
           ...recordProps,
           recordName: `${alternateName}.`,
+          ...this.props.overrides?.aRecordProps,
         });
         new AaaaRecord(this, 'AaaaRecordAlt' + i, {
           ...recordProps,
           recordName: `${alternateName}.`,
+          ...this.props.overrides?.aaaaRecordProps,
         });
         i++;
       }

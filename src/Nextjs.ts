@@ -28,7 +28,7 @@ export interface NextjsConstructOverrides {
   readonly nextjsServerProps?: OptionalNextjsServerProps;
   readonly nextjsImageProps?: OptionalNextjsImageProps;
   readonly nextjsRevalidationProps?: OptionalNextjsRevalidationProps;
-  readonly nextjsDomainPropsProps?: OptionalNextjsDomainProps;
+  readonly nextjsDomainProps?: OptionalNextjsDomainProps;
   readonly nextjsDistributionProps?: OptionalNextjsDistributionProps;
   readonly nextjsInvalidationProps?: OptionalNextjsInvalidationProps;
 }
@@ -158,6 +158,7 @@ export class Nextjs extends Construct {
       environment: props.environment,
       quiet: props.quiet,
       skipBuild: props.skipBuild,
+      ...props.overrides?.nextjs?.nextjsBuildProps,
     });
 
     // deploy nextjs static assets to s3
@@ -166,18 +167,21 @@ export class Nextjs extends Construct {
       environment: props.environment,
       nextBuild: this.nextBuild,
       overrides: props.overrides?.nextjsStaticAssets,
+      ...props.overrides?.nextjs?.nextjsStaticAssetsProps,
     });
 
     this.serverFunction = new NextjsServer(this, 'Server', {
       nextBuild: this.nextBuild,
       staticAssetBucket: this.staticAssets.bucket,
       overrides: props.overrides?.nextjsServer,
+      ...props.overrides?.nextjs?.nextjsServerProps,
     });
     // build image optimization
     this.imageOptimizationFunction = new NextjsImage(this, 'ImgOptFn', {
       bucket: props.imageOptimizationBucket || this.bucket,
       nextBuild: this.nextBuild,
       overrides: props.overrides?.nextjsImage,
+      ...props.overrides?.nextjs?.nextjsImageProps,
     });
 
     // build revalidation queue and handler function
@@ -185,10 +189,14 @@ export class Nextjs extends Construct {
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction,
       overrides: props.overrides?.nextjsRevalidation,
+      ...props.overrides?.nextjs?.nextjsRevalidationProps,
     });
 
     if (this.props.domainProps) {
-      this.domain = new NextjsDomain(this, 'Domain', this.props.domainProps);
+      this.domain = new NextjsDomain(this, 'Domain', {
+        ...this.props.domainProps,
+        ...props.overrides?.nextjs?.nextjsDomainProps,
+      });
     }
     this.distribution = new NextjsDistribution(this, 'Distribution', {
       nextjsPath: props.nextjsPath,
@@ -200,6 +208,7 @@ export class Nextjs extends Construct {
       serverFunction: this.serverFunction.lambdaFunction,
       imageOptFunction: this.imageOptimizationFunction,
       overrides: props.overrides?.nextjsDistribution,
+      ...props.overrides?.nextjs?.nextjsDistributionProps,
     });
     if (this.domain) {
       this.domain.createDnsRecords(this.distribution.distribution);
@@ -210,6 +219,7 @@ export class Nextjs extends Construct {
         distribution: this.distribution.distribution,
         dependencies: [], // [this.staticAssets, this.serverFunction, this.imageOptimizationFunction]
         overrides: props.overrides?.nextjsInvalidation,
+        ...props.overrides?.nextjs?.nextjsInvalidationProps,
       });
     }
   }

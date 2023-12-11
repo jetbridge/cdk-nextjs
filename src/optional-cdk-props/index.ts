@@ -11,3 +11,4 @@ export { OptionalHostedZoneProviderProps } from './OptionalHostedZoneProviderPro
 export { OptionalProviderProps } from './OptionalProviderProps';
 export { OptionalS3OriginProps } from './OptionalS3OriginProps';
 export { OptionalTablePropsV2 } from './OptionalTablePropsV2';
+export { OptionalNextjsBucketDeploymentProps } from './OptionalNextjsBucketDeploymentProps'

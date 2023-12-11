@@ -28,6 +28,7 @@
 /src/optional-cdk-props/OptionalEdgeFunctionProps.ts linguist-generated
 /src/optional-cdk-props/OptionalFunctionProps.ts linguist-generated
 /src/optional-cdk-props/OptionalHostedZoneProviderProps.ts linguist-generated
+/src/optional-cdk-props/OptionalNextjsBucketDeploymentProps.ts linguist-generated
 /src/optional-cdk-props/OptionalProviderProps.ts linguist-generated
 /src/optional-cdk-props/OptionalS3OriginProps.ts linguist-generated
 /src/optional-cdk-props/OptionalTablePropsV2.ts linguist-generated

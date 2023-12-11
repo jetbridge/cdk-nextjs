@@ -65,3 +65,4 @@ tsconfig.json
 !/src/optional-cdk-props/OptionalTablePropsV2.ts
 !/src/optional-cdk-props/OptionalProviderProps.ts
 !/src/optional-cdk-props/OptionalAssetProps.ts
+!/src/optional-cdk-props/OptionalNextjsBucketDeploymentProps.ts

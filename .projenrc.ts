@@ -143,6 +143,12 @@ new ProjenStruct(project, {
 })
   .mixin(Struct.fromFqn('aws-cdk-lib.aws_s3_assets.AssetProps'))
   .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalNextjsBucketDeploymentProps',
+  filePath: getFilePath('OptionalNextjsBucketDeploymentProps'),
+})
+  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsBucketDeploymentProps'))
+  .allOptional();
 
 // const e2eTestsWorkflow = project.github?.addWorkflow('e2e-tests');
 // e2eTestsWorkflow?.on({ pullRequest: { branches: ['main'] } });

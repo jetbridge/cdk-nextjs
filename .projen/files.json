@@ -23,6 +23,7 @@
     "src/optional-cdk-props/OptionalEdgeFunctionProps.ts",
     "src/optional-cdk-props/OptionalFunctionProps.ts",
     "src/optional-cdk-props/OptionalHostedZoneProviderProps.ts",
+    "src/optional-cdk-props/OptionalNextjsBucketDeploymentProps.ts",
     "src/optional-cdk-props/OptionalProviderProps.ts",
     "src/optional-cdk-props/OptionalS3OriginProps.ts",
     "src/optional-cdk-props/OptionalTablePropsV2.ts",

@@ -9,9 +9,11 @@ import { CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
 import { OptionalAssetProps } from './optional-cdk-props/OptionalAssetProps';
+import { OptionalNextjsBucketDeploymentProps } from './optional-cdk-props/OptionalNextjsBucketDeploymentProps';
 
 export interface NextjsStaticAssetOverrides {
   readonly bucketProps?: s3.BucketProps;
+  readonly nextjsBucketDeploymentProps?: OptionalNextjsBucketDeploymentProps;
   readonly assetProps?: OptionalAssetProps;
 }
 
@@ -135,6 +137,7 @@ export class NextjsStaticAssets extends Construct {
           CacheControl: 'public, max-age=31536000, immutable',
         },
       },
+      ...this.props.overrides?.nextjsBucketDeploymentProps,
     });
   }
 }

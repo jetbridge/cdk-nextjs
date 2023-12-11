@@ -2,7 +2,7 @@ import { Code, Function as LambdaFunction, FunctionOptions } from 'aws-cdk-lib/a
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import type { NextjsBuild } from './NextjsBuild';
-import { OptionalFunctionProps } from './optional-cdk-props/OptionalFunctionProps';
+import { OptionalFunctionProps } from './optional-cdk-props';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 
 export interface NextjsImageOverrides {

@@ -12,10 +12,12 @@ import {
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Construct } from 'constructs';
 import { NextjsProps } from '.';
-import { OptionalAaaaRecordProps } from './optional-cdk-props/OptionalAaaaRecordProps';
-import { OptionalARecordProps } from './optional-cdk-props/OptionalARecordProps';
-import { OptionalCertificateProps } from './optional-cdk-props/OptionalCertificateProps';
-import { OptionalHostedZoneProviderProps } from './optional-cdk-props/OptionalHostedZoneProviderProps';
+import {
+  OptionalAaaaRecordProps,
+  OptionalCertificateProps,
+  OptionalHostedZoneProviderProps,
+  OptionalARecordProps,
+} from './optional-cdk-props';
 
 export interface NextjsDomainOverrides {
   readonly certificateProps?: OptionalCertificateProps;

@@ -2,25 +2,35 @@ import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import { NextjsBuild, NextjsBuildProps } from './NextjsBuild';
-import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
+import { NextjsBuild } from './NextjsBuild';
+import { NextjsDistribution } from './NextjsDistribution';
 import { NextjsDomain, NextjsDomainProps } from './NextjsDomain';
-import { NextjsImage, NextjsImageProps } from './NextjsImage';
-import { NextjsInvalidation, NextjsInvalidationProps } from './NextjsInvalidation';
+import { NextjsImage } from './NextjsImage';
+import { NextjsInvalidation } from './NextjsInvalidation';
 import { NextjsOverrides } from './NextjsOverrides';
-import { NextjsRevalidation, NextjsRevalidationProps } from './NextjsRevalidation';
-import { NextjsServer, NextjsServerProps } from './NextjsServer';
-import { NextjsStaticAssets, NextjsStaticAssetsProps } from './NextjsStaticAssets';
+import { NextjsRevalidation } from './NextjsRevalidation';
+import { NextjsServer } from './NextjsServer';
+import { NextjsStaticAssets } from './NextjsStaticAssets';
+import {
+  OptionalNextjsDistributionProps,
+  OptionalNextjsDomainProps,
+  OptionalNextjsImageProps,
+  OptionalNextjsInvalidationProps,
+  OptionalNextjsRevalidationProps,
+  OptionalNextjsServerProps,
+  OptionalNextjsStaticAssetsProps,
+} from './optional-cdk-props';
+import { OptionalNextjsBuildProps } from './optional-cdk-props/OptionalNextjsBuildProps';
 
 export interface NextjsConstructOverrides {
-  readonly nextjsBuildProps?: NextjsBuildProps;
-  readonly nextjsStaticAssetsProps?: NextjsStaticAssetsProps;
-  readonly nextjsServerProps?: NextjsServerProps;
-  readonly nextjsImage?: NextjsImageProps;
-  readonly nextjsRevalidation?: NextjsRevalidationProps;
-  readonly nextjsDomainProps?: NextjsDomainProps;
-  readonly nextjsDistribution?: NextjsDistributionProps;
-  readonly nextjsInvalidation?: NextjsInvalidationProps;
+  readonly nextjsBuildProps?: OptionalNextjsBuildProps;
+  readonly nextjsStaticAssetsProps?: OptionalNextjsStaticAssetsProps;
+  readonly nextjsServerProps?: OptionalNextjsServerProps;
+  readonly nextjsImageProps?: OptionalNextjsImageProps;
+  readonly nextjsRevalidationProps?: OptionalNextjsRevalidationProps;
+  readonly nextjsDomainPropsProps?: OptionalNextjsDomainProps;
+  readonly nextjsDistributionProps?: OptionalNextjsDistributionProps;
+  readonly nextjsInvalidationProps?: OptionalNextjsInvalidationProps;
 }
 
 export interface NextjsProps {

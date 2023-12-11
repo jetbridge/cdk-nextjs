@@ -8,8 +8,7 @@ import { Construct } from 'constructs';
 import { CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
-import { OptionalAssetProps } from './optional-cdk-props/OptionalAssetProps';
-import { OptionalNextjsBucketDeploymentProps } from './optional-cdk-props/OptionalNextjsBucketDeploymentProps';
+import { OptionalAssetProps, OptionalNextjsBucketDeploymentProps } from './optional-cdk-props';
 
 export interface NextjsStaticAssetOverrides {
   readonly bucketProps?: s3.BucketProps;

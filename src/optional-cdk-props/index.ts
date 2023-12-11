@@ -11,4 +11,12 @@ export { OptionalHostedZoneProviderProps } from './OptionalHostedZoneProviderPro
 export { OptionalProviderProps } from './OptionalProviderProps';
 export { OptionalS3OriginProps } from './OptionalS3OriginProps';
 export { OptionalTablePropsV2 } from './OptionalTablePropsV2';
-export { OptionalNextjsBucketDeploymentProps } from './OptionalNextjsBucketDeploymentProps'
+export { OptionalNextjsBucketDeploymentProps } from './OptionalNextjsBucketDeploymentProps';
+export { OptionalNextjsBuildProps } from './OptionalNextjsBuildProps';
+export { OptionalNextjsDistributionProps } from './OptionalNextjsDistributionProps';
+export { OptionalNextjsDomainProps } from './OptionalNextjsDomainProps';
+export { OptionalNextjsImageProps } from './OptionalNextjsImageProps';
+export { OptionalNextjsInvalidationProps } from './OptionalNextjsInvalidationProps';
+export { OptionalNextjsRevalidationProps } from './OptionalNextjsRevalidationProps';
+export { OptionalNextjsServerProps } from './OptionalNextjsServerProps';
+export { OptionalNextjsStaticAssetsProps } from './OptionalNextjsStaticAssetsProps';

@@ -14,10 +14,12 @@ import { DEFAULT_STATIC_MAX_AGE, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './c
 import { NextjsProps } from './Nextjs';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDomain } from './NextjsDomain';
-import { OptionalCloudFrontFunctionProps } from './optional-cdk-props/OptionalCloudFrontFunctionProps';
-import { OptionalDistributionProps } from './optional-cdk-props/OptionalDistributionProps';
-import { OptionalEdgeFunctionProps } from './optional-cdk-props/OptionalEdgeFunctionProps';
-import { OptionalS3OriginProps } from './optional-cdk-props/OptionalS3OriginProps';
+import {
+  OptionalCloudFrontFunctionProps,
+  OptionalDistributionProps,
+  OptionalEdgeFunctionProps,
+  OptionalS3OriginProps,
+} from './optional-cdk-props';
 
 export interface NextjsDistributionOverrides {
   readonly cloudFrontFunctionProps?: OptionalCloudFrontFunctionProps;

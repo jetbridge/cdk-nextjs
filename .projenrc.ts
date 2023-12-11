@@ -1,7 +1,8 @@
 import { ProjenStruct, Struct } from '@mrgrain/jsii-struct-builder';
 import { BuildOptions } from 'esbuild';
-import { awscdk } from 'projen';
+import { JsonPatch, awscdk } from 'projen';
 import { TypeScriptCompilerOptions, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
+import {} from 'projen/lib/github';
 
 const commonBundlingOptions = {
   bundle: true,
@@ -76,6 +77,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
 project.bundler.addBundle('./src/lambdas/nextjs-bucket-deployment.ts', commonBundlingOptions);
 project.bundler.addBundle('./src/lambdas/sign-fn-url.ts', commonBundlingOptions);
 
+const buildWorkflow = project.tryFindObjectFile('.github/workflows/build.yml');
+// https://github.com/mrgrain/jsii-struct-builder/issues/174#issuecomment-1850496788
+buildWorkflow?.patch(JsonPatch.replace('/jobs/build/steps/4/run', 'npx projen compile && npx projen build'));
+
 const getFilePath = (fileName: string) => 'src/optional-cdk-props/' + fileName + '.ts';
 new ProjenStruct(project, { name: 'OptionalFunctionProps', filePath: getFilePath('OptionalFunctionProps') })
   .mixin(Struct.fromFqn('aws-cdk-lib.aws_lambda.FunctionProps'))
@@ -148,6 +153,54 @@ new ProjenStruct(project, {
   filePath: getFilePath('OptionalNextjsBucketDeploymentProps'),
 })
   .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsBucketDeploymentProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalNextjsBuildProps',
+  filePath: getFilePath('OptionalNextjsBuildProps'),
+})
+  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsBuildProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalNextjsStaticAssetsProps',
+  filePath: getFilePath('OptionalNextjsStaticAssetsProps'),
+})
+  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsStaticAssetsProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalNextjsServerProps',
+  filePath: getFilePath('OptionalNextjsServerProps'),
+})
+  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsServerProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalNextjsImageProps',
+  filePath: getFilePath('OptionalNextjsImageProps'),
+})
+  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsImageProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalNextjsRevalidationProps',
+  filePath: getFilePath('OptionalNextjsRevalidationProps'),
+})
+  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsRevalidationProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalNextjsDomainProps',
+  filePath: getFilePath('OptionalNextjsDomainProps'),
+})
+  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsDomainProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalNextjsDistributionProps',
+  filePath: getFilePath('OptionalNextjsDistributionProps'),
+})
+  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsDistributionProps'))
+  .allOptional();
+new ProjenStruct(project, {
+  name: 'OptionalNextjsInvalidationProps',
+  filePath: getFilePath('OptionalNextjsInvalidationProps'),
+})
+  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsInvalidationProps'))
   .allOptional();
 
 // const e2eTestsWorkflow = project.github?.addWorkflow('e2e-tests');

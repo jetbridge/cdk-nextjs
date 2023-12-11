@@ -66,3 +66,11 @@ tsconfig.json
 !/src/optional-cdk-props/OptionalProviderProps.ts
 !/src/optional-cdk-props/OptionalAssetProps.ts
 !/src/optional-cdk-props/OptionalNextjsBucketDeploymentProps.ts
+!/src/optional-cdk-props/OptionalNextjsBuildProps.ts
+!/src/optional-cdk-props/OptionalNextjsStaticAssetsProps.ts
+!/src/optional-cdk-props/OptionalNextjsServerProps.ts
+!/src/optional-cdk-props/OptionalNextjsImageProps.ts
+!/src/optional-cdk-props/OptionalNextjsRevalidationProps.ts
+!/src/optional-cdk-props/OptionalNextjsDomainProps.ts
+!/src/optional-cdk-props/OptionalNextjsDistributionProps.ts
+!/src/optional-cdk-props/OptionalNextjsInvalidationProps.ts

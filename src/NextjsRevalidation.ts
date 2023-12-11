@@ -10,10 +10,12 @@ import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsServer } from './NextjsServer';
-import { OptionalCustomResourceProps } from './optional-cdk-props/OptionalCustomResourceProps';
-import { OptionalFunctionProps } from './optional-cdk-props/OptionalFunctionProps';
-import { OptionalProviderProps } from './optional-cdk-props/OptionalProviderProps';
-import { OptionalTablePropsV2 } from './optional-cdk-props/OptionalTablePropsV2';
+import {
+  OptionalCustomResourceProps,
+  OptionalFunctionProps,
+  OptionalProviderProps,
+  OptionalTablePropsV2,
+} from './optional-cdk-props';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 
 export interface NextjsRevalidationOverrides {

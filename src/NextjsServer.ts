@@ -11,9 +11,7 @@ import { CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { NextjsProps } from './Nextjs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
-import { OptionalNextjsBucketDeploymentProps } from './optional-cdk-props';
-import { OptionalAssetProps } from './optional-cdk-props/OptionalAssetProps';
-import { OptionalFunctionProps } from './optional-cdk-props/OptionalFunctionProps';
+import { OptionalAssetProps, OptionalFunctionProps, OptionalNextjsBucketDeploymentProps } from './optional-cdk-props';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 import { createArchive } from './utils/create-archive';
 

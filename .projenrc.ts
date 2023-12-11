@@ -42,7 +42,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   eslintOptions: {
     prettier: true,
     dirs: ['src'],
-    ignorePatterns: ['examples/', 'e2e-tests/'],
+    ignorePatterns: ['examples/', 'e2e-tests/', 'optional-cdk-props/'],
   },
   projenrcTs: true,
   tsconfig: { compilerOptions: { ...commonTscOptions } },

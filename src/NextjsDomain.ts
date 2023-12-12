@@ -17,7 +17,7 @@ import {
   OptionalCertificateProps,
   OptionalHostedZoneProviderProps,
   OptionalARecordProps,
-} from './optional-cdk-props';
+} from './generated-structs';
 
 export interface NextjsDomainOverrides {
   readonly certificateProps?: OptionalCertificateProps;

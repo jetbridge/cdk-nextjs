@@ -11,15 +11,15 @@ import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { DEFAULT_STATIC_MAX_AGE, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
-import { NextjsProps } from './Nextjs';
-import { NextjsBuild } from './NextjsBuild';
-import { NextjsDomain } from './NextjsDomain';
 import {
   OptionalCloudFrontFunctionProps,
   OptionalDistributionProps,
   OptionalEdgeFunctionProps,
   OptionalS3OriginProps,
-} from './optional-cdk-props';
+} from './generated-structs';
+import { NextjsProps } from './Nextjs';
+import { NextjsBuild } from './NextjsBuild';
+import { NextjsDomain } from './NextjsDomain';
 
 export interface NextjsDistributionOverrides {
   readonly cloudFrontFunctionProps?: OptionalCloudFrontFunctionProps;

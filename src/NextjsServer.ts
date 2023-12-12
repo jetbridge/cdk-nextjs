@@ -8,10 +8,10 @@ import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
 import { CACHE_BUCKET_KEY_PREFIX } from './constants';
+import { OptionalAssetProps, OptionalFunctionProps, OptionalNextjsBucketDeploymentProps } from './generated-structs';
 import { NextjsProps } from './Nextjs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
-import { OptionalAssetProps, OptionalFunctionProps, OptionalNextjsBucketDeploymentProps } from './optional-cdk-props';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 import { createArchive } from './utils/create-archive';
 

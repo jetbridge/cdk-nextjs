@@ -4,7 +4,7 @@ import { Code, Function } from 'aws-cdk-lib/aws-lambda';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
-import { OptionalCustomResourceProps, OptionalFunctionProps } from './optional-cdk-props';
+import { OptionalCustomResourceProps, OptionalFunctionProps } from './generated-structs';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 
 export interface NextjsBucketDeploymentOverrides {

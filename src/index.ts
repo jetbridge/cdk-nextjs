@@ -19,4 +19,4 @@ export { NextjsInvalidation, NextjsInvalidationProps, NextjsInvalidationOverride
 export { NextjsDomain, NextjsDomainProps, NextjsDomainOverrides } from './NextjsDomain';
 export { Nextjs, NextjsProps, NextjsConstructOverrides } from './Nextjs';
 export { NextjsOverrides } from './NextjsOverrides';
-export * from './optional-cdk-props';
+export * from './generated-structs';

@@ -2,6 +2,16 @@ import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
+import {
+  OptionalNextjsDistributionProps,
+  OptionalNextjsDomainProps,
+  OptionalNextjsImageProps,
+  OptionalNextjsInvalidationProps,
+  OptionalNextjsRevalidationProps,
+  OptionalNextjsServerProps,
+  OptionalNextjsStaticAssetsProps,
+} from './generated-structs';
+import { OptionalNextjsBuildProps } from './generated-structs/OptionalNextjsBuildProps';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDistribution } from './NextjsDistribution';
 import { NextjsDomain, NextjsDomainProps } from './NextjsDomain';
@@ -11,16 +21,6 @@ import { NextjsOverrides } from './NextjsOverrides';
 import { NextjsRevalidation } from './NextjsRevalidation';
 import { NextjsServer } from './NextjsServer';
 import { NextjsStaticAssets } from './NextjsStaticAssets';
-import {
-  OptionalNextjsDistributionProps,
-  OptionalNextjsDomainProps,
-  OptionalNextjsImageProps,
-  OptionalNextjsInvalidationProps,
-  OptionalNextjsRevalidationProps,
-  OptionalNextjsServerProps,
-  OptionalNextjsStaticAssetsProps,
-} from './optional-cdk-props';
-import { OptionalNextjsBuildProps } from './optional-cdk-props/OptionalNextjsBuildProps';
 
 export interface NextjsConstructOverrides {
   readonly nextjsBuildProps?: OptionalNextjsBuildProps;

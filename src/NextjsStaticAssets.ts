@@ -6,9 +6,9 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
 import { CACHE_BUCKET_KEY_PREFIX } from './constants';
+import { OptionalAssetProps, OptionalNextjsBucketDeploymentProps } from './generated-structs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
-import { OptionalAssetProps, OptionalNextjsBucketDeploymentProps } from './optional-cdk-props';
 
 export interface NextjsStaticAssetOverrides {
   readonly bucketProps?: s3.BucketProps;

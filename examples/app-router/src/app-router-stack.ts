@@ -2,6 +2,9 @@ import { CfnOutput, Stack, StackProps, Token } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Nextjs } from 'cdk-nextjs-standalone';
 
+/**
+ * This stack showcases how to use cdk-nextjs with Next.js App Router
+ */
 export class AppRouterStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);

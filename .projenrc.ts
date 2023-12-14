@@ -81,7 +81,7 @@ const buildWorkflow = project.tryFindObjectFile('.github/workflows/build.yml');
 // https://github.com/mrgrain/jsii-struct-builder/issues/174#issuecomment-1850496788
 buildWorkflow?.patch(JsonPatch.replace('/jobs/build/steps/4/run', 'npx projen compile && npx projen build'));
 
-const getFilePath = (fileName: string) => 'src/optional-cdk-props/' + fileName + '.ts';
+const getFilePath = (fileName: string) => 'src/generated-structs/' + fileName + '.ts';
 new ProjenStruct(project, { name: 'OptionalFunctionProps', filePath: getFilePath('OptionalFunctionProps') })
   .mixin(Struct.fromFqn('aws-cdk-lib.aws_lambda.FunctionProps'))
   .allOptional();

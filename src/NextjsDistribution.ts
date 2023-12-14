@@ -10,7 +10,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import { DEFAULT_STATIC_MAX_AGE, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
+import { NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
 import {
   OptionalCloudFrontFunctionProps,
   OptionalDistributionProps,
@@ -35,33 +35,11 @@ export interface NextjsDistributionOverrides {
   readonly s3OriginProps?: OptionalS3OriginProps;
 }
 
-export interface NextjsCachePolicyProps {
-  readonly staticResponseHeaderPolicy?: ResponseHeadersPolicy;
-  readonly staticCachePolicy?: cloudfront.ICachePolicy;
-  readonly serverCachePolicy?: cloudfront.ICachePolicy;
-  readonly imageCachePolicy?: cloudfront.ICachePolicy;
-
-  /**
-   * Cache-control max-age default for static assets (/_next/*).
-   * Default: 30 days.
-   */
-  readonly staticClientMaxAgeDefault?: Duration;
-}
-
-export interface NextjsOriginRequestPolicyProps {
-  readonly serverOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
-  readonly imageOptimizationOriginRequestPolicy?: cloudfront.IOriginRequestPolicy;
-}
-
 export interface NextjsDistributionProps {
   /**
    * @see {@link NextjsProps.basePath}
    */
   readonly basePath?: NextjsProps['basePath'];
-  /**
-   * Override the default CloudFront cache policies created internally.
-   */
-  readonly cachePolicies?: NextjsCachePolicyProps;
   /**
    * @see {@link NextjsProps.distribution}
    */
@@ -88,10 +66,6 @@ export interface NextjsDistributionProps {
    * @see {@link NextjsProps.nextjsPath}
    */
   readonly nextjsPath: NextjsProps['nextjsPath'];
-  /**
-   * Override the default CloudFront origin request policies created internally.
-   */
-  readonly originRequestPolicies?: NextjsOriginRequestPolicyProps;
   /**
    * Overrides
    */
@@ -179,30 +153,26 @@ export class NextjsDistribution extends Construct {
   }
 
   private createStaticBehaviorOptions(): cloudfront.BehaviorOptions {
-    const staticClientMaxAge = this.props.cachePolicies?.staticClientMaxAgeDefault || DEFAULT_STATIC_MAX_AGE;
-    // TODO: remove this response headers policy once S3 files have correct cache control headers with new asset deployment technique
-    const responseHeadersPolicy =
-      this.props.cachePolicies?.staticResponseHeaderPolicy ??
-      new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
-        // add default header for static assets
-        customHeadersBehavior: {
-          customHeaders: [
-            {
-              header: 'cache-control',
-              override: false,
-              // by default tell browser to cache static files for this long
-              // this is separate from the origin cache policy
-              value: `public,max-age=${staticClientMaxAge},immutable`,
-            },
-          ],
-        },
-      });
+    const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
+      // add default header for static assets
+      customHeadersBehavior: {
+        customHeaders: [
+          {
+            header: 'cache-control',
+            override: false,
+            // by default tell browser to cache static files for this long
+            // this is separate from the origin cache policy
+            value: `public,max-age=${Duration.days(30).toSeconds()},immutable`,
+          },
+        ],
+      },
+    });
     return {
       ...this.commonBehaviorOptions,
       origin: this.s3Origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
-      cachePolicy: this.props.cachePolicies?.staticCachePolicy ?? cloudfront.CachePolicy.CACHING_OPTIMIZED,
+      cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
       responseHeadersPolicy,
       ...this.props.overrides?.staticBehaviorOptions,
     };
@@ -250,34 +220,29 @@ export class NextjsDistribution extends Construct {
   private createServerBehaviorOptions(): cloudfront.BehaviorOptions {
     const fnUrl = this.props.serverFunction.addFunctionUrl({ authType: this.fnUrlAuthType });
     const origin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), this.props.overrides?.serverHttpOriginProps);
-    const originRequestPolicy =
-      this.props.originRequestPolicies?.serverOriginRequestPolicy ??
-      cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER;
-    const cachePolicy =
-      this.props.cachePolicies?.serverCachePolicy ??
-      new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
-        queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-        headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
-          'accept',
-          'rsc',
-          'next-router-prefetch',
-          'next-router-state-tree',
-          'next-url'
-        ),
-        cookieBehavior: cloudfront.CacheCookieBehavior.all(),
-        defaultTtl: Duration.seconds(0),
-        maxTtl: Duration.days(365),
-        minTtl: Duration.seconds(0),
-        enableAcceptEncodingBrotli: true,
-        enableAcceptEncodingGzip: true,
-        comment: 'Nextjs Server Default Cache Policy',
-        ...this.props.overrides?.serverCachePolicyProps,
-      });
+    const cachePolicy = new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
+      queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+      headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
+        'accept',
+        'rsc',
+        'next-router-prefetch',
+        'next-router-state-tree',
+        'next-url'
+      ),
+      cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+      defaultTtl: Duration.seconds(0),
+      maxTtl: Duration.days(365),
+      minTtl: Duration.seconds(0),
+      enableAcceptEncodingBrotli: true,
+      enableAcceptEncodingGzip: true,
+      comment: 'Nextjs Server Default Cache Policy',
+      ...this.props.overrides?.serverCachePolicyProps,
+    });
     return {
       ...this.commonBehaviorOptions,
       origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-      originRequestPolicy,
+      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       cachePolicy,
       edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
       functionAssociations: this.createCloudFrontFnAssociations(),
@@ -308,30 +273,25 @@ export class NextjsDistribution extends Construct {
       Fn.parseDomainName(imageOptFnUrl.url),
       this.props.overrides?.imageHttpOriginProps
     );
-    const originRequestPolicy =
-      this.props.originRequestPolicies?.imageOptimizationOriginRequestPolicy ??
-      cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER;
-    const cachePolicy =
-      this.props.cachePolicies?.imageCachePolicy ??
-      new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
-        queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-        headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
-        cookieBehavior: cloudfront.CacheCookieBehavior.all(),
-        defaultTtl: Duration.days(1),
-        maxTtl: Duration.days(365),
-        minTtl: Duration.days(0),
-        enableAcceptEncodingBrotli: true,
-        enableAcceptEncodingGzip: true,
-        comment: 'Nextjs Image Default Cache Policy',
-        ...this.props.overrides?.imageCachePolicyProps,
-      });
+    const cachePolicy = new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
+      queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+      headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
+      cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+      defaultTtl: Duration.days(1),
+      maxTtl: Duration.days(365),
+      minTtl: Duration.days(0),
+      enableAcceptEncodingBrotli: true,
+      enableAcceptEncodingGzip: true,
+      comment: 'Nextjs Image Default Cache Policy',
+      ...this.props.overrides?.imageCachePolicyProps,
+    });
     return {
       ...this.commonBehaviorOptions,
       origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
       cachePolicy,
-      originRequestPolicy,
+      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       edgeLambdas: this.edgeLambdas,
       ...this.props.overrides?.imageBehaviorOptions,
     };

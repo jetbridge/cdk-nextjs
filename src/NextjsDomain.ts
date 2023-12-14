@@ -89,7 +89,7 @@ export interface NextjsDomainProps {
 /**
  * Use a custom domain with `Nextjs`. Requires a Route53 hosted zone to have been
  * created within the same AWS account. For DNS setups where you cannot use a
- * Route53 hosted zone in the same AWS account, use the `defaults.distribution.cdk.distribution`
+ * Route53 hosted zone in the same AWS account, use the `overrides.nextjsDistribution.distributionProps`
  * prop of {@link NextjsProps}.
  *
  * See {@link NextjsDomainProps} TS Doc comments for detailed docs on how to customize.

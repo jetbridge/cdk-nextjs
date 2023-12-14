@@ -26,6 +26,8 @@
   - `NextjsDefaultsProps.assetDeployment` -> `NextjsOverrides.staticAssets`
   - `NextjsDefaultsProps.lambda` -> `NextjsOverrides.nextjsServer`
   - `NextjsDefaultsProps.distribution` -> `NextjsOverrides.nextjsDistribution`
+- Remove `NextjsDistributionProps.originRequestPolicies` in favor of `NextjsOverrides.nextjsDistribution.*BehaviorOptions`
+- Remove `NextjsDistributionProps.cachePolicies` in favor of `NextjsOverrides.nextjsDistribution.*CachePolicies`
 
 
 ## v3

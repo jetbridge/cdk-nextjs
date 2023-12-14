@@ -151,7 +151,7 @@ export class Nextjs extends Construct {
     super(scope, id);
 
     // build nextjs app
-    this.nextBuild = new NextjsBuild(this, id, {
+    this.nextBuild = new NextjsBuild(this, 'Build', {
       nextjsPath: props.nextjsPath,
       buildCommand: props.buildCommand,
       buildPath: props.buildPath,
@@ -177,7 +177,7 @@ export class Nextjs extends Construct {
       ...props.overrides?.nextjs?.nextjsServerProps,
     });
     // build image optimization
-    this.imageOptimizationFunction = new NextjsImage(this, 'ImgOptFn', {
+    this.imageOptimizationFunction = new NextjsImage(this, 'Image', {
       bucket: props.imageOptimizationBucket || this.bucket,
       nextBuild: this.nextBuild,
       overrides: props.overrides?.nextjsImage,

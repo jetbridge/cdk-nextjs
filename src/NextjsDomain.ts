@@ -12,6 +12,19 @@ import {
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Construct } from 'constructs';
 import { NextjsProps } from '.';
+import {
+  OptionalAaaaRecordProps,
+  OptionalCertificateProps,
+  OptionalHostedZoneProviderProps,
+  OptionalARecordProps,
+} from './generated-structs';
+
+export interface NextjsDomainOverrides {
+  readonly certificateProps?: OptionalCertificateProps;
+  readonly hostedZoneProviderProps?: OptionalHostedZoneProviderProps;
+  readonly aRecordProps?: OptionalARecordProps;
+  readonly aaaaRecordProps?: OptionalAaaaRecordProps;
+}
 
 export interface NextjsDomainProps {
   /**
@@ -67,12 +80,16 @@ export interface NextjsDomainProps {
    * If {@link NextjsDomainProps.certificate} is passed, then this prop is ignored.
    */
   readonly certificateDomainName?: string;
+  /**
+   * Override props for every construct.
+   */
+  readonly overrides?: NextjsDomainOverrides;
 }
 
 /**
  * Use a custom domain with `Nextjs`. Requires a Route53 hosted zone to have been
  * created within the same AWS account. For DNS setups where you cannot use a
- * Route53 hosted zone in the same AWS account, use the `defaults.distribution.cdk.distribution`
+ * Route53 hosted zone in the same AWS account, use the `overrides.nextjsDistribution.distributionProps`
  * prop of {@link NextjsProps}.
  *
  * See {@link NextjsDomainProps} TS Doc comments for detailed docs on how to customize.
@@ -118,6 +135,7 @@ export class NextjsDomain extends Construct {
     if (!this.props.hostedZone) {
       return HostedZone.fromLookup(this, 'HostedZone', {
         domainName: this.props.domainName,
+        ...this.props.overrides?.hostedZoneProviderProps,
       });
     } else {
       return this.props.hostedZone;
@@ -129,6 +147,7 @@ export class NextjsDomain extends Construct {
       return new Certificate(this, 'Certificate', {
         domainName: this.props.certificateDomainName ?? this.props.domainName,
         validation: CertificateValidation.fromDns(this.hostedZone),
+        ...this.props.overrides?.certificateProps,
       });
     } else {
       return this.props.certificate;
@@ -154,10 +173,12 @@ export class NextjsDomain extends Construct {
         new ARecord(this, 'ARecordAlt' + i, {
           ...recordProps,
           recordName: `${alternateName}.`,
+          ...this.props.overrides?.aRecordProps,
         });
         new AaaaRecord(this, 'AaaaRecordAlt' + i, {
           ...recordProps,
           recordName: `${alternateName}.`,
+          ...this.props.overrides?.aaaaRecordProps,
         });
         i++;
       }

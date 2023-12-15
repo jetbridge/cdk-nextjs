@@ -1,9 +1,8 @@
 import { CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Nextjs, NextjsDistributionProps } from 'cdk-nextjs-standalone';
+import { Nextjs } from 'cdk-nextjs-standalone';
 import { CfnWebACL } from 'aws-cdk-lib/aws-wafv2';
 import { Function as CdkFunction, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
-import { DistributionProps, SecurityPolicyProtocol } from 'aws-cdk-lib/aws-cloudfront';
 
 export class HighSecurityStack extends Stack {
   private nextjs: Nextjs;
@@ -15,15 +14,17 @@ export class HighSecurityStack extends Stack {
     this.nextjs = new Nextjs(this, 'nextjs', {
       nextjsPath: '../../open-next/examples/app-router',
       skipBuild: false,
-      defaults: {
-        distribution: {
-          functionUrlAuthType: FunctionUrlAuthType.AWS_IAM,
-          cdk: {
-            distribution: {
-              webAclId: webAcl.attrArn,
-            } as unknown as DistributionProps,
-          },
-        } satisfies Partial<NextjsDistributionProps>,
+      overrides: {
+        nextjs: {
+          nextjsDistributionProps: {
+            functionUrlAuthType: FunctionUrlAuthType.AWS_IAM,
+          }
+        },
+        nextjsDistribution: {
+          distributionProps: {
+            webAclId: webAcl.attrArn
+          }
+        }
       }
     });
     this.retainEdgeFnOnDelete();

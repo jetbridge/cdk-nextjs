@@ -4,7 +4,13 @@ import { Code, Function } from 'aws-cdk-lib/aws-lambda';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
+import { OptionalCustomResourceProps, OptionalFunctionProps } from './generated-structs';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
+
+export interface NextjsBucketDeploymentOverrides {
+  readonly functionProps?: OptionalFunctionProps;
+  readonly customResourceProps?: OptionalCustomResourceProps;
+}
 
 export interface NextjsBucketDeploymentProps {
   /**
@@ -44,6 +50,10 @@ export interface NextjsBucketDeploymentProps {
    * Destination S3 Bucket Key Prefix
    */
   readonly destinationKeyPrefix?: string | undefined;
+  /**
+   * Override props for every construct.
+   */
+  readonly overrides?: NextjsBucketDeploymentOverrides;
   /**
    * Replace placeholders in all files in `asset`. Placeholder targets are
    * defined by keys of record. Values to replace placeholders with are defined
@@ -116,6 +126,7 @@ export class NextjsBucketDeployment extends Construct {
       code: Code.fromAsset(path.resolve(__dirname, '..', 'assets', 'lambdas', 'nextjs-bucket-deployment')),
       handler: 'index.handler',
       timeout: Duration.minutes(5),
+      ...this.props.overrides?.functionProps,
     });
     if (this.props.debug) {
       fn.addEnvironment('DEBUG', '1');
@@ -140,6 +151,7 @@ export class NextjsBucketDeployment extends Construct {
       properties,
       resourceType: 'Custom::NextjsBucketDeployment',
       serviceToken,
+      ...this.props.overrides?.customResourceProps,
     });
   }
 }

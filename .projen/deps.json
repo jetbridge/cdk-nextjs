@@ -9,6 +9,10 @@
       "type": "build"
     },
     {
+      "name": "@mrgrain/jsii-struct-builder",
+      "type": "build"
+    },
+    {
       "name": "@smithy/signature-v4",
       "type": "build"
     },

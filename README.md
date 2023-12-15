@@ -86,17 +86,8 @@ Built on top of [open-next](https://open-next.js.org/), which was partially buil
 
 ## Contribute
 
-Hey there, we value every new contribution a lot 🙏🏼 thank you.
-
-Here is a short HowTo before you get started:
-
-1. Please make sure to create a bug first
-2. Link the bug in your pull request
-3. Run `yarn build` after you made your changes and before you open a pull request
-
-### Projen
-Don't manually update package.json or use npm CLI. Update dependencies in .projenrc.js then run yarn projen.
+See [Contribute](./docs/contribute.md).
 
 ## Breaking changes
 
-See [here](./docs/major-changes.md).
+See [Major Changes](./docs/major-changes.md).

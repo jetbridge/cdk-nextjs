@@ -22,6 +22,12 @@
 - Remove `projectRoot` as it's not being used
 - Remove `tempBuildDir` as it's not being used
 - Create `NextjsDomain`. Remove custom domain related props from `NextjsDistribution`.
+- Add more customizable `NextjsOverrides` in favor of `NextjsDefaultsProps`. (Remove `NextjsProps.defaults`)
+  - `NextjsDefaultsProps.assetDeployment` -> `NextjsOverrides.staticAssets`
+  - `NextjsDefaultsProps.lambda` -> `NextjsOverrides.nextjsServer`
+  - `NextjsDefaultsProps.distribution` -> `NextjsOverrides.nextjsDistribution`
+- Remove `NextjsDistributionProps.originRequestPolicies` in favor of `NextjsOverrides.nextjsDistribution.*BehaviorOptions`
+- Remove `NextjsDistributionProps.cachePolicies` in favor of `NextjsOverrides.nextjsDistribution.*CachePolicies`
 
 
 ## v3

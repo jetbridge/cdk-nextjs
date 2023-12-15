@@ -8,11 +8,19 @@ import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
 import { CACHE_BUCKET_KEY_PREFIX } from './constants';
+import { OptionalAssetProps, OptionalFunctionProps, OptionalNextjsBucketDeploymentProps } from './generated-structs';
 import { NextjsProps } from './Nextjs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 import { createArchive } from './utils/create-archive';
+
+export interface NextjsServerOverrides {
+  readonly sourceCodeAssetProps?: OptionalAssetProps;
+  readonly destinationCodeAssetProps?: OptionalAssetProps;
+  readonly functionProps?: OptionalFunctionProps;
+  readonly nextjsBucketDeploymentProps: OptionalNextjsBucketDeploymentProps;
+}
 
 export type EnvironmentVars = Record<string, string>;
 
@@ -29,6 +37,10 @@ export interface NextjsServerProps {
    * @see {@link NextjsBuild}
    */
   readonly nextBuild: NextjsBuild;
+  /**
+   * Override props for every construct.
+   */
+  readonly overrides?: NextjsServerOverrides;
   /**
    * @see {@link NextjsProps.quiet}
    */
@@ -82,6 +94,7 @@ export class NextjsServer extends Construct {
     });
     const asset = new Asset(this, 'SourceCodeAsset', {
       path: archivePath,
+      ...this.props.overrides?.sourceCodeAssetProps,
     });
     // new Asset() creates copy of zip into cdk.out/. This cleans up tmp folder
     rmSync(archivePath, { recursive: true });
@@ -97,6 +110,7 @@ export class NextjsServer extends Construct {
     writeFileSync(resolve(assetsTmpDir, 'index.mjs'), `export function handler() { return '${randomUUID()}' }`);
     const destinationAsset = new Asset(this, 'DestinationCodeAsset', {
       path: assetsTmpDir,
+      ...this.props.overrides?.destinationCodeAssetProps,
     });
     rmSync(assetsTmpDir, { recursive: true });
     return destinationAsset;
@@ -112,6 +126,7 @@ export class NextjsServer extends Construct {
       // this.props.environment is for build time, not this.environment which is for runtime
       substitutionConfig: NextjsBucketDeployment.getSubstitutionConfig(this.props.environment || {}),
       zip: true,
+      ...this.props.overrides?.nextjsBucketDeploymentProps,
     });
     return bucketDeployment;
   }
@@ -128,6 +143,7 @@ export class NextjsServer extends Construct {
       // `this.props.lambda.environment` is defined, it will override
       // CACHE_* environment variables which are required
       environment: { ...this.environment, ...this.props.lambda?.environment },
+      ...this.props.overrides?.functionProps,
     });
     this.props.staticAssetBucket.grantReadWrite(fn);
 

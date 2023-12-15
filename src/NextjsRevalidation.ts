@@ -5,12 +5,27 @@ import { AnyPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Code, Function as LambdaFunction, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
-import { Queue } from 'aws-cdk-lib/aws-sqs';
+import { Queue, QueueProps } from 'aws-cdk-lib/aws-sqs';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
+import {
+  OptionalCustomResourceProps,
+  OptionalFunctionProps,
+  OptionalProviderProps,
+  OptionalTablePropsV2,
+} from './generated-structs';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsServer } from './NextjsServer';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
+
+export interface NextjsRevalidationOverrides {
+  readonly queueProps?: QueueProps;
+  readonly queueFunctionProps?: OptionalFunctionProps;
+  readonly tableProps?: OptionalTablePropsV2;
+  readonly insertFunctionProps?: OptionalFunctionProps;
+  readonly insertProviderProps?: OptionalProviderProps;
+  readonly insertCustomResourceProps?: OptionalCustomResourceProps;
+}
 
 export interface NextjsRevalidationProps {
   /**
@@ -21,6 +36,10 @@ export interface NextjsRevalidationProps {
    * @see {@link NextjsBuild}
    */
   readonly nextBuild: NextjsBuild;
+  /**
+   * Override props for every construct.
+   */
+  readonly overrides?: NextjsRevalidationOverrides;
   /**
    * @see {@link NextjsServer}
    */
@@ -66,6 +85,7 @@ export class NextjsRevalidation extends Construct {
     const queue = new Queue(this, 'Queue', {
       fifo: true,
       receiveMessageWaitTime: Duration.seconds(20),
+      ...this.props.overrides?.queueProps,
     });
     // https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-least-privilege-policy.html
     queue.addToResourcePolicy(
@@ -95,6 +115,7 @@ export class NextjsRevalidation extends Construct {
       handler: 'index.handler',
       description: 'Next.js Queue Revalidation Function',
       timeout: Duration.seconds(30),
+      ...this.props.overrides?.queueFunctionProps,
     });
     fn.addEventSource(new SqsEventSource(this.queue, { batchSize: 5 }));
     return fn;
@@ -113,6 +134,7 @@ export class NextjsRevalidation extends Construct {
         },
       ],
       removalPolicy: RemovalPolicy.DESTROY,
+      ...this.props.overrides?.tableProps,
     });
   }
 
@@ -141,6 +163,7 @@ export class NextjsRevalidation extends Construct {
         environment: {
           CACHE_DYNAMO_TABLE: revalidationTable.tableName,
         },
+        ...this.props.overrides?.insertFunctionProps,
       });
 
       revalidationTable.grantReadWriteData(insertFn);
@@ -148,6 +171,7 @@ export class NextjsRevalidation extends Construct {
       const provider = new Provider(this, 'DynamoDBProvider', {
         onEventHandler: insertFn,
         logRetention: RetentionDays.ONE_DAY,
+        ...this.props.overrides?.insertProviderProps,
       });
 
       new CustomResource(this, 'DynamoDBResource', {
@@ -155,6 +179,7 @@ export class NextjsRevalidation extends Construct {
         properties: {
           version: Date.now().toString(),
         },
+        ...this.props.overrides?.insertCustomResourceProps,
       });
 
       return insertFn;

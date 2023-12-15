@@ -6,8 +6,15 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
 import { CACHE_BUCKET_KEY_PREFIX } from './constants';
+import { OptionalAssetProps, OptionalNextjsBucketDeploymentProps } from './generated-structs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
+
+export interface NextjsStaticAssetOverrides {
+  readonly bucketProps?: s3.BucketProps;
+  readonly nextjsBucketDeploymentProps?: OptionalNextjsBucketDeploymentProps;
+  readonly assetProps?: OptionalAssetProps;
+}
 
 export interface NextjsStaticAssetsProps {
   /**
@@ -29,14 +36,18 @@ export interface NextjsStaticAssetsProps {
    */
   readonly environment?: Record<string, string>;
   /**
+   * The `NextjsBuild` instance representing the built Nextjs application.
+   */
+  readonly nextBuild: NextjsBuild;
+  /**
+   * Override props for every construct.
+   */
+  readonly overrides?: NextjsStaticAssetOverrides;
+  /**
    * If `true` (default), then removes old static assets after upload new static assets.
    * @default true
    */
   readonly prune?: boolean;
-  /**
-   * The `NextjsBuild` instance representing the built Nextjs application.
-   */
-  readonly nextBuild: NextjsBuild;
 }
 
 /**
@@ -85,6 +96,7 @@ export class NextjsStaticAssets extends Construct {
         enforceSSL: true,
         blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
         encryption: s3.BucketEncryption.S3_MANAGED,
+        ...this.props.overrides?.bucketProps,
       })
     );
   }
@@ -96,6 +108,7 @@ export class NextjsStaticAssets extends Construct {
     fs.cpSync(this.props.nextBuild.nextCacheDir, resolve(tmpAssetsDir, CACHE_BUCKET_KEY_PREFIX), { recursive: true });
     const asset = new Asset(this, 'Asset', {
       path: tmpAssetsDir,
+      ...this.props.overrides?.assetProps,
     });
     fs.rmSync(tmpAssetsDir, { recursive: true });
     return asset;
@@ -123,6 +136,7 @@ export class NextjsStaticAssets extends Construct {
           CacheControl: 'public, max-age=31536000, immutable',
         },
       },
+      ...this.props.overrides?.nextjsBucketDeploymentProps,
     });
   }
 }

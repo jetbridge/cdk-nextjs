@@ -1,38 +1,36 @@
 import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
+import {
+  OptionalNextjsDistributionProps,
+  OptionalNextjsDomainProps,
+  OptionalNextjsImageProps,
+  OptionalNextjsInvalidationProps,
+  OptionalNextjsRevalidationProps,
+  OptionalNextjsServerProps,
+  OptionalNextjsStaticAssetsProps,
+} from './generated-structs';
+import { OptionalNextjsBuildProps } from './generated-structs/OptionalNextjsBuildProps';
 import { NextjsBuild } from './NextjsBuild';
-import { NextjsDistribution, NextjsDistributionProps } from './NextjsDistribution';
+import { NextjsDistribution } from './NextjsDistribution';
 import { NextjsDomain, NextjsDomainProps } from './NextjsDomain';
 import { NextjsImage } from './NextjsImage';
 import { NextjsInvalidation } from './NextjsInvalidation';
+import { NextjsOverrides } from './NextjsOverrides';
 import { NextjsRevalidation } from './NextjsRevalidation';
 import { NextjsServer } from './NextjsServer';
-import { NextjsStaticAssets, NextjsStaticAssetsProps } from './NextjsStaticAssets';
+import { NextjsStaticAssets } from './NextjsStaticAssets';
 
-/**
- * Defaults for created resources.
- * Why `any`? see https://github.com/aws/jsii/issues/2901
- */
-export interface NextjsDefaultsProps {
-  /**
-   * Override static file deployment settings.
-   */
-  readonly assetDeployment?: NextjsStaticAssetsProps | any;
-
-  /**
-   * Override server lambda function settings.
-   */
-  readonly lambda?: FunctionOptions;
-
-  /**
-   * Override CloudFront distribution settings.
-   *
-   * These properties should all be optional but cannot be due to a limitation in jsii.
-   */
-  readonly distribution?: NextjsDistributionProps | any;
+export interface NextjsConstructOverrides {
+  readonly nextjsBuildProps?: OptionalNextjsBuildProps;
+  readonly nextjsStaticAssetsProps?: OptionalNextjsStaticAssetsProps;
+  readonly nextjsServerProps?: OptionalNextjsServerProps;
+  readonly nextjsImageProps?: OptionalNextjsImageProps;
+  readonly nextjsRevalidationProps?: OptionalNextjsRevalidationProps;
+  readonly nextjsDomainProps?: OptionalNextjsDomainProps;
+  readonly nextjsDistributionProps?: OptionalNextjsDistributionProps;
+  readonly nextjsInvalidationProps?: OptionalNextjsInvalidationProps;
 }
 
 export interface NextjsProps {
@@ -58,11 +56,6 @@ export interface NextjsProps {
    */
   readonly buildPath?: string;
   /**
-   * Allows you to override defaults for the resources created by this
-   * construct.
-   */
-  readonly defaults?: NextjsDefaultsProps;
-  /**
    * Optional CloudFront Distribution created outside of this construct that will
    * be used to add Next.js behaviors and origins onto. Useful with `basePath`.
    */
@@ -85,6 +78,12 @@ export interface NextjsProps {
    * Can be the root of your project (`.`) or a subdirectory (`packages/web`).
    */
   readonly nextjsPath: string;
+  /**
+   * Override props for every construct. Enables deep customization. Use with caution as
+   * you can override all props. Recommend reviewing source code to see props
+   * you'll be overriding before using.
+   */
+  readonly overrides?: NextjsOverrides;
   /**
    * Less build output.
    */
@@ -154,48 +153,64 @@ export class Nextjs extends Construct {
     super(scope, id);
 
     // build nextjs app
-    this.nextBuild = new NextjsBuild(this, id, props);
+    this.nextBuild = new NextjsBuild(this, 'Build', {
+      nextjsPath: props.nextjsPath,
+      buildCommand: props.buildCommand,
+      buildPath: props.buildPath,
+      environment: props.environment,
+      quiet: props.quiet,
+      skipBuild: props.skipBuild,
+      ...props.overrides?.nextjs?.nextjsBuildProps,
+    });
 
     // deploy nextjs static assets to s3
     this.staticAssets = new NextjsStaticAssets(this, 'StaticAssets', {
       basePath: props.basePath,
-      bucket: props.defaults?.assetDeployment?.bucket,
       environment: props.environment,
       nextBuild: this.nextBuild,
+      overrides: props.overrides?.nextjsStaticAssets,
+      ...props.overrides?.nextjs?.nextjsStaticAssetsProps,
     });
 
     this.serverFunction = new NextjsServer(this, 'Server', {
       nextBuild: this.nextBuild,
-      lambda: props.defaults?.lambda,
       staticAssetBucket: this.staticAssets.bucket,
+      overrides: props.overrides?.nextjsServer,
+      ...props.overrides?.nextjs?.nextjsServerProps,
     });
     // build image optimization
-    this.imageOptimizationFunction = new NextjsImage(this, 'ImgOptFn', {
+    this.imageOptimizationFunction = new NextjsImage(this, 'Image', {
       bucket: props.imageOptimizationBucket || this.bucket,
-      lambdaOptions: props.defaults?.lambda,
       nextBuild: this.nextBuild,
+      overrides: props.overrides?.nextjsImage,
+      ...props.overrides?.nextjs?.nextjsImageProps,
     });
 
     // build revalidation queue and handler function
     this.revalidation = new NextjsRevalidation(this, 'Revalidation', {
-      lambdaOptions: props.defaults?.lambda,
       nextBuild: this.nextBuild,
       serverFunction: this.serverFunction,
+      overrides: props.overrides?.nextjsRevalidation,
+      ...props.overrides?.nextjs?.nextjsRevalidationProps,
     });
 
     if (this.props.domainProps) {
-      this.domain = new NextjsDomain(this, 'Domain', this.props.domainProps);
+      this.domain = new NextjsDomain(this, 'Domain', {
+        ...this.props.domainProps,
+        ...props.overrides?.nextjs?.nextjsDomainProps,
+      });
     }
     this.distribution = new NextjsDistribution(this, 'Distribution', {
       nextjsPath: props.nextjsPath,
       basePath: props.basePath,
       distribution: props.distribution,
-      ...props.defaults?.distribution,
       staticAssetsBucket: this.staticAssets.bucket,
       nextBuild: this.nextBuild,
       nextDomain: this.domain,
       serverFunction: this.serverFunction.lambdaFunction,
       imageOptFunction: this.imageOptimizationFunction,
+      overrides: props.overrides?.nextjsDistribution,
+      ...props.overrides?.nextjs?.nextjsDistributionProps,
     });
     if (this.domain) {
       this.domain.createDnsRecords(this.distribution.distribution);
@@ -205,6 +220,8 @@ export class Nextjs extends Construct {
       new NextjsInvalidation(this, 'Invalidation', {
         distribution: this.distribution.distribution,
         dependencies: [], // [this.staticAssets, this.serverFunction, this.imageOptimizationFunction]
+        overrides: props.overrides?.nextjsInvalidation,
+        ...props.overrides?.nextjs?.nextjsInvalidationProps,
       });
     }
   }

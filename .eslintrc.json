@@ -37,6 +37,7 @@
   "ignorePatterns": [
     "examples/",
     "e2e-tests/",
+    "generated-structs/",
     "!.projenrc.ts",
     "!projenrc/**/*.ts"
   ],

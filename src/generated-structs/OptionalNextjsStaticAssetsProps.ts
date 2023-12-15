@@ -13,7 +13,7 @@ export interface OptionalNextjsStaticAssetsProps {
    */
   readonly prune?: boolean;
   /**
-   * Overrides.
+   * Override props for every construct.
    * @stability stable
    */
   readonly overrides?: NextjsStaticAssetOverrides;

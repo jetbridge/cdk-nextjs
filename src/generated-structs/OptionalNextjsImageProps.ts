@@ -7,7 +7,7 @@ import type { aws_lambda, aws_s3 } from 'aws-cdk-lib';
  */
 export interface OptionalNextjsImageProps {
   /**
-   * Overrides.
+   * Override props for every construct.
    * @stability stable
    */
   readonly overrides?: NextjsImageOverrides;

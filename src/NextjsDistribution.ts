@@ -162,7 +162,34 @@ export class NextjsDistribution extends Construct {
             override: false,
             // by default tell browser to cache static files for this long
             // this is separate from the origin cache policy
+            // copied from: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#caching_static_assets_with_cache_busting
             value: `public,max-age=${Duration.days(30).toSeconds()},immutable`,
+          },
+          // below security headers copied from: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-response-headers-policies.html#managed-response-headers-policies-security
+          {
+            header: 'referrer-policy',
+            override: false,
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            header: 'strict-transport-security',
+            override: false,
+            value: 'max-age=31536000',
+          },
+          {
+            header: 'x-content-type-options',
+            override: true,
+            value: 'nosniff',
+          },
+          {
+            header: 'x-frame-options',
+            override: false,
+            value: 'SAMEORIGIN',
+          },
+          {
+            header: 'x-xss-protection',
+            override: false,
+            value: '1; mode=block',
           },
         ],
       },
@@ -248,6 +275,7 @@ export class NextjsDistribution extends Construct {
       cachePolicy,
       edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
       functionAssociations: this.createCloudFrontFnAssociations(),
+      responseHeadersPolicy: ResponseHeadersPolicy.SECURITY_HEADERS,
       ...this.props.overrides?.serverBehaviorOptions,
     };
   }
@@ -295,6 +323,7 @@ export class NextjsDistribution extends Construct {
       cachePolicy,
       originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       edgeLambdas: this.edgeLambdas,
+      responseHeadersPolicy: ResponseHeadersPolicy.SECURITY_HEADERS,
       ...this.props.overrides?.imageBehaviorOptions,
     };
   }

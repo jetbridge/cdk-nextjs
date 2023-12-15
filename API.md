@@ -86,20 +86,11 @@ Built on top of [open-next](https://open-next.js.org/), which was partially buil
 
 ## Contribute
 
-Hey there, we value every new contribution a lot 🙏🏼 thank you.
-
-Here is a short HowTo before you get started:
-
-1. Please make sure to create a bug first
-2. Link the bug in your pull request
-3. Run `yarn build` after you made your changes and before you open a pull request
-
-### Projen
-Don't manually update package.json or use npm CLI. Update dependencies in .projenrc.js then run yarn projen.
+See [Contribute](./docs/contribute.md).
 
 ## Breaking changes
 
-See [here](./docs/major-changes.md).
+See [Major Changes](./docs/major-changes.md).
 
 # API Reference <a name="API Reference" id="api-reference"></a>
 
@@ -866,7 +857,7 @@ Use a custom domain with `Nextjs`.
 
 Requires a Route53 hosted zone to have been
 created within the same AWS account. For DNS setups where you cannot use a
-Route53 hosted zone in the same AWS account, use the `defaults.distribution.cdk.distribution`
+Route53 hosted zone in the same AWS account, use the `overrides.nextjsDistribution.distributionProps`
 prop of {@link NextjsProps}.
 
 See {@link NextjsDomainProps} TS Doc comments for detailed docs on how to customize.
@@ -2640,7 +2631,7 @@ const nextjsBucketDeploymentProps: NextjsBucketDeploymentProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationBucket">destinationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Destination S3 Bucket. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.debug">debug</a></code> | <code>boolean</code> | Enable verbose output of Custom Resource Lambda. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationKeyPrefix">destinationKeyPrefix</a></code> | <code>string</code> | Destination S3 Bucket Key Prefix. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a></code> | Overrides. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a></code> | Override props for every construct. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects. Only applies if `zip` is `false`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.putConfig">putConfig</a></code> | <code>{[ key: string ]: {[ key: string ]: string}}</code> | Mapping of files to PUT options for `PutObjectCommand`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.substitutionConfig">substitutionConfig</a></code> | <code>{[ key: string ]: string}</code> | Replace placeholders in all files in `asset`. |
@@ -2705,7 +2696,7 @@ public readonly overrides: NextjsBucketDeploymentOverrides;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a>
 
-Overrides.
+Override props for every construct.
 
 ---
 
@@ -2872,79 +2863,108 @@ public readonly skipBuild: boolean;
 
 ---
 
-### NextjsCachePolicyProps <a name="NextjsCachePolicyProps" id="cdk-nextjs-standalone.NextjsCachePolicyProps"></a>
+### NextjsConstructOverrides <a name="NextjsConstructOverrides" id="cdk-nextjs-standalone.NextjsConstructOverrides"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsCachePolicyProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsConstructOverrides.Initializer"></a>
 
 ```typescript
-import { NextjsCachePolicyProps } from 'cdk-nextjs-standalone'
+import { NextjsConstructOverrides } from 'cdk-nextjs-standalone'
 
-const nextjsCachePolicyProps: NextjsCachePolicyProps = { ... }
+const nextjsConstructOverrides: NextjsConstructOverrides = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.imageCachePolicy">imageCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.serverCachePolicy">serverCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticCachePolicy">staticCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticClientMaxAgeDefault">staticClientMaxAgeDefault</a></code> | <code>aws-cdk-lib.Duration</code> | Cache-control max-age default for static assets (/_next/*). |
-| <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticResponseHeaderPolicy">staticResponseHeaderPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicy</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsBuildProps">nextjsBuildProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps">OptionalNextjsBuildProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsDistributionProps">nextjsDistributionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps">OptionalNextjsDistributionProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsDomainProps">nextjsDomainProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps">OptionalNextjsDomainProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsImageProps">nextjsImageProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsImageProps">OptionalNextjsImageProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsInvalidationProps">nextjsInvalidationProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsInvalidationProps">OptionalNextjsInvalidationProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsRevalidationProps">nextjsRevalidationProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsRevalidationProps">OptionalNextjsRevalidationProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsServerProps">nextjsServerProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps">OptionalNextjsServerProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsStaticAssetsProps">nextjsStaticAssetsProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps">OptionalNextjsStaticAssetsProps</a></code> | *No description.* |
 
 ---
 
-##### `imageCachePolicy`<sup>Optional</sup> <a name="imageCachePolicy" id="cdk-nextjs-standalone.NextjsCachePolicyProps.property.imageCachePolicy"></a>
+##### `nextjsBuildProps`<sup>Optional</sup> <a name="nextjsBuildProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsBuildProps"></a>
 
 ```typescript
-public readonly imageCachePolicy: ICachePolicy;
+public readonly nextjsBuildProps: OptionalNextjsBuildProps;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.ICachePolicy
+- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps">OptionalNextjsBuildProps</a>
 
 ---
 
-##### `serverCachePolicy`<sup>Optional</sup> <a name="serverCachePolicy" id="cdk-nextjs-standalone.NextjsCachePolicyProps.property.serverCachePolicy"></a>
+##### `nextjsDistributionProps`<sup>Optional</sup> <a name="nextjsDistributionProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsDistributionProps"></a>
 
 ```typescript
-public readonly serverCachePolicy: ICachePolicy;
+public readonly nextjsDistributionProps: OptionalNextjsDistributionProps;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.ICachePolicy
+- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps">OptionalNextjsDistributionProps</a>
 
 ---
 
-##### `staticCachePolicy`<sup>Optional</sup> <a name="staticCachePolicy" id="cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticCachePolicy"></a>
+##### `nextjsDomainProps`<sup>Optional</sup> <a name="nextjsDomainProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsDomainProps"></a>
 
 ```typescript
-public readonly staticCachePolicy: ICachePolicy;
+public readonly nextjsDomainProps: OptionalNextjsDomainProps;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.ICachePolicy
+- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps">OptionalNextjsDomainProps</a>
 
 ---
 
-##### `staticClientMaxAgeDefault`<sup>Optional</sup> <a name="staticClientMaxAgeDefault" id="cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticClientMaxAgeDefault"></a>
+##### `nextjsImageProps`<sup>Optional</sup> <a name="nextjsImageProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsImageProps"></a>
 
 ```typescript
-public readonly staticClientMaxAgeDefault: Duration;
+public readonly nextjsImageProps: OptionalNextjsImageProps;
 ```
 
-- *Type:* aws-cdk-lib.Duration
-
-Cache-control max-age default for static assets (/_next/*).
-
-Default: 30 days.
+- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsImageProps">OptionalNextjsImageProps</a>
 
 ---
 
-##### `staticResponseHeaderPolicy`<sup>Optional</sup> <a name="staticResponseHeaderPolicy" id="cdk-nextjs-standalone.NextjsCachePolicyProps.property.staticResponseHeaderPolicy"></a>
+##### `nextjsInvalidationProps`<sup>Optional</sup> <a name="nextjsInvalidationProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsInvalidationProps"></a>
 
 ```typescript
-public readonly staticResponseHeaderPolicy: ResponseHeadersPolicy;
+public readonly nextjsInvalidationProps: OptionalNextjsInvalidationProps;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicy
+- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsInvalidationProps">OptionalNextjsInvalidationProps</a>
+
+---
+
+##### `nextjsRevalidationProps`<sup>Optional</sup> <a name="nextjsRevalidationProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsRevalidationProps"></a>
+
+```typescript
+public readonly nextjsRevalidationProps: OptionalNextjsRevalidationProps;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsRevalidationProps">OptionalNextjsRevalidationProps</a>
+
+---
+
+##### `nextjsServerProps`<sup>Optional</sup> <a name="nextjsServerProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsServerProps"></a>
+
+```typescript
+public readonly nextjsServerProps: OptionalNextjsServerProps;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsServerProps">OptionalNextjsServerProps</a>
+
+---
+
+##### `nextjsStaticAssetsProps`<sup>Optional</sup> <a name="nextjsStaticAssetsProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsStaticAssetsProps"></a>
+
+```typescript
+public readonly nextjsStaticAssetsProps: OptionalNextjsStaticAssetsProps;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps">OptionalNextjsStaticAssetsProps</a>
 
 ---
 
@@ -3106,12 +3126,10 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.cachePolicies">cachePolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsCachePolicyProps">NextjsCachePolicyProps</a></code> | Override the default CloudFront cache policies created internally. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.originRequestPolicies">originRequestPolicies</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps">NextjsOriginRequestPolicyProps</a></code> | Override the default CloudFront origin request policies created internally. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | Overrides. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | Override props for every construct. |
 
 ---
 
@@ -3193,18 +3211,6 @@ public readonly basePath: string;
 
 ---
 
-##### `cachePolicies`<sup>Optional</sup> <a name="cachePolicies" id="cdk-nextjs-standalone.NextjsDistributionProps.property.cachePolicies"></a>
-
-```typescript
-public readonly cachePolicies: NextjsCachePolicyProps;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsCachePolicyProps">NextjsCachePolicyProps</a>
-
-Override the default CloudFront cache policies created internally.
-
----
-
 ##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDistributionProps.property.distribution"></a>
 
 ```typescript
@@ -3242,18 +3248,6 @@ public readonly nextDomain: NextjsDomain;
 
 ---
 
-##### `originRequestPolicies`<sup>Optional</sup> <a name="originRequestPolicies" id="cdk-nextjs-standalone.NextjsDistributionProps.property.originRequestPolicies"></a>
-
-```typescript
-public readonly originRequestPolicies: NextjsOriginRequestPolicyProps;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps">NextjsOriginRequestPolicyProps</a>
-
-Override the default CloudFront origin request policies created internally.
-
----
-
 ##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.NextjsDistributionProps.property.overrides"></a>
 
 ```typescript
@@ -3262,7 +3256,7 @@ public readonly overrides: NextjsDistributionOverrides;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a>
 
-Overrides.
+Override props for every construct.
 
 ---
 
@@ -3346,7 +3340,7 @@ const nextjsDomainProps: NextjsDomainProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | If this prop is `undefined` then an ACM `Certificate` will be created based on {@link NextjsDomainProps.domainName} with DNS Validation. This prop allows you to control the TLS/SSL certificate created. The certificate you create must be in the `us-east-1` (N. Virginia) region as required by AWS CloudFront. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.certificateDomainName">certificateDomainName</a></code> | <code>string</code> | The domain name used in this construct when creating an ACM `Certificate`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | You must create the hosted zone out-of-band. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a></code> | Overrides. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a></code> | Override props for every construct. |
 
 ---
 
@@ -3466,7 +3460,7 @@ public readonly overrides: NextjsDomainOverrides;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a>
 
-Overrides.
+Override props for every construct.
 
 ---
 
@@ -3515,7 +3509,7 @@ const nextjsImageProps: NextjsImageProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a></code> | Overrides. |
+| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a></code> | Override props for every construct. |
 
 ---
 
@@ -3563,7 +3557,7 @@ public readonly overrides: NextjsImageOverrides;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a>
 
-Overrides.
+Override props for every construct.
 
 ---
 
@@ -3611,7 +3605,7 @@ const nextjsInvalidationProps: NextjsInvalidationProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps.property.dependencies">dependencies</a></code> | <code>constructs.Construct[]</code> | Constructs that should complete before invalidating CloudFront Distribution. |
 | <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | CloudFront Distribution to invalidate. |
-| <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a></code> | Overrides. |
+| <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a></code> | Override props for every construct. |
 
 ---
 
@@ -3649,50 +3643,13 @@ public readonly overrides: NextjsInvalidationOverrides;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a>
 
-Overrides.
-
----
-
-### NextjsOriginRequestPolicyProps <a name="NextjsOriginRequestPolicyProps" id="cdk-nextjs-standalone.NextjsOriginRequestPolicyProps"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsOriginRequestPolicyProps.Initializer"></a>
-
-```typescript
-import { NextjsOriginRequestPolicyProps } from 'cdk-nextjs-standalone'
-
-const nextjsOriginRequestPolicyProps: NextjsOriginRequestPolicyProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps.property.imageOptimizationOriginRequestPolicy">imageOptimizationOriginRequestPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsOriginRequestPolicyProps.property.serverOriginRequestPolicy">serverOriginRequestPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy</code> | *No description.* |
-
----
-
-##### `imageOptimizationOriginRequestPolicy`<sup>Optional</sup> <a name="imageOptimizationOriginRequestPolicy" id="cdk-nextjs-standalone.NextjsOriginRequestPolicyProps.property.imageOptimizationOriginRequestPolicy"></a>
-
-```typescript
-public readonly imageOptimizationOriginRequestPolicy: IOriginRequestPolicy;
-```
-
-- *Type:* aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy
-
----
-
-##### `serverOriginRequestPolicy`<sup>Optional</sup> <a name="serverOriginRequestPolicy" id="cdk-nextjs-standalone.NextjsOriginRequestPolicyProps.property.serverOriginRequestPolicy"></a>
-
-```typescript
-public readonly serverOriginRequestPolicy: IOriginRequestPolicy;
-```
-
-- *Type:* aws-cdk-lib.aws_cloudfront.IOriginRequestPolicy
+Override props for every construct.
 
 ---
 
 ### NextjsOverrides <a name="NextjsOverrides" id="cdk-nextjs-standalone.NextjsOverrides"></a>
+
+Override props for every construct.
 
 #### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsOverrides.Initializer"></a>
 
@@ -3706,6 +3663,7 @@ const nextjsOverrides: NextjsOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjs">nextjs</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides">NextjsConstructOverrides</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsBucketDeployment">nextjsBucketDeployment</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsDistribution">nextjsDistribution</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsDomain">nextjsDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a></code> | *No description.* |
@@ -3714,6 +3672,16 @@ const nextjsOverrides: NextjsOverrides = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsRevalidation">nextjsRevalidation</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsServer">nextjsServer</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsStaticAssets">nextjsStaticAssets</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a></code> | *No description.* |
+
+---
+
+##### `nextjs`<sup>Optional</sup> <a name="nextjs" id="cdk-nextjs-standalone.NextjsOverrides.property.nextjs"></a>
+
+```typescript
+public readonly nextjs: NextjsConstructOverrides;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsConstructOverrides">NextjsConstructOverrides</a>
 
 ---
 
@@ -3819,7 +3787,7 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.domainProps">domainProps</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | Props to configure {@link NextjsDomain}. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build **and** runtime. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket">imageOptimizationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Optional S3 Bucket to use, defaults to assets bucket. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsOverrides">NextjsOverrides</a></code> | Overrides for constructs. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsOverrides">NextjsOverrides</a></code> | Override props for every construct. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | Skips running Next.js build. Useful if you want to deploy `Nextjs` but haven't made any changes to Next.js app code. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
@@ -3951,9 +3919,11 @@ public readonly overrides: NextjsOverrides;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsOverrides">NextjsOverrides</a>
 
-Overrides for constructs.
+Override props for every construct.
 
-Enables deep customization. Use with caution.
+Enables deep customization. Use with caution as
+you can override all props. Recommend reviewing source code to see props
+you'll be overriding before using.
 
 ---
 
@@ -4097,7 +4067,7 @@ const nextjsRevalidationProps: NextjsRevalidationProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a></code> | Overrides. |
+| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a></code> | Override props for every construct. |
 
 ---
 
@@ -4145,7 +4115,7 @@ public readonly overrides: NextjsRevalidationOverrides;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a>
 
-Overrides.
+Override props for every construct.
 
 ---
 
@@ -4163,16 +4133,27 @@ const nextjsServerOverrides: NextjsServerOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.destinationCodeAsset">destinationCodeAsset</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.nextjsBucketDeploymentProps">nextjsBucketDeploymentProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.destinationCodeAssetProps">destinationCodeAssetProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.functionProps">functionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.sourceCodeAsset">sourceCodeAsset</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.sourceCodeAssetProps">sourceCodeAssetProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
 
 ---
 
-##### `destinationCodeAsset`<sup>Optional</sup> <a name="destinationCodeAsset" id="cdk-nextjs-standalone.NextjsServerOverrides.property.destinationCodeAsset"></a>
+##### `nextjsBucketDeploymentProps`<sup>Required</sup> <a name="nextjsBucketDeploymentProps" id="cdk-nextjs-standalone.NextjsServerOverrides.property.nextjsBucketDeploymentProps"></a>
 
 ```typescript
-public readonly destinationCodeAsset: OptionalAssetProps;
+public readonly nextjsBucketDeploymentProps: OptionalNextjsBucketDeploymentProps;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a>
+
+---
+
+##### `destinationCodeAssetProps`<sup>Optional</sup> <a name="destinationCodeAssetProps" id="cdk-nextjs-standalone.NextjsServerOverrides.property.destinationCodeAssetProps"></a>
+
+```typescript
+public readonly destinationCodeAssetProps: OptionalAssetProps;
 ```
 
 - *Type:* <a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a>
@@ -4189,10 +4170,10 @@ public readonly functionProps: OptionalFunctionProps;
 
 ---
 
-##### `sourceCodeAsset`<sup>Optional</sup> <a name="sourceCodeAsset" id="cdk-nextjs-standalone.NextjsServerOverrides.property.sourceCodeAsset"></a>
+##### `sourceCodeAssetProps`<sup>Optional</sup> <a name="sourceCodeAssetProps" id="cdk-nextjs-standalone.NextjsServerOverrides.property.sourceCodeAssetProps"></a>
 
 ```typescript
-public readonly sourceCodeAsset: OptionalAssetProps;
+public readonly sourceCodeAssetProps: OptionalAssetProps;
 ```
 
 - *Type:* <a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a>
@@ -4217,7 +4198,7 @@ const nextjsServerProps: NextjsServerProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.staticAssetBucket">staticAssetBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Static asset bucket. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a></code> | Overrides. |
+| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a></code> | Override props for every construct. |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
 
 ---
@@ -4280,7 +4261,7 @@ public readonly overrides: NextjsServerOverrides;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a>
 
-Overrides.
+Override props for every construct.
 
 ---
 
@@ -4312,6 +4293,7 @@ const nextjsStaticAssetOverrides: NextjsStaticAssetOverrides = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.assetProps">assetProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.bucketProps">bucketProps</a></code> | <code>aws-cdk-lib.aws_s3.BucketProps</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.nextjsBucketDeploymentProps">nextjsBucketDeploymentProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a></code> | *No description.* |
 
 ---
 
@@ -4335,6 +4317,16 @@ public readonly bucketProps: BucketProps;
 
 ---
 
+##### `nextjsBucketDeploymentProps`<sup>Optional</sup> <a name="nextjsBucketDeploymentProps" id="cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.nextjsBucketDeploymentProps"></a>
+
+```typescript
+public readonly nextjsBucketDeploymentProps: OptionalNextjsBucketDeploymentProps;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a>
+
+---
+
 ### NextjsStaticAssetsProps <a name="NextjsStaticAssetsProps" id="cdk-nextjs-standalone.NextjsStaticAssetsProps"></a>
 
 #### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.Initializer"></a>
@@ -4353,7 +4345,7 @@ const nextjsStaticAssetsProps: NextjsStaticAssetsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Define your own bucket to store static assets. |
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a></code> | Overrides. |
+| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a></code> | Override props for every construct. |
 | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.prune">prune</a></code> | <code>boolean</code> | If `true` (default), then removes old static assets after upload new static assets. |
 
 ---
@@ -4425,7 +4417,7 @@ public readonly overrides: NextjsStaticAssetOverrides;
 
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a>
 
-Overrides.
+Override props for every construct.
 
 ---
 
@@ -7065,6 +7057,911 @@ Specifies the ID of the VPC associated with a private hosted zone.
 
 If a VPC ID is provided and privateZone is false, no results will be returned
 and an error will be raised
+
+---
+
+### OptionalNextjsBucketDeploymentProps <a name="OptionalNextjsBucketDeploymentProps" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps"></a>
+
+OptionalNextjsBucketDeploymentProps.
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.Initializer"></a>
+
+```typescript
+import { OptionalNextjsBucketDeploymentProps } from 'cdk-nextjs-standalone'
+
+const optionalNextjsBucketDeploymentProps: OptionalNextjsBucketDeploymentProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.asset">asset</a></code> | <code>aws-cdk-lib.aws_s3_assets.Asset</code> | Source `Asset`. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.debug">debug</a></code> | <code>boolean</code> | Enable verbose output of Custom Resource Lambda. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.destinationBucket">destinationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Destination S3 Bucket. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.destinationKeyPrefix">destinationKeyPrefix</a></code> | <code>string</code> | Destination S3 Bucket Key Prefix. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a></code> | Override props for every construct. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.putConfig">putConfig</a></code> | <code>{[ key: string ]: {[ key: string ]: string}}</code> | Mapping of files to PUT options for `PutObjectCommand`. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.substitutionConfig">substitutionConfig</a></code> | <code>{[ key: string ]: string}</code> | Replace placeholders in all files in `asset`. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.zip">zip</a></code> | <code>boolean</code> | If `true` then files will be zipped before writing to destination bucket. |
+
+---
+
+##### `asset`<sup>Optional</sup> <a name="asset" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.asset"></a>
+
+```typescript
+public readonly asset: Asset;
+```
+
+- *Type:* aws-cdk-lib.aws_s3_assets.Asset
+
+Source `Asset`.
+
+---
+
+##### `debug`<sup>Optional</sup> <a name="debug" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.debug"></a>
+
+```typescript
+public readonly debug: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Enable verbose output of Custom Resource Lambda.
+
+---
+
+##### `destinationBucket`<sup>Optional</sup> <a name="destinationBucket" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.destinationBucket"></a>
+
+```typescript
+public readonly destinationBucket: IBucket;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.IBucket
+
+Destination S3 Bucket.
+
+---
+
+##### `destinationKeyPrefix`<sup>Optional</sup> <a name="destinationKeyPrefix" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.destinationKeyPrefix"></a>
+
+```typescript
+public readonly destinationKeyPrefix: string;
+```
+
+- *Type:* string
+
+Destination S3 Bucket Key Prefix.
+
+---
+
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.overrides"></a>
+
+```typescript
+public readonly overrides: NextjsBucketDeploymentOverrides;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a>
+
+Override props for every construct.
+
+---
+
+##### `prune`<sup>Optional</sup> <a name="prune" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.prune"></a>
+
+```typescript
+public readonly prune: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects.
+
+Only applies if `zip` is `false`.
+Old objects are determined by listing objects
+in bucket before creating new objects and finding the objects that aren't in
+the new objects.
+
+---
+
+##### `putConfig`<sup>Optional</sup> <a name="putConfig" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.putConfig"></a>
+
+```typescript
+public readonly putConfig: {[ key: string ]: {[ key: string ]: string}};
+```
+
+- *Type:* {[ key: string ]: {[ key: string ]: string}}
+
+Mapping of files to PUT options for `PutObjectCommand`.
+
+Keys of
+record must be a glob pattern (uses micromatch). Values of record are options
+for PUT command for AWS SDK JS V3. See [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-s3/Interface/PutObjectRequest/)
+for options. If a file matches multiple globs, configuration will be
+merged. Later entries override earlier entries.
+
+`Bucket`, `Key`, and `Body` PUT options cannot be set.
+
+---
+
+##### `substitutionConfig`<sup>Optional</sup> <a name="substitutionConfig" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.substitutionConfig"></a>
+
+```typescript
+public readonly substitutionConfig: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+Replace placeholders in all files in `asset`.
+
+Placeholder targets are
+defined by keys of record. Values to replace placeholders with are defined
+by values of record.
+
+---
+
+##### `zip`<sup>Optional</sup> <a name="zip" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.zip"></a>
+
+```typescript
+public readonly zip: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+If `true` then files will be zipped before writing to destination bucket.
+
+Useful for Lambda functions.
+
+---
+
+### OptionalNextjsBuildProps <a name="OptionalNextjsBuildProps" id="cdk-nextjs-standalone.OptionalNextjsBuildProps"></a>
+
+OptionalNextjsBuildProps.
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.Initializer"></a>
+
+```typescript
+import { OptionalNextjsBuildProps } from 'cdk-nextjs-standalone'
+
+const optionalNextjsBuildProps: OptionalNextjsBuildProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.buildPath">buildPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | *No description.* |
+
+---
+
+##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.buildCommand"></a>
+
+```typescript
+public readonly buildCommand: string;
+```
+
+- *Type:* string
+
+---
+
+##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.buildPath"></a>
+
+```typescript
+public readonly buildPath: string;
+```
+
+- *Type:* string
+
+---
+
+##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.environment"></a>
+
+```typescript
+public readonly environment: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+---
+
+##### `nextjsPath`<sup>Optional</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.nextjsPath"></a>
+
+```typescript
+public readonly nextjsPath: string;
+```
+
+- *Type:* string
+
+---
+
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `skipBuild`<sup>Optional</sup> <a name="skipBuild" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.skipBuild"></a>
+
+```typescript
+public readonly skipBuild: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+### OptionalNextjsDistributionProps <a name="OptionalNextjsDistributionProps" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps"></a>
+
+OptionalNextjsDistributionProps.
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.Initializer"></a>
+
+```typescript
+import { OptionalNextjsDistributionProps } from 'cdk-nextjs-standalone'
+
+const optionalNextjsDistributionProps: OptionalNextjsDistributionProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.imageOptFunction">imageOptFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to optimize images. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | Override props for every construct. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
+
+---
+
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.basePath"></a>
+
+```typescript
+public readonly basePath: string;
+```
+
+- *Type:* string
+
+---
+
+##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.distribution"></a>
+
+```typescript
+public readonly distribution: Distribution;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.Distribution
+
+---
+
+##### `functionUrlAuthType`<sup>Optional</sup> <a name="functionUrlAuthType" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.functionUrlAuthType"></a>
+
+```typescript
+public readonly functionUrlAuthType: FunctionUrlAuthType;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.FunctionUrlAuthType
+- *Default:* "NONE"
+
+Override lambda function url auth type.
+
+---
+
+##### `imageOptFunction`<sup>Optional</sup> <a name="imageOptFunction" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.imageOptFunction"></a>
+
+```typescript
+public readonly imageOptFunction: IFunction;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+Lambda function to optimize images.
+
+Must be provided if you want to serve dynamic requests.
+
+---
+
+##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextBuild"></a>
+
+```typescript
+public readonly nextBuild: NextjsBuild;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+
+---
+
+##### `nextDomain`<sup>Optional</sup> <a name="nextDomain" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextDomain"></a>
+
+```typescript
+public readonly nextDomain: NextjsDomain;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a>
+
+---
+
+##### `nextjsPath`<sup>Optional</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextjsPath"></a>
+
+```typescript
+public readonly nextjsPath: string;
+```
+
+- *Type:* string
+
+---
+
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.overrides"></a>
+
+```typescript
+public readonly overrides: NextjsDistributionOverrides;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a>
+
+Override props for every construct.
+
+---
+
+##### `serverFunction`<sup>Optional</sup> <a name="serverFunction" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverFunction"></a>
+
+```typescript
+public readonly serverFunction: IFunction;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+Lambda function to route all non-static requests to.
+
+Must be provided if you want to serve dynamic requests.
+
+---
+
+##### `staticAssetsBucket`<sup>Optional</sup> <a name="staticAssetsBucket" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.staticAssetsBucket"></a>
+
+```typescript
+public readonly staticAssetsBucket: IBucket;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.IBucket
+
+Bucket containing static assets.
+
+Must be provided if you want to serve static files.
+
+---
+
+### OptionalNextjsDomainProps <a name="OptionalNextjsDomainProps" id="cdk-nextjs-standalone.OptionalNextjsDomainProps"></a>
+
+OptionalNextjsDomainProps.
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.Initializer"></a>
+
+```typescript
+import { OptionalNextjsDomainProps } from 'cdk-nextjs-standalone'
+
+const optionalNextjsDomainProps: OptionalNextjsDomainProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps.property.alternateNames">alternateNames</a></code> | <code>string[]</code> | Alternate domain names that should route to the Cloudfront Distribution. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | If this prop is `undefined` then an ACM `Certificate` will be created based on {@link NextjsDomainProps.domainName } with DNS Validation. This prop allows you to control the TLS/SSL certificate created. The certificate you create must be in the `us-east-1` (N. Virginia) region as required by AWS CloudFront. Set this option if you have an existing certificate in the `us-east-1` region in AWS Certificate Manager you want to use. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps.property.certificateDomainName">certificateDomainName</a></code> | <code>string</code> | The domain name used in this construct when creating an ACM `Certificate`. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps.property.domainName">domainName</a></code> | <code>string</code> | An easy to remember address of your website. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | You must create the hosted zone out-of-band. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a></code> | Override props for every construct. |
+
+---
+
+##### `alternateNames`<sup>Optional</sup> <a name="alternateNames" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.property.alternateNames"></a>
+
+```typescript
+public readonly alternateNames: string[];
+```
+
+- *Type:* string[]
+
+Alternate domain names that should route to the Cloudfront Distribution.
+
+For example, if you specificied `"example.com"` as your {@link NextjsDomainProps.domainName },
+you could specify `["www.example.com", "api.example.com"]`.
+Learn more about the [requirements](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html#alternate-domain-names-requirements)
+and [restrictions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html#alternate-domain-names-restrictions)
+for using alternate domain names with CloudFront.
+
+Note, in order to use alternate domain names, they must be covered by your
+certificate. By default, the certificate created in this construct only covers
+the {@link NextjsDomainProps.domainName }. Therefore, you'll need to specify
+a wildcard domain name like `"*.example.com"` with {@link NextjsDomainProps.certificateDomainName }
+so that this construct will create the certificate the covers the alternate
+domain names. Otherwise, you can use {@link NextjsDomainProps.certificate }
+to create the certificate yourself where you'll need to ensure it has a
+wildcard or uses subject alternative names including the
+alternative names specified here.
+
+---
+
+##### `certificate`<sup>Optional</sup> <a name="certificate" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.property.certificate"></a>
+
+```typescript
+public readonly certificate: ICertificate;
+```
+
+- *Type:* aws-cdk-lib.aws_certificatemanager.ICertificate
+
+If this prop is `undefined` then an ACM `Certificate` will be created based on {@link NextjsDomainProps.domainName } with DNS Validation. This prop allows you to control the TLS/SSL certificate created. The certificate you create must be in the `us-east-1` (N. Virginia) region as required by AWS CloudFront. Set this option if you have an existing certificate in the `us-east-1` region in AWS Certificate Manager you want to use.
+
+---
+
+##### `certificateDomainName`<sup>Optional</sup> <a name="certificateDomainName" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.property.certificateDomainName"></a>
+
+```typescript
+public readonly certificateDomainName: string;
+```
+
+- *Type:* string
+
+The domain name used in this construct when creating an ACM `Certificate`.
+
+Useful
+when passing {@link NextjsDomainProps.alternateNames } and you need to specify
+a wildcard domain like "*.example.com". If `undefined`, then {@link NextjsDomainProps.domainName }
+will be used.
+
+If {@link NextjsDomainProps.certificate } is passed, then this prop is ignored.
+
+---
+
+##### `domainName`<sup>Optional</sup> <a name="domainName" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.property.domainName"></a>
+
+```typescript
+public readonly domainName: string;
+```
+
+- *Type:* string
+
+An easy to remember address of your website.
+
+Only supports domains hosted
+on [Route 53](https://aws.amazon.com/route53/). Used as `domainName` for
+ACM `Certificate` if {@link NextjsDomainProps.certificate } and
+{@link NextjsDomainProps.certificateDomainName } are `undefined`.
+
+---
+
+##### `hostedZone`<sup>Optional</sup> <a name="hostedZone" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.property.hostedZone"></a>
+
+```typescript
+public readonly hostedZone: IHostedZone;
+```
+
+- *Type:* aws-cdk-lib.aws_route53.IHostedZone
+
+You must create the hosted zone out-of-band.
+
+You can lookup the hosted zone outside this construct and pass it in via this prop.
+Alternatively if this prop is `undefined`, then the hosted zone will be
+**looked up** (not created) via `HostedZone.fromLookup` with {@link NextjsDomainProps.domainName }.
+
+---
+
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.property.overrides"></a>
+
+```typescript
+public readonly overrides: NextjsDomainOverrides;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a>
+
+Override props for every construct.
+
+---
+
+### OptionalNextjsImageProps <a name="OptionalNextjsImageProps" id="cdk-nextjs-standalone.OptionalNextjsImageProps"></a>
+
+OptionalNextjsImageProps.
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsImageProps.Initializer"></a>
+
+```typescript
+import { OptionalNextjsImageProps } from 'cdk-nextjs-standalone'
+
+const optionalNextjsImageProps: OptionalNextjsImageProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsImageProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsImageProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsImageProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsImageProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a></code> | Override props for every construct. |
+
+---
+
+##### `bucket`<sup>Optional</sup> <a name="bucket" id="cdk-nextjs-standalone.OptionalNextjsImageProps.property.bucket"></a>
+
+```typescript
+public readonly bucket: IBucket;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.IBucket
+
+The S3 bucket holding application images.
+
+---
+
+##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="cdk-nextjs-standalone.OptionalNextjsImageProps.property.lambdaOptions"></a>
+
+```typescript
+public readonly lambdaOptions: FunctionOptions;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.FunctionOptions
+
+Override function properties.
+
+---
+
+##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="cdk-nextjs-standalone.OptionalNextjsImageProps.property.nextBuild"></a>
+
+```typescript
+public readonly nextBuild: NextjsBuild;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+
+---
+
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsImageProps.property.overrides"></a>
+
+```typescript
+public readonly overrides: NextjsImageOverrides;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a>
+
+Override props for every construct.
+
+---
+
+### OptionalNextjsInvalidationProps <a name="OptionalNextjsInvalidationProps" id="cdk-nextjs-standalone.OptionalNextjsInvalidationProps"></a>
+
+OptionalNextjsInvalidationProps.
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsInvalidationProps.Initializer"></a>
+
+```typescript
+import { OptionalNextjsInvalidationProps } from 'cdk-nextjs-standalone'
+
+const optionalNextjsInvalidationProps: OptionalNextjsInvalidationProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.dependencies">dependencies</a></code> | <code>constructs.Construct[]</code> | Constructs that should complete before invalidating CloudFront Distribution. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | CloudFront Distribution to invalidate. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a></code> | Override props for every construct. |
+
+---
+
+##### `dependencies`<sup>Optional</sup> <a name="dependencies" id="cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.dependencies"></a>
+
+```typescript
+public readonly dependencies: Construct[];
+```
+
+- *Type:* constructs.Construct[]
+
+Constructs that should complete before invalidating CloudFront Distribution.
+
+Useful for assets that must be deployed/updated before invalidating.
+
+---
+
+##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.distribution"></a>
+
+```typescript
+public readonly distribution: IDistribution;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IDistribution
+
+CloudFront Distribution to invalidate.
+
+---
+
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.overrides"></a>
+
+```typescript
+public readonly overrides: NextjsInvalidationOverrides;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a>
+
+Override props for every construct.
+
+---
+
+### OptionalNextjsRevalidationProps <a name="OptionalNextjsRevalidationProps" id="cdk-nextjs-standalone.OptionalNextjsRevalidationProps"></a>
+
+OptionalNextjsRevalidationProps.
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsRevalidationProps.Initializer"></a>
+
+```typescript
+import { OptionalNextjsRevalidationProps } from 'cdk-nextjs-standalone'
+
+const optionalNextjsRevalidationProps: OptionalNextjsRevalidationProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a></code> | Override props for every construct. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | *No description.* |
+
+---
+
+##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.lambdaOptions"></a>
+
+```typescript
+public readonly lambdaOptions: FunctionOptions;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.FunctionOptions
+
+Override function properties.
+
+---
+
+##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.nextBuild"></a>
+
+```typescript
+public readonly nextBuild: NextjsBuild;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+
+---
+
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.overrides"></a>
+
+```typescript
+public readonly overrides: NextjsRevalidationOverrides;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a>
+
+Override props for every construct.
+
+---
+
+##### `serverFunction`<sup>Optional</sup> <a name="serverFunction" id="cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.serverFunction"></a>
+
+```typescript
+public readonly serverFunction: NextjsServer;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a>
+
+---
+
+### OptionalNextjsServerProps <a name="OptionalNextjsServerProps" id="cdk-nextjs-standalone.OptionalNextjsServerProps"></a>
+
+OptionalNextjsServerProps.
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsServerProps.Initializer"></a>
+
+```typescript
+import { OptionalNextjsServerProps } from 'cdk-nextjs-standalone'
+
+const optionalNextjsServerProps: OptionalNextjsServerProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a></code> | Override props for every construct. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps.property.staticAssetBucket">staticAssetBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Static asset bucket. |
+
+---
+
+##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.OptionalNextjsServerProps.property.environment"></a>
+
+```typescript
+public readonly environment: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+---
+
+##### `lambda`<sup>Optional</sup> <a name="lambda" id="cdk-nextjs-standalone.OptionalNextjsServerProps.property.lambda"></a>
+
+```typescript
+public readonly lambda: FunctionOptions;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.FunctionOptions
+
+Override function properties.
+
+---
+
+##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="cdk-nextjs-standalone.OptionalNextjsServerProps.property.nextBuild"></a>
+
+```typescript
+public readonly nextBuild: NextjsBuild;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+
+---
+
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsServerProps.property.overrides"></a>
+
+```typescript
+public readonly overrides: NextjsServerOverrides;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a>
+
+Override props for every construct.
+
+---
+
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.OptionalNextjsServerProps.property.quiet"></a>
+
+```typescript
+public readonly quiet: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `staticAssetBucket`<sup>Optional</sup> <a name="staticAssetBucket" id="cdk-nextjs-standalone.OptionalNextjsServerProps.property.staticAssetBucket"></a>
+
+```typescript
+public readonly staticAssetBucket: IBucket;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.IBucket
+
+Static asset bucket.
+
+Function needs bucket to read from cache.
+
+---
+
+### OptionalNextjsStaticAssetsProps <a name="OptionalNextjsStaticAssetsProps" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps"></a>
+
+OptionalNextjsStaticAssetsProps.
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.Initializer"></a>
+
+```typescript
+import { OptionalNextjsStaticAssetsProps } from 'cdk-nextjs-standalone'
+
+const optionalNextjsStaticAssetsProps: OptionalNextjsStaticAssetsProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. Note, you'll need to set [basePath](https://nextjs.org/docs/app/api-reference/next-config-js/basePath) in your `next.config.ts` to this value and ensure any files in `public` folder have correct prefix. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Define your own bucket to store static assets. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a></code> | Override props for every construct. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.prune">prune</a></code> | <code>boolean</code> | If `true` (default), then removes old static assets after upload new static assets. |
+
+---
+
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.basePath"></a>
+
+```typescript
+public readonly basePath: string;
+```
+
+- *Type:* string
+
+Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. Note, you'll need to set [basePath](https://nextjs.org/docs/app/api-reference/next-config-js/basePath) in your `next.config.ts` to this value and ensure any files in `public` folder have correct prefix.
+
+---
+
+##### `bucket`<sup>Optional</sup> <a name="bucket" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.bucket"></a>
+
+```typescript
+public readonly bucket: IBucket;
+```
+
+- *Type:* aws-cdk-lib.aws_s3.IBucket
+
+Define your own bucket to store static assets.
+
+---
+
+##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.environment"></a>
+
+```typescript
+public readonly environment: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+Custom environment variables to pass to the NextJS build and runtime.
+
+---
+
+##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.nextBuild"></a>
+
+```typescript
+public readonly nextBuild: NextjsBuild;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+
+The `NextjsBuild` instance representing the built Nextjs application.
+
+---
+
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.overrides"></a>
+
+```typescript
+public readonly overrides: NextjsStaticAssetOverrides;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a>
+
+Override props for every construct.
+
+---
+
+##### `prune`<sup>Optional</sup> <a name="prune" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.prune"></a>
+
+```typescript
+public readonly prune: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+If `true` (default), then removes old static assets after upload new static assets.
 
 ---
 

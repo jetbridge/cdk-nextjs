@@ -7,7 +7,7 @@ import type { aws_certificatemanager, aws_route53 } from 'aws-cdk-lib';
  */
 export interface OptionalNextjsDomainProps {
   /**
-   * Overrides.
+   * Override props for every construct.
    * @stability stable
    */
   readonly overrides?: NextjsDomainOverrides;

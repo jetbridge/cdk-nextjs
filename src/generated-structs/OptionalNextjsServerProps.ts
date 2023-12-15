@@ -11,7 +11,7 @@ export interface OptionalNextjsServerProps {
    */
   readonly quiet?: boolean;
   /**
-   * Overrides.
+   * Override props for every construct.
    * @stability stable
    */
   readonly overrides?: NextjsServerOverrides;

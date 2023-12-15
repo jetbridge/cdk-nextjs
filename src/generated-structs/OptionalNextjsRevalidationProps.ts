@@ -7,7 +7,7 @@ import type { aws_lambda } from 'aws-cdk-lib';
  */
 export interface OptionalNextjsRevalidationProps {
   /**
-   * Overrides.
+   * Override props for every construct.
    * @stability stable
    */
   readonly overrides?: NextjsRevalidationOverrides;

@@ -8,7 +8,7 @@ import type { Construct } from 'constructs';
  */
 export interface OptionalNextjsInvalidationProps {
   /**
-   * Overrides.
+   * Override props for every construct.
    * @stability stable
    */
   readonly overrides?: NextjsInvalidationOverrides;

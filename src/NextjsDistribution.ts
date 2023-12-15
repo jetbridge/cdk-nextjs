@@ -27,11 +27,14 @@ export interface NextjsDistributionOverrides {
   readonly edgeFunctionProps?: OptionalEdgeFunctionProps;
   readonly imageBehaviorOptions?: BehaviorOptions;
   readonly imageCachePolicyProps?: CachePolicyProps;
+  readonly imageResponseHeadersPolicyProps: cloudfront.ResponseHeadersPolicyProps;
   readonly imageHttpOriginProps?: HttpOriginProps;
   readonly serverBehaviorOptions?: BehaviorOptions;
   readonly serverCachePolicyProps?: CachePolicyProps;
+  readonly serverResponseHeadersPolicyProps?: cloudfront.ResponseHeadersPolicyProps;
   readonly serverHttpOriginProps?: HttpOriginProps;
   readonly staticBehaviorOptions?: BehaviorOptions;
+  readonly staticResponseHeadersPolicyProps?: cloudfront.ResponseHeadersPolicyProps;
   readonly s3OriginProps?: OptionalS3OriginProps;
 }
 
@@ -97,6 +100,26 @@ export class NextjsDistribution extends Construct {
     compress: true,
   };
 
+  /**
+   * Common security headers applied by default to all origins
+   * @see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-response-headers-policies.html#managed-response-headers-policies-security
+   */
+  private commonSecurityHeadersBehavior: cloudfront.ResponseSecurityHeadersBehavior = {
+    contentTypeOptions: { override: false },
+    frameOptions: { frameOption: cloudfront.HeadersFrameOption.SAMEORIGIN, override: false },
+    referrerPolicy: {
+      override: false,
+      referrerPolicy: cloudfront.HeadersReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN,
+    },
+    strictTransportSecurity: {
+      accessControlMaxAge: Duration.days(365),
+      includeSubdomains: true,
+      override: false,
+      preload: true,
+    },
+    xssProtection: { override: false, protection: true, modeBlock: true },
+  };
+
   private s3Origin: origins.S3Origin;
 
   private staticBehaviorOptions: cloudfront.BehaviorOptions;
@@ -160,39 +183,15 @@ export class NextjsDistribution extends Construct {
           {
             header: 'cache-control',
             override: false,
-            // by default tell browser to cache static files for this long
-            // this is separate from the origin cache policy
-            // copied from: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#caching_static_assets_with_cache_busting
-            value: `public,max-age=${Duration.days(30).toSeconds()},immutable`,
-          },
-          // below security headers copied from: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-response-headers-policies.html#managed-response-headers-policies-security
-          {
-            header: 'referrer-policy',
-            override: false,
-            value: 'strict-origin-when-cross-origin',
-          },
-          {
-            header: 'strict-transport-security',
-            override: false,
-            value: 'max-age=31536000',
-          },
-          {
-            header: 'x-content-type-options',
-            override: true,
-            value: 'nosniff',
-          },
-          {
-            header: 'x-frame-options',
-            override: false,
-            value: 'SAMEORIGIN',
-          },
-          {
-            header: 'x-xss-protection',
-            override: false,
-            value: '1; mode=block',
+            // MDN Cache-Control Use Case: Caching static assets with "cache busting"
+            // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#caching_static_assets_with_cache_busting
+            value: `max-age=${Duration.days(365).toSeconds()}, immutable`,
           },
         ],
       },
+      securityHeadersBehavior: this.commonSecurityHeadersBehavior,
+      comment: 'Nextjs Static Response Headers Policy',
+      ...this.props.overrides?.staticResponseHeadersPolicyProps,
     });
     return {
       ...this.commonBehaviorOptions,
@@ -264,8 +263,24 @@ export class NextjsDistribution extends Construct {
       minTtl: Duration.seconds(0),
       enableAcceptEncodingBrotli: true,
       enableAcceptEncodingGzip: true,
-      comment: 'Nextjs Server Default Cache Policy',
+      comment: 'Nextjs Server Cache Policy',
       ...this.props.overrides?.serverCachePolicyProps,
+    });
+    const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ServerResponseHeadersPolicy', {
+      customHeadersBehavior: {
+        customHeaders: [
+          {
+            header: 'cache-control',
+            override: false,
+            // MDN Cache-Control Use Case: Up-to-date contents always
+            // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#up-to-date_contents_always
+            value: `no-cache`,
+          },
+        ],
+      },
+      securityHeadersBehavior: this.commonSecurityHeadersBehavior,
+      comment: 'Nextjs Server Response Headers Policy',
+      ...this.props.overrides?.serverResponseHeadersPolicyProps,
     });
     return {
       ...this.commonBehaviorOptions,
@@ -275,7 +290,7 @@ export class NextjsDistribution extends Construct {
       cachePolicy,
       edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
       functionAssociations: this.createCloudFrontFnAssociations(),
-      responseHeadersPolicy: ResponseHeadersPolicy.SECURITY_HEADERS,
+      responseHeadersPolicy,
       ...this.props.overrides?.serverBehaviorOptions,
     };
   }
@@ -312,8 +327,24 @@ export class NextjsDistribution extends Construct {
       minTtl: Duration.days(0),
       enableAcceptEncodingBrotli: true,
       enableAcceptEncodingGzip: true,
-      comment: 'Nextjs Image Default Cache Policy',
+      comment: 'Nextjs Image Cache Policy',
       ...this.props.overrides?.imageCachePolicyProps,
+    });
+    const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ImageResponseHeadersPolicy', {
+      customHeadersBehavior: {
+        customHeaders: [
+          {
+            header: 'cache-control',
+            override: false,
+            // MDN Cache-Control Use Case: Up-to-date contents always
+            // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#up-to-date_contents_always
+            value: `no-cache`,
+          },
+        ],
+      },
+      securityHeadersBehavior: this.commonSecurityHeadersBehavior,
+      comment: 'Nextjs Image Response Headers Policy',
+      ...this.props.overrides?.imageResponseHeadersPolicyProps,
     });
     return {
       ...this.commonBehaviorOptions,
@@ -323,7 +354,7 @@ export class NextjsDistribution extends Construct {
       cachePolicy,
       originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       edgeLambdas: this.edgeLambdas,
-      responseHeadersPolicy: ResponseHeadersPolicy.SECURITY_HEADERS,
+      responseHeadersPolicy,
       ...this.props.overrides?.imageBehaviorOptions,
     };
   }

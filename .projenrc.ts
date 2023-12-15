@@ -47,7 +47,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   projenrcTs: true,
   tsconfig: { compilerOptions: { ...commonTscOptions } },
   tsconfigDev: { compilerOptions: { ...commonTscOptions } },
-  gitignore: ['.idea'],
+  gitignore: ['.idea', '.DS_Store'],
   // dependency config
   jsiiVersion: '~5.0.0',
   cdkVersion: '2.110.0',
@@ -77,8 +77,9 @@ project.bundler.addBundle('./src/lambdas/nextjs-bucket-deployment.ts', commonBun
 project.bundler.addBundle('./src/lambdas/sign-fn-url.ts', commonBundlingOptions);
 
 const buildWorkflow = project.tryFindObjectFile('.github/workflows/build.yml');
-// https://github.com/mrgrain/jsii-struct-builder/issues/174#issuecomment-1850496788
-buildWorkflow?.patch(JsonPatch.replace('/jobs/build/steps/4/run', 'npx projen compile && npx projen build'));
+buildWorkflow?.patch(JsonPatch.replace('/jobs/build/steps/3/run', 'npx projen compile && npx projen build'));
+const releaseWorkflow = project.tryFindObjectFile('.github/workflows/release.yml');
+releaseWorkflow?.patch(JsonPatch.replace('/jobs/release/steps/4/run', 'npx projen compile && npx projen release'));
 
 const getFilePath = (fileName: string) => 'src/generated-structs/' + fileName + '.ts';
 new ProjenStruct(project, { name: 'OptionalFunctionProps', filePath: getFilePath('OptionalFunctionProps') })

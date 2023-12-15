@@ -29,7 +29,9 @@ jobs:
         run: npx projen compile && npx projen build
       - name: Find mutations
         id: self_mutation
-        run: npx projen compile && npx projen build
+        run: |-
+          git add .
+          git diff --staged --patch --exit-code > .repo.patch || echo "self_mutation_happened=true" >> $GITHUB_OUTPUT
       - name: Upload patch
         if: steps.self_mutation.outputs.self_mutation_happened
         uses: actions/upload-artifact@v3

@@ -51,7 +51,7 @@ export interface NextjsBucketDeploymentProps {
    */
   readonly destinationKeyPrefix?: string | undefined;
   /**
-   * Overrides
+   * Override props for every construct.
    */
   readonly overrides?: NextjsBucketDeploymentOverrides;
   /**

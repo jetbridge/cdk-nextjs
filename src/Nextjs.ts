@@ -79,7 +79,9 @@ export interface NextjsProps {
    */
   readonly nextjsPath: string;
   /**
-   * Overrides for constructs. Enables deep customization. Use with caution.
+   * Override props for every construct. Enables deep customization. Use with caution as
+   * you can override all props. Recommend reviewing source code to see props
+   * you'll be overriding before using.
    */
   readonly overrides?: NextjsOverrides;
   /**

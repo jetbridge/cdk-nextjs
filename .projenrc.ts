@@ -2,7 +2,6 @@ import { ProjenStruct, Struct } from '@mrgrain/jsii-struct-builder';
 import { BuildOptions } from 'esbuild';
 import { JsonPatch, awscdk } from 'projen';
 import { TypeScriptCompilerOptions, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
-import {} from 'projen/lib/github';
 
 const commonBundlingOptions = {
   bundle: true,

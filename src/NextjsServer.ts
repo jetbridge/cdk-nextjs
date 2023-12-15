@@ -38,7 +38,7 @@ export interface NextjsServerProps {
    */
   readonly nextBuild: NextjsBuild;
   /**
-   * Overrides
+   * Override props for every construct.
    */
   readonly overrides?: NextjsServerOverrides;
   /**

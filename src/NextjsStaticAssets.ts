@@ -40,7 +40,7 @@ export interface NextjsStaticAssetsProps {
    */
   readonly nextBuild: NextjsBuild;
   /**
-   * Overrides
+   * Override props for every construct.
    */
   readonly overrides?: NextjsStaticAssetOverrides;
   /**

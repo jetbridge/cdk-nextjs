@@ -23,7 +23,7 @@ export interface NextjsImageProps {
    */
   readonly nextBuild: NextjsBuild;
   /**
-   * Overrides
+   * Override props for every construct.
    */
   readonly overrides?: NextjsImageOverrides;
 }

@@ -26,7 +26,7 @@ export interface NextjsInvalidationProps {
    */
   readonly dependencies: Construct[];
   /**
-   * Overrides
+   * Override props for every construct.
    */
   readonly overrides?: NextjsInvalidationOverrides;
 }

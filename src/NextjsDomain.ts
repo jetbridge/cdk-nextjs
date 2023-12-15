@@ -81,7 +81,7 @@ export interface NextjsDomainProps {
    */
   readonly certificateDomainName?: string;
   /**
-   * Overrides
+   * Override props for every construct.
    */
   readonly overrides?: NextjsDomainOverrides;
 }

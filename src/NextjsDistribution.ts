@@ -67,7 +67,7 @@ export interface NextjsDistributionProps {
    */
   readonly nextjsPath: NextjsProps['nextjsPath'];
   /**
-   * Overrides
+   * Override props for every construct.
    */
   readonly overrides?: NextjsDistributionOverrides;
   /**
@@ -224,10 +224,12 @@ export class NextjsDistribution extends Construct {
       queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
       headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
         'accept',
+        'accept-encoding',
         'rsc',
         'next-router-prefetch',
         'next-router-state-tree',
-        'next-url'
+        'next-url',
+        'x-prerender-revalidate'
       ),
       cookieBehavior: cloudfront.CacheCookieBehavior.all(),
       defaultTtl: Duration.seconds(0),

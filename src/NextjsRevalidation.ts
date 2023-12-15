@@ -37,7 +37,7 @@ export interface NextjsRevalidationProps {
    */
   readonly nextBuild: NextjsBuild;
   /**
-   * Overrides
+   * Override props for every construct.
    */
   readonly overrides?: NextjsRevalidationOverrides;
   /**

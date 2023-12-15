@@ -8,6 +8,9 @@ import { NextjsRevalidationOverrides } from './NextjsRevalidation';
 import { NextjsServerOverrides } from './NextjsServer';
 import { NextjsStaticAssetOverrides } from './NextjsStaticAssets';
 
+/**
+ * Override props for every construct.
+ */
 export interface NextjsOverrides {
   readonly nextjs?: NextjsConstructOverrides;
   readonly nextjsBucketDeployment?: NextjsBucketDeploymentOverrides;

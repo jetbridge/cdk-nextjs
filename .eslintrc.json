@@ -37,7 +37,7 @@
   "ignorePatterns": [
     "examples/",
     "e2e-tests/",
-    "optional-cdk-props/",
+    "generated-structs/",
     "!.projenrc.ts",
     "!projenrc/**/*.ts"
   ],

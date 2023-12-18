@@ -250,7 +250,6 @@ export class NextjsDistribution extends Construct {
       queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
       headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
         'accept',
-        'accept-encoding',
         'rsc',
         'next-router-prefetch',
         'next-router-state-tree',

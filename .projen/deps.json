@@ -17,10 +17,6 @@
       "type": "build"
     },
     {
-      "name": "@types/adm-zip",
-      "type": "build"
-    },
-    {
       "name": "@types/aws-lambda",
       "type": "build"
     },

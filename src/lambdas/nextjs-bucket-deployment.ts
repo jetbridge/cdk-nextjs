@@ -259,7 +259,13 @@ function createS3Key({ keyPrefix, path, baseLocalDir }: { keyPrefix?: string; pa
   return join(...objectKeyParts);
 }
 
-function uploadObjects({
+async function* chunkArray(array: string[], chunkSize: number) {
+  for (let i = 0; i < array.length; i += chunkSize) {
+    yield array.slice(i, i + chunkSize);
+  }
+}
+
+async function uploadObjects({
   bucket,
   keyPrefix,
   filePaths,
@@ -272,19 +278,22 @@ function uploadObjects({
   baseLocalDir: string;
   putConfig: CustomResourceProperties['putConfig'];
 }) {
-  const putObjectInputs: PutObjectCommandInput[] = filePaths.map((path) => {
-    const contentType = mime.lookup(path) || undefined;
-    const putObjectOptions = getPutObjectOptions({ path, putConfig });
-    const key = createS3Key({ keyPrefix, path, baseLocalDir });
-    return {
-      ContentType: contentType,
-      ...putObjectOptions,
-      Bucket: bucket,
-      Key: key,
-      Body: createReadStream(path),
-    };
-  });
-  return Promise.all(putObjectInputs.map((input) => s3.send(new PutObjectCommand(input))));
+  for await (const filePathChunk of chunkArray(filePaths, 100)) {
+    const putObjectInputs: PutObjectCommandInput[] = filePathChunk.map((path) => {
+      const contentType = mime.lookup(path) || undefined;
+      const putObjectOptions = getPutObjectOptions({ path, putConfig });
+      const key = createS3Key({ keyPrefix, path, baseLocalDir });
+      return {
+        ContentType: contentType,
+        ...putObjectOptions,
+        Bucket: bucket,
+        Key: key,
+        Body: createReadStream(path),
+      };
+    });
+
+    await Promise.all(putObjectInputs.map((input) => s3.send(new PutObjectCommand(input))));
+  }
 }
 
 /**

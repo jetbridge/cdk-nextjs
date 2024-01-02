@@ -278,7 +278,7 @@ async function uploadObjects({
   baseLocalDir: string;
   putConfig: CustomResourceProperties['putConfig'];
 }) {
-  for await (const filePathChunk of chunkArray(filePaths, 10)) {
+  for await (const filePathChunk of chunkArray(filePaths, 100)) {
     const putObjectInputs: PutObjectCommandInput[] = filePathChunk.map((path) => {
       const contentType = mime.lookup(path) || undefined;
       const putObjectOptions = getPutObjectOptions({ path, putConfig });

@@ -3884,11 +3884,16 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | Optional CloudFront Distribution created outside of this construct that will be used to add Next.js behaviors and origins onto. Useful with `basePath`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.domainProps">domainProps</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | Props to configure {@link NextjsDomain}. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build **and** runtime. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.imageCachePolicy">imageCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | [See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas). |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket">imageOptimizationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Optional S3 Bucket to use, defaults to assets bucket. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.imageResponseHeadersPolicy">imageResponseHeadersPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy</code> | [See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas). |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsOverrides">NextjsOverrides</a></code> | Override props for every construct. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.serverCachePolicy">serverCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | [See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas). |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.serverResponseHeadersPolicy">serverResponseHeadersPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy</code> | [See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas). |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | Skips running Next.js build. Useful if you want to deploy `Nextjs` but haven't made any changes to Next.js app code. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.staticResponseHeadersPolicy">staticResponseHeadersPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy</code> | [See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas). |
 
 ---
 
@@ -3997,6 +4002,18 @@ Custom environment variables to pass to the NextJS build **and** runtime.
 
 ---
 
+##### `imageCachePolicy`<sup>Optional</sup> <a name="imageCachePolicy" id="cdk-nextjs-standalone.NextjsProps.property.imageCachePolicy"></a>
+
+```typescript
+public readonly imageCachePolicy: ICachePolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.ICachePolicy
+
+[See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas).
+
+---
+
 ##### `imageOptimizationBucket`<sup>Optional</sup> <a name="imageOptimizationBucket" id="cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket"></a>
 
 ```typescript
@@ -4006,6 +4023,18 @@ public readonly imageOptimizationBucket: IBucket;
 - *Type:* aws-cdk-lib.aws_s3.IBucket
 
 Optional S3 Bucket to use, defaults to assets bucket.
+
+---
+
+##### `imageResponseHeadersPolicy`<sup>Optional</sup> <a name="imageResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsProps.property.imageResponseHeadersPolicy"></a>
+
+```typescript
+public readonly imageResponseHeadersPolicy: IResponseHeadersPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy
+
+[See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas).
 
 ---
 
@@ -4037,6 +4066,30 @@ Less build output.
 
 ---
 
+##### `serverCachePolicy`<sup>Optional</sup> <a name="serverCachePolicy" id="cdk-nextjs-standalone.NextjsProps.property.serverCachePolicy"></a>
+
+```typescript
+public readonly serverCachePolicy: ICachePolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.ICachePolicy
+
+[See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas).
+
+---
+
+##### `serverResponseHeadersPolicy`<sup>Optional</sup> <a name="serverResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsProps.property.serverResponseHeadersPolicy"></a>
+
+```typescript
+public readonly serverResponseHeadersPolicy: IResponseHeadersPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy
+
+[See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas).
+
+---
+
 ##### `skipBuild`<sup>Optional</sup> <a name="skipBuild" id="cdk-nextjs-standalone.NextjsProps.property.skipBuild"></a>
 
 ```typescript
@@ -4062,6 +4115,18 @@ By default all CloudFront cache will be invalidated on deployment.
 
 This can be set to true to skip the full cache invalidation, which
 could be important for some users.
+
+---
+
+##### `staticResponseHeadersPolicy`<sup>Optional</sup> <a name="staticResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsProps.property.staticResponseHeadersPolicy"></a>
+
+```typescript
+public readonly staticResponseHeadersPolicy: IResponseHeadersPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy
+
+[See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas).
 
 ---
 

@@ -1,4 +1,4 @@
-import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
+import { Distribution, ICachePolicy, IResponseHeadersPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
@@ -60,6 +60,26 @@ export interface NextjsProps {
    * be used to add Next.js behaviors and origins onto. Useful with `basePath`.
    */
   readonly distribution?: Distribution;
+  /**
+   * [See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas)
+   */
+  readonly imageCachePolicy?: ICachePolicy;
+  /**
+   * [See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas)
+   */
+  readonly imageResponseHeadersPolicy?: IResponseHeadersPolicy;
+  /**
+   * [See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas)
+   */
+  readonly serverCachePolicy?: ICachePolicy;
+  /**
+   * [See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas)
+   */
+  readonly serverResponseHeadersPolicy?: IResponseHeadersPolicy;
+  /**
+   * [See](docs/code-deployment-flow.md#cloudfront-distribution-policies-quotas)
+   */
+  readonly staticResponseHeadersPolicy?: IResponseHeadersPolicy;
   /**
    * Props to configure {@link NextjsDomain}. See details on how to customize at
    * {@link NextjsDomainProps}
@@ -209,6 +229,11 @@ export class Nextjs extends Construct {
       nextDomain: this.domain,
       serverFunction: this.serverFunction.lambdaFunction,
       imageOptFunction: this.imageOptimizationFunction,
+      imageCachePolicy: props.imageCachePolicy,
+      imageResponseHeadersPolicy: props.imageResponseHeadersPolicy,
+      serverCachePolicy: props.serverCachePolicy,
+      serverResponseHeadersPolicy: props.serverResponseHeadersPolicy,
+      staticResponseHeadersPolicy: props.staticResponseHeadersPolicy,
       overrides: props.overrides?.nextjsDistribution,
       ...props.overrides?.nextjs?.nextjsDistributionProps,
     });

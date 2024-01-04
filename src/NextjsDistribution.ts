@@ -50,23 +50,23 @@ export interface NextjsDistributionProps {
   /**
    * @see {@link NextjsProps.imageCachePolicy}
    */
-  readonly imageCachePolicy?: cloudfront.ICachePolicy;
+  readonly imageCachePolicy?: NextjsProps['imageCachePolicy'];
   /**
    * @see {@link NextjsProps.imageResponseHeadersPolicy}
    */
-  readonly imageResponseHeadersPolicy?: cloudfront.IResponseHeadersPolicy;
+  readonly imageResponseHeadersPolicy?: NextjsProps['imageResponseHeadersPolicy'];
   /**
    * @see {@link NextjsProps.serverCachePolicy}
    */
-  readonly serverCachePolicy?: cloudfront.ICachePolicy;
+  readonly serverCachePolicy?: NextjsProps['serverCachePolicy'];
   /**
    * @see {@link NextjsProps.serverResponseHeadersPolicy}
    */
-  readonly serverResponseHeadersPolicy?: cloudfront.IResponseHeadersPolicy;
+  readonly serverResponseHeadersPolicy?: NextjsProps['serverResponseHeadersPolicy'];
   /**
    * @see {@link NextjsProps.staticResponseHeadersPolicy}
    */
-  readonly staticResponseHeadersPolicy?: cloudfront.IResponseHeadersPolicy;
+  readonly staticResponseHeadersPolicy?: NextjsProps['staticResponseHeadersPolicy'];
   /**
    * Override lambda function url auth type
    * @default "NONE"

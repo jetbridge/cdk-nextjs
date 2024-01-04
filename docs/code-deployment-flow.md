@@ -39,15 +39,11 @@ For this reason you can optionally pass in your own cache policies and response 
 
 ```ts
 new Nextjs(this, 'Nextjs', {
-  nextjs: {
-    nextjsDistributionProps: {
-      imageCachePolicy: CachePolicy.fromCachePolicyId(this, '...', 'xxx'),
-      imageResponseHeadersPolicy: ResponseHeadersPolicy.fromResponseHeadersPolicyId(this, '...', 'xxx'),
-      serverCachePolicy: CachePolicy.fromCachePolicyId(this, '...', 'xxx'),
-      serverResponseHeadersPolicy: ResponseHeadersPolicy.fromResponseHeadersPolicyId(this, '...', 'xxx'),
-      staticResponseHeadersPolicy: ResponseHeadersPolicy.fromResponseHeadersPolicyId(this, '...', 'xxx'),
-    }
-  }
+  imageCachePolicy: CachePolicy.fromCachePolicyId(this, '...', 'xxx'),
+  imageResponseHeadersPolicy: ResponseHeadersPolicy.fromResponseHeadersPolicyId(this, '...', 'xxx'),
+  serverCachePolicy: CachePolicy.fromCachePolicyId(this, '...', 'xxx'),
+  serverResponseHeadersPolicy: ResponseHeadersPolicy.fromResponseHeadersPolicyId(this, '...', 'xxx'),
+  staticResponseHeadersPolicy: ResponseHeadersPolicy.fromResponseHeadersPolicyId(this, '...', 'xxx')
 });
 ```
 

@@ -1,8 +1,8 @@
-import { Stack, Token } from 'aws-cdk-lib';
 import { execSync } from 'child_process';
-import { Construct } from 'constructs';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Stack, Token } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import {
   NEXTJS_BUILD_DIR,
   NEXTJS_BUILD_DYNAMODB_PROVIDER_FN_DIR,

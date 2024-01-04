@@ -1,8 +1,8 @@
+import { Stack, Token } from 'aws-cdk-lib';
 import { execSync } from 'child_process';
+import { Construct } from 'constructs';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Stack, Token } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
 import {
   NEXTJS_BUILD_DIR,
   NEXTJS_BUILD_DYNAMODB_PROVIDER_FN_DIR,
@@ -107,14 +107,7 @@ export class NextjsBuild extends Construct {
     const bundlingRequired = Stack.of(this).bundlingRequired;
     const skipBuild = this.props.skipBuild;
 
-    /**
-     * | bundlingRequired | skipBuild | Scenario                        | Action                                            |
-     * |------------------|-----------|---------------------------------|---------------------------------------------------|
-     * | true             | true      | deploy/synth with reused bundle | no build, check .open-next exists, fail if not    |
-     * | true             | false     | regular deploy/synth            | build, .open-next will exist                      |
-     * | false            | false     | destroy                         | no build, check if .open-next exists, if not mock |
-     * | false            | true      | destroy with reused bundle?     | no build, check if .open-next exists, if not mock |
-     */
+    // for more info see docs/code-deployment-flow.md Conditional Build Logic section
     if (bundlingRequired) {
       // deploy/synth
       if (skipBuild) {

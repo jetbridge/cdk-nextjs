@@ -5,12 +5,12 @@ import { Stack, Token } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import {
   NEXTJS_BUILD_DIR,
+  NEXTJS_BUILD_DYNAMODB_PROVIDER_FN_DIR,
   NEXTJS_BUILD_IMAGE_FN_DIR,
   NEXTJS_BUILD_REVALIDATE_FN_DIR,
   NEXTJS_BUILD_SERVER_FN_DIR,
-  NEXTJS_STATIC_DIR,
   NEXTJS_CACHE_DIR,
-  NEXTJS_BUILD_DYNAMODB_PROVIDER_FN_DIR,
+  NEXTJS_STATIC_DIR,
 } from './constants';
 import type { NextjsProps } from './Nextjs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
@@ -103,9 +103,21 @@ export class NextjsBuild extends Construct {
     super(scope, id);
     this.props = props;
     this.validatePaths();
-    // when `cdk deploy "NonNextjsStack" --exclusively` is run, don't run build
-    if (Stack.of(this).bundlingRequired && !this.props.skipBuild) {
-      this.build();
+
+    const bundlingRequired = Stack.of(this).bundlingRequired;
+    const skipBuild = this.props.skipBuild;
+
+    // for more info see docs/code-deployment-flow.md Conditional Build Logic section
+    if (bundlingRequired) {
+      // deploy/synth
+      if (skipBuild) {
+        this.assertBuildDirExists(true);
+      } else {
+        this.build();
+      }
+    } else {
+      // destroy
+      this.mockNextBuildDir();
     }
   }
 
@@ -171,6 +183,17 @@ export class NextjsBuild extends Construct {
     return listDirectory(this.nextStaticDir).map((file) => path.join('/', path.relative(this.nextStaticDir, file)));
   }
 
+  private assertBuildDirExists(throwIfMissing = true) {
+    const dir = this.getNextBuildDir();
+    if (!fs.existsSync(dir)) {
+      if (throwIfMissing) {
+        throw new Error(`Build directory "${dir}" does not exist. Try removing skipBuild: true option.`);
+      }
+      return false;
+    }
+    return true;
+  }
+
   private getNextBuildDir(): string {
     const dir = path.resolve(this.props.nextjsPath, NEXTJS_BUILD_DIR);
     this.warnIfMissing(dir);
@@ -180,6 +203,25 @@ export class NextjsBuild extends Construct {
   private warnIfMissing(dir: string) {
     if (!fs.existsSync(dir)) {
       console.warn(`Warning: ${dir} does not exist.`);
+    }
+  }
+
+  private mockNextBuildDir() {
+    function createMockDirAndFile(dir: string) {
+      fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(path.join(dir, 'package.json'), '{}', 'utf8');
+    }
+
+    const buildDirExists = this.assertBuildDirExists(false);
+    if (!buildDirExists) {
+      // mock .open-next
+      createMockDirAndFile(this.getNextBuildDir());
+      createMockDirAndFile(this.nextServerFnDir);
+      createMockDirAndFile(this.nextImageFnDir);
+      createMockDirAndFile(this.nextRevalidateFnDir);
+      createMockDirAndFile(this.nextRevalidateDynamoDBProviderFnDir);
+      createMockDirAndFile(this.nextStaticDir);
+      createMockDirAndFile(this.nextCacheDir);
     }
   }
 }

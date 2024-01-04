@@ -14,6 +14,24 @@ Deep dive into `Nextjs` constructs code deployment flow - how your Next.js code 
 _Only applicable for PNPM Monorepos_
 PNPM Monorepos use symlinks between workspace node_modules and the top level node_modules. CDK Assets do not support symlinks despite the configuration options available. Therefore, we must zip up the assets ourselves. Also, `nextjs-bucket-deployment.ts` handles symlinks to unzip and zip symlinks within Lambda Custom Resources (for ServerFnBucketDeployment).
 
+
+## Conditional Build Logic
+
+`NextjjsBuild` will use the following logic to determine if a build is required or not to proceed.
+
+```
+| bundlingRequired | skipBuild | Scenario                        | Action                                            |
+|------------------|-----------|---------------------------------|---------------------------------------------------|
+| true             | true      | deploy/synth with reused bundle | no build, check .open-next exists, fail if not    |
+| true             | false     | regular deploy/synth            | build, .open-next will exist                      |
+| false            | false     | destroy                         | no build, check if .open-next exists, if not mock |
+| false            | true      | destroy with reused bundle      | no build, check if .open-next exists, if not mock |
+```
+
+*bundlingRequired* = `Stack.of(this).bundlingRequired` [see](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.Stack.html#bundlingrequired)
+*skipBuild* = `NextjsProps.skipBuild`
+
+
 Relevant GitHub Issues:
 - https://github.com/aws/aws-cdk/issues/9251
 - https://github.com/Stuk/jszip/issues/386#issuecomment-634773343

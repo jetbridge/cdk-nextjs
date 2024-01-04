@@ -2986,20 +2986,15 @@ const nextjsDistributionOverrides: NextjsDistributionOverrides = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.distributionProps">distributionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps">OptionalDistributionProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.edgeFunctionProps">edgeFunctionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps">OptionalEdgeFunctionProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageBehaviorOptions">imageBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.BehaviorOptions</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageCachePolicy">imageCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageCachePolicyProps">imageCachePolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.CachePolicyProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageHttpOriginProps">imageHttpOriginProps</a></code> | <code>aws-cdk-lib.aws_cloudfront_origins.HttpOriginProps</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageResponseHeadersPolicy">imageResponseHeadersPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageResponseHeadersPolicyProps">imageResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.s3OriginProps">s3OriginProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps">OptionalS3OriginProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverBehaviorOptions">serverBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.BehaviorOptions</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverCachePolicy">serverCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverCachePolicyProps">serverCachePolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.CachePolicyProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverHttpOriginProps">serverHttpOriginProps</a></code> | <code>aws-cdk-lib.aws_cloudfront_origins.HttpOriginProps</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverResponseHeadersPolicy">serverResponseHeadersPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverResponseHeadersPolicyProps">serverResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticBehaviorOptions">staticBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.BehaviorOptions</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticResponseHeadersPolicy">staticResponseHeadersPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticResponseHeadersPolicyProps">staticResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
 
 ---
@@ -3044,16 +3039,6 @@ public readonly imageBehaviorOptions: BehaviorOptions;
 
 ---
 
-##### `imageCachePolicy`<sup>Optional</sup> <a name="imageCachePolicy" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageCachePolicy"></a>
-
-```typescript
-public readonly imageCachePolicy: ICachePolicy;
-```
-
-- *Type:* aws-cdk-lib.aws_cloudfront.ICachePolicy
-
----
-
 ##### `imageCachePolicyProps`<sup>Optional</sup> <a name="imageCachePolicyProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageCachePolicyProps"></a>
 
 ```typescript
@@ -3071,16 +3056,6 @@ public readonly imageHttpOriginProps: HttpOriginProps;
 ```
 
 - *Type:* aws-cdk-lib.aws_cloudfront_origins.HttpOriginProps
-
----
-
-##### `imageResponseHeadersPolicy`<sup>Optional</sup> <a name="imageResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageResponseHeadersPolicy"></a>
-
-```typescript
-public readonly imageResponseHeadersPolicy: IResponseHeadersPolicy;
-```
-
-- *Type:* aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy
 
 ---
 
@@ -3114,16 +3089,6 @@ public readonly serverBehaviorOptions: BehaviorOptions;
 
 ---
 
-##### `serverCachePolicy`<sup>Optional</sup> <a name="serverCachePolicy" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverCachePolicy"></a>
-
-```typescript
-public readonly serverCachePolicy: ICachePolicy;
-```
-
-- *Type:* aws-cdk-lib.aws_cloudfront.ICachePolicy
-
----
-
 ##### `serverCachePolicyProps`<sup>Optional</sup> <a name="serverCachePolicyProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverCachePolicyProps"></a>
 
 ```typescript
@@ -3144,16 +3109,6 @@ public readonly serverHttpOriginProps: HttpOriginProps;
 
 ---
 
-##### `serverResponseHeadersPolicy`<sup>Optional</sup> <a name="serverResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverResponseHeadersPolicy"></a>
-
-```typescript
-public readonly serverResponseHeadersPolicy: IResponseHeadersPolicy;
-```
-
-- *Type:* aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy
-
----
-
 ##### `serverResponseHeadersPolicyProps`<sup>Optional</sup> <a name="serverResponseHeadersPolicyProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverResponseHeadersPolicyProps"></a>
 
 ```typescript
@@ -3171,16 +3126,6 @@ public readonly staticBehaviorOptions: BehaviorOptions;
 ```
 
 - *Type:* aws-cdk-lib.aws_cloudfront.BehaviorOptions
-
----
-
-##### `staticResponseHeadersPolicy`<sup>Optional</sup> <a name="staticResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticResponseHeadersPolicy"></a>
-
-```typescript
-public readonly staticResponseHeadersPolicy: IResponseHeadersPolicy;
-```
-
-- *Type:* aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy
 
 ---
 
@@ -3216,8 +3161,13 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.imageCachePolicy">imageCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.imageResponseHeadersPolicy">imageResponseHeadersPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | Override props for every construct. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.serverCachePolicy">serverCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.serverResponseHeadersPolicy">serverResponseHeadersPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.staticResponseHeadersPolicy">staticResponseHeadersPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy</code> | *No description.* |
 
 ---
 
@@ -3324,6 +3274,30 @@ Override lambda function url auth type.
 
 ---
 
+##### `imageCachePolicy`<sup>Optional</sup> <a name="imageCachePolicy" id="cdk-nextjs-standalone.NextjsDistributionProps.property.imageCachePolicy"></a>
+
+```typescript
+public readonly imageCachePolicy: ICachePolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.ICachePolicy
+
+> [{@link NextjsProps.imageCachePolicy }]({@link NextjsProps.imageCachePolicy })
+
+---
+
+##### `imageResponseHeadersPolicy`<sup>Optional</sup> <a name="imageResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsDistributionProps.property.imageResponseHeadersPolicy"></a>
+
+```typescript
+public readonly imageResponseHeadersPolicy: IResponseHeadersPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy
+
+> [{@link NextjsProps.imageResponseHeadersPolicy }]({@link NextjsProps.imageResponseHeadersPolicy })
+
+---
+
 ##### `nextDomain`<sup>Optional</sup> <a name="nextDomain" id="cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain"></a>
 
 ```typescript
@@ -3345,6 +3319,42 @@ public readonly overrides: NextjsDistributionOverrides;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a>
 
 Override props for every construct.
+
+---
+
+##### `serverCachePolicy`<sup>Optional</sup> <a name="serverCachePolicy" id="cdk-nextjs-standalone.NextjsDistributionProps.property.serverCachePolicy"></a>
+
+```typescript
+public readonly serverCachePolicy: ICachePolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.ICachePolicy
+
+> [{@link NextjsProps.serverCachePolicy }]({@link NextjsProps.serverCachePolicy })
+
+---
+
+##### `serverResponseHeadersPolicy`<sup>Optional</sup> <a name="serverResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsDistributionProps.property.serverResponseHeadersPolicy"></a>
+
+```typescript
+public readonly serverResponseHeadersPolicy: IResponseHeadersPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy
+
+> [{@link NextjsProps.serverResponseHeadersPolicy }]({@link NextjsProps.serverResponseHeadersPolicy })
+
+---
+
+##### `staticResponseHeadersPolicy`<sup>Optional</sup> <a name="staticResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsDistributionProps.property.staticResponseHeadersPolicy"></a>
+
+```typescript
+public readonly staticResponseHeadersPolicy: IResponseHeadersPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy
+
+> [{@link NextjsProps.staticResponseHeadersPolicy }]({@link NextjsProps.staticResponseHeadersPolicy })
 
 ---
 
@@ -7410,13 +7420,18 @@ const optionalNextjsDistributionProps: OptionalNextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.imageCachePolicy">imageCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.imageOptFunction">imageOptFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to optimize images. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.imageResponseHeadersPolicy">imageResponseHeadersPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | Override props for every construct. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverCachePolicy">serverCachePolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.ICachePolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverResponseHeadersPolicy">serverResponseHeadersPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.staticResponseHeadersPolicy">staticResponseHeadersPolicy</a></code> | <code>aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy</code> | *No description.* |
 
 ---
 
@@ -7453,6 +7468,16 @@ Override lambda function url auth type.
 
 ---
 
+##### `imageCachePolicy`<sup>Optional</sup> <a name="imageCachePolicy" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.imageCachePolicy"></a>
+
+```typescript
+public readonly imageCachePolicy: ICachePolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.ICachePolicy
+
+---
+
 ##### `imageOptFunction`<sup>Optional</sup> <a name="imageOptFunction" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.imageOptFunction"></a>
 
 ```typescript
@@ -7464,6 +7489,16 @@ public readonly imageOptFunction: IFunction;
 Lambda function to optimize images.
 
 Must be provided if you want to serve dynamic requests.
+
+---
+
+##### `imageResponseHeadersPolicy`<sup>Optional</sup> <a name="imageResponseHeadersPolicy" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.imageResponseHeadersPolicy"></a>
+
+```typescript
+public readonly imageResponseHeadersPolicy: IResponseHeadersPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy
 
 ---
 
@@ -7509,6 +7544,16 @@ Override props for every construct.
 
 ---
 
+##### `serverCachePolicy`<sup>Optional</sup> <a name="serverCachePolicy" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverCachePolicy"></a>
+
+```typescript
+public readonly serverCachePolicy: ICachePolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.ICachePolicy
+
+---
+
 ##### `serverFunction`<sup>Optional</sup> <a name="serverFunction" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverFunction"></a>
 
 ```typescript
@@ -7523,6 +7568,16 @@ Must be provided if you want to serve dynamic requests.
 
 ---
 
+##### `serverResponseHeadersPolicy`<sup>Optional</sup> <a name="serverResponseHeadersPolicy" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverResponseHeadersPolicy"></a>
+
+```typescript
+public readonly serverResponseHeadersPolicy: IResponseHeadersPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy
+
+---
+
 ##### `staticAssetsBucket`<sup>Optional</sup> <a name="staticAssetsBucket" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.staticAssetsBucket"></a>
 
 ```typescript
@@ -7534,6 +7589,16 @@ public readonly staticAssetsBucket: IBucket;
 Bucket containing static assets.
 
 Must be provided if you want to serve static files.
+
+---
+
+##### `staticResponseHeadersPolicy`<sup>Optional</sup> <a name="staticResponseHeadersPolicy" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.staticResponseHeadersPolicy"></a>
+
+```typescript
+public readonly staticResponseHeadersPolicy: IResponseHeadersPolicy;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IResponseHeadersPolicy
 
 ---
 

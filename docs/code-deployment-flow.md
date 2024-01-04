@@ -31,6 +31,25 @@ PNPM Monorepos use symlinks between workspace node_modules and the top level nod
 *bundlingRequired* = `Stack.of(this).bundlingRequired` [see](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.Stack.html#bundlingrequired)
 *skipBuild* = `NextjsProps.skipBuild`
 
+## CloudFront Distribution Policies Quotas
+
+There is a hard limit of 20 Response headers policies per AWS account and Cache policies per AWS account  and when deploying multiple sites this limit is easily reached.
+
+For this reason you can optionally pass in your own cache policies and response headers policies to the `Nextjs` construct.
+
+```ts
+new Nextjs(this, 'Nextjs', {
+  nextjs: {
+    nextjsDistributionProps: {
+      imageCachePolicy: CachePolicy.fromCachePolicyId(this, '...', 'xxx'),
+      imageResponseHeadersPolicy: ResponseHeadersPolicy.fromResponseHeadersPolicyId(this, '...', 'xxx'),
+      serverCachePolicy: CachePolicy.fromCachePolicyId(this, '...', 'xxx'),
+      serverResponseHeadersPolicy: ResponseHeadersPolicy.fromResponseHeadersPolicyId(this, '...', 'xxx'),
+      staticResponseHeadersPolicy: ResponseHeadersPolicy.fromResponseHeadersPolicyId(this, '...', 'xxx'),
+    }
+  }
+});
+```
 
 Relevant GitHub Issues:
 - https://github.com/aws/aws-cdk/issues/9251

@@ -27,19 +27,14 @@ export interface NextjsDistributionOverrides {
   readonly edgeFunctionProps?: OptionalEdgeFunctionProps;
   readonly imageBehaviorOptions?: BehaviorOptions;
   readonly imageCachePolicyProps?: CachePolicyProps;
-  readonly imageCachePolicy?: cloudfront.ICachePolicy;
   readonly imageResponseHeadersPolicyProps?: cloudfront.ResponseHeadersPolicyProps;
-  readonly imageResponseHeadersPolicy?: cloudfront.IResponseHeadersPolicy;
   readonly imageHttpOriginProps?: HttpOriginProps;
   readonly serverBehaviorOptions?: BehaviorOptions;
   readonly serverCachePolicyProps?: CachePolicyProps;
-  readonly serverCachePolicy?: cloudfront.ICachePolicy;
   readonly serverResponseHeadersPolicyProps?: cloudfront.ResponseHeadersPolicyProps;
-  readonly serverResponseHeadersPolicy?: cloudfront.IResponseHeadersPolicy;
   readonly serverHttpOriginProps?: HttpOriginProps;
   readonly staticBehaviorOptions?: BehaviorOptions;
   readonly staticResponseHeadersPolicyProps?: cloudfront.ResponseHeadersPolicyProps;
-  readonly staticResponseHeadersPolicy?: cloudfront.IResponseHeadersPolicy;
   readonly s3OriginProps?: OptionalS3OriginProps;
 }
 
@@ -52,6 +47,26 @@ export interface NextjsDistributionProps {
    * @see {@link NextjsProps.distribution}
    */
   readonly distribution?: NextjsProps['distribution'];
+  /**
+   * @see {@link NextjsProps.imageCachePolicy}
+   */
+  readonly imageCachePolicy?: cloudfront.ICachePolicy;
+  /**
+   * @see {@link NextjsProps.imageResponseHeadersPolicy}
+   */
+  readonly imageResponseHeadersPolicy?: cloudfront.IResponseHeadersPolicy;
+  /**
+   * @see {@link NextjsProps.serverCachePolicy}
+   */
+  readonly serverCachePolicy?: cloudfront.ICachePolicy;
+  /**
+   * @see {@link NextjsProps.serverResponseHeadersPolicy}
+   */
+  readonly serverResponseHeadersPolicy?: cloudfront.IResponseHeadersPolicy;
+  /**
+   * @see {@link NextjsProps.staticResponseHeadersPolicy}
+   */
+  readonly staticResponseHeadersPolicy?: cloudfront.IResponseHeadersPolicy;
   /**
    * Override lambda function url auth type
    * @default "NONE"
@@ -194,8 +209,8 @@ export class NextjsDistribution extends Construct {
   }
 
   private getStaticResponseHeadersPolicy() {
-    if (this.props.overrides?.staticResponseHeadersPolicy) {
-      return this.props.overrides.staticResponseHeadersPolicy;
+    if (this.props.staticResponseHeadersPolicy) {
+      return this.props.staticResponseHeadersPolicy;
     }
 
     return new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
@@ -275,8 +290,8 @@ export class NextjsDistribution extends Construct {
   }
 
   private getServerResponseHeadersPolicy() {
-    if (this.props.overrides?.serverResponseHeadersPolicy) {
-      return this.props.overrides.serverResponseHeadersPolicy;
+    if (this.props.serverResponseHeadersPolicy) {
+      return this.props.serverResponseHeadersPolicy;
     }
 
     return new ResponseHeadersPolicy(this, 'ServerResponseHeadersPolicy', {
@@ -298,8 +313,8 @@ export class NextjsDistribution extends Construct {
   }
 
   private getServerCachePolicy() {
-    if (this.props.overrides?.serverCachePolicy) {
-      return this.props.overrides.serverCachePolicy;
+    if (this.props.serverCachePolicy) {
+      return this.props.serverCachePolicy;
     }
 
     return new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
@@ -362,8 +377,8 @@ export class NextjsDistribution extends Construct {
   }
 
   private getImageResponseHeadersPolicy() {
-    if (this.props.overrides?.imageResponseHeadersPolicy) {
-      return this.props.overrides.imageResponseHeadersPolicy;
+    if (this.props.imageResponseHeadersPolicy) {
+      return this.props.imageResponseHeadersPolicy;
     }
 
     return new ResponseHeadersPolicy(this, 'ImageResponseHeadersPolicy', {
@@ -385,8 +400,8 @@ export class NextjsDistribution extends Construct {
   }
 
   private getImageCachePolicy() {
-    if (this.props.overrides?.imageCachePolicy) {
-      return this.props.overrides.imageCachePolicy;
+    if (this.props.imageCachePolicy) {
+      return this.props.imageCachePolicy;
     }
 
     return new cloudfront.CachePolicy(this, 'ImageCachePolicy', {

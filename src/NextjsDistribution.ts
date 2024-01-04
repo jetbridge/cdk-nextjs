@@ -27,14 +27,19 @@ export interface NextjsDistributionOverrides {
   readonly edgeFunctionProps?: OptionalEdgeFunctionProps;
   readonly imageBehaviorOptions?: BehaviorOptions;
   readonly imageCachePolicyProps?: CachePolicyProps;
-  readonly imageResponseHeadersPolicyProps: cloudfront.ResponseHeadersPolicyProps;
+  readonly imageCachePolicy?: cloudfront.ICachePolicy;
+  readonly imageResponseHeadersPolicyProps?: cloudfront.ResponseHeadersPolicyProps;
+  readonly imageResponseHeadersPolicy?: cloudfront.IResponseHeadersPolicy;
   readonly imageHttpOriginProps?: HttpOriginProps;
   readonly serverBehaviorOptions?: BehaviorOptions;
   readonly serverCachePolicyProps?: CachePolicyProps;
+  readonly serverCachePolicy?: cloudfront.ICachePolicy;
   readonly serverResponseHeadersPolicyProps?: cloudfront.ResponseHeadersPolicyProps;
+  readonly serverResponseHeadersPolicy?: cloudfront.IResponseHeadersPolicy;
   readonly serverHttpOriginProps?: HttpOriginProps;
   readonly staticBehaviorOptions?: BehaviorOptions;
   readonly staticResponseHeadersPolicyProps?: cloudfront.ResponseHeadersPolicyProps;
+  readonly staticResponseHeadersPolicy?: cloudfront.IResponseHeadersPolicy;
   readonly s3OriginProps?: OptionalS3OriginProps;
 }
 
@@ -176,7 +181,24 @@ export class NextjsDistribution extends Construct {
   }
 
   private createStaticBehaviorOptions(): cloudfront.BehaviorOptions {
-    const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
+    const responseHeadersPolicy = this.getStaticResponseHeadersPolicy();
+    return {
+      ...this.commonBehaviorOptions,
+      origin: this.s3Origin,
+      allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+      cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
+      cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+      responseHeadersPolicy,
+      ...this.props.overrides?.staticBehaviorOptions,
+    };
+  }
+
+  private getStaticResponseHeadersPolicy() {
+    if (this.props.overrides?.staticResponseHeadersPolicy) {
+      return this.props.overrides.staticResponseHeadersPolicy;
+    }
+
+    return new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
       // add default header for static assets
       customHeadersBehavior: {
         customHeaders: [
@@ -193,15 +215,6 @@ export class NextjsDistribution extends Construct {
       comment: 'Nextjs Static Response Headers Policy',
       ...this.props.overrides?.staticResponseHeadersPolicyProps,
     });
-    return {
-      ...this.commonBehaviorOptions,
-      origin: this.s3Origin,
-      allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
-      cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
-      cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
-      responseHeadersPolicy,
-      ...this.props.overrides?.staticBehaviorOptions,
-    };
   }
 
   private get fnUrlAuthType(): lambda.FunctionUrlAuthType {
@@ -246,7 +259,50 @@ export class NextjsDistribution extends Construct {
   private createServerBehaviorOptions(): cloudfront.BehaviorOptions {
     const fnUrl = this.props.serverFunction.addFunctionUrl({ authType: this.fnUrlAuthType });
     const origin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), this.props.overrides?.serverHttpOriginProps);
-    const cachePolicy = new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
+    const cachePolicy = this.getServerCachePolicy();
+    const responseHeadersPolicy = this.getServerResponseHeadersPolicy();
+    return {
+      ...this.commonBehaviorOptions,
+      origin,
+      allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+      cachePolicy,
+      edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
+      functionAssociations: this.createCloudFrontFnAssociations(),
+      responseHeadersPolicy,
+      ...this.props.overrides?.serverBehaviorOptions,
+    };
+  }
+
+  private getServerResponseHeadersPolicy() {
+    if (this.props.overrides?.serverResponseHeadersPolicy) {
+      return this.props.overrides.serverResponseHeadersPolicy;
+    }
+
+    return new ResponseHeadersPolicy(this, 'ServerResponseHeadersPolicy', {
+      customHeadersBehavior: {
+        customHeaders: [
+          {
+            header: 'cache-control',
+            override: false,
+            // MDN Cache-Control Use Case: Up-to-date contents always
+            // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#up-to-date_contents_always
+            value: `no-cache`,
+          },
+        ],
+      },
+      securityHeadersBehavior: this.commonSecurityHeadersBehavior,
+      comment: 'Nextjs Server Response Headers Policy',
+      ...this.props.overrides?.serverResponseHeadersPolicyProps,
+    });
+  }
+
+  private getServerCachePolicy() {
+    if (this.props.overrides?.serverCachePolicy) {
+      return this.props.overrides.serverCachePolicy;
+    }
+
+    return new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
       queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
       headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
         'accept',
@@ -265,33 +321,6 @@ export class NextjsDistribution extends Construct {
       comment: 'Nextjs Server Cache Policy',
       ...this.props.overrides?.serverCachePolicyProps,
     });
-    const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ServerResponseHeadersPolicy', {
-      customHeadersBehavior: {
-        customHeaders: [
-          {
-            header: 'cache-control',
-            override: false,
-            // MDN Cache-Control Use Case: Up-to-date contents always
-            // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#up-to-date_contents_always
-            value: `no-cache`,
-          },
-        ],
-      },
-      securityHeadersBehavior: this.commonSecurityHeadersBehavior,
-      comment: 'Nextjs Server Response Headers Policy',
-      ...this.props.overrides?.serverResponseHeadersPolicyProps,
-    });
-    return {
-      ...this.commonBehaviorOptions,
-      origin,
-      allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
-      cachePolicy,
-      edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
-      functionAssociations: this.createCloudFrontFnAssociations(),
-      responseHeadersPolicy,
-      ...this.props.overrides?.serverBehaviorOptions,
-    };
   }
 
   /**
@@ -317,19 +346,27 @@ export class NextjsDistribution extends Construct {
       Fn.parseDomainName(imageOptFnUrl.url),
       this.props.overrides?.imageHttpOriginProps
     );
-    const cachePolicy = new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
-      queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-      headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
-      cookieBehavior: cloudfront.CacheCookieBehavior.all(),
-      defaultTtl: Duration.days(1),
-      maxTtl: Duration.days(365),
-      minTtl: Duration.days(0),
-      enableAcceptEncodingBrotli: true,
-      enableAcceptEncodingGzip: true,
-      comment: 'Nextjs Image Cache Policy',
-      ...this.props.overrides?.imageCachePolicyProps,
-    });
-    const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ImageResponseHeadersPolicy', {
+    const cachePolicy = this.getImageCachePolicy();
+    const responseHeadersPolicy = this.getImageResponseHeadersPolicy();
+    return {
+      ...this.commonBehaviorOptions,
+      origin,
+      allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+      cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
+      cachePolicy,
+      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+      edgeLambdas: this.edgeLambdas,
+      responseHeadersPolicy,
+      ...this.props.overrides?.imageBehaviorOptions,
+    };
+  }
+
+  private getImageResponseHeadersPolicy() {
+    if (this.props.overrides?.imageResponseHeadersPolicy) {
+      return this.props.overrides.imageResponseHeadersPolicy;
+    }
+
+    return new ResponseHeadersPolicy(this, 'ImageResponseHeadersPolicy', {
       customHeadersBehavior: {
         customHeaders: [
           {
@@ -345,17 +382,25 @@ export class NextjsDistribution extends Construct {
       comment: 'Nextjs Image Response Headers Policy',
       ...this.props.overrides?.imageResponseHeadersPolicyProps,
     });
-    return {
-      ...this.commonBehaviorOptions,
-      origin,
-      allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
-      cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
-      cachePolicy,
-      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
-      edgeLambdas: this.edgeLambdas,
-      responseHeadersPolicy,
-      ...this.props.overrides?.imageBehaviorOptions,
-    };
+  }
+
+  private getImageCachePolicy() {
+    if (this.props.overrides?.imageCachePolicy) {
+      return this.props.overrides.imageCachePolicy;
+    }
+
+    return new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
+      queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+      headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
+      cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+      defaultTtl: Duration.days(1),
+      maxTtl: Duration.days(365),
+      minTtl: Duration.days(0),
+      enableAcceptEncodingBrotli: true,
+      enableAcceptEncodingGzip: true,
+      comment: 'Nextjs Image Cache Policy',
+      ...this.props.overrides?.imageCachePolicyProps,
+    });
   }
 
   /**

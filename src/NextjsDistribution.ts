@@ -1,8 +1,12 @@
-import * as fs from 'node:fs';
-import * as path from 'path';
 import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
-import { BehaviorOptions, CachePolicyProps, Distribution, ResponseHeadersPolicy } from 'aws-cdk-lib/aws-cloudfront';
+import {
+  AddBehaviorOptions,
+  BehaviorOptions,
+  CachePolicyProps,
+  Distribution,
+  ResponseHeadersPolicy,
+} from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import { HttpOriginProps } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
@@ -10,6 +14,8 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
+import * as fs from 'node:fs';
+import * as path from 'path';
 import { NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
 import {
   OptionalCloudFrontFunctionProps,
@@ -25,15 +31,15 @@ export interface NextjsDistributionOverrides {
   readonly cloudFrontFunctionProps?: OptionalCloudFrontFunctionProps;
   readonly distributionProps?: OptionalDistributionProps;
   readonly edgeFunctionProps?: OptionalEdgeFunctionProps;
-  readonly imageBehaviorOptions?: BehaviorOptions;
+  readonly imageBehaviorOptions?: AddBehaviorOptions;
   readonly imageCachePolicyProps?: CachePolicyProps;
-  readonly imageResponseHeadersPolicyProps: cloudfront.ResponseHeadersPolicyProps;
+  readonly imageResponseHeadersPolicyProps?: cloudfront.ResponseHeadersPolicyProps;
   readonly imageHttpOriginProps?: HttpOriginProps;
-  readonly serverBehaviorOptions?: BehaviorOptions;
+  readonly serverBehaviorOptions?: AddBehaviorOptions;
   readonly serverCachePolicyProps?: CachePolicyProps;
   readonly serverResponseHeadersPolicyProps?: cloudfront.ResponseHeadersPolicyProps;
   readonly serverHttpOriginProps?: HttpOriginProps;
-  readonly staticBehaviorOptions?: BehaviorOptions;
+  readonly staticBehaviorOptions?: AddBehaviorOptions;
   readonly staticResponseHeadersPolicyProps?: cloudfront.ResponseHeadersPolicyProps;
   readonly s3OriginProps?: OptionalS3OriginProps;
 }

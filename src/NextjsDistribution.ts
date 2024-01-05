@@ -211,8 +211,8 @@ export class NextjsDistribution extends Construct {
       allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
       cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
-      ...staticBehaviorOptions,
       responseHeadersPolicy,
+      ...staticBehaviorOptions,
     };
   }
 
@@ -310,9 +310,9 @@ export class NextjsDistribution extends Construct {
       originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
       functionAssociations: this.createCloudFrontFnAssociations(),
-      ...serverBehaviorOptions,
       cachePolicy,
       responseHeadersPolicy,
+      ...serverBehaviorOptions,
     };
   }
 
@@ -385,9 +385,9 @@ export class NextjsDistribution extends Construct {
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
       originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       edgeLambdas: this.edgeLambdas,
-      ...imageBehaviorOptions,
       cachePolicy,
       responseHeadersPolicy,
+      ...imageBehaviorOptions,
     };
   }
 

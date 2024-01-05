@@ -2982,30 +2982,20 @@ const nextjsDistributionOverrides: NextjsDistributionOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageResponseHeadersPolicyProps">imageResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.cloudFrontFunctionProps">cloudFrontFunctionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps">OptionalCloudFrontFunctionProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.distributionProps">distributionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps">OptionalDistributionProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.edgeFunctionProps">edgeFunctionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps">OptionalEdgeFunctionProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageBehaviorOptions">imageBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.BehaviorOptions</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageBehaviorOptions">imageBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.AddBehaviorOptions</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageCachePolicyProps">imageCachePolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.CachePolicyProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageHttpOriginProps">imageHttpOriginProps</a></code> | <code>aws-cdk-lib.aws_cloudfront_origins.HttpOriginProps</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageResponseHeadersPolicyProps">imageResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.s3OriginProps">s3OriginProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps">OptionalS3OriginProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverBehaviorOptions">serverBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.BehaviorOptions</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverBehaviorOptions">serverBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.AddBehaviorOptions</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverCachePolicyProps">serverCachePolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.CachePolicyProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverHttpOriginProps">serverHttpOriginProps</a></code> | <code>aws-cdk-lib.aws_cloudfront_origins.HttpOriginProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverResponseHeadersPolicyProps">serverResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticBehaviorOptions">staticBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.BehaviorOptions</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticBehaviorOptions">staticBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.AddBehaviorOptions</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticResponseHeadersPolicyProps">staticResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
-
----
-
-##### `imageResponseHeadersPolicyProps`<sup>Required</sup> <a name="imageResponseHeadersPolicyProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageResponseHeadersPolicyProps"></a>
-
-```typescript
-public readonly imageResponseHeadersPolicyProps: ResponseHeadersPolicyProps;
-```
-
-- *Type:* aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps
 
 ---
 
@@ -3042,10 +3032,10 @@ public readonly edgeFunctionProps: OptionalEdgeFunctionProps;
 ##### `imageBehaviorOptions`<sup>Optional</sup> <a name="imageBehaviorOptions" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageBehaviorOptions"></a>
 
 ```typescript
-public readonly imageBehaviorOptions: BehaviorOptions;
+public readonly imageBehaviorOptions: AddBehaviorOptions;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.BehaviorOptions
+- *Type:* aws-cdk-lib.aws_cloudfront.AddBehaviorOptions
 
 ---
 
@@ -3069,6 +3059,16 @@ public readonly imageHttpOriginProps: HttpOriginProps;
 
 ---
 
+##### `imageResponseHeadersPolicyProps`<sup>Optional</sup> <a name="imageResponseHeadersPolicyProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageResponseHeadersPolicyProps"></a>
+
+```typescript
+public readonly imageResponseHeadersPolicyProps: ResponseHeadersPolicyProps;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps
+
+---
+
 ##### `s3OriginProps`<sup>Optional</sup> <a name="s3OriginProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.s3OriginProps"></a>
 
 ```typescript
@@ -3082,10 +3082,10 @@ public readonly s3OriginProps: OptionalS3OriginProps;
 ##### `serverBehaviorOptions`<sup>Optional</sup> <a name="serverBehaviorOptions" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverBehaviorOptions"></a>
 
 ```typescript
-public readonly serverBehaviorOptions: BehaviorOptions;
+public readonly serverBehaviorOptions: AddBehaviorOptions;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.BehaviorOptions
+- *Type:* aws-cdk-lib.aws_cloudfront.AddBehaviorOptions
 
 ---
 
@@ -3122,10 +3122,10 @@ public readonly serverResponseHeadersPolicyProps: ResponseHeadersPolicyProps;
 ##### `staticBehaviorOptions`<sup>Optional</sup> <a name="staticBehaviorOptions" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticBehaviorOptions"></a>
 
 ```typescript
-public readonly staticBehaviorOptions: BehaviorOptions;
+public readonly staticBehaviorOptions: AddBehaviorOptions;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.BehaviorOptions
+- *Type:* aws-cdk-lib.aws_cloudfront.AddBehaviorOptions
 
 ---
 

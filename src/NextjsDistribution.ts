@@ -1,3 +1,5 @@
+import * as fs from 'node:fs';
+import * as path from 'path';
 import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import {
@@ -14,8 +16,6 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import * as fs from 'node:fs';
-import * as path from 'path';
 import { NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
 import {
   OptionalCloudFrontFunctionProps,
@@ -90,10 +90,6 @@ export interface NextjsDistributionProps {
    */
   readonly staticAssetsBucket: s3.IBucket;
 }
-
-type Mutable<T> = {
-  -readonly [P in keyof T]: T[P];
-};
 
 /**
  * Create a CloudFront distribution to serve a Next.js application.
@@ -186,18 +182,12 @@ export class NextjsDistribution extends Construct {
   }
 
   private createStaticBehaviorOptions(): BehaviorOptions {
-    const staticBehaviorOptions = <Mutable<BehaviorOptions>>{
-      ...this.commonBehaviorOptions,
-      origin: this.s3Origin,
-      allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
-      cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
-      cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
-      ...this.props.overrides?.staticBehaviorOptions,
-    };
+    const staticBehaviorOptions = this.props.overrides?.staticBehaviorOptions;
 
-    // add default response headers policy if not provided
-    if (!staticBehaviorOptions.responseHeadersPolicy) {
-      staticBehaviorOptions.responseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
+    // create default response headers policy if not provided
+    const responseHeadersPolicy =
+      staticBehaviorOptions?.responseHeadersPolicy ??
+      new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
         // add default header for static assets
         customHeadersBehavior: {
           customHeaders: [
@@ -214,9 +204,16 @@ export class NextjsDistribution extends Construct {
         comment: 'Nextjs Static Response Headers Policy',
         ...this.props.overrides?.staticResponseHeadersPolicyProps,
       });
-    }
 
-    return <BehaviorOptions>staticBehaviorOptions;
+    return {
+      ...this.commonBehaviorOptions,
+      origin: this.s3Origin,
+      allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+      cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
+      cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+      ...staticBehaviorOptions,
+      responseHeadersPolicy,
+    };
   }
 
   private get fnUrlAuthType(): lambda.FunctionUrlAuthType {
@@ -261,20 +258,12 @@ export class NextjsDistribution extends Construct {
   private createServerBehaviorOptions(): cloudfront.BehaviorOptions {
     const fnUrl = this.props.serverFunction.addFunctionUrl({ authType: this.fnUrlAuthType });
     const origin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), this.props.overrides?.serverHttpOriginProps);
+    const serverBehaviorOptions = this.props.overrides?.serverBehaviorOptions;
 
-    const serverBehaviorOptions = <Mutable<BehaviorOptions>>{
-      ...this.commonBehaviorOptions,
-      origin,
-      allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
-      edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
-      functionAssociations: this.createCloudFrontFnAssociations(),
-      ...this.props.overrides?.serverBehaviorOptions,
-    };
-
-    // add default cache policy if not provided
-    if (!serverBehaviorOptions.cachePolicy) {
-      serverBehaviorOptions.cachePolicy = new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
+    // create default cache policy if not provided
+    const cachePolicy =
+      serverBehaviorOptions?.cachePolicy ??
+      new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
         queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
         headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
           'accept',
@@ -293,11 +282,11 @@ export class NextjsDistribution extends Construct {
         comment: 'Nextjs Server Cache Policy',
         ...this.props.overrides?.serverCachePolicyProps,
       });
-    }
 
-    // add default response headers policy if not provided
-    if (!serverBehaviorOptions.responseHeadersPolicy) {
-      serverBehaviorOptions.responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ServerResponseHeadersPolicy', {
+    // create default response headers policy if not provided
+    const responseHeadersPolicy =
+      serverBehaviorOptions?.responseHeadersPolicy ??
+      new ResponseHeadersPolicy(this, 'ServerResponseHeadersPolicy', {
         customHeadersBehavior: {
           customHeaders: [
             {
@@ -313,9 +302,18 @@ export class NextjsDistribution extends Construct {
         comment: 'Nextjs Server Response Headers Policy',
         ...this.props.overrides?.serverResponseHeadersPolicyProps,
       });
-    }
 
-    return <BehaviorOptions>serverBehaviorOptions;
+    return {
+      ...this.commonBehaviorOptions,
+      origin,
+      allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+      edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
+      functionAssociations: this.createCloudFrontFnAssociations(),
+      ...serverBehaviorOptions,
+      cachePolicy,
+      responseHeadersPolicy,
+    };
   }
 
   /**
@@ -342,19 +340,12 @@ export class NextjsDistribution extends Construct {
       this.props.overrides?.imageHttpOriginProps
     );
 
-    const imageBehaviorOptions = <Mutable<BehaviorOptions>>{
-      ...this.commonBehaviorOptions,
-      origin,
-      allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
-      cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
-      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
-      edgeLambdas: this.edgeLambdas,
-      ...this.props.overrides?.imageBehaviorOptions,
-    };
+    const imageBehaviorOptions = this.props.overrides?.imageBehaviorOptions;
 
     // add default cache policy if not provided
-    if (!imageBehaviorOptions.cachePolicy) {
-      imageBehaviorOptions.cachePolicy = new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
+    const cachePolicy =
+      imageBehaviorOptions?.cachePolicy ??
+      new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
         queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
         headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
         cookieBehavior: cloudfront.CacheCookieBehavior.all(),
@@ -366,11 +357,11 @@ export class NextjsDistribution extends Construct {
         comment: 'Nextjs Image Cache Policy',
         ...this.props.overrides?.imageCachePolicyProps,
       });
-    }
 
     // add default response headers policy if not provided
-    if (!imageBehaviorOptions.responseHeadersPolicy) {
-      imageBehaviorOptions.responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ImageResponseHeadersPolicy', {
+    const responseHeadersPolicy =
+      imageBehaviorOptions?.responseHeadersPolicy ??
+      new ResponseHeadersPolicy(this, 'ImageResponseHeadersPolicy', {
         customHeadersBehavior: {
           customHeaders: [
             {
@@ -386,8 +377,18 @@ export class NextjsDistribution extends Construct {
         comment: 'Nextjs Image Response Headers Policy',
         ...this.props.overrides?.imageResponseHeadersPolicyProps,
       });
-    }
-    return <BehaviorOptions>imageBehaviorOptions;
+
+    return {
+      ...this.commonBehaviorOptions,
+      origin,
+      allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+      cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
+      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+      edgeLambdas: this.edgeLambdas,
+      ...imageBehaviorOptions,
+      cachePolicy,
+      responseHeadersPolicy,
+    };
   }
 
   /**

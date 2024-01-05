@@ -85,6 +85,10 @@ export interface NextjsDistributionProps {
   readonly staticAssetsBucket: s3.IBucket;
 }
 
+type Mutable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
+
 /**
  * Create a CloudFront distribution to serve a Next.js application.
  */
@@ -175,33 +179,38 @@ export class NextjsDistribution extends Construct {
     return this.props.functionUrlAuthType === lambda.FunctionUrlAuthType.AWS_IAM;
   }
 
-  private createStaticBehaviorOptions(): cloudfront.BehaviorOptions {
-    const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
-      // add default header for static assets
-      customHeadersBehavior: {
-        customHeaders: [
-          {
-            header: 'cache-control',
-            override: false,
-            // MDN Cache-Control Use Case: Caching static assets with "cache busting"
-            // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#caching_static_assets_with_cache_busting
-            value: `max-age=${Duration.days(365).toSeconds()}, immutable`,
-          },
-        ],
-      },
-      securityHeadersBehavior: this.commonSecurityHeadersBehavior,
-      comment: 'Nextjs Static Response Headers Policy',
-      ...this.props.overrides?.staticResponseHeadersPolicyProps,
-    });
-    return {
+  private createStaticBehaviorOptions(): BehaviorOptions {
+    const staticBehaviorOptions = <Mutable<BehaviorOptions>>{
       ...this.commonBehaviorOptions,
       origin: this.s3Origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
       cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
-      responseHeadersPolicy,
       ...this.props.overrides?.staticBehaviorOptions,
     };
+
+    // add default response headers policy if not provided
+    if (!staticBehaviorOptions.responseHeadersPolicy) {
+      staticBehaviorOptions.responseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
+        // add default header for static assets
+        customHeadersBehavior: {
+          customHeaders: [
+            {
+              header: 'cache-control',
+              override: false,
+              // MDN Cache-Control Use Case: Caching static assets with "cache busting"
+              // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#caching_static_assets_with_cache_busting
+              value: `max-age=${Duration.days(365).toSeconds()}, immutable`,
+            },
+          ],
+        },
+        securityHeadersBehavior: this.commonSecurityHeadersBehavior,
+        comment: 'Nextjs Static Response Headers Policy',
+        ...this.props.overrides?.staticResponseHeadersPolicyProps,
+      });
+    }
+
+    return <BehaviorOptions>staticBehaviorOptions;
   }
 
   private get fnUrlAuthType(): lambda.FunctionUrlAuthType {
@@ -246,52 +255,61 @@ export class NextjsDistribution extends Construct {
   private createServerBehaviorOptions(): cloudfront.BehaviorOptions {
     const fnUrl = this.props.serverFunction.addFunctionUrl({ authType: this.fnUrlAuthType });
     const origin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), this.props.overrides?.serverHttpOriginProps);
-    const cachePolicy = new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
-      queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-      headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
-        'accept',
-        'rsc',
-        'next-router-prefetch',
-        'next-router-state-tree',
-        'next-url',
-        'x-prerender-revalidate'
-      ),
-      cookieBehavior: cloudfront.CacheCookieBehavior.all(),
-      defaultTtl: Duration.seconds(0),
-      maxTtl: Duration.days(365),
-      minTtl: Duration.seconds(0),
-      enableAcceptEncodingBrotli: true,
-      enableAcceptEncodingGzip: true,
-      comment: 'Nextjs Server Cache Policy',
-      ...this.props.overrides?.serverCachePolicyProps,
-    });
-    const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ServerResponseHeadersPolicy', {
-      customHeadersBehavior: {
-        customHeaders: [
-          {
-            header: 'cache-control',
-            override: false,
-            // MDN Cache-Control Use Case: Up-to-date contents always
-            // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#up-to-date_contents_always
-            value: `no-cache`,
-          },
-        ],
-      },
-      securityHeadersBehavior: this.commonSecurityHeadersBehavior,
-      comment: 'Nextjs Server Response Headers Policy',
-      ...this.props.overrides?.serverResponseHeadersPolicyProps,
-    });
-    return {
+
+    const serverBehaviorOptions = <Mutable<BehaviorOptions>>{
       ...this.commonBehaviorOptions,
       origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
       originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
-      cachePolicy,
       edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
       functionAssociations: this.createCloudFrontFnAssociations(),
-      responseHeadersPolicy,
       ...this.props.overrides?.serverBehaviorOptions,
     };
+
+    // add default cache policy if not provided
+    if (!serverBehaviorOptions.cachePolicy) {
+      serverBehaviorOptions.cachePolicy = new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
+        queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+        headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
+          'accept',
+          'rsc',
+          'next-router-prefetch',
+          'next-router-state-tree',
+          'next-url',
+          'x-prerender-revalidate'
+        ),
+        cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+        defaultTtl: Duration.seconds(0),
+        maxTtl: Duration.days(365),
+        minTtl: Duration.seconds(0),
+        enableAcceptEncodingBrotli: true,
+        enableAcceptEncodingGzip: true,
+        comment: 'Nextjs Server Cache Policy',
+        ...this.props.overrides?.serverCachePolicyProps,
+      });
+    }
+
+    // add default response headers policy if not provided
+    if (!serverBehaviorOptions.responseHeadersPolicy) {
+      serverBehaviorOptions.responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ServerResponseHeadersPolicy', {
+        customHeadersBehavior: {
+          customHeaders: [
+            {
+              header: 'cache-control',
+              override: false,
+              // MDN Cache-Control Use Case: Up-to-date contents always
+              // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#up-to-date_contents_always
+              value: `no-cache`,
+            },
+          ],
+        },
+        securityHeadersBehavior: this.commonSecurityHeadersBehavior,
+        comment: 'Nextjs Server Response Headers Policy',
+        ...this.props.overrides?.serverResponseHeadersPolicyProps,
+      });
+    }
+
+    return <BehaviorOptions>serverBehaviorOptions;
   }
 
   /**
@@ -317,45 +335,53 @@ export class NextjsDistribution extends Construct {
       Fn.parseDomainName(imageOptFnUrl.url),
       this.props.overrides?.imageHttpOriginProps
     );
-    const cachePolicy = new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
-      queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-      headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
-      cookieBehavior: cloudfront.CacheCookieBehavior.all(),
-      defaultTtl: Duration.days(1),
-      maxTtl: Duration.days(365),
-      minTtl: Duration.days(0),
-      enableAcceptEncodingBrotli: true,
-      enableAcceptEncodingGzip: true,
-      comment: 'Nextjs Image Cache Policy',
-      ...this.props.overrides?.imageCachePolicyProps,
-    });
-    const responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ImageResponseHeadersPolicy', {
-      customHeadersBehavior: {
-        customHeaders: [
-          {
-            header: 'cache-control',
-            override: false,
-            // MDN Cache-Control Use Case: Up-to-date contents always
-            // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#up-to-date_contents_always
-            value: `no-cache`,
-          },
-        ],
-      },
-      securityHeadersBehavior: this.commonSecurityHeadersBehavior,
-      comment: 'Nextjs Image Response Headers Policy',
-      ...this.props.overrides?.imageResponseHeadersPolicyProps,
-    });
-    return {
+
+    const imageBehaviorOptions = <Mutable<BehaviorOptions>>{
       ...this.commonBehaviorOptions,
       origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
-      cachePolicy,
       originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       edgeLambdas: this.edgeLambdas,
-      responseHeadersPolicy,
       ...this.props.overrides?.imageBehaviorOptions,
     };
+
+    // add default cache policy if not provided
+    if (!imageBehaviorOptions.cachePolicy) {
+      imageBehaviorOptions.cachePolicy = new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
+        queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+        headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
+        cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+        defaultTtl: Duration.days(1),
+        maxTtl: Duration.days(365),
+        minTtl: Duration.days(0),
+        enableAcceptEncodingBrotli: true,
+        enableAcceptEncodingGzip: true,
+        comment: 'Nextjs Image Cache Policy',
+        ...this.props.overrides?.imageCachePolicyProps,
+      });
+    }
+
+    // add default response headers policy if not provided
+    if (!imageBehaviorOptions.responseHeadersPolicy) {
+      imageBehaviorOptions.responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ImageResponseHeadersPolicy', {
+        customHeadersBehavior: {
+          customHeaders: [
+            {
+              header: 'cache-control',
+              override: false,
+              // MDN Cache-Control Use Case: Up-to-date contents always
+              // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#up-to-date_contents_always
+              value: `no-cache`,
+            },
+          ],
+        },
+        securityHeadersBehavior: this.commonSecurityHeadersBehavior,
+        comment: 'Nextjs Image Response Headers Policy',
+        ...this.props.overrides?.imageResponseHeadersPolicyProps,
+      });
+    }
+    return <BehaviorOptions>imageBehaviorOptions;
   }
 
   /**

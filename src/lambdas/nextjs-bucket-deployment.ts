@@ -379,12 +379,26 @@ async function pruneBucket({
     }
   }
   if (oldObjectKeysToBeDeleted.length) {
-    await s3.send(
-      new DeleteObjectsCommand({
-        Bucket: bucketName,
-        Delete: { Objects: oldObjectKeysToBeDeleted.map((k) => ({ Key: k })) },
-      })
-    );
+    const deletePromises = [];
+
+    // AWS limits S3 delete commands to 1000 keys per call
+    const deleteCommandLimit = 1000;
+
+    for (let i = 0; i < oldObjectKeysToBeDeleted.length; i += deleteCommandLimit) {
+      const objectChunk = oldObjectKeysToBeDeleted.slice(i, i + deleteCommandLimit);
+
+      deletePromises.push(
+        s3.send(
+          new DeleteObjectsCommand({
+            Bucket: bucketName,
+            Delete: { Objects: objectChunk.map((k) => ({ Key: k })) },
+          })
+        )
+      );
+    }
+
+    await Promise.all(deletePromises);
+
     debug(`Objects pruned in ${bucketName}: ${oldObjectKeysToBeDeleted.join(', ')}`);
   } else {
     debug(`No objects to prune`);

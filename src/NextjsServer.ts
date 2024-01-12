@@ -19,7 +19,7 @@ export interface NextjsServerOverrides {
   readonly sourceCodeAssetProps?: OptionalAssetProps;
   readonly destinationCodeAssetProps?: OptionalAssetProps;
   readonly functionProps?: OptionalFunctionProps;
-  readonly nextjsBucketDeploymentProps: OptionalNextjsBucketDeploymentProps;
+  readonly nextjsBucketDeploymentProps?: OptionalNextjsBucketDeploymentProps;
 }
 
 export type EnvironmentVars = Record<string, string>;

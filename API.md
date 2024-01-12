@@ -4166,20 +4166,10 @@ const nextjsServerOverrides: NextjsServerOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.nextjsBucketDeploymentProps">nextjsBucketDeploymentProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.destinationCodeAssetProps">destinationCodeAssetProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.functionProps">functionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a></code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.nextjsBucketDeploymentProps">nextjsBucketDeploymentProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.sourceCodeAssetProps">sourceCodeAssetProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
-
----
-
-##### `nextjsBucketDeploymentProps`<sup>Required</sup> <a name="nextjsBucketDeploymentProps" id="cdk-nextjs-standalone.NextjsServerOverrides.property.nextjsBucketDeploymentProps"></a>
-
-```typescript
-public readonly nextjsBucketDeploymentProps: OptionalNextjsBucketDeploymentProps;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a>
 
 ---
 
@@ -4200,6 +4190,16 @@ public readonly functionProps: OptionalFunctionProps;
 ```
 
 - *Type:* <a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a>
+
+---
+
+##### `nextjsBucketDeploymentProps`<sup>Optional</sup> <a name="nextjsBucketDeploymentProps" id="cdk-nextjs-standalone.NextjsServerOverrides.property.nextjsBucketDeploymentProps"></a>
+
+```typescript
+public readonly nextjsBucketDeploymentProps: OptionalNextjsBucketDeploymentProps;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a>
 
 ---
 

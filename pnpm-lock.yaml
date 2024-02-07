@@ -78,19 +78,19 @@ importers:
         specifier: ^15
         version: 15.0.0
       jsii:
-        specifier: ^5.3.15
+        specifier: ~5.3.12
         version: 5.3.15
       jsii-diff:
         specifier: ^1.94.0
         version: 1.94.0
       jsii-docgen:
-        specifier: ^9.2.2
-        version: 9.2.2(jsii-rosetta@5.3.12)
+        specifier: ^10.3.15
+        version: 10.3.15(jsii-rosetta@5.3.12)
       jsii-pacmak:
         specifier: ^1.94.0
         version: 1.94.0
       jsii-rosetta:
-        specifier: ^5.3.12
+        specifier: ~5.3.12
         version: 5.3.12
       jszip:
         specifier: ^3.10.1
@@ -5429,12 +5429,11 @@ packages:
       - supports-color
     dev: true
 
-  /jsii-docgen@9.2.2(jsii-rosetta@5.3.12):
-    resolution: {integrity: sha512-QoL0BCGZMU1TxqJ7/RyEVhdKGnE2ZQnay9A35yJ8jkb31qyl6HN8dnAzfrz1ym4VbYtwlSqQ+Occjor8E/uxow==}
-    engines: {node: '>= 16.0.0'}
+  /jsii-docgen@10.3.15(jsii-rosetta@5.3.12):
+    resolution: {integrity: sha512-mjaPmNhui2bPxt8l+UHugB0na87ratjMw+XlZdmcOTikuL2Zj/iCjiu57dlfs0BTCghq59umWbExsNXpQNxFNA==}
     hasBin: true
     peerDependencies:
-      jsii-rosetta: ~v1.85.0 || ~5.0.14 || ~5.1.2
+      jsii-rosetta: ~v1.85.0 || ~5.0.14 || ~5.1.2 || ~5.2.0 || ~5.3.0
     dependencies:
       '@jsii/spec': 1.94.0
       case: 1.6.3
@@ -5443,7 +5442,7 @@ packages:
       glob-promise: 6.0.5(glob@8.1.0)
       jsii-reflect: 1.94.0
       jsii-rosetta: 5.3.12
-      semver: 7.5.4
+      semver: 7.6.0
       yargs: 16.2.0
     dev: true
 

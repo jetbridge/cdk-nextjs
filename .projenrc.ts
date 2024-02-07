@@ -46,7 +46,7 @@ const rootProject = new awscdk.AwsCdkConstructLibrary({
   description: 'Deploy a NextJS app to AWS using CDK. Uses standalone build and output tracing.',
   keywords: ['nextjs', 'next', 'aws-cdk', 'aws', 'cdk', 'standalone', 'iac', 'infrastructure', 'cloud', 'serverless'],
   // dependency config
-  jsiiVersion: '^5.0.0',
+  jsiiVersion: '~5.3.12',
   // cannot have "deps" b/c package can be consumed by other languages so they
   // must be bundled into "bundledDeps"
   bundledDeps: [] /* Runtime dependencies of this module. */,

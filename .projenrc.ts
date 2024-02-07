@@ -7,7 +7,8 @@ const commonProjectOptions = {
   packageManager: NodePackageManager.PNPM,
   projenCommand: 'pnpm dlx projen',
   cdkVersion: '2.121.1',
-} satisfies Partial<awscdk.AwsCdkTypeScriptApp>;
+  sampleCode: false,
+} satisfies Partial<awscdk.AwsCdkTypeScriptAppOptions>;
 
 const commonTscOptions: TypeScriptCompilerOptions = {
   // isolatedModules: true, // why doesn't this work?

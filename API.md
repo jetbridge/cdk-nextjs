@@ -1605,6 +1605,9 @@ NextjsImage.fromFunctionArn(scope: Construct, id: string, functionArn: string)
 
 Import a lambda function into the CDK using its ARN.
 
+For `Function.addPermissions()` to work on this imported lambda, make sure that is
+in the same account and region as the stack you are importing it into.
+
 ###### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsImage.fromFunctionArn.parameter.scope"></a>
 
 - *Type:* constructs.Construct
@@ -1632,6 +1635,9 @@ NextjsImage.fromFunctionAttributes(scope: Construct, id: string, attrs: Function
 ```
 
 Creates a Lambda function object which represents a function not defined within this stack.
+
+For `Function.addPermissions()` to work on this imported lambda, set the sameEnvironment property to true
+if this imported lambda is in the same account and region as the stack you are importing it into.
 
 ###### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsImage.fromFunctionAttributes.parameter.scope"></a>
 
@@ -4486,9 +4492,13 @@ const optionalAaaaRecordProps: OptionalAaaaRecordProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.comment">comment</a></code> | <code>string</code> | A comment to add on the record. |
 | <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.deleteExisting">deleteExisting</a></code> | <code>boolean</code> | Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. |
 | <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.geoLocation">geoLocation</a></code> | <code>aws-cdk-lib.aws_route53.GeoLocation</code> | The geographical origin for this record to return DNS records based on the user's location. |
+| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.multiValueAnswer">multiValueAnswer</a></code> | <code>boolean</code> | Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. |
 | <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.recordName">recordName</a></code> | <code>string</code> | The subdomain name for this record. |
+| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.region">region</a></code> | <code>string</code> | The Amazon EC2 Region where you created the resource that this resource record set refers to. |
+| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.setIdentifier">setIdentifier</a></code> | <code>string</code> | A string used to distinguish between different records with the same combination of DNS name and type. |
 | <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.target">target</a></code> | <code>aws-cdk-lib.aws_route53.RecordTarget</code> | The target. |
 | <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.ttl">ttl</a></code> | <code>aws-cdk-lib.Duration</code> | The resource record cache time to live (TTL). |
+| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.weight">weight</a></code> | <code>number</code> | Among resource record sets that have the same combination of DNS name and type, a value that determines the proportion of DNS queries that Amazon Route 53 responds to using the current resource record set. |
 | <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.zone">zone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | The hosted zone in which to define the new record. |
 
 ---
@@ -4536,6 +4546,19 @@ The geographical origin for this record to return DNS records based on the user'
 
 ---
 
+##### `multiValueAnswer`<sup>Optional</sup> <a name="multiValueAnswer" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.multiValueAnswer"></a>
+
+```typescript
+public readonly multiValueAnswer: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries.
+
+---
+
 ##### `recordName`<sup>Optional</sup> <a name="recordName" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.recordName"></a>
 
 ```typescript
@@ -4553,6 +4576,43 @@ For example, if you want to create a record for acme.example.com, specify
 
 You can also specify the fully qualified domain name which terminates with a
 ".". For example, "acme.example.com.".
+
+---
+
+##### `region`<sup>Optional</sup> <a name="region" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.region"></a>
+
+```typescript
+public readonly region: string;
+```
+
+- *Type:* string
+- *Default:* Do not set latency based routing
+
+The Amazon EC2 Region where you created the resource that this resource record set refers to.
+
+The resource typically is an AWS resource, such as an EC2 instance or an ELB load balancer,
+and is referred to by an IP address or a DNS domain name, depending on the record type.
+
+When Amazon Route 53 receives a DNS query for a domain name and type for which you have created latency resource record sets,
+Route 53 selects the latency resource record set that has the lowest latency between the end user and the associated Amazon EC2 Region.
+Route 53 then returns the value that is associated with the selected resource record set.
+
+---
+
+##### `setIdentifier`<sup>Optional</sup> <a name="setIdentifier" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.setIdentifier"></a>
+
+```typescript
+public readonly setIdentifier: string;
+```
+
+- *Type:* string
+- *Default:* Auto generated string
+
+A string used to distinguish between different records with the same combination of DNS name and type.
+
+It can only be set when either weight or geoLocation is defined.
+
+This parameter must be between 1 and 128 characters in length.
 
 ---
 
@@ -4578,6 +4638,24 @@ public readonly ttl: Duration;
 - *Default:* Duration.minutes(30)
 
 The resource record cache time to live (TTL).
+
+---
+
+##### `weight`<sup>Optional</sup> <a name="weight" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.weight"></a>
+
+```typescript
+public readonly weight: number;
+```
+
+- *Type:* number
+- *Default:* Do not set weighted routing
+
+Among resource record sets that have the same combination of DNS name and type, a value that determines the proportion of DNS queries that Amazon Route 53 responds to using the current resource record set.
+
+Route 53 calculates the sum of the weights for the resource record sets that have the same combination of DNS name and type.
+Route 53 then responds to queries based on the ratio of a resource's weight to the total.
+
+This value can be a number between 0 and 255.
 
 ---
 
@@ -4612,9 +4690,13 @@ const optionalARecordProps: OptionalARecordProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.comment">comment</a></code> | <code>string</code> | A comment to add on the record. |
 | <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.deleteExisting">deleteExisting</a></code> | <code>boolean</code> | Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. |
 | <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.geoLocation">geoLocation</a></code> | <code>aws-cdk-lib.aws_route53.GeoLocation</code> | The geographical origin for this record to return DNS records based on the user's location. |
+| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.multiValueAnswer">multiValueAnswer</a></code> | <code>boolean</code> | Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. |
 | <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.recordName">recordName</a></code> | <code>string</code> | The subdomain name for this record. |
+| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.region">region</a></code> | <code>string</code> | The Amazon EC2 Region where you created the resource that this resource record set refers to. |
+| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.setIdentifier">setIdentifier</a></code> | <code>string</code> | A string used to distinguish between different records with the same combination of DNS name and type. |
 | <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.target">target</a></code> | <code>aws-cdk-lib.aws_route53.RecordTarget</code> | The target. |
 | <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.ttl">ttl</a></code> | <code>aws-cdk-lib.Duration</code> | The resource record cache time to live (TTL). |
+| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.weight">weight</a></code> | <code>number</code> | Among resource record sets that have the same combination of DNS name and type, a value that determines the proportion of DNS queries that Amazon Route 53 responds to using the current resource record set. |
 | <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.zone">zone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | The hosted zone in which to define the new record. |
 
 ---
@@ -4662,6 +4744,19 @@ The geographical origin for this record to return DNS records based on the user'
 
 ---
 
+##### `multiValueAnswer`<sup>Optional</sup> <a name="multiValueAnswer" id="cdk-nextjs-standalone.OptionalARecordProps.property.multiValueAnswer"></a>
+
+```typescript
+public readonly multiValueAnswer: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries.
+
+---
+
 ##### `recordName`<sup>Optional</sup> <a name="recordName" id="cdk-nextjs-standalone.OptionalARecordProps.property.recordName"></a>
 
 ```typescript
@@ -4679,6 +4774,43 @@ For example, if you want to create a record for acme.example.com, specify
 
 You can also specify the fully qualified domain name which terminates with a
 ".". For example, "acme.example.com.".
+
+---
+
+##### `region`<sup>Optional</sup> <a name="region" id="cdk-nextjs-standalone.OptionalARecordProps.property.region"></a>
+
+```typescript
+public readonly region: string;
+```
+
+- *Type:* string
+- *Default:* Do not set latency based routing
+
+The Amazon EC2 Region where you created the resource that this resource record set refers to.
+
+The resource typically is an AWS resource, such as an EC2 instance or an ELB load balancer,
+and is referred to by an IP address or a DNS domain name, depending on the record type.
+
+When Amazon Route 53 receives a DNS query for a domain name and type for which you have created latency resource record sets,
+Route 53 selects the latency resource record set that has the lowest latency between the end user and the associated Amazon EC2 Region.
+Route 53 then returns the value that is associated with the selected resource record set.
+
+---
+
+##### `setIdentifier`<sup>Optional</sup> <a name="setIdentifier" id="cdk-nextjs-standalone.OptionalARecordProps.property.setIdentifier"></a>
+
+```typescript
+public readonly setIdentifier: string;
+```
+
+- *Type:* string
+- *Default:* Auto generated string
+
+A string used to distinguish between different records with the same combination of DNS name and type.
+
+It can only be set when either weight or geoLocation is defined.
+
+This parameter must be between 1 and 128 characters in length.
 
 ---
 
@@ -4704,6 +4836,24 @@ public readonly ttl: Duration;
 - *Default:* Duration.minutes(30)
 
 The resource record cache time to live (TTL).
+
+---
+
+##### `weight`<sup>Optional</sup> <a name="weight" id="cdk-nextjs-standalone.OptionalARecordProps.property.weight"></a>
+
+```typescript
+public readonly weight: number;
+```
+
+- *Type:* number
+- *Default:* Do not set weighted routing
+
+Among resource record sets that have the same combination of DNS name and type, a value that determines the proportion of DNS queries that Amazon Route 53 responds to using the current resource record set.
+
+Route 53 calculates the sum of the weights for the resource record sets that have the same combination of DNS name and type.
+Route 53 then responds to queries based on the ratio of a resource's weight to the total.
+
+This value can be a number between 0 and 255.
 
 ---
 
@@ -4919,6 +5069,7 @@ const optionalCertificateProps: OptionalCertificateProps = { ... }
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps.property.certificateName">certificateName</a></code> | <code>string</code> | The Certificate name. |
 | <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps.property.domainName">domainName</a></code> | <code>string</code> | Fully-qualified domain name to request a certificate for. |
+| <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps.property.keyAlgorithm">keyAlgorithm</a></code> | <code>aws-cdk-lib.aws_certificatemanager.KeyAlgorithm</code> | Specifies the algorithm of the public and private key pair that your certificate uses to encrypt data. |
 | <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps.property.subjectAlternativeNames">subjectAlternativeNames</a></code> | <code>string[]</code> | Alternative domain names on your certificate. |
 | <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps.property.transparencyLoggingEnabled">transparencyLoggingEnabled</a></code> | <code>boolean</code> | Enable or disable transparency logging for this certificate. |
 | <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps.property.validation">validation</a></code> | <code>aws-cdk-lib.aws_certificatemanager.CertificateValidation</code> | How to validate this certificate. |
@@ -4951,6 +5102,19 @@ public readonly domainName: string;
 Fully-qualified domain name to request a certificate for.
 
 May contain wildcards, such as ``*.domain.com``.
+
+---
+
+##### `keyAlgorithm`<sup>Optional</sup> <a name="keyAlgorithm" id="cdk-nextjs-standalone.OptionalCertificateProps.property.keyAlgorithm"></a>
+
+```typescript
+public readonly keyAlgorithm: KeyAlgorithm;
+```
+
+- *Type:* aws-cdk-lib.aws_certificatemanager.KeyAlgorithm
+- *Default:* KeyAlgorithm.RSA_2048
+
+Specifies the algorithm of the public and private key pair that your certificate uses to encrypt data.
 
 ---
 
@@ -5020,6 +5184,8 @@ const optionalCloudFrontFunctionProps: OptionalCloudFrontFunctionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.code">code</a></code> | <code>aws-cdk-lib.aws_cloudfront.FunctionCode</code> | The source code of the function. |
 | <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.comment">comment</a></code> | <code>string</code> | A comment to describe the function. |
 | <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.functionName">functionName</a></code> | <code>string</code> | A name to identify the function. |
+| <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.keyValueStore">keyValueStore</a></code> | <code>aws-cdk-lib.aws_cloudfront.IKeyValueStore</code> | The Key Value Store to associate with this function. |
+| <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_cloudfront.FunctionRuntime</code> | The runtime environment for the function. |
 
 ---
 
@@ -5058,6 +5224,35 @@ public readonly functionName: string;
 - *Default:* generated from the `id`
 
 A name to identify the function.
+
+---
+
+##### `keyValueStore`<sup>Optional</sup> <a name="keyValueStore" id="cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.keyValueStore"></a>
+
+```typescript
+public readonly keyValueStore: IKeyValueStore;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IKeyValueStore
+- *Default:* no key value store is associated
+
+The Key Value Store to associate with this function.
+
+In order to associate a Key Value Store, the `runtime` must be
+`cloudfront-js-2.0` or newer.
+
+---
+
+##### `runtime`<sup>Optional</sup> <a name="runtime" id="cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.runtime"></a>
+
+```typescript
+public readonly runtime: FunctionRuntime;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.FunctionRuntime
+- *Default:* FunctionRuntime.JS_1_0 (unless `keyValueStore` is specified, then `FunctionRuntime.JS_2_0`)
+
+The runtime environment for the function.
 
 ---
 
@@ -5237,6 +5432,7 @@ const optionalDistributionProps: OptionalDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.logIncludesCookies">logIncludesCookies</a></code> | <code>boolean</code> | Specifies whether you want CloudFront to include cookies in access logs. |
 | <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.minimumProtocolVersion">minimumProtocolVersion</a></code> | <code>aws-cdk-lib.aws_cloudfront.SecurityPolicyProtocol</code> | The minimum version of the SSL protocol that you want CloudFront to use for HTTPS connections. |
 | <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.priceClass">priceClass</a></code> | <code>aws-cdk-lib.aws_cloudfront.PriceClass</code> | The price class that corresponds with the maximum price that you want to pay for CloudFront service. |
+| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.publishAdditionalMetrics">publishAdditionalMetrics</a></code> | <code>boolean</code> | Whether to enable additional CloudWatch metrics. |
 | <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.sslSupportMethod">sslSupportMethod</a></code> | <code>aws-cdk-lib.aws_cloudfront.SSLMethod</code> | The SSL method CloudFront will use for your distribution. |
 | <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.webAclId">webAclId</a></code> | <code>string</code> | Unique identifier that specifies the AWS WAF web ACL to associate with this CloudFront distribution. |
 
@@ -5482,6 +5678,19 @@ that has the lowest latency among the edge locations in your price class.
 
 ---
 
+##### `publishAdditionalMetrics`<sup>Optional</sup> <a name="publishAdditionalMetrics" id="cdk-nextjs-standalone.OptionalDistributionProps.property.publishAdditionalMetrics"></a>
+
+```typescript
+public readonly publishAdditionalMetrics: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Whether to enable additional CloudWatch metrics.
+
+---
+
 ##### `sslSupportMethod`<sup>Optional</sup> <a name="sslSupportMethod" id="cdk-nextjs-standalone.OptionalDistributionProps.property.sslSupportMethod"></a>
 
 ```typescript
@@ -5561,9 +5770,11 @@ const optionalEdgeFunctionProps: OptionalEdgeFunctionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.handler">handler</a></code> | <code>string</code> | The name of the method within your code that Lambda calls to execute your function. |
 | <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.initialPolicy">initialPolicy</a></code> | <code>aws-cdk-lib.aws_iam.PolicyStatement[]</code> | Initial policy statements to add to the created Lambda Role. |
 | <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.insightsVersion">insightsVersion</a></code> | <code>aws-cdk-lib.aws_lambda.LambdaInsightsVersion</code> | Specify the version of CloudWatch Lambda insights to use for monitoring. |
+| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.ipv6AllowedForDualStack">ipv6AllowedForDualStack</a></code> | <code>boolean</code> | Allows outbound IPv6 traffic on VPC functions that are connected to dual-stack subnets. |
 | <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.layers">layers</a></code> | <code>aws-cdk-lib.aws_lambda.ILayerVersion[]</code> | A list of layers to add to the function's execution environment. |
 | <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logFormat">logFormat</a></code> | <code>string</code> | Sets the logFormat for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | Sets the log group name for the function. |
+| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.loggingFormat">loggingFormat</a></code> | <code>aws-cdk-lib.aws_lambda.LoggingFormat</code> | Sets the loggingFormat for the function. |
+| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The log group the function sends logs to. |
 | <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The number of days log events are kept in CloudWatch Logs. |
 | <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetentionRetryOptions">logRetentionRetryOptions</a></code> | <code>aws-cdk-lib.aws_lambda.LogRetentionRetryOptions</code> | When log retention is specified, a custom resource attempts to create the CloudWatch log group. |
 | <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetentionRole">logRetentionRole</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The IAM role for the Lambda function associated with the custom resource that sets the retention policy. |
@@ -5617,6 +5828,9 @@ Whether to allow the Lambda to send all network traffic.
 If set to false, you must individually add traffic rules to allow the
 Lambda to connect to network targets.
 
+Do not specify this property if the `securityGroups` or `securityGroup` property is set.
+Instead, configure `allowAllOutbound` directly on the security group.
+
 ---
 
 ##### `allowPublicSubnet`<sup>Optional</sup> <a name="allowPublicSubnet" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.allowPublicSubnet"></a>
@@ -5641,7 +5855,7 @@ public readonly applicationLogLevel: string;
 ```
 
 - *Type:* string
-- *Default:* INFO
+- *Default:* "INFO"
 
 Sets the application log level for the function.
 
@@ -5896,6 +6110,21 @@ Specify the version of CloudWatch Lambda insights to use for monitoring.
 
 ---
 
+##### `ipv6AllowedForDualStack`<sup>Optional</sup> <a name="ipv6AllowedForDualStack" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.ipv6AllowedForDualStack"></a>
+
+```typescript
+public readonly ipv6AllowedForDualStack: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Allows outbound IPv6 traffic on VPC functions that are connected to dual-stack subnets.
+
+Only used if 'vpc' is supplied.
+
+---
+
 ##### `layers`<sup>Optional</sup> <a name="layers" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.layers"></a>
 
 ```typescript
@@ -5920,9 +6149,22 @@ public readonly logFormat: string;
 ```
 
 - *Type:* string
-- *Default:* Text format
+- *Default:* "Text"
 
 Sets the logFormat for the function.
+
+---
+
+##### `loggingFormat`<sup>Optional</sup> <a name="loggingFormat" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.loggingFormat"></a>
+
+```typescript
+public readonly loggingFormat: LoggingFormat;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.LoggingFormat
+- *Default:* LoggingFormat.TEXT
+
+Sets the loggingFormat for the function.
 
 ---
 
@@ -5933,9 +6175,17 @@ public readonly logGroup: ILogGroup;
 ```
 
 - *Type:* aws-cdk-lib.aws_logs.ILogGroup
-- *Default:* `/aws/lambda/${this.functionName}` default log group name created by Lambda
+- *Default:* `/aws/lambda/${this.functionName}` - default log group created by Lambda
 
-Sets the log group name for the function.
+The log group the function sends logs to.
+
+By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/\<function name\>.
+However you cannot change the properties of this auto-created log group using the AWS CDK, e.g. you cannot set a different log retention.
+
+Use the `logGroup` property to create a fully customizable LogGroup ahead of time, and instruct the Lambda function to send logs to it.
+
+Providing a user-controlled log group was rolled out to commercial regions on 2023-11-16.
+If you are deploying to another type of region, please check regional availability first.
 
 ---
 
@@ -5954,6 +6204,20 @@ When updating
 this property, unsetting it doesn't remove the log retention policy. To
 remove the retention policy, set the value to `INFINITE`.
 
+This is a legacy API and we strongly recommend you move away from it if you can.
+Instead create a fully customizable log group with `logs.LogGroup` and use the `logGroup` property
+to instruct the Lambda function to send logs to it.
+Migrating from `logRetention` to `logGroup` will cause the name of the log group to change.
+Users and code and referencing the name verbatim will have to adjust.
+
+In AWS CDK code, you can access the log group name directly from the LogGroup construct:
+```ts
+import * as logs from 'aws-cdk-lib/aws-logs';
+
+declare const myLogGroup: logs.LogGroup;
+myLogGroup.logGroupName;
+```
+
 ---
 
 ##### `logRetentionRetryOptions`<sup>Optional</sup> <a name="logRetentionRetryOptions" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetentionRetryOptions"></a>
@@ -5969,6 +6233,9 @@ When log retention is specified, a custom resource attempts to create the CloudW
 
 These options control the retry policy when interacting with CloudWatch APIs.
 
+This is a legacy API and we strongly recommend you migrate to `logGroup` if you can.
+`logGroup` allows you to create a fully customizable log group and instruct the Lambda function to send logs to it.
+
 ---
 
 ##### `logRetentionRole`<sup>Optional</sup> <a name="logRetentionRole" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetentionRole"></a>
@@ -5981,6 +6248,9 @@ public readonly logRetentionRole: IRole;
 - *Default:* A new role is created.
 
 The IAM role for the Lambda function associated with the custom resource that sets the retention policy.
+
+This is a legacy API and we strongly recommend you migrate to `logGroup` if you can.
+`logGroup` allows you to create a fully customizable log group and instruct the Lambda function to send logs to it.
 
 ---
 
@@ -6214,7 +6484,7 @@ public readonly systemLogLevel: string;
 ```
 
 - *Type:* string
-- *Default:* INFO
+- *Default:* "INFO"
 
 Sets the system log level for the function.
 
@@ -6321,9 +6591,11 @@ const optionalFunctionProps: OptionalFunctionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.handler">handler</a></code> | <code>string</code> | The name of the method within your code that Lambda calls to execute your function. |
 | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.initialPolicy">initialPolicy</a></code> | <code>aws-cdk-lib.aws_iam.PolicyStatement[]</code> | Initial policy statements to add to the created Lambda Role. |
 | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.insightsVersion">insightsVersion</a></code> | <code>aws-cdk-lib.aws_lambda.LambdaInsightsVersion</code> | Specify the version of CloudWatch Lambda insights to use for monitoring. |
+| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.ipv6AllowedForDualStack">ipv6AllowedForDualStack</a></code> | <code>boolean</code> | Allows outbound IPv6 traffic on VPC functions that are connected to dual-stack subnets. |
 | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.layers">layers</a></code> | <code>aws-cdk-lib.aws_lambda.ILayerVersion[]</code> | A list of layers to add to the function's execution environment. |
 | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.logFormat">logFormat</a></code> | <code>string</code> | Sets the logFormat for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | Sets the log group name for the function. |
+| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.loggingFormat">loggingFormat</a></code> | <code>aws-cdk-lib.aws_lambda.LoggingFormat</code> | Sets the loggingFormat for the function. |
+| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The log group the function sends logs to. |
 | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The number of days log events are kept in CloudWatch Logs. |
 | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.logRetentionRetryOptions">logRetentionRetryOptions</a></code> | <code>aws-cdk-lib.aws_lambda.LogRetentionRetryOptions</code> | When log retention is specified, a custom resource attempts to create the CloudWatch log group. |
 | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.logRetentionRole">logRetentionRole</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The IAM role for the Lambda function associated with the custom resource that sets the retention policy. |
@@ -6376,6 +6648,9 @@ Whether to allow the Lambda to send all network traffic.
 If set to false, you must individually add traffic rules to allow the
 Lambda to connect to network targets.
 
+Do not specify this property if the `securityGroups` or `securityGroup` property is set.
+Instead, configure `allowAllOutbound` directly on the security group.
+
 ---
 
 ##### `allowPublicSubnet`<sup>Optional</sup> <a name="allowPublicSubnet" id="cdk-nextjs-standalone.OptionalFunctionProps.property.allowPublicSubnet"></a>
@@ -6400,7 +6675,7 @@ public readonly applicationLogLevel: string;
 ```
 
 - *Type:* string
-- *Default:* INFO
+- *Default:* "INFO"
 
 Sets the application log level for the function.
 
@@ -6655,6 +6930,21 @@ Specify the version of CloudWatch Lambda insights to use for monitoring.
 
 ---
 
+##### `ipv6AllowedForDualStack`<sup>Optional</sup> <a name="ipv6AllowedForDualStack" id="cdk-nextjs-standalone.OptionalFunctionProps.property.ipv6AllowedForDualStack"></a>
+
+```typescript
+public readonly ipv6AllowedForDualStack: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Allows outbound IPv6 traffic on VPC functions that are connected to dual-stack subnets.
+
+Only used if 'vpc' is supplied.
+
+---
+
 ##### `layers`<sup>Optional</sup> <a name="layers" id="cdk-nextjs-standalone.OptionalFunctionProps.property.layers"></a>
 
 ```typescript
@@ -6679,9 +6969,22 @@ public readonly logFormat: string;
 ```
 
 - *Type:* string
-- *Default:* Text format
+- *Default:* "Text"
 
 Sets the logFormat for the function.
+
+---
+
+##### `loggingFormat`<sup>Optional</sup> <a name="loggingFormat" id="cdk-nextjs-standalone.OptionalFunctionProps.property.loggingFormat"></a>
+
+```typescript
+public readonly loggingFormat: LoggingFormat;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.LoggingFormat
+- *Default:* LoggingFormat.TEXT
+
+Sets the loggingFormat for the function.
 
 ---
 
@@ -6692,9 +6995,17 @@ public readonly logGroup: ILogGroup;
 ```
 
 - *Type:* aws-cdk-lib.aws_logs.ILogGroup
-- *Default:* `/aws/lambda/${this.functionName}` default log group name created by Lambda
+- *Default:* `/aws/lambda/${this.functionName}` - default log group created by Lambda
 
-Sets the log group name for the function.
+The log group the function sends logs to.
+
+By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/\<function name\>.
+However you cannot change the properties of this auto-created log group using the AWS CDK, e.g. you cannot set a different log retention.
+
+Use the `logGroup` property to create a fully customizable LogGroup ahead of time, and instruct the Lambda function to send logs to it.
+
+Providing a user-controlled log group was rolled out to commercial regions on 2023-11-16.
+If you are deploying to another type of region, please check regional availability first.
 
 ---
 
@@ -6713,6 +7024,20 @@ When updating
 this property, unsetting it doesn't remove the log retention policy. To
 remove the retention policy, set the value to `INFINITE`.
 
+This is a legacy API and we strongly recommend you move away from it if you can.
+Instead create a fully customizable log group with `logs.LogGroup` and use the `logGroup` property
+to instruct the Lambda function to send logs to it.
+Migrating from `logRetention` to `logGroup` will cause the name of the log group to change.
+Users and code and referencing the name verbatim will have to adjust.
+
+In AWS CDK code, you can access the log group name directly from the LogGroup construct:
+```ts
+import * as logs from 'aws-cdk-lib/aws-logs';
+
+declare const myLogGroup: logs.LogGroup;
+myLogGroup.logGroupName;
+```
+
 ---
 
 ##### `logRetentionRetryOptions`<sup>Optional</sup> <a name="logRetentionRetryOptions" id="cdk-nextjs-standalone.OptionalFunctionProps.property.logRetentionRetryOptions"></a>
@@ -6728,6 +7053,9 @@ When log retention is specified, a custom resource attempts to create the CloudW
 
 These options control the retry policy when interacting with CloudWatch APIs.
 
+This is a legacy API and we strongly recommend you migrate to `logGroup` if you can.
+`logGroup` allows you to create a fully customizable log group and instruct the Lambda function to send logs to it.
+
 ---
 
 ##### `logRetentionRole`<sup>Optional</sup> <a name="logRetentionRole" id="cdk-nextjs-standalone.OptionalFunctionProps.property.logRetentionRole"></a>
@@ -6740,6 +7068,9 @@ public readonly logRetentionRole: IRole;
 - *Default:* A new role is created.
 
 The IAM role for the Lambda function associated with the custom resource that sets the retention policy.
+
+This is a legacy API and we strongly recommend you migrate to `logGroup` if you can.
+`logGroup` allows you to create a fully customizable log group and instruct the Lambda function to send logs to it.
 
 ---
 
@@ -6960,7 +7291,7 @@ public readonly systemLogLevel: string;
 ```
 
 - *Type:* string
-- *Default:* INFO
+- *Default:* "INFO"
 
 Sets the system log level for the function.
 
@@ -8015,6 +8346,7 @@ const optionalProviderProps: OptionalProviderProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.isCompleteHandler">isCompleteHandler</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The AWS Lambda function to invoke in order to determine if the operation is complete. |
+| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The Log Group used for logging of events emitted by the custom resource's lambda function. |
 | <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The number of days framework log events are kept in CloudWatch Logs. |
 | <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.onEventHandler">onEventHandler</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The AWS Lambda function to invoke for all resource lifecycle operations (CREATE/UPDATE/DELETE). |
 | <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.providerFunctionEnvEncryption">providerFunctionEnvEncryption</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | AWS KMS key used to encrypt provider lambda's environment variables. |
@@ -8046,6 +8378,22 @@ passed, the operation will fail.
 
 ---
 
+##### `logGroup`<sup>Optional</sup> <a name="logGroup" id="cdk-nextjs-standalone.OptionalProviderProps.property.logGroup"></a>
+
+```typescript
+public readonly logGroup: ILogGroup;
+```
+
+- *Type:* aws-cdk-lib.aws_logs.ILogGroup
+- *Default:* a default log group created by AWS Lambda
+
+The Log Group used for logging of events emitted by the custom resource's lambda function.
+
+Providing a user-controlled log group was rolled out to commercial regions on 2023-11-16.
+If you are deploying to another type of region, please check regional availability first.
+
+---
+
 ##### `logRetention`<sup>Optional</sup> <a name="logRetention" id="cdk-nextjs-standalone.OptionalProviderProps.property.logRetention"></a>
 
 ```typescript
@@ -8060,6 +8408,9 @@ The number of days framework log events are kept in CloudWatch Logs.
 When
 updating this property, unsetting it doesn't remove the log retention policy.
 To remove the retention policy, set the value to `INFINITE`.
+
+This is a legacy API and we strongly recommend you migrate to `logGroup` if you can.
+`logGroup` allows you to create a fully customizable log group and instruct the Lambda function to send logs to it.
 
 ---
 

@@ -30,6 +30,12 @@ export interface OptionalCertificateProps {
    */
   readonly subjectAlternativeNames?: Array<string>;
   /**
+   * Specifies the algorithm of the public and private key pair that your certificate uses to encrypt data.
+   * @default KeyAlgorithm.RSA_2048
+   * @stability stable
+   */
+  readonly keyAlgorithm?: aws_certificatemanager.KeyAlgorithm;
+  /**
    * The Certificate name.
    * Since the Certificate resource doesn't support providing a physical name, the value provided here will be recorded in the `Name` tag
    * @default the full, absolute path of this construct

@@ -52,7 +52,7 @@
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^6",
     "@typescript-eslint/parser": "^6",
-    "aws-cdk-lib": "2.110.0",
+    "aws-cdk-lib": "2.131.0",
     "aws-lambda": "^1.0.7",
     "constructs": "10.0.5",
     "esbuild": "^0.19.8",
@@ -80,7 +80,7 @@
     "undici": "^5.28.2"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "^2.110.0",
+    "aws-cdk-lib": "^2.131.0",
     "constructs": "^10.0.5"
   },
   "keywords": [

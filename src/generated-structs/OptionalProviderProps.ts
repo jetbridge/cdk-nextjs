@@ -69,10 +69,21 @@ group is created for each function.
    * When
    * updating this property, unsetting it doesn't remove the log retention policy.
    * To remove the retention policy, set the value to `INFINITE`.
+   *
+   * This is a legacy API and we strongly recommend you migrate to `logGroup` if you can.
+   * `logGroup` allows you to create a fully customizable log group and instruct the Lambda function to send logs to it.
    * @default logs.RetentionDays.INFINITE
    * @stability stable
    */
   readonly logRetention?: aws_logs.RetentionDays;
+  /**
+   * The Log Group used for logging of events emitted by the custom resource's lambda function.
+   * Providing a user-controlled log group was rolled out to commercial regions on 2023-11-16.
+   * If you are deploying to another type of region, please check regional availability first.
+   * @default - a default log group created by AWS Lambda
+   * @stability stable
+   */
+  readonly logGroup?: aws_logs.ILogGroup;
   /**
    * The AWS Lambda function to invoke in order to determine if the operation is complete.
    * This function will be called immediately after `onEvent` and then

@@ -11,11 +11,42 @@ export interface OptionalAaaaRecordProps {
    */
   readonly target?: aws_route53.RecordTarget;
   /**
+   * Among resource record sets that have the same combination of DNS name and type, a value that determines the proportion of DNS queries that Amazon Route 53 responds to using the current resource record set.
+   * Route 53 calculates the sum of the weights for the resource record sets that have the same combination of DNS name and type.
+   * Route 53 then responds to queries based on the ratio of a resource's weight to the total.
+   *
+   * This value can be a number between 0 and 255.
+   * @default - Do not set weighted routing
+   * @stability stable
+   */
+  readonly weight?: number;
+  /**
    * The resource record cache time to live (TTL).
    * @default Duration.minutes(30)
    * @stability stable
    */
   readonly ttl?: Duration;
+  /**
+   * A string used to distinguish between different records with the same combination of DNS name and type.
+   * It can only be set when either weight or geoLocation is defined.
+   *
+   * This parameter must be between 1 and 128 characters in length.
+   * @default - Auto generated string
+   * @stability stable
+   */
+  readonly setIdentifier?: string;
+  /**
+   * The Amazon EC2 Region where you created the resource that this resource record set refers to.
+   * The resource typically is an AWS resource, such as an EC2 instance or an ELB load balancer,
+   * and is referred to by an IP address or a DNS domain name, depending on the record type.
+   *
+   * When Amazon Route 53 receives a DNS query for a domain name and type for which you have created latency resource record sets,
+   * Route 53 selects the latency resource record set that has the lowest latency between the end user and the associated Amazon EC2 Region.
+   * Route 53 then returns the value that is associated with the selected resource record set.
+   * @default - Do not set latency based routing
+   * @stability stable
+   */
+  readonly region?: string;
   /**
    * The subdomain name for this record. This should be relative to the zone root name.
    * For example, if you want to create a record for acme.example.com, specify
@@ -27,6 +58,12 @@ export interface OptionalAaaaRecordProps {
    * @stability stable
    */
   readonly recordName?: string;
+  /**
+   * Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries.
+   * @default false
+   * @stability stable
+   */
+  readonly multiValueAnswer?: boolean;
   /**
    * The geographical origin for this record to return DNS records based on the user's location.
    * @stability stable

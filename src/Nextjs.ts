@@ -197,6 +197,7 @@ export class Nextjs extends Construct {
     if (this.props.domainProps) {
       this.domain = new NextjsDomain(this, 'Domain', {
         ...this.props.domainProps,
+        overrides: props.overrides?.nextjsDomain,
         ...props.overrides?.nextjs?.nextjsDomainProps,
       });
     }

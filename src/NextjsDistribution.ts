@@ -329,6 +329,7 @@ export class NextjsDistribution extends Construct {
         return request;
       }
       `),
+      ...this.props.overrides?.cloudFrontFunctionProps,
     });
     return [{ eventType: cloudfront.FunctionEventType.VIEWER_REQUEST, function: cloudFrontFn }];
   }

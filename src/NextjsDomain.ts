@@ -165,8 +165,14 @@ export class NextjsDomain extends Construct {
       zone: this.hostedZone,
       target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
     };
-    new ARecord(this, 'ARecordMain', recordProps); // IPv4
-    new AaaaRecord(this, 'AaaaRecordMain', recordProps); // IPv6
+    new ARecord(this, 'ARecordMain', {
+      ...recordProps,
+      ...this.props.overrides?.aRecordProps,
+    }); // IPv4
+    new AaaaRecord(this, 'AaaaRecordMain', {
+      ...recordProps,
+      ...this.props.overrides?.aaaaRecordProps,
+    }); // IPv6
     if (this.props.alternateNames?.length) {
       let i = 1;
       for (const alternateName of this.props.alternateNames) {

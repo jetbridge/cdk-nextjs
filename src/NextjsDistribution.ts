@@ -348,7 +348,7 @@ export class NextjsDistribution extends Construct {
       new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
         queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
         headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
-        cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+        cookieBehavior: cloudfront.CacheCookieBehavior.none(),
         defaultTtl: Duration.days(1),
         maxTtl: Duration.days(365),
         minTtl: Duration.days(0),

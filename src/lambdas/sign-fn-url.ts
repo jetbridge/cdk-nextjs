@@ -109,6 +109,11 @@ export function cfHeadersToHeaderBag(headers: CloudFrontHeaders): Bag {
   // not destructured) is case sensitive. we arbitrarily use case insensitive key
   for (const [headerKey, [{ value }]] of Object.entries(headers)) {
     headerBag[headerKey] = value;
+    // if there is an authorization from CloudFront, move it as
+    // it will be overwritten when the headers are signed
+    if (headerKey === 'authorization') {
+      headerBag['origin-authorization'] = value;
+    }
   }
   return headerBag;
 }

@@ -8,7 +8,13 @@ describe('LambdaOriginRequestIamAuth', () => {
     const event = getFakePageRequest();
     const request = event.Records[0].cf.request;
     await signRequest(request);
-    const securityHeaders = ['x-amz-date', 'x-amz-security-token', 'x-amz-content-sha256', 'authorization'];
+    const securityHeaders = [
+      'x-amz-date',
+      'x-amz-security-token',
+      'x-amz-content-sha256',
+      'authorization',
+      'origin-authorization',
+    ];
     const hasSignedHeaders = securityHeaders.every((h) => h in request.headers);
     expect(hasSignedHeaders).toBe(true);
   });
@@ -35,6 +41,12 @@ function getFakePageRequest(): CloudFrontRequestEvent {
           request: {
             clientIp: '1.1.1.1',
             headers: {
+              authorization: [
+                {
+                  key: 'Authorization',
+                  value: 'Bearer token',
+                },
+              ],
               host: [
                 {
                   key: 'Host',

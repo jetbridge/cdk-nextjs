@@ -41,8 +41,8 @@
   },
   "devDependencies": {
     "@aws-crypto/sha256-js": "^5.2.0",
-    "@aws-sdk/client-s3": "^3.462.0",
-    "@aws-sdk/lib-storage": "^3.606.0",
+    "@aws-sdk/client-s3": "^3.608.0",
+    "@aws-sdk/lib-storage": "^3.608.0",
     "@mrgrain/jsii-struct-builder": "^0.7.3",
     "@smithy/signature-v4": "^2.0.16",
     "@types/adm-zip": "^0.5.5",

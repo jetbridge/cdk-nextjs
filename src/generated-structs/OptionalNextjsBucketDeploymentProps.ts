@@ -38,7 +38,10 @@ export interface OptionalNextjsBucketDeploymentProps {
    * Old objects are determined by listing objects
    * in bucket before creating new objects and finding the objects that aren't in
    * the new objects.
-   * @default true
+   *
+   * Note, if this is set to true then clients who have old HTML files (browser tabs opened before deployment)
+   * will reference JS, CSS files that do not exist in S3 reslting in 404s.
+   * @default false
    * @stability stable
    */
   readonly prune?: boolean;

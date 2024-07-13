@@ -2713,13 +2713,16 @@ public readonly prune: boolean;
 ```
 
 - *Type:* boolean
-- *Default:* true
+- *Default:* false
 
 If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects. Only applies if `zip` is `false`.
 
 Old objects are determined by listing objects
 in bucket before creating new objects and finding the objects that aren't in
 the new objects.
+
+Note, if this is set to true then clients who have old HTML files (browser tabs opened before deployment)
+will reference JS, CSS files that do not exist in S3 reslting in 404s.
 
 ---
 
@@ -7520,7 +7523,7 @@ public readonly prune: boolean;
 ```
 
 - *Type:* boolean
-- *Default:* true
+- *Default:* false
 
 If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects.
 
@@ -7528,6 +7531,9 @@ Only applies if `zip` is `false`.
 Old objects are determined by listing objects
 in bucket before creating new objects and finding the objects that aren't in
 the new objects.
+
+Note, if this is set to true then clients who have old HTML files (browser tabs opened before deployment)
+will reference JS, CSS files that do not exist in S3 reslting in 404s.
 
 ---
 

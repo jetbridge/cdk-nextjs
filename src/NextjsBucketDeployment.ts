@@ -146,7 +146,7 @@ export class NextjsBucketDeployment extends Construct {
       destinationBucketName: this.props.destinationBucket.bucketName,
       destinationKeyPrefix: this.props.destinationKeyPrefix,
       putConfig: this.props.putConfig,
-      prune: this.props.prune ?? true,
+      prune: this.props.prune,
       substitutionConfig: this.props.substitutionConfig,
       zip: this.props.zip,
     };

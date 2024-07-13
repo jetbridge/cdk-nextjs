@@ -9,6 +9,10 @@
       "type": "build"
     },
     {
+      "name": "@aws-sdk/lib-storage",
+      "type": "build"
+    },
+    {
       "name": "@mrgrain/jsii-struct-builder",
       "type": "build"
     },

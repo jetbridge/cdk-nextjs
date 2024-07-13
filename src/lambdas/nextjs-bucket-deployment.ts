@@ -25,6 +25,7 @@ import {
   type PutObjectCommandInput,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage';
 import type { CloudFormationCustomResourceHandler } from 'aws-lambda';
 import type * as JSZipType from 'jszip';
 // @ts-ignore jsii doesn't support esModuleInterop
@@ -292,7 +293,7 @@ async function uploadObjects({
       };
     });
 
-    await Promise.all(putObjectInputs.map((input) => s3.send(new PutObjectCommand(input))));
+    await Promise.all(putObjectInputs.map((params) => new Upload({ client: s3, params }).done()));
   }
 }
 

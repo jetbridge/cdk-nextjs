@@ -34,10 +34,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
   name: 'cdk-nextjs-standalone',
   packageName: 'cdk-nextjs-standalone',
   majorVersion: 4,
-  prerelease: 'beta',
+  // prerelease: 'beta',
   minNodeVersion: '18.0.0',
-  description: 'Deploy a NextJS app to AWS using CDK. Uses standalone build and output tracing.',
-  keywords: ['nextjs', 'next', 'aws-cdk', 'aws', 'cdk', 'standalone', 'iac', 'infrastructure', 'cloud', 'serverless'],
+  description: 'Deploy a NextJS app to AWS using CDK and OpenNext.',
+  keywords: ['nextjs', 'next', 'aws-cdk', 'aws', 'cdk', 'standalone', 'iac', 'infrastructure', 'cloud', 'serverless', 'open-next'],
   // tooling config
   eslintOptions: {
     prettier: true,

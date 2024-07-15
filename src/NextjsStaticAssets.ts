@@ -127,7 +127,7 @@ export class NextjsStaticAssets extends Construct {
       // only put env vars that are placeholders in custom resource properties
       // to be replaced. other env vars were injected at build time.
       substitutionConfig: NextjsBucketDeployment.getSubstitutionConfig(this.buildEnvVars),
-      prune: this.props.prune === false ? false : true, // default to true
+      prune: this.props.prune, // defaults to false
       putConfig: {
         [allFiles]: {
           CacheControl: 'public, max-age=0, must-revalidate',

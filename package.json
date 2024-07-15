@@ -1,6 +1,6 @@
 {
   "name": "cdk-nextjs-standalone",
-  "description": "Deploy a NextJS app to AWS using CDK. Uses standalone build and output tracing.",
+  "description": "Deploy a NextJS app to AWS using CDK and OpenNext.",
   "repository": {
     "type": "git",
     "url": "https://github.com/jetbridge/cdk-nextjs.git"
@@ -93,6 +93,7 @@
     "infrastructure",
     "next",
     "nextjs",
+    "open-next",
     "serverless",
     "standalone"
   ],

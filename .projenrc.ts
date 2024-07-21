@@ -84,6 +84,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
   ] /* Build dependencies for this module. */,
   // misc config
   sampleCode: false, // do not generate sample test files
+  publishToPypi: {
+    distName: 'cdk-nextjs-standalone',
+    module: 'cdk_nextjs_standalone',
+  },
 });
 
 project.bundler.addBundle('./src/lambdas/nextjs-bucket-deployment.ts', commonBundlingOptions);

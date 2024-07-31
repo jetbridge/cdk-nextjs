@@ -41,6 +41,10 @@ export interface NextjsBuildProps {
    * @see {@link NextjsProps.skipBuild}
    */
   readonly skipBuild?: NextjsProps['skipBuild'];
+  /**
+   * @see {@link NextjsProps.streaming}
+   */
+  readonly streaming?: NextjsProps['streaming'];
 }
 
 /**
@@ -142,7 +146,8 @@ export class NextjsBuild extends Construct {
 
   private build() {
     const buildPath = this.props.buildPath ?? this.props.nextjsPath;
-    const buildCommand = this.props.buildCommand ?? 'npx open-next@^2 build';
+    const defaultBuildCommand = `npx open-next@^2 build ${this.props.streaming ? '--streaming' : ''}`;
+    const buildCommand = this.props.buildCommand ?? defaultBuildCommand;
     // run build
     if (!this.props.quiet) {
       console.debug(`Running "${buildCommand}" in`, buildPath);

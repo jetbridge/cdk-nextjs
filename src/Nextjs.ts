@@ -100,6 +100,11 @@ export interface NextjsProps {
    * could be important for some users.
    */
   readonly skipFullInvalidation?: boolean;
+  /**
+   * Streaming allows you to send data to the client as it's generated
+   * instead of waiting for the entire response to be generated.
+   */
+  readonly streaming?: boolean;
 }
 
 /**
@@ -160,6 +165,7 @@ export class Nextjs extends Construct {
       environment: props.environment,
       quiet: props.quiet,
       skipBuild: props.skipBuild,
+      streaming: props.streaming,
       ...props.overrides?.nextjs?.nextjsBuildProps,
     });
 
@@ -205,6 +211,7 @@ export class Nextjs extends Construct {
       nextjsPath: props.nextjsPath,
       basePath: props.basePath,
       distribution: props.distribution,
+      streaming: props.streaming,
       staticAssetsBucket: this.staticAssets.bucket,
       nextBuild: this.nextBuild,
       nextDomain: this.domain,

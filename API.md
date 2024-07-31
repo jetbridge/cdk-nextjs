@@ -2797,6 +2797,7 @@ const nextjsBuildProps: NextjsBuildProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -2869,6 +2870,18 @@ public readonly skipBuild: boolean;
 - *Type:* boolean
 
 > [{@link NextjsProps.skipBuild }]({@link NextjsProps.skipBuild })
+
+---
+
+##### `streaming`<sup>Optional</sup> <a name="streaming" id="cdk-nextjs-standalone.NextjsBuildProps.property.streaming"></a>
+
+```typescript
+public readonly streaming: boolean;
+```
+
+- *Type:* boolean
+
+> [{@link NextjsProps.streaming }]({@link NextjsProps.streaming })
 
 ---
 
@@ -3172,6 +3185,7 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | Override props for every construct. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -3299,6 +3313,18 @@ public readonly overrides: NextjsDistributionOverrides;
 - *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a>
 
 Override props for every construct.
+
+---
+
+##### `streaming`<sup>Optional</sup> <a name="streaming" id="cdk-nextjs-standalone.NextjsDistributionProps.property.streaming"></a>
+
+```typescript
+public readonly streaming: boolean;
+```
+
+- *Type:* boolean
+
+> [{@link NextjsProps.streaming }]({@link NextjsProps.streaming })
 
 ---
 
@@ -3833,6 +3859,7 @@ const nextjsProps: NextjsProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | Skips running Next.js build. Useful if you want to deploy `Nextjs` but haven't made any changes to Next.js app code. |
 | <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
+| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.streaming">streaming</a></code> | <code>boolean</code> | Streaming allows you to send data to the client as it's generated instead of waiting for the entire response to be generated. |
 
 ---
 
@@ -4006,6 +4033,18 @@ By default all CloudFront cache will be invalidated on deployment.
 
 This can be set to true to skip the full cache invalidation, which
 could be important for some users.
+
+---
+
+##### `streaming`<sup>Optional</sup> <a name="streaming" id="cdk-nextjs-standalone.NextjsProps.property.streaming"></a>
+
+```typescript
+public readonly streaming: boolean;
+```
+
+- *Type:* boolean
+
+Streaming allows you to send data to the client as it's generated instead of waiting for the entire response to be generated.
 
 ---
 
@@ -7610,6 +7649,7 @@ const optionalNextjsBuildProps: OptionalNextjsBuildProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -7673,6 +7713,16 @@ public readonly skipBuild: boolean;
 
 ---
 
+##### `streaming`<sup>Optional</sup> <a name="streaming" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.streaming"></a>
+
+```typescript
+public readonly streaming: boolean;
+```
+
+- *Type:* boolean
+
+---
+
 ### OptionalNextjsDistributionProps <a name="OptionalNextjsDistributionProps" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps"></a>
 
 OptionalNextjsDistributionProps.
@@ -7699,6 +7749,7 @@ const optionalNextjsDistributionProps: OptionalNextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | Override props for every construct. |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -7816,6 +7867,16 @@ public readonly staticAssetsBucket: IBucket;
 Bucket containing static assets.
 
 Must be provided if you want to serve static files.
+
+---
+
+##### `streaming`<sup>Optional</sup> <a name="streaming" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.streaming"></a>
+
+```typescript
+public readonly streaming: boolean;
+```
+
+- *Type:* boolean
 
 ---
 

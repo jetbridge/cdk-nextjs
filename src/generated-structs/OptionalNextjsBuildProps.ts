@@ -7,6 +7,10 @@ export interface OptionalNextjsBuildProps {
   /**
    * @stability stable
    */
+  readonly streaming?: boolean;
+  /**
+   * @stability stable
+   */
   readonly skipBuild?: boolean;
   /**
    * @stability stable

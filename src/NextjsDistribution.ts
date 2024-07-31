@@ -13,7 +13,7 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import { HttpOriginProps } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Runtime, InvokeMode } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
@@ -89,6 +89,10 @@ export interface NextjsDistributionProps {
    * Must be provided if you want to serve static files.
    */
   readonly staticAssetsBucket: s3.IBucket;
+  /**
+   * @see {@link NextjsProps.streaming}
+   */
+  readonly streaming?: boolean;
 }
 
 /**
@@ -256,7 +260,10 @@ export class NextjsDistribution extends Construct {
   }
 
   private createServerBehaviorOptions(): cloudfront.BehaviorOptions {
-    const fnUrl = this.props.serverFunction.addFunctionUrl({ authType: this.fnUrlAuthType });
+    const fnUrl = this.props.serverFunction.addFunctionUrl({
+      authType: this.fnUrlAuthType,
+      invokeMode: this.props.streaming ? InvokeMode.RESPONSE_STREAM : InvokeMode.BUFFERED,
+    });
     const origin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), this.props.overrides?.serverHttpOriginProps);
     const serverBehaviorOptions = this.props.overrides?.serverBehaviorOptions;
 

@@ -179,6 +179,7 @@ export class Nextjs extends Construct {
     });
 
     this.serverFunction = new NextjsServer(this, 'Server', {
+      environment: props.environment,
       nextBuild: this.nextBuild,
       staticAssetBucket: this.staticAssets.bucket,
       overrides: props.overrides?.nextjsServer,

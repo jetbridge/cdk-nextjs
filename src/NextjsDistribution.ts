@@ -310,13 +310,20 @@ export class NextjsDistribution extends Construct {
         ...this.props.overrides?.serverResponseHeadersPolicyProps,
       });
 
+    let functionAssociations: cloudfront.FunctionAssociation[];
+    if (this.props.overrides?.distributionProps?.defaultBehavior?.functionAssociations) {
+      functionAssociations = this.props.overrides.distributionProps.defaultBehavior.functionAssociations;
+    } else {
+      functionAssociations = this.createCloudFrontFnAssociations();
+    }
+
     return {
       ...this.commonBehaviorOptions,
       origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
       originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
-      functionAssociations: this.createCloudFrontFnAssociations(),
+      functionAssociations,
       cachePolicy,
       responseHeadersPolicy,
       ...serverBehaviorOptions,

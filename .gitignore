@@ -32,7 +32,6 @@ jspm_packages/
 .cache
 .idea
 .DS_Store
-!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
@@ -53,6 +52,7 @@ junit.xml
 tsconfig.json
 !/API.md
 /assets/
+!/.projenrc.ts
 !/src/generated-structs/OptionalFunctionProps.ts
 !/src/generated-structs/OptionalCustomResourceProps.ts
 !/src/generated-structs/OptionalS3OriginProps.ts

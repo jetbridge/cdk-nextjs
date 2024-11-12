@@ -45,8 +45,8 @@ export interface NextjsProps {
    */
   readonly basePath?: string;
   /**
-   * Optional value used to install NextJS node dependencies.
-   * @default 'npx --yes open-next@^2 build'
+   * Optional build command override value.
+   * @default 'npx @opennextjs/aws@^3 build'
    */
   readonly buildCommand?: string;
   /**

@@ -15,7 +15,7 @@ export class OverridesStack extends Stack {
 
     const nextjs = new Nextjs(this, 'nextjs', {
       nextjsPath: '../../open-next/examples/app-router',
-      buildCommand: 'npx open-next@^2 build',
+      buildCommand: 'npx @opennextjs/aws@^3 build',
       // skipBuild: true,
       overrides: {
         nextjs: {

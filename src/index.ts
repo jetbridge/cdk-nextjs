@@ -8,7 +8,12 @@ export {
   NextjsBucketDeploymentProps,
   NextjsBucketDeploymentOverrides,
 } from './NextjsBucketDeployment';
-export { NextjsDistribution, NextjsDistributionProps, NextjsDistributionOverrides } from './NextjsDistribution';
+export {
+  NextjsDistribution,
+  NextjsDistributionProps,
+  NextjsDistributionOverrides,
+  ViewerRequestFunctionProps,
+} from './NextjsDistribution';
 export { NextjsInvalidation, NextjsInvalidationProps, NextjsInvalidationOverrides } from './NextjsInvalidation';
 export { NextjsDomain, NextjsDomainProps, NextjsDomainOverrides } from './NextjsDomain';
 export { Nextjs, NextjsProps, NextjsConstructOverrides } from './Nextjs';

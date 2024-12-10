@@ -3004,7 +3004,6 @@ const nextjsDistributionOverrides: NextjsDistributionOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.cloudFrontFunctionProps">cloudFrontFunctionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps">OptionalCloudFrontFunctionProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.distributionProps">distributionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps">OptionalDistributionProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.edgeFunctionProps">edgeFunctionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps">OptionalEdgeFunctionProps</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageBehaviorOptions">imageBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.AddBehaviorOptions</code> | *No description.* |
@@ -3018,16 +3017,7 @@ const nextjsDistributionOverrides: NextjsDistributionOverrides = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverResponseHeadersPolicyProps">serverResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticBehaviorOptions">staticBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.AddBehaviorOptions</code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticResponseHeadersPolicyProps">staticResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
-
----
-
-##### `cloudFrontFunctionProps`<sup>Optional</sup> <a name="cloudFrontFunctionProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.cloudFrontFunctionProps"></a>
-
-```typescript
-public readonly cloudFrontFunctionProps: OptionalCloudFrontFunctionProps;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps">OptionalCloudFrontFunctionProps</a>
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.viewerRequestFunctionProps">viewerRequestFunctionProps</a></code> | <code><a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps">ViewerRequestFunctionProps</a></code> | *No description.* |
 
 ---
 
@@ -3158,6 +3148,16 @@ public readonly staticResponseHeadersPolicyProps: ResponseHeadersPolicyProps;
 ```
 
 - *Type:* aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps
+
+---
+
+##### `viewerRequestFunctionProps`<sup>Optional</sup> <a name="viewerRequestFunctionProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.viewerRequestFunctionProps"></a>
+
+```typescript
+public readonly viewerRequestFunctionProps: ViewerRequestFunctionProps;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps">ViewerRequestFunctionProps</a>
 
 ---
 
@@ -5223,23 +5223,10 @@ const optionalCloudFrontFunctionProps: OptionalCloudFrontFunctionProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.code">code</a></code> | <code>aws-cdk-lib.aws_cloudfront.FunctionCode</code> | The source code of the function. |
 | <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.comment">comment</a></code> | <code>string</code> | A comment to describe the function. |
 | <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.functionName">functionName</a></code> | <code>string</code> | A name to identify the function. |
 | <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.keyValueStore">keyValueStore</a></code> | <code>aws-cdk-lib.aws_cloudfront.IKeyValueStore</code> | The Key Value Store to associate with this function. |
 | <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_cloudfront.FunctionRuntime</code> | The runtime environment for the function. |
-
----
-
-##### `code`<sup>Optional</sup> <a name="code" id="cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.code"></a>
-
-```typescript
-public readonly code: FunctionCode;
-```
-
-- *Type:* aws-cdk-lib.aws_cloudfront.FunctionCode
-
-The source code of the function.
 
 ---
 
@@ -9018,6 +9005,102 @@ public readonly timeToLiveAttribute: string;
 - *Default:* TTL is disabled
 
 The name of the TTL attribute.
+
+---
+
+### ViewerRequestFunctionProps <a name="ViewerRequestFunctionProps" id="cdk-nextjs-standalone.ViewerRequestFunctionProps"></a>
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.ViewerRequestFunctionProps.Initializer"></a>
+
+```typescript
+import { ViewerRequestFunctionProps } from 'cdk-nextjs-standalone'
+
+const viewerRequestFunctionProps: ViewerRequestFunctionProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps.property.comment">comment</a></code> | <code>string</code> | A comment to describe the function. |
+| <code><a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps.property.functionName">functionName</a></code> | <code>string</code> | A name to identify the function. |
+| <code><a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps.property.keyValueStore">keyValueStore</a></code> | <code>aws-cdk-lib.aws_cloudfront.IKeyValueStore</code> | The Key Value Store to associate with this function. |
+| <code><a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_cloudfront.FunctionRuntime</code> | The runtime environment for the function. |
+| <code><a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps.property.code">code</a></code> | <code>aws-cdk-lib.aws_cloudfront.FunctionCode</code> | Cloudfront function code that runs on VIEWER_REQUEST. |
+
+---
+
+##### `comment`<sup>Optional</sup> <a name="comment" id="cdk-nextjs-standalone.ViewerRequestFunctionProps.property.comment"></a>
+
+```typescript
+public readonly comment: string;
+```
+
+- *Type:* string
+- *Default:* same as `functionName`
+
+A comment to describe the function.
+
+---
+
+##### `functionName`<sup>Optional</sup> <a name="functionName" id="cdk-nextjs-standalone.ViewerRequestFunctionProps.property.functionName"></a>
+
+```typescript
+public readonly functionName: string;
+```
+
+- *Type:* string
+- *Default:* generated from the `id`
+
+A name to identify the function.
+
+---
+
+##### `keyValueStore`<sup>Optional</sup> <a name="keyValueStore" id="cdk-nextjs-standalone.ViewerRequestFunctionProps.property.keyValueStore"></a>
+
+```typescript
+public readonly keyValueStore: IKeyValueStore;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.IKeyValueStore
+- *Default:* no key value store is associated
+
+The Key Value Store to associate with this function.
+
+In order to associate a Key Value Store, the `runtime` must be
+`cloudfront-js-2.0` or newer.
+
+---
+
+##### `runtime`<sup>Optional</sup> <a name="runtime" id="cdk-nextjs-standalone.ViewerRequestFunctionProps.property.runtime"></a>
+
+```typescript
+public readonly runtime: FunctionRuntime;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.FunctionRuntime
+- *Default:* FunctionRuntime.JS_1_0 (unless `keyValueStore` is specified, then `FunctionRuntime.JS_2_0`)
+
+The runtime environment for the function.
+
+---
+
+##### `code`<sup>Optional</sup> <a name="code" id="cdk-nextjs-standalone.ViewerRequestFunctionProps.property.code"></a>
+
+```typescript
+public readonly code: FunctionCode;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudfront.FunctionCode
+- *Default:* async function handler(event) {  // INJECT_CLOUDFRONT_FUNCTION_HOST_HEADER  // INJECT_CLOUDFRONT_FUNCTION_CACHE_HEADER_KEY }
+
+Cloudfront function code that runs on VIEWER_REQUEST.
+
+The following comments will be replaced with code snippets
+so you can customize this function.
+
+INJECT_CLOUDFRONT_FUNCTION_HOST_HEADER: Add the required x-forwarded-host header.
+INJECT_CLOUDFRONT_FUNCTION_CACHE_HEADER_KEY: Improves open-next cache key.
 
 ---
 

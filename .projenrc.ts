@@ -112,6 +112,7 @@ new ProjenStruct(project, {
   filePath: getFilePath('OptionalCloudFrontFunctionProps'),
 })
   .mixin(Struct.fromFqn('aws-cdk-lib.aws_cloudfront.FunctionProps'))
+  .omit('code')
   .allOptional();
 new ProjenStruct(project, {
   name: 'OptionalDistributionProps',

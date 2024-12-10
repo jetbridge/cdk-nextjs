@@ -31,9 +31,4 @@ export interface OptionalCloudFrontFunctionProps {
    * @stability stable
    */
   readonly comment?: string;
-  /**
-   * The source code of the function.
-   * @stability stable
-   */
-  readonly code?: aws_cloudfront.FunctionCode;
 }

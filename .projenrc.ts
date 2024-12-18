@@ -61,7 +61,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   tsconfigDev: { compilerOptions: { ...commonTscOptions } },
   gitignore: ['.idea', '.DS_Store'],
   // dependency config
-  jsiiVersion: '~5.0.0',
+  jsiiVersion: '~5.7.1',
   cdkVersion: '2.131.0',
   bundledDeps: [] /* Runtime dependencies of this module. */,
   devDeps: [

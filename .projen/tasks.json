@@ -32,14 +32,15 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": ""
+        "RELEASE_TAG_PREFIX": "",
+        "BUMP_PACKAGE": "commit-and-tag-version@^12"
       },
       "steps": [
         {
           "builtin": "release/bump-version"
         }
       ],
-      "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
+      "condition": "git log --oneline -1 | grep -qv \"chore(release):\""
     },
     "bundle": {
       "name": "bundle",
@@ -58,7 +59,7 @@
       "description": "Create a JavaScript bundle from ./src/lambdas/nextjs-bucket-deployment.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle ./src/lambdas/nextjs-bucket-deployment.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap"
+          "exec": "esbuild --bundle ./src/lambdas/nextjs-bucket-deployment.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap --minify"
         }
       ]
     },
@@ -67,7 +68,7 @@
       "description": "Continuously update the JavaScript bundle from ./src/lambdas/nextjs-bucket-deployment.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle ./src/lambdas/nextjs-bucket-deployment.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap --watch"
+          "exec": "esbuild --bundle ./src/lambdas/nextjs-bucket-deployment.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap --minify --watch"
         }
       ]
     },
@@ -76,7 +77,7 @@
       "description": "Create a JavaScript bundle from ./src/lambdas/sign-fn-url.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle ./src/lambdas/sign-fn-url.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-url/index.js\" --sourcemap"
+          "exec": "esbuild --bundle ./src/lambdas/sign-fn-url.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-url/index.js\" --sourcemap --minify"
         }
       ]
     },
@@ -85,7 +86,7 @@
       "description": "Continuously update the JavaScript bundle from ./src/lambdas/sign-fn-url.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle ./src/lambdas/sign-fn-url.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-url/index.js\" --sourcemap --watch"
+          "exec": "esbuild --bundle ./src/lambdas/sign-fn-url.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-url/index.js\" --sourcemap --minify --watch"
         }
       ]
     },
@@ -172,9 +173,13 @@
     "eslint": {
       "name": "eslint",
       "description": "Runs eslint against the codebase",
+      "env": {
+        "ESLINT_USE_FLAT_CONFIG": "false"
+      },
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test build-tools projenrc .projenrc.ts"
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern $@ src test build-tools projenrc .projenrc.ts",
+          "receiveArgs": true
         }
       ]
     },
@@ -201,7 +206,12 @@
       "description": "Creates the distribution package",
       "steps": [
         {
-          "exec": "if [ ! -z ${CI} ]; then rsync -a . .repo --exclude .git --exclude node_modules && rm -rf dist && mv .repo dist; else npx projen package-all; fi"
+          "spawn": "package:js",
+          "condition": "node -e \"if (!process.env.CI) process.exit(1)\""
+        },
+        {
+          "spawn": "package-all",
+          "condition": "node -e \"if (process.env.CI) process.exit(1)\""
         }
       ]
     },
@@ -275,7 +285,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --coverageProvider=v8 --updateSnapshot",
+          "exec": "jest --passWithNoTests --updateSnapshot",
           "receiveArgs": true
         },
         {
@@ -300,7 +310,8 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": ""
+        "RELEASE_TAG_PREFIX": "",
+        "BUMP_PACKAGE": "commit-and-tag-version@^12"
       },
       "steps": [
         {
@@ -316,13 +327,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-crypto/sha256-js,@aws-sdk/client-s3,@aws-sdk/lib-storage,@mrgrain/jsii-struct-builder,@smithy/signature-v4,@types/adm-zip,@types/aws-lambda,@types/jest,@types/micromatch,@types/mime-types,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,aws-lambda,esbuild,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,eslint,jest,jest-junit,jsii-diff,jsii-docgen,jsii-pacmak,jszip,micromatch,mime-types,prettier,projen,standard-version,ts-jest,ts-node,typescript,undici,aws-cdk-lib,constructs"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@aws-crypto/sha256-js,@aws-sdk/client-s3,@aws-sdk/lib-storage,@mrgrain/jsii-struct-builder,@smithy/signature-v4,@types/adm-zip,@types/aws-lambda,@types/jest,@types/micromatch,@types/mime-types,aws-lambda,esbuild,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-pacmak,jszip,micromatch,mime-types,prettier,projen,ts-jest,ts-node,typescript,undici"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @aws-crypto/sha256-js @aws-sdk/client-s3 @aws-sdk/lib-storage @mrgrain/jsii-struct-builder @smithy/signature-v4 @types/adm-zip @types/aws-lambda @types/jest @types/micromatch @types/mime-types @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-lambda esbuild eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jszip micromatch mime-types prettier projen standard-version ts-jest ts-node typescript undici aws-cdk-lib constructs"
+          "exec": "yarn upgrade @aws-crypto/sha256-js @aws-sdk/client-s3 @aws-sdk/lib-storage @mrgrain/jsii-struct-builder @smithy/signature-v4 @types/adm-zip @types/aws-lambda @types/jest @types/micromatch @types/mime-types @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-lambda commit-and-tag-version esbuild eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii jszip micromatch mime-types prettier projen ts-jest ts-node typescript undici aws-cdk-lib constructs"
         },
         {
           "exec": "npx projen"

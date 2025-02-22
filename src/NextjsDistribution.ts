@@ -27,8 +27,25 @@ import { NextjsProps } from './Nextjs';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDomain } from './NextjsDomain';
 
+export interface ViewerRequestFunctionProps extends OptionalCloudFrontFunctionProps {
+  /**
+   * Cloudfront function code that runs on VIEWER_REQUEST.
+   * The following comments will be replaced with code snippets
+   * so you can customize this function.
+   *
+   * INJECT_CLOUDFRONT_FUNCTION_HOST_HEADER: Add the required x-forwarded-host header.
+   * INJECT_CLOUDFRONT_FUNCTION_CACHE_HEADER_KEY: Improves open-next cache key.
+   *
+   * @default
+   * async function handler(event) {
+   *  // INJECT_CLOUDFRONT_FUNCTION_HOST_HEADER
+   *  // INJECT_CLOUDFRONT_FUNCTION_CACHE_HEADER_KEY
+   * }
+   */
+  readonly code?: cloudfront.FunctionCode;
+}
 export interface NextjsDistributionOverrides {
-  readonly cloudFrontFunctionProps?: OptionalCloudFrontFunctionProps;
+  readonly viewerRequestFunctionProps?: ViewerRequestFunctionProps;
   readonly distributionProps?: OptionalDistributionProps;
   readonly edgeFunctionProps?: OptionalEdgeFunctionProps;
   readonly imageBehaviorOptions?: AddBehaviorOptions;
@@ -272,14 +289,7 @@ export class NextjsDistribution extends Construct {
       serverBehaviorOptions?.cachePolicy ??
       new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
         queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-        headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
-          'accept',
-          'rsc',
-          'next-router-prefetch',
-          'next-router-state-tree',
-          'next-url',
-          'x-prerender-revalidate'
-        ),
+        headerBehavior: cloudfront.CacheHeaderBehavior.allowList('x-open-next-cache-key'),
         cookieBehavior: cloudfront.CacheCookieBehavior.all(),
         defaultTtl: Duration.seconds(0),
         maxTtl: Duration.days(365),
@@ -301,7 +311,7 @@ export class NextjsDistribution extends Construct {
               override: false,
               // MDN Cache-Control Use Case: Up-to-date contents always
               // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#up-to-date_contents_always
-              value: `no-cache`,
+              value: 'no-cache',
             },
           ],
         },
@@ -323,19 +333,78 @@ export class NextjsDistribution extends Construct {
     };
   }
 
+  private useCloudFrontFunctionHostHeader() {
+    return `event.request.headers["x-forwarded-host"] = event.request.headers.host;`;
+  }
+
+  private useCloudFrontFunctionCacheHeaderKey() {
+    // This function is used to improve cache hit ratio by setting the cache key
+    // based on the request headers and the path. `next/image` only needs the
+    // accept header, and this header is not useful for the rest of the query
+    return `
+  const getHeader = (key) => {
+    const header = event.request.headers[key];
+    if (header) {
+      if (header.multiValue) {
+        return header.multiValue.map((header) => header.value).join(",");
+      }
+      if (header.value) {
+        return header.value;
+      }
+    }
+    return "";
+  }
+
+  let cacheKey = "";
+
+  if (event.request.uri.startsWith("/_next/image")) {
+    cacheKey = getHeader("accept");
+  } else {
+    cacheKey =
+      getHeader("rsc") +
+      getHeader("next-router-prefetch") +
+      getHeader("next-router-state-tree") +
+      getHeader("next-url") +
+      getHeader("x-prerender-revalidate");
+  }
+
+  if (event.request.cookies["__prerender_bypass"]) {
+    cacheKey += event.request.cookies["__prerender_bypass"]
+      ? event.request.cookies["__prerender_bypass"].value
+      : "";
+  }
+  const crypto = require("crypto")
+  const hashedKey = crypto.createHash("md5").update(cacheKey).digest("hex");
+  event.request.headers["x-open-next-cache-key"] = { value: hashedKey };
+    `;
+  }
+
   /**
    * If this doesn't run, then Next.js Server's `request.url` will be Lambda Function
    * URL instead of domain
    */
   private createCloudFrontFnAssociations() {
+    let code =
+      this.props.overrides?.viewerRequestFunctionProps?.code?.render() ??
+      `
+async function handler(event) {
+// INJECT_CLOUDFRONT_FUNCTION_HOST_HEADER
+// INJECT_CLOUDFRONT_FUNCTION_CACHE_HEADER_KEY
+}
+    `;
+    code = code.replace(
+      /^\s*\/\/\s*INJECT_CLOUDFRONT_FUNCTION_HOST_HEADER.*$/i,
+      this.useCloudFrontFunctionHostHeader()
+    );
+    code = code.replace(
+      /^\s*\/\/\s*INJECT_CLOUDFRONT_FUNCTION_CACHE_HEADER_KEY.*$/i,
+      this.useCloudFrontFunctionCacheHeaderKey()
+    );
     const cloudFrontFn = new cloudfront.Function(this, 'CloudFrontFn', {
-      code: cloudfront.FunctionCode.fromInline(`
-      function handler(event) {
-        var request = event.request;
-        request.headers["x-forwarded-host"] = request.headers.host;
-        return request;
-      }
-      `),
+      runtime: cloudfront.FunctionRuntime.JS_2_0,
+      ...this.props.overrides?.viewerRequestFunctionProps,
+      // Override code last to get injections
+      code: cloudfront.FunctionCode.fromInline(code),
     });
     return [{ eventType: cloudfront.FunctionEventType.VIEWER_REQUEST, function: cloudFrontFn }];
   }
@@ -376,7 +445,7 @@ export class NextjsDistribution extends Construct {
               override: false,
               // MDN Cache-Control Use Case: Up-to-date contents always
               // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#up-to-date_contents_always
-              value: `no-cache`,
+              value: 'no-cache',
             },
           ],
         },
@@ -474,7 +543,7 @@ export class NextjsDistribution extends Construct {
     });
     if (publicFiles.length >= 25) {
       throw new Error(
-        `Too many public/ files in Next.js build. CloudFront limits Distributions to 25 Cache Behaviors. See documented limit here: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions`
+        'Too many public/ files in Next.js build. CloudFront limits Distributions to 25 Cache Behaviors. See documented limit here: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions'
       );
     }
     for (const publicFile of publicFiles) {

@@ -146,8 +146,7 @@ export class NextjsBuild extends Construct {
 
   private build() {
     const buildPath = this.props.buildPath ?? this.props.nextjsPath;
-    const defaultBuildCommand = `npx open-next@^2 build ${this.props.streaming ? '--streaming' : ''}`;
-    const buildCommand = this.props.buildCommand ?? defaultBuildCommand;
+    const buildCommand = this.props.buildCommand ?? `npx @opennextjs/aws@^3 build`;
     // run build
     if (!this.props.quiet) {
       console.debug(`Running "${buildCommand}" in`, buildPath);

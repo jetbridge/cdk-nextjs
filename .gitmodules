@@ -1,3 +1,3 @@
 [submodule "open-next"]
 	path = open-next
-	url = https://github.com/sst/open-next.git
+	url = https://github.com/opennextjs/opennextjs-aws.git

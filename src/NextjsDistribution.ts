@@ -334,7 +334,7 @@ export class NextjsDistribution extends Construct {
   }
 
   private useCloudFrontFunctionHostHeader() {
-    return `event.request.headers["x-forwarded-host"] = event.request.headers.host;`;
+    return `  event.request.headers["x-forwarded-host"] = event.request.headers.host;`;
   }
 
   private useCloudFrontFunctionCacheHeaderKey() {
@@ -373,7 +373,7 @@ export class NextjsDistribution extends Construct {
       ? event.request.cookies["__prerender_bypass"].value
       : "";
   }
-  const crypto = require("crypto")
+  const crypto = require("crypto");
   const hashedKey = crypto.createHash("md5").update(cacheKey).digest("hex");
   event.request.headers["x-open-next-cache-key"] = { value: hashedKey };
     `;
@@ -390,14 +390,15 @@ export class NextjsDistribution extends Construct {
 async function handler(event) {
 // INJECT_CLOUDFRONT_FUNCTION_HOST_HEADER
 // INJECT_CLOUDFRONT_FUNCTION_CACHE_HEADER_KEY
+  return event.request;
 }
     `;
     code = code.replace(
-      /^\s*\/\/\s*INJECT_CLOUDFRONT_FUNCTION_HOST_HEADER.*$/i,
+      /^\s*\/\/\s*INJECT_CLOUDFRONT_FUNCTION_HOST_HEADER.*$/im,
       this.useCloudFrontFunctionHostHeader()
     );
     code = code.replace(
-      /^\s*\/\/\s*INJECT_CLOUDFRONT_FUNCTION_CACHE_HEADER_KEY.*$/i,
+      /^\s*\/\/\s*INJECT_CLOUDFRONT_FUNCTION_CACHE_HEADER_KEY.*$/im,
       this.useCloudFrontFunctionCacheHeaderKey()
     );
     const cloudFrontFn = new cloudfront.Function(this, 'CloudFrontFn', {

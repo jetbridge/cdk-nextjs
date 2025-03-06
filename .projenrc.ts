@@ -18,6 +18,8 @@ const commonTscOptions: TypeScriptCompilerOptions = {
   // esModuleInterop: true, // why doesn't this work?
 };
 
+const minNodeVersion = '18.18.0';
+
 const project = new awscdk.AwsCdkConstructLibrary({
   // repository config
   author: 'JetBridge',
@@ -35,7 +37,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   packageName: 'cdk-nextjs-standalone',
   majorVersion: 4,
   // prerelease: 'beta',
-  minNodeVersion: '>=18.18.0',
+  minNodeVersion,
+  workflowNodeVersion: `>=${minNodeVersion}`,
   description: 'Deploy a NextJS app to AWS using CDK and OpenNext.',
   keywords: [
     'nextjs',

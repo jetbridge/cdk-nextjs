@@ -98,7 +98,7 @@
     "standalone"
   ],
   "engines": {
-    "node": ">= >=18.18.0"
+    "node": ">= 18.18.0"
   },
   "main": "lib/index.js",
   "license": "Apache-2.0",

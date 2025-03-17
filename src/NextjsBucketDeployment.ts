@@ -70,6 +70,10 @@ export interface NextjsBucketDeploymentProps {
    * @default false
    */
   readonly zip?: boolean | undefined;
+  /**
+   * The number of files to upload in parallel.
+   */
+  readonly queueSize?: number | undefined;
 }
 
 /**
@@ -80,6 +84,7 @@ export interface CustomResourceProperties {
   destinationKeyPrefix?: string;
   prune?: boolean | undefined;
   putConfig?: NextjsBucketDeploymentProps['putConfig'];
+  queueSize?: number | undefined;
   substitutionConfig?: NextjsBucketDeploymentProps['substitutionConfig'];
   sourceBucketName: string;
   sourceKeyPrefix?: string | undefined;
@@ -149,6 +154,7 @@ export class NextjsBucketDeployment extends Construct {
       prune: this.props.prune ?? false,
       substitutionConfig: this.props.substitutionConfig,
       zip: this.props.zip,
+      queueSize: this.props.queueSize,
     };
     return new CustomResource(this, 'CustomResource', {
       properties,

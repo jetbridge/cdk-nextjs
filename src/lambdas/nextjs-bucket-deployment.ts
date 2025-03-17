@@ -25,7 +25,7 @@ import {
   type PutObjectCommandInput,
   S3Client,
 } from '@aws-sdk/client-s3';
-import { Upload } from '@aws-sdk/lib-storage';
+import { Options, Upload } from '@aws-sdk/lib-storage';
 import type { CloudFormationCustomResourceHandler } from 'aws-lambda';
 import type * as JSZipType from 'jszip';
 // @ts-ignore jsii doesn't support esModuleInterop
@@ -73,6 +73,7 @@ export const handler: CloudFormationCustomResourceHandler = async (event, contex
           filePaths,
           baseLocalDir: sourceDirPath,
           putConfig: props.putConfig,
+          queueSize: props.queueSize,
         });
         if (props.prune) {
           debug('Emptying/pruning bucket: ' + props.destinationBucketName);
@@ -272,12 +273,14 @@ async function uploadObjects({
   filePaths,
   baseLocalDir,
   putConfig = {},
+  queueSize,
 }: {
   bucket: CustomResourceProperties['destinationBucketName'];
   keyPrefix?: CustomResourceProperties['destinationKeyPrefix'];
   filePaths: string[];
   baseLocalDir: string;
   putConfig: CustomResourceProperties['putConfig'];
+  queueSize: CustomResourceProperties['queueSize'];
 }) {
   for await (const filePathChunk of chunkArray(filePaths, 100)) {
     const putObjectInputs: PutObjectCommandInput[] = filePathChunk.map((path) => {
@@ -293,7 +296,21 @@ async function uploadObjects({
       };
     });
 
-    await Promise.all(putObjectInputs.map((params) => new Upload({ client: s3, params }).done()));
+    // Call put objects serially, prevents XAmzContentSHA256Mismatch errors
+    // This seems to be a bug within the lib storage package, I have opened an issue here: https://github.com/aws/aws-sdk-js-v3/issues/6940
+    await putObjectInputs.reduce(async (acc, params) => {
+      await acc;
+      const opts: Options = {
+        client: s3,
+        params,
+      };
+      if (queueSize) {
+        opts.queueSize = queueSize;
+      }
+      const upload = new Upload(opts);
+      console.log('uploading', params);
+      return upload.done();
+    }, Promise.resolve<any>(null));
   }
 }
 

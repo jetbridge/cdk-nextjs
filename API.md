@@ -2546,6 +2546,7 @@ const nextjsBucketDeploymentProps: NextjsBucketDeploymentProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a></code> | Override props for every construct. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects. Only applies if `zip` is `false`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.putConfig">putConfig</a></code> | <code>{[ key: string ]: {[ key: string ]: string}}</code> | Mapping of files to PUT options for `PutObjectCommand`. |
+| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.queueSize">queueSize</a></code> | <code>number</code> | The number of files to upload in parallel. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.substitutionConfig">substitutionConfig</a></code> | <code>{[ key: string ]: string}</code> | Replace placeholders in all files in `asset`. |
 | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.zip">zip</a></code> | <code>boolean</code> | If `true` then files will be zipped before writing to destination bucket. |
 
@@ -2649,6 +2650,18 @@ for options. If a file matches multiple globs, configuration will be
 merged. Later entries override earlier entries.
 
 `Bucket`, `Key`, and `Body` PUT options cannot be set.
+
+---
+
+##### `queueSize`<sup>Optional</sup> <a name="queueSize" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.queueSize"></a>
+
+```typescript
+public readonly queueSize: number;
+```
+
+- *Type:* number
+
+The number of files to upload in parallel.
 
 ---
 
@@ -7382,6 +7395,7 @@ const optionalNextjsBucketDeploymentProps: OptionalNextjsBucketDeploymentProps =
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a></code> | Override props for every construct. |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects. |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.putConfig">putConfig</a></code> | <code>{[ key: string ]: {[ key: string ]: string}}</code> | Mapping of files to PUT options for `PutObjectCommand`. |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.queueSize">queueSize</a></code> | <code>number</code> | The number of files to upload in parallel. |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.substitutionConfig">substitutionConfig</a></code> | <code>{[ key: string ]: string}</code> | Replace placeholders in all files in `asset`. |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.zip">zip</a></code> | <code>boolean</code> | If `true` then files will be zipped before writing to destination bucket. |
 
@@ -7486,6 +7500,18 @@ for options. If a file matches multiple globs, configuration will be
 merged. Later entries override earlier entries.
 
 `Bucket`, `Key`, and `Body` PUT options cannot be set.
+
+---
+
+##### `queueSize`<sup>Optional</sup> <a name="queueSize" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.queueSize"></a>
+
+```typescript
+public readonly queueSize: number;
+```
+
+- *Type:* number
+
+The number of files to upload in parallel.
 
 ---
 

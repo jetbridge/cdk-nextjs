@@ -22,11 +22,6 @@ export interface OptionalNextjsBucketDeploymentProps {
    */
   readonly substitutionConfig?: Record<string, string>;
   /**
-   * The number of files to upload in parallel.
-   * @stability stable
-   */
-  readonly queueSize?: number;
-  /**
    * Mapping of files to PUT options for `PutObjectCommand`.
    * Keys of
    * record must be a glob pattern (uses micromatch). Values of record are options

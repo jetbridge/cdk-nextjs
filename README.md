@@ -10,6 +10,7 @@ Supported NextJs versions: >=12.3.0+ (includes 13.0.0+)
 Uses the [standalone output](https://nextjs.org/docs/advanced-features/output-file-tracing) build mode.
 
 ## Quickstart
+
 ```ts
 import { App, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
@@ -21,7 +22,7 @@ class WebStack extends Stack {
     const nextjs = new Nextjs(this, 'Nextjs', {
       nextjsPath: './web', // relative path from your project root to NextJS
     });
-    new CfnOutput(this, "CloudFrontDistributionDomain", {
+    new CfnOutput(this, 'CloudFrontDistributionDomain', {
       value: nextjs.distribution.distributionDomain,
     });
   }
@@ -32,6 +33,7 @@ new WebStack(app, 'web');
 ```
 
 ## Important Notes
+
 - Due to CloudFront's Distribution Cache Behavior pattern matching limitations, a cache behavior will be created for each top level file or directory in your `public/` folder. CloudFront has a soft limit of [25 cache behaviors per distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions). Therefore, it's recommended to include all assets that can be under a top level folder like `public/static/`. Learn more in open-next docs [here](https://github.com/sst/open-next/blob/main/README.md#workaround-create-one-cache-behavior-per-top-level-file-and-folder-in-public-aws-specific).
 
 ## Documentation
@@ -41,16 +43,18 @@ Available on [Construct Hub](https://constructs.dev/packages/cdk-nextjs-standalo
 ## Examples
 
 See example CDK apps [here](./examples) including:
+
 - App Router
 - Pages Router
 - App/Pages Router
 - High Security
 - Multiple Sites
+
 To deploy an example, make sure to read the [README.md](./examples/README.md)
 
 ### Discord Chat
 
-We're in the #open-next channel on the [Serverless Stack Discord](https://discord.gg/sst).
+We're in the #aws channel on the [Open-Next Discord](https://discord.gg/VqFVt4YtSq).
 
 ## About
 

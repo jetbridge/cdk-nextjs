@@ -217,7 +217,7 @@ export class NextjsDistribution extends Construct {
               override: false,
               // MDN Cache-Control Use Case: Caching static assets with "cache busting"
               // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#caching_static_assets_with_cache_busting
-              value: `max-age=${Duration.days(365).toSeconds()}, immutable`,
+              value: `no-cache, no-store, must-revalidate, max-age=0`,
             },
           ],
         },

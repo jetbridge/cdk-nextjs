@@ -116,8 +116,7 @@ export class NextjsStaticAssets extends Construct {
 
   private createBucketDeployment(asset: Asset) {
     const basePath = this.props.basePath?.replace(/^\//, ''); // remove leading slash (if present)
-    const allFiles = basePath ? `${basePath}/**/*` : '**/*';
-    const staticFiles = basePath ? `${basePath}/_next/static/**/*'` : '_next/static/**/*';
+    const staticFiles = '**/_next/static/**/*';
 
     return new NextjsBucketDeployment(this, 'BucketDeployment', {
       asset,
@@ -129,9 +128,6 @@ export class NextjsStaticAssets extends Construct {
       substitutionConfig: NextjsBucketDeployment.getSubstitutionConfig(this.buildEnvVars),
       prune: this.props.prune, // defaults to false
       putConfig: {
-        [allFiles]: {
-          CacheControl: 'public, max-age=0, must-revalidate',
-        },
         [staticFiles]: {
           CacheControl: 'public, max-age=31536000, immutable',
         },

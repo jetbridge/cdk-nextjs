@@ -34,6 +34,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   },
   // package config
   name: 'cdk-nextjs-standalone',
+  packageName: '@funkepublishing/cdk-nextjs-standalone',
   majorVersion: 4,
   // prerelease: 'beta',
   minNodeVersion,

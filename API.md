@@ -2,7 +2,7 @@
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
 
-### Nextjs <a name="Nextjs" id="cdk-nextjs-standalone.Nextjs"></a>
+### Nextjs <a name="Nextjs" id="@funkepublishing/cdk-nextjs-standalone.Nextjs"></a>
 
 The `Nextjs` construct is a higher level construct that makes it easy to create a NextJS app.
 
@@ -21,37 +21,37 @@ new Nextjs(this, "Web", {
 ```
 
 
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.Nextjs.Initializer"></a>
+#### Initializers <a name="Initializers" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.Initializer"></a>
 
 ```typescript
-import { Nextjs } from 'cdk-nextjs-standalone'
+import { Nextjs } from '@funkepublishing/cdk-nextjs-standalone'
 
 new Nextjs(scope: Construct, id: string, props: NextjsProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsProps">NextjsProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.Initializer.parameter.props">props</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps">NextjsProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.Nextjs.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.Nextjs.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.Nextjs.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsProps">NextjsProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps">NextjsProps</a>
 
 ---
 
@@ -59,11 +59,11 @@ new Nextjs(scope: Construct, id: string, props: NextjsProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.Nextjs.toString"></a>
+##### `toString` <a name="toString" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.toString"></a>
 
 ```typescript
 public toString(): string
@@ -75,21 +75,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.Nextjs.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.isConstruct"></a>
 
 ```typescript
-import { Nextjs } from 'cdk-nextjs-standalone'
+import { Nextjs } from '@funkepublishing/cdk-nextjs-standalone'
 
 Nextjs.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.Nextjs.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -101,22 +101,22 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Convenience method to access `Nextjs.staticAssets.bucket`. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.url">url</a></code> | <code>string</code> | URL of Next.js App. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.distribution">distribution</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistribution">NextjsDistribution</a></code> | CloudFront distribution. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.imageOptimizationFunction">imageOptimizationFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsImage">NextjsImage</a></code> | The image optimization handler lambda function. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.imageOptimizationLambdaFunctionUrl">imageOptimizationLambdaFunctionUrl</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrl</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.lambdaFunctionUrl">lambdaFunctionUrl</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrl</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built NextJS project output. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.revalidation">revalidation</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidation">NextjsRevalidation</a></code> | Revalidation handler and queue. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | The main NextJS server handler lambda function. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.staticAssets">staticAssets</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets">NextjsStaticAssets</a></code> | Asset deployment to S3. |
-| <code><a href="#cdk-nextjs-standalone.Nextjs.property.domain">domain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | Optional Route53 Hosted Zone, ACM Certificate, and Route53 DNS Records. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Convenience method to access `Nextjs.staticAssets.bucket`. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.property.url">url</a></code> | <code>string</code> | URL of Next.js App. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.property.distribution">distribution</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistribution">NextjsDistribution</a></code> | CloudFront distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.property.imageOptimizationFunction">imageOptimizationFunction</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage">NextjsImage</a></code> | The image optimization handler lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.property.imageOptimizationLambdaFunctionUrl">imageOptimizationLambdaFunctionUrl</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrl</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.property.lambdaFunctionUrl">lambdaFunctionUrl</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrl</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.property.nextBuild">nextBuild</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | Built NextJS project output. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.property.revalidation">revalidation</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation">NextjsRevalidation</a></code> | Revalidation handler and queue. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.property.serverFunction">serverFunction</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | The main NextJS server handler lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.property.staticAssets">staticAssets</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets">NextjsStaticAssets</a></code> | Asset deployment to S3. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.Nextjs.property.domain">domain</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | Optional Route53 Hosted Zone, ACM Certificate, and Route53 DNS Records. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.Nextjs.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -128,7 +128,7 @@ The tree node.
 
 ---
 
-##### `bucket`<sup>Required</sup> <a name="bucket" id="cdk-nextjs-standalone.Nextjs.property.bucket"></a>
+##### `bucket`<sup>Required</sup> <a name="bucket" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.property.bucket"></a>
 
 ```typescript
 public readonly bucket: IBucket;
@@ -140,7 +140,7 @@ Convenience method to access `Nextjs.staticAssets.bucket`.
 
 ---
 
-##### `url`<sup>Required</sup> <a name="url" id="cdk-nextjs-standalone.Nextjs.property.url"></a>
+##### `url`<sup>Required</sup> <a name="url" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.property.url"></a>
 
 ```typescript
 public readonly url: string;
@@ -152,31 +152,31 @@ URL of Next.js App.
 
 ---
 
-##### `distribution`<sup>Required</sup> <a name="distribution" id="cdk-nextjs-standalone.Nextjs.property.distribution"></a>
+##### `distribution`<sup>Required</sup> <a name="distribution" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.property.distribution"></a>
 
 ```typescript
 public readonly distribution: NextjsDistribution;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistribution">NextjsDistribution</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistribution">NextjsDistribution</a>
 
 CloudFront distribution.
 
 ---
 
-##### `imageOptimizationFunction`<sup>Required</sup> <a name="imageOptimizationFunction" id="cdk-nextjs-standalone.Nextjs.property.imageOptimizationFunction"></a>
+##### `imageOptimizationFunction`<sup>Required</sup> <a name="imageOptimizationFunction" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.property.imageOptimizationFunction"></a>
 
 ```typescript
 public readonly imageOptimizationFunction: NextjsImage;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsImage">NextjsImage</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage">NextjsImage</a>
 
 The image optimization handler lambda function.
 
 ---
 
-##### `imageOptimizationLambdaFunctionUrl`<sup>Required</sup> <a name="imageOptimizationLambdaFunctionUrl" id="cdk-nextjs-standalone.Nextjs.property.imageOptimizationLambdaFunctionUrl"></a>
+##### `imageOptimizationLambdaFunctionUrl`<sup>Required</sup> <a name="imageOptimizationLambdaFunctionUrl" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.property.imageOptimizationLambdaFunctionUrl"></a>
 
 ```typescript
 public readonly imageOptimizationLambdaFunctionUrl: FunctionUrl;
@@ -186,7 +186,7 @@ public readonly imageOptimizationLambdaFunctionUrl: FunctionUrl;
 
 ---
 
-##### `lambdaFunctionUrl`<sup>Required</sup> <a name="lambdaFunctionUrl" id="cdk-nextjs-standalone.Nextjs.property.lambdaFunctionUrl"></a>
+##### `lambdaFunctionUrl`<sup>Required</sup> <a name="lambdaFunctionUrl" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.property.lambdaFunctionUrl"></a>
 
 ```typescript
 public readonly lambdaFunctionUrl: FunctionUrl;
@@ -196,102 +196,102 @@ public readonly lambdaFunctionUrl: FunctionUrl;
 
 ---
 
-##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.Nextjs.property.nextBuild"></a>
+##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.property.nextBuild"></a>
 
 ```typescript
 public readonly nextBuild: NextjsBuild;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 Built NextJS project output.
 
 ---
 
-##### `revalidation`<sup>Required</sup> <a name="revalidation" id="cdk-nextjs-standalone.Nextjs.property.revalidation"></a>
+##### `revalidation`<sup>Required</sup> <a name="revalidation" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.property.revalidation"></a>
 
 ```typescript
 public readonly revalidation: NextjsRevalidation;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsRevalidation">NextjsRevalidation</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation">NextjsRevalidation</a>
 
 Revalidation handler and queue.
 
 ---
 
-##### `serverFunction`<sup>Required</sup> <a name="serverFunction" id="cdk-nextjs-standalone.Nextjs.property.serverFunction"></a>
+##### `serverFunction`<sup>Required</sup> <a name="serverFunction" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.property.serverFunction"></a>
 
 ```typescript
 public readonly serverFunction: NextjsServer;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer">NextjsServer</a>
 
 The main NextJS server handler lambda function.
 
 ---
 
-##### `staticAssets`<sup>Required</sup> <a name="staticAssets" id="cdk-nextjs-standalone.Nextjs.property.staticAssets"></a>
+##### `staticAssets`<sup>Required</sup> <a name="staticAssets" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.property.staticAssets"></a>
 
 ```typescript
 public readonly staticAssets: NextjsStaticAssets;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsStaticAssets">NextjsStaticAssets</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets">NextjsStaticAssets</a>
 
 Asset deployment to S3.
 
 ---
 
-##### `domain`<sup>Optional</sup> <a name="domain" id="cdk-nextjs-standalone.Nextjs.property.domain"></a>
+##### `domain`<sup>Optional</sup> <a name="domain" id="@funkepublishing/cdk-nextjs-standalone.Nextjs.property.domain"></a>
 
 ```typescript
 public readonly domain: NextjsDomain;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a>
 
 Optional Route53 Hosted Zone, ACM Certificate, and Route53 DNS Records.
 
 ---
 
 
-### NextjsBucketDeployment <a name="NextjsBucketDeployment" id="cdk-nextjs-standalone.NextjsBucketDeployment"></a>
+### NextjsBucketDeployment <a name="NextjsBucketDeployment" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment"></a>
 
 Similar to CDK's `BucketDeployment` construct, but with a focus on replacing template placeholders (i.e. environment variables) and configuring PUT options like cache control.
 
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsBucketDeployment.Initializer"></a>
+#### Initializers <a name="Initializers" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.Initializer"></a>
 
 ```typescript
-import { NextjsBucketDeployment } from 'cdk-nextjs-standalone'
+import { NextjsBucketDeployment } from '@funkepublishing/cdk-nextjs-standalone'
 
 new NextjsBucketDeployment(scope: Construct, id: string, props: NextjsBucketDeploymentProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps">NextjsBucketDeploymentProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.props">props</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps">NextjsBucketDeploymentProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps">NextjsBucketDeploymentProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps">NextjsBucketDeploymentProps</a>
 
 ---
 
@@ -299,11 +299,11 @@ new NextjsBucketDeployment(scope: Construct, id: string, props: NextjsBucketDepl
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsBucketDeployment.toString"></a>
+##### `toString` <a name="toString" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.toString"></a>
 
 ```typescript
 public toString(): string
@@ -315,23 +315,23 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionConfig">getSubstitutionConfig</a></code> | Creates `substitutionConfig` an object by extracting unresolved tokens. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionValue">getSubstitutionValue</a></code> | Formats a string as a template value so custom resource knows to replace. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionConfig">getSubstitutionConfig</a></code> | Creates `substitutionConfig` an object by extracting unresolved tokens. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionValue">getSubstitutionValue</a></code> | Formats a string as a template value so custom resource knows to replace. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsBucketDeployment.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.isConstruct"></a>
 
 ```typescript
-import { NextjsBucketDeployment } from 'cdk-nextjs-standalone'
+import { NextjsBucketDeployment } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsBucketDeployment.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsBucketDeployment.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -339,33 +339,33 @@ Any object.
 
 ---
 
-##### `getSubstitutionConfig` <a name="getSubstitutionConfig" id="cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionConfig"></a>
+##### `getSubstitutionConfig` <a name="getSubstitutionConfig" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionConfig"></a>
 
 ```typescript
-import { NextjsBucketDeployment } from 'cdk-nextjs-standalone'
+import { NextjsBucketDeployment } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsBucketDeployment.getSubstitutionConfig(env: {[ key: string ]: string})
 ```
 
 Creates `substitutionConfig` an object by extracting unresolved tokens.
 
-###### `env`<sup>Required</sup> <a name="env" id="cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionConfig.parameter.env"></a>
+###### `env`<sup>Required</sup> <a name="env" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionConfig.parameter.env"></a>
 
 - *Type:* {[ key: string ]: string}
 
 ---
 
-##### `getSubstitutionValue` <a name="getSubstitutionValue" id="cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionValue"></a>
+##### `getSubstitutionValue` <a name="getSubstitutionValue" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionValue"></a>
 
 ```typescript
-import { NextjsBucketDeployment } from 'cdk-nextjs-standalone'
+import { NextjsBucketDeployment } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsBucketDeployment.getSubstitutionValue(v: string)
 ```
 
 Formats a string as a template value so custom resource knows to replace.
 
-###### `v`<sup>Required</sup> <a name="v" id="cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionValue.parameter.v"></a>
+###### `v`<sup>Required</sup> <a name="v" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.getSubstitutionValue.parameter.v"></a>
 
 - *Type:* string
 
@@ -375,12 +375,12 @@ Formats a string as a template value so custom resource knows to replace.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeployment.property.function">function</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | Lambda Function Provider for Custom Resource. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.property.function">function</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | Lambda Function Provider for Custom Resource. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsBucketDeployment.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -392,7 +392,7 @@ The tree node.
 
 ---
 
-##### `function`<sup>Required</sup> <a name="function" id="cdk-nextjs-standalone.NextjsBucketDeployment.property.function"></a>
+##### `function`<sup>Required</sup> <a name="function" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeployment.property.function"></a>
 
 ```typescript
 public readonly function: Function;
@@ -405,41 +405,41 @@ Lambda Function Provider for Custom Resource.
 ---
 
 
-### NextjsBuild <a name="NextjsBuild" id="cdk-nextjs-standalone.NextjsBuild"></a>
+### NextjsBuild <a name="NextjsBuild" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild"></a>
 
 Build Next.js app.
 
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsBuild.Initializer"></a>
+#### Initializers <a name="Initializers" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.Initializer"></a>
 
 ```typescript
-import { NextjsBuild } from 'cdk-nextjs-standalone'
+import { NextjsBuild } from '@funkepublishing/cdk-nextjs-standalone'
 
 new NextjsBuild(scope: Construct, id: string, props: NextjsBuildProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.Initializer.parameter.props">props</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsBuild.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsBuild.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsBuild.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a>
 
 ---
 
@@ -447,12 +447,12 @@ new NextjsBuild(scope: Construct, id: string, props: NextjsBuildProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.readPublicFileList">readPublicFileList</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.readPublicFileList">readPublicFileList</a></code> | *No description.* |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsBuild.toString"></a>
+##### `toString` <a name="toString" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.toString"></a>
 
 ```typescript
 public toString(): string
@@ -460,7 +460,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `readPublicFileList` <a name="readPublicFileList" id="cdk-nextjs-standalone.NextjsBuild.readPublicFileList"></a>
+##### `readPublicFileList` <a name="readPublicFileList" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.readPublicFileList"></a>
 
 ```typescript
 public readPublicFileList(): string[]
@@ -470,21 +470,21 @@ public readPublicFileList(): string[]
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsBuild.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.isConstruct"></a>
 
 ```typescript
-import { NextjsBuild } from 'cdk-nextjs-standalone'
+import { NextjsBuild } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsBuild.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsBuild.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -496,18 +496,18 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir">nextCacheDir</a></code> | <code>string</code> | Cache directory for generated data. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir">nextImageFnDir</a></code> | <code>string</code> | Contains function for processessing image requests. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateDynamoDBProviderFnDir">nextRevalidateDynamoDBProviderFnDir</a></code> | <code>string</code> | Contains function for inserting revalidation items into the table. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir">nextRevalidateFnDir</a></code> | <code>string</code> | Contains function for processing items from revalidation queue. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextServerFnDir">nextServerFnDir</a></code> | <code>string</code> | Contains server code and dependencies. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir">nextStaticDir</a></code> | <code>string</code> | Static files containing client-side code. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuild.property.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir">nextCacheDir</a></code> | <code>string</code> | Cache directory for generated data. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir">nextImageFnDir</a></code> | <code>string</code> | Contains function for processessing image requests. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateDynamoDBProviderFnDir">nextRevalidateDynamoDBProviderFnDir</a></code> | <code>string</code> | Contains function for inserting revalidation items into the table. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir">nextRevalidateFnDir</a></code> | <code>string</code> | Contains function for processing items from revalidation queue. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.nextServerFnDir">nextServerFnDir</a></code> | <code>string</code> | Contains server code and dependencies. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir">nextStaticDir</a></code> | <code>string</code> | Static files containing client-side code. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.props">props</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a></code> | *No description.* |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsBuild.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -519,7 +519,7 @@ The tree node.
 
 ---
 
-##### `nextCacheDir`<sup>Required</sup> <a name="nextCacheDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir"></a>
+##### `nextCacheDir`<sup>Required</sup> <a name="nextCacheDir" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.nextCacheDir"></a>
 
 ```typescript
 public readonly nextCacheDir: string;
@@ -531,7 +531,7 @@ Cache directory for generated data.
 
 ---
 
-##### `nextImageFnDir`<sup>Required</sup> <a name="nextImageFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir"></a>
+##### `nextImageFnDir`<sup>Required</sup> <a name="nextImageFnDir" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.nextImageFnDir"></a>
 
 ```typescript
 public readonly nextImageFnDir: string;
@@ -545,7 +545,7 @@ Should be arm64.
 
 ---
 
-##### `nextRevalidateDynamoDBProviderFnDir`<sup>Required</sup> <a name="nextRevalidateDynamoDBProviderFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateDynamoDBProviderFnDir"></a>
+##### `nextRevalidateDynamoDBProviderFnDir`<sup>Required</sup> <a name="nextRevalidateDynamoDBProviderFnDir" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateDynamoDBProviderFnDir"></a>
 
 ```typescript
 public readonly nextRevalidateDynamoDBProviderFnDir: string;
@@ -557,7 +557,7 @@ Contains function for inserting revalidation items into the table.
 
 ---
 
-##### `nextRevalidateFnDir`<sup>Required</sup> <a name="nextRevalidateFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir"></a>
+##### `nextRevalidateFnDir`<sup>Required</sup> <a name="nextRevalidateFnDir" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.nextRevalidateFnDir"></a>
 
 ```typescript
 public readonly nextRevalidateFnDir: string;
@@ -569,7 +569,7 @@ Contains function for processing items from revalidation queue.
 
 ---
 
-##### `nextServerFnDir`<sup>Required</sup> <a name="nextServerFnDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextServerFnDir"></a>
+##### `nextServerFnDir`<sup>Required</sup> <a name="nextServerFnDir" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.nextServerFnDir"></a>
 
 ```typescript
 public readonly nextServerFnDir: string;
@@ -581,7 +581,7 @@ Contains server code and dependencies.
 
 ---
 
-##### `nextStaticDir`<sup>Required</sup> <a name="nextStaticDir" id="cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir"></a>
+##### `nextStaticDir`<sup>Required</sup> <a name="nextStaticDir" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.nextStaticDir"></a>
 
 ```typescript
 public readonly nextStaticDir: string;
@@ -593,52 +593,52 @@ Static files containing client-side code.
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsBuild.property.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuild.property.props"></a>
 
 ```typescript
 public readonly props: NextjsBuildProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps">NextjsBuildProps</a>
 
 ---
 
 
-### NextjsDistribution <a name="NextjsDistribution" id="cdk-nextjs-standalone.NextjsDistribution"></a>
+### NextjsDistribution <a name="NextjsDistribution" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution"></a>
 
 Create a CloudFront distribution to serve a Next.js application.
 
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsDistribution.Initializer"></a>
+#### Initializers <a name="Initializers" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.Initializer"></a>
 
 ```typescript
-import { NextjsDistribution } from 'cdk-nextjs-standalone'
+import { NextjsDistribution } from '@funkepublishing/cdk-nextjs-standalone'
 
 new NextjsDistribution(scope: Construct, id: string, props: NextjsDistributionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps">NextjsDistributionProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.Initializer.parameter.props">props</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps">NextjsDistributionProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsDistribution.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsDistribution.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsDistribution.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionProps">NextjsDistributionProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps">NextjsDistributionProps</a>
 
 ---
 
@@ -646,11 +646,11 @@ new NextjsDistribution(scope: Construct, id: string, props: NextjsDistributionPr
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsDistribution.toString"></a>
+##### `toString` <a name="toString" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.toString"></a>
 
 ```typescript
 public toString(): string
@@ -662,21 +662,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsDistribution.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.isConstruct"></a>
 
 ```typescript
-import { NextjsDistribution } from 'cdk-nextjs-standalone'
+import { NextjsDistribution } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsDistribution.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsDistribution.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -688,15 +688,15 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.distributionDomain">distributionDomain</a></code> | <code>string</code> | The domain name of the internally created CloudFront Distribution. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.distributionId">distributionId</a></code> | <code>string</code> | The ID of the internally created CloudFront Distribution. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.url">url</a></code> | <code>string</code> | The CloudFront URL of the website. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistribution.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | The internally created CloudFront `Distribution` instance. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.property.distributionDomain">distributionDomain</a></code> | <code>string</code> | The domain name of the internally created CloudFront Distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.property.distributionId">distributionId</a></code> | <code>string</code> | The ID of the internally created CloudFront Distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.property.url">url</a></code> | <code>string</code> | The CloudFront URL of the website. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | The internally created CloudFront `Distribution` instance. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsDistribution.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -708,7 +708,7 @@ The tree node.
 
 ---
 
-##### `distributionDomain`<sup>Required</sup> <a name="distributionDomain" id="cdk-nextjs-standalone.NextjsDistribution.property.distributionDomain"></a>
+##### `distributionDomain`<sup>Required</sup> <a name="distributionDomain" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.property.distributionDomain"></a>
 
 ```typescript
 public readonly distributionDomain: string;
@@ -720,7 +720,7 @@ The domain name of the internally created CloudFront Distribution.
 
 ---
 
-##### `distributionId`<sup>Required</sup> <a name="distributionId" id="cdk-nextjs-standalone.NextjsDistribution.property.distributionId"></a>
+##### `distributionId`<sup>Required</sup> <a name="distributionId" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.property.distributionId"></a>
 
 ```typescript
 public readonly distributionId: string;
@@ -732,7 +732,7 @@ The ID of the internally created CloudFront Distribution.
 
 ---
 
-##### `url`<sup>Required</sup> <a name="url" id="cdk-nextjs-standalone.NextjsDistribution.property.url"></a>
+##### `url`<sup>Required</sup> <a name="url" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.property.url"></a>
 
 ```typescript
 public readonly url: string;
@@ -744,7 +744,7 @@ The CloudFront URL of the website.
 
 ---
 
-##### `distribution`<sup>Required</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDistribution.property.distribution"></a>
+##### `distribution`<sup>Required</sup> <a name="distribution" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistribution.property.distribution"></a>
 
 ```typescript
 public readonly distribution: Distribution;
@@ -757,7 +757,7 @@ The internally created CloudFront `Distribution` instance.
 ---
 
 
-### NextjsDomain <a name="NextjsDomain" id="cdk-nextjs-standalone.NextjsDomain"></a>
+### NextjsDomain <a name="NextjsDomain" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain"></a>
 
 Use a custom domain with `Nextjs`.
 
@@ -775,37 +775,37 @@ still create a Route53 hosted zone. Please see [Configuring DNS Delegation from
 CloudFlare to AWS Route53](https://veducate.co.uk/dns-delegation-route53/)
 as an example.
 
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsDomain.Initializer"></a>
+#### Initializers <a name="Initializers" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.Initializer"></a>
 
 ```typescript
-import { NextjsDomain } from 'cdk-nextjs-standalone'
+import { NextjsDomain } from '@funkepublishing/cdk-nextjs-standalone'
 
 new NextjsDomain(scope: Construct, id: string, props: NextjsDomainProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.props">props</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a>
 
 ---
 
@@ -813,12 +813,12 @@ new NextjsDomain(scope: Construct, id: string, props: NextjsDomainProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomain.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomain.createDnsRecords">createDnsRecords</a></code> | Creates DNS records (A and AAAA) records for {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.alternateNames} if defined. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain.createDnsRecords">createDnsRecords</a></code> | Creates DNS records (A and AAAA) records for {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.alternateNames} if defined. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsDomain.toString"></a>
+##### `toString` <a name="toString" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.toString"></a>
 
 ```typescript
 public toString(): string
@@ -826,7 +826,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `createDnsRecords` <a name="createDnsRecords" id="cdk-nextjs-standalone.NextjsDomain.createDnsRecords"></a>
+##### `createDnsRecords` <a name="createDnsRecords" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.createDnsRecords"></a>
 
 ```typescript
 public createDnsRecords(distribution: Distribution): void
@@ -834,7 +834,7 @@ public createDnsRecords(distribution: Distribution): void
 
 Creates DNS records (A and AAAA) records for {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.alternateNames} if defined.
 
-###### `distribution`<sup>Required</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDomain.createDnsRecords.parameter.distribution"></a>
+###### `distribution`<sup>Required</sup> <a name="distribution" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.createDnsRecords.parameter.distribution"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudfront.Distribution
 
@@ -844,21 +844,21 @@ Creates DNS records (A and AAAA) records for {@link NextjsDomainProps.domainName
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomain.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsDomain.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.isConstruct"></a>
 
 ```typescript
-import { NextjsDomain } from 'cdk-nextjs-standalone'
+import { NextjsDomain } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsDomain.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsDomain.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -870,14 +870,14 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomain.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomain.property.domainNames">domainNames</a></code> | <code>string[]</code> | Concatentation of {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.alternateNames}. Used in instantiation of CloudFront Distribution in NextjsDistribution. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomain.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | ACM Certificate. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomain.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | Route53 Hosted Zone. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain.property.domainNames">domainNames</a></code> | <code>string[]</code> | Concatentation of {@link NextjsDomainProps.domainName} and {@link NextjsDomainProps.alternateNames}. Used in instantiation of CloudFront Distribution in NextjsDistribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | ACM Certificate. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | Route53 Hosted Zone. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsDomain.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -889,7 +889,7 @@ The tree node.
 
 ---
 
-##### `domainNames`<sup>Required</sup> <a name="domainNames" id="cdk-nextjs-standalone.NextjsDomain.property.domainNames"></a>
+##### `domainNames`<sup>Required</sup> <a name="domainNames" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.property.domainNames"></a>
 
 ```typescript
 public readonly domainNames: string[];
@@ -901,7 +901,7 @@ Concatentation of {@link NextjsDomainProps.domainName} and {@link NextjsDomainPr
 
 ---
 
-##### `certificate`<sup>Required</sup> <a name="certificate" id="cdk-nextjs-standalone.NextjsDomain.property.certificate"></a>
+##### `certificate`<sup>Required</sup> <a name="certificate" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.property.certificate"></a>
 
 ```typescript
 public readonly certificate: ICertificate;
@@ -913,7 +913,7 @@ ACM Certificate.
 
 ---
 
-##### `hostedZone`<sup>Required</sup> <a name="hostedZone" id="cdk-nextjs-standalone.NextjsDomain.property.hostedZone"></a>
+##### `hostedZone`<sup>Required</sup> <a name="hostedZone" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomain.property.hostedZone"></a>
 
 ```typescript
 public readonly hostedZone: IHostedZone;
@@ -926,41 +926,41 @@ Route53 Hosted Zone.
 ---
 
 
-### NextjsImage <a name="NextjsImage" id="cdk-nextjs-standalone.NextjsImage"></a>
+### NextjsImage <a name="NextjsImage" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage"></a>
 
 This lambda handles image optimization.
 
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsImage.Initializer"></a>
+#### Initializers <a name="Initializers" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.Initializer"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 new NextjsImage(scope: Construct, id: string, props: NextjsImageProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsImageProps">NextjsImageProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.Initializer.parameter.props">props</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageProps">NextjsImageProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsImage.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsImage.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsImageProps">NextjsImageProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageProps">NextjsImageProps</a>
 
 ---
 
@@ -968,31 +968,31 @@ new NextjsImage(scope: Construct, id: string, props: NextjsImageProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.addEventSource">addEventSource</a></code> | Adds an event source to this function. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.addEventSourceMapping">addEventSourceMapping</a></code> | Adds an event source that maps to this AWS Lambda function. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.addFunctionUrl">addFunctionUrl</a></code> | Adds a url to this lambda function. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.addPermission">addPermission</a></code> | Adds a permission to the Lambda resource policy. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.addToRolePolicy">addToRolePolicy</a></code> | Adds a statement to the IAM role assumed by the instance. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.configureAsyncInvoke">configureAsyncInvoke</a></code> | Configures options for asynchronous invocation. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.considerWarningOnInvokeFunctionPermissions">considerWarningOnInvokeFunctionPermissions</a></code> | A warning will be added to functions under the following conditions: - permissions that include `lambda:InvokeFunction` are added to the unqualified function. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.grantInvoke">grantInvoke</a></code> | Grant the given identity permissions to invoke this Lambda. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.grantInvokeCompositePrincipal">grantInvokeCompositePrincipal</a></code> | Grant multiple principals the ability to invoke this Lambda via CompositePrincipal. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.grantInvokeUrl">grantInvokeUrl</a></code> | Grant the given identity permissions to invoke this Lambda Function URL. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.metric">metric</a></code> | Return the given named metric for this Function. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.metricDuration">metricDuration</a></code> | How long execution of this Lambda takes. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.metricErrors">metricErrors</a></code> | How many invocations of this Lambda fail. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.metricInvocations">metricInvocations</a></code> | How often this Lambda is invoked. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.metricThrottles">metricThrottles</a></code> | How often this Lambda is throttled. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.addAlias">addAlias</a></code> | Defines an alias for this function. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.addEnvironment">addEnvironment</a></code> | Adds an environment variable to this Lambda function. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.addLayers">addLayers</a></code> | Adds one or more Lambda Layers to this Lambda function. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.invalidateVersionBasedOn">invalidateVersionBasedOn</a></code> | Mix additional information into the hash of the Version object. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.addEventSource">addEventSource</a></code> | Adds an event source to this function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.addEventSourceMapping">addEventSourceMapping</a></code> | Adds an event source that maps to this AWS Lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.addFunctionUrl">addFunctionUrl</a></code> | Adds a url to this lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.addPermission">addPermission</a></code> | Adds a permission to the Lambda resource policy. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.addToRolePolicy">addToRolePolicy</a></code> | Adds a statement to the IAM role assumed by the instance. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.configureAsyncInvoke">configureAsyncInvoke</a></code> | Configures options for asynchronous invocation. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.considerWarningOnInvokeFunctionPermissions">considerWarningOnInvokeFunctionPermissions</a></code> | A warning will be added to functions under the following conditions: - permissions that include `lambda:InvokeFunction` are added to the unqualified function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.grantInvoke">grantInvoke</a></code> | Grant the given identity permissions to invoke this Lambda. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.grantInvokeCompositePrincipal">grantInvokeCompositePrincipal</a></code> | Grant multiple principals the ability to invoke this Lambda via CompositePrincipal. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.grantInvokeUrl">grantInvokeUrl</a></code> | Grant the given identity permissions to invoke this Lambda Function URL. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.metric">metric</a></code> | Return the given named metric for this Function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricDuration">metricDuration</a></code> | How long execution of this Lambda takes. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricErrors">metricErrors</a></code> | How many invocations of this Lambda fail. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricInvocations">metricInvocations</a></code> | How often this Lambda is invoked. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricThrottles">metricThrottles</a></code> | How often this Lambda is throttled. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.addAlias">addAlias</a></code> | Defines an alias for this function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.addEnvironment">addEnvironment</a></code> | Adds an environment variable to this Lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.addLayers">addLayers</a></code> | Adds one or more Lambda Layers to this Lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.invalidateVersionBasedOn">invalidateVersionBasedOn</a></code> | Mix additional information into the hash of the Version object. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsImage.toString"></a>
+##### `toString` <a name="toString" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.toString"></a>
 
 ```typescript
 public toString(): string
@@ -1000,7 +1000,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `applyRemovalPolicy` <a name="applyRemovalPolicy" id="cdk-nextjs-standalone.NextjsImage.applyRemovalPolicy"></a>
+##### `applyRemovalPolicy` <a name="applyRemovalPolicy" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.applyRemovalPolicy"></a>
 
 ```typescript
 public applyRemovalPolicy(policy: RemovalPolicy): void
@@ -1016,13 +1016,13 @@ to be replaced.
 The resource can be deleted (`RemovalPolicy.DESTROY`), or left in your AWS
 account for data recovery and cleanup later (`RemovalPolicy.RETAIN`).
 
-###### `policy`<sup>Required</sup> <a name="policy" id="cdk-nextjs-standalone.NextjsImage.applyRemovalPolicy.parameter.policy"></a>
+###### `policy`<sup>Required</sup> <a name="policy" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.applyRemovalPolicy.parameter.policy"></a>
 
 - *Type:* aws-cdk-lib.RemovalPolicy
 
 ---
 
-##### `addEventSource` <a name="addEventSource" id="cdk-nextjs-standalone.NextjsImage.addEventSource"></a>
+##### `addEventSource` <a name="addEventSource" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addEventSource"></a>
 
 ```typescript
 public addEventSource(source: IEventSource): void
@@ -1038,13 +1038,13 @@ import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 myFunction.addEventSource(new SqsEventSource(myQueue));
 ```
 
-###### `source`<sup>Required</sup> <a name="source" id="cdk-nextjs-standalone.NextjsImage.addEventSource.parameter.source"></a>
+###### `source`<sup>Required</sup> <a name="source" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addEventSource.parameter.source"></a>
 
 - *Type:* aws-cdk-lib.aws_lambda.IEventSource
 
 ---
 
-##### `addEventSourceMapping` <a name="addEventSourceMapping" id="cdk-nextjs-standalone.NextjsImage.addEventSourceMapping"></a>
+##### `addEventSourceMapping` <a name="addEventSourceMapping" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addEventSourceMapping"></a>
 
 ```typescript
 public addEventSourceMapping(id: string, options: EventSourceMappingOptions): EventSourceMapping
@@ -1052,19 +1052,19 @@ public addEventSourceMapping(id: string, options: EventSourceMappingOptions): Ev
 
 Adds an event source that maps to this AWS Lambda function.
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsImage.addEventSourceMapping.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addEventSourceMapping.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-###### `options`<sup>Required</sup> <a name="options" id="cdk-nextjs-standalone.NextjsImage.addEventSourceMapping.parameter.options"></a>
+###### `options`<sup>Required</sup> <a name="options" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addEventSourceMapping.parameter.options"></a>
 
 - *Type:* aws-cdk-lib.aws_lambda.EventSourceMappingOptions
 
 ---
 
-##### `addFunctionUrl` <a name="addFunctionUrl" id="cdk-nextjs-standalone.NextjsImage.addFunctionUrl"></a>
+##### `addFunctionUrl` <a name="addFunctionUrl" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addFunctionUrl"></a>
 
 ```typescript
 public addFunctionUrl(options?: FunctionUrlOptions): FunctionUrl
@@ -1072,13 +1072,13 @@ public addFunctionUrl(options?: FunctionUrlOptions): FunctionUrl
 
 Adds a url to this lambda function.
 
-###### `options`<sup>Optional</sup> <a name="options" id="cdk-nextjs-standalone.NextjsImage.addFunctionUrl.parameter.options"></a>
+###### `options`<sup>Optional</sup> <a name="options" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addFunctionUrl.parameter.options"></a>
 
 - *Type:* aws-cdk-lib.aws_lambda.FunctionUrlOptions
 
 ---
 
-##### `addPermission` <a name="addPermission" id="cdk-nextjs-standalone.NextjsImage.addPermission"></a>
+##### `addPermission` <a name="addPermission" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addPermission"></a>
 
 ```typescript
 public addPermission(id: string, permission: Permission): void
@@ -1088,7 +1088,7 @@ Adds a permission to the Lambda resource policy.
 
 > [Permission for details.](Permission for details.)
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsImage.addPermission.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addPermission.parameter.id"></a>
 
 - *Type:* string
 
@@ -1096,7 +1096,7 @@ The id for the permission construct.
 
 ---
 
-###### `permission`<sup>Required</sup> <a name="permission" id="cdk-nextjs-standalone.NextjsImage.addPermission.parameter.permission"></a>
+###### `permission`<sup>Required</sup> <a name="permission" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addPermission.parameter.permission"></a>
 
 - *Type:* aws-cdk-lib.aws_lambda.Permission
 
@@ -1104,7 +1104,7 @@ The permission to grant to this Lambda function.
 
 ---
 
-##### `addToRolePolicy` <a name="addToRolePolicy" id="cdk-nextjs-standalone.NextjsImage.addToRolePolicy"></a>
+##### `addToRolePolicy` <a name="addToRolePolicy" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addToRolePolicy"></a>
 
 ```typescript
 public addToRolePolicy(statement: PolicyStatement): void
@@ -1112,13 +1112,13 @@ public addToRolePolicy(statement: PolicyStatement): void
 
 Adds a statement to the IAM role assumed by the instance.
 
-###### `statement`<sup>Required</sup> <a name="statement" id="cdk-nextjs-standalone.NextjsImage.addToRolePolicy.parameter.statement"></a>
+###### `statement`<sup>Required</sup> <a name="statement" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addToRolePolicy.parameter.statement"></a>
 
 - *Type:* aws-cdk-lib.aws_iam.PolicyStatement
 
 ---
 
-##### `configureAsyncInvoke` <a name="configureAsyncInvoke" id="cdk-nextjs-standalone.NextjsImage.configureAsyncInvoke"></a>
+##### `configureAsyncInvoke` <a name="configureAsyncInvoke" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.configureAsyncInvoke"></a>
 
 ```typescript
 public configureAsyncInvoke(options: EventInvokeConfigOptions): void
@@ -1126,13 +1126,13 @@ public configureAsyncInvoke(options: EventInvokeConfigOptions): void
 
 Configures options for asynchronous invocation.
 
-###### `options`<sup>Required</sup> <a name="options" id="cdk-nextjs-standalone.NextjsImage.configureAsyncInvoke.parameter.options"></a>
+###### `options`<sup>Required</sup> <a name="options" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.configureAsyncInvoke.parameter.options"></a>
 
 - *Type:* aws-cdk-lib.aws_lambda.EventInvokeConfigOptions
 
 ---
 
-##### `considerWarningOnInvokeFunctionPermissions` <a name="considerWarningOnInvokeFunctionPermissions" id="cdk-nextjs-standalone.NextjsImage.considerWarningOnInvokeFunctionPermissions"></a>
+##### `considerWarningOnInvokeFunctionPermissions` <a name="considerWarningOnInvokeFunctionPermissions" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.considerWarningOnInvokeFunctionPermissions"></a>
 
 ```typescript
 public considerWarningOnInvokeFunctionPermissions(scope: Construct, action: string): void
@@ -1145,19 +1145,19 @@ function.currentVersion is invoked before or after the permission is created.
 This applies only to permissions on Lambda functions, not versions or aliases.
 This function is overridden as a noOp for QualifiedFunctionBase.
 
-###### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsImage.considerWarningOnInvokeFunctionPermissions.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.considerWarningOnInvokeFunctionPermissions.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-###### `action`<sup>Required</sup> <a name="action" id="cdk-nextjs-standalone.NextjsImage.considerWarningOnInvokeFunctionPermissions.parameter.action"></a>
+###### `action`<sup>Required</sup> <a name="action" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.considerWarningOnInvokeFunctionPermissions.parameter.action"></a>
 
 - *Type:* string
 
 ---
 
-##### `grantInvoke` <a name="grantInvoke" id="cdk-nextjs-standalone.NextjsImage.grantInvoke"></a>
+##### `grantInvoke` <a name="grantInvoke" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.grantInvoke"></a>
 
 ```typescript
 public grantInvoke(grantee: IGrantable): Grant
@@ -1165,13 +1165,13 @@ public grantInvoke(grantee: IGrantable): Grant
 
 Grant the given identity permissions to invoke this Lambda.
 
-###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-nextjs-standalone.NextjsImage.grantInvoke.parameter.grantee"></a>
+###### `grantee`<sup>Required</sup> <a name="grantee" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.grantInvoke.parameter.grantee"></a>
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
 
 ---
 
-##### `grantInvokeCompositePrincipal` <a name="grantInvokeCompositePrincipal" id="cdk-nextjs-standalone.NextjsImage.grantInvokeCompositePrincipal"></a>
+##### `grantInvokeCompositePrincipal` <a name="grantInvokeCompositePrincipal" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.grantInvokeCompositePrincipal"></a>
 
 ```typescript
 public grantInvokeCompositePrincipal(compositePrincipal: CompositePrincipal): Grant[]
@@ -1179,13 +1179,13 @@ public grantInvokeCompositePrincipal(compositePrincipal: CompositePrincipal): Gr
 
 Grant multiple principals the ability to invoke this Lambda via CompositePrincipal.
 
-###### `compositePrincipal`<sup>Required</sup> <a name="compositePrincipal" id="cdk-nextjs-standalone.NextjsImage.grantInvokeCompositePrincipal.parameter.compositePrincipal"></a>
+###### `compositePrincipal`<sup>Required</sup> <a name="compositePrincipal" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.grantInvokeCompositePrincipal.parameter.compositePrincipal"></a>
 
 - *Type:* aws-cdk-lib.aws_iam.CompositePrincipal
 
 ---
 
-##### `grantInvokeUrl` <a name="grantInvokeUrl" id="cdk-nextjs-standalone.NextjsImage.grantInvokeUrl"></a>
+##### `grantInvokeUrl` <a name="grantInvokeUrl" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.grantInvokeUrl"></a>
 
 ```typescript
 public grantInvokeUrl(grantee: IGrantable): Grant
@@ -1193,13 +1193,13 @@ public grantInvokeUrl(grantee: IGrantable): Grant
 
 Grant the given identity permissions to invoke this Lambda Function URL.
 
-###### `grantee`<sup>Required</sup> <a name="grantee" id="cdk-nextjs-standalone.NextjsImage.grantInvokeUrl.parameter.grantee"></a>
+###### `grantee`<sup>Required</sup> <a name="grantee" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.grantInvokeUrl.parameter.grantee"></a>
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
 
 ---
 
-##### `metric` <a name="metric" id="cdk-nextjs-standalone.NextjsImage.metric"></a>
+##### `metric` <a name="metric" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metric"></a>
 
 ```typescript
 public metric(metricName: string, props?: MetricOptions): Metric
@@ -1207,19 +1207,19 @@ public metric(metricName: string, props?: MetricOptions): Metric
 
 Return the given named metric for this Function.
 
-###### `metricName`<sup>Required</sup> <a name="metricName" id="cdk-nextjs-standalone.NextjsImage.metric.parameter.metricName"></a>
+###### `metricName`<sup>Required</sup> <a name="metricName" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metric.parameter.metricName"></a>
 
 - *Type:* string
 
 ---
 
-###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.metric.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metric.parameter.props"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
 
 ---
 
-##### `metricDuration` <a name="metricDuration" id="cdk-nextjs-standalone.NextjsImage.metricDuration"></a>
+##### `metricDuration` <a name="metricDuration" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricDuration"></a>
 
 ```typescript
 public metricDuration(props?: MetricOptions): Metric
@@ -1229,13 +1229,13 @@ How long execution of this Lambda takes.
 
 Average over 5 minutes
 
-###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.metricDuration.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricDuration.parameter.props"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
 
 ---
 
-##### `metricErrors` <a name="metricErrors" id="cdk-nextjs-standalone.NextjsImage.metricErrors"></a>
+##### `metricErrors` <a name="metricErrors" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricErrors"></a>
 
 ```typescript
 public metricErrors(props?: MetricOptions): Metric
@@ -1245,13 +1245,13 @@ How many invocations of this Lambda fail.
 
 Sum over 5 minutes
 
-###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.metricErrors.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricErrors.parameter.props"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
 
 ---
 
-##### `metricInvocations` <a name="metricInvocations" id="cdk-nextjs-standalone.NextjsImage.metricInvocations"></a>
+##### `metricInvocations` <a name="metricInvocations" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricInvocations"></a>
 
 ```typescript
 public metricInvocations(props?: MetricOptions): Metric
@@ -1261,13 +1261,13 @@ How often this Lambda is invoked.
 
 Sum over 5 minutes
 
-###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.metricInvocations.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricInvocations.parameter.props"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
 
 ---
 
-##### `metricThrottles` <a name="metricThrottles" id="cdk-nextjs-standalone.NextjsImage.metricThrottles"></a>
+##### `metricThrottles` <a name="metricThrottles" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricThrottles"></a>
 
 ```typescript
 public metricThrottles(props?: MetricOptions): Metric
@@ -1277,13 +1277,13 @@ How often this Lambda is throttled.
 
 Sum over 5 minutes
 
-###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.metricThrottles.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricThrottles.parameter.props"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
 
 ---
 
-##### `addAlias` <a name="addAlias" id="cdk-nextjs-standalone.NextjsImage.addAlias"></a>
+##### `addAlias` <a name="addAlias" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addAlias"></a>
 
 ```typescript
 public addAlias(aliasName: string, options?: AliasOptions): Alias
@@ -1307,7 +1307,7 @@ new lambda.Alias(this, 'AliasLive', {
 });
 ```
 
-###### `aliasName`<sup>Required</sup> <a name="aliasName" id="cdk-nextjs-standalone.NextjsImage.addAlias.parameter.aliasName"></a>
+###### `aliasName`<sup>Required</sup> <a name="aliasName" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addAlias.parameter.aliasName"></a>
 
 - *Type:* string
 
@@ -1315,7 +1315,7 @@ The name of the alias.
 
 ---
 
-###### `options`<sup>Optional</sup> <a name="options" id="cdk-nextjs-standalone.NextjsImage.addAlias.parameter.options"></a>
+###### `options`<sup>Optional</sup> <a name="options" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addAlias.parameter.options"></a>
 
 - *Type:* aws-cdk-lib.aws_lambda.AliasOptions
 
@@ -1323,7 +1323,7 @@ Alias options.
 
 ---
 
-##### `addEnvironment` <a name="addEnvironment" id="cdk-nextjs-standalone.NextjsImage.addEnvironment"></a>
+##### `addEnvironment` <a name="addEnvironment" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addEnvironment"></a>
 
 ```typescript
 public addEnvironment(key: string, value: string, options?: EnvironmentOptions): Function
@@ -1333,7 +1333,7 @@ Adds an environment variable to this Lambda function.
 
 If this is a ref to a Lambda function, this operation results in a no-op.
 
-###### `key`<sup>Required</sup> <a name="key" id="cdk-nextjs-standalone.NextjsImage.addEnvironment.parameter.key"></a>
+###### `key`<sup>Required</sup> <a name="key" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addEnvironment.parameter.key"></a>
 
 - *Type:* string
 
@@ -1341,7 +1341,7 @@ The environment variable key.
 
 ---
 
-###### `value`<sup>Required</sup> <a name="value" id="cdk-nextjs-standalone.NextjsImage.addEnvironment.parameter.value"></a>
+###### `value`<sup>Required</sup> <a name="value" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addEnvironment.parameter.value"></a>
 
 - *Type:* string
 
@@ -1349,7 +1349,7 @@ The environment variable's value.
 
 ---
 
-###### `options`<sup>Optional</sup> <a name="options" id="cdk-nextjs-standalone.NextjsImage.addEnvironment.parameter.options"></a>
+###### `options`<sup>Optional</sup> <a name="options" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addEnvironment.parameter.options"></a>
 
 - *Type:* aws-cdk-lib.aws_lambda.EnvironmentOptions
 
@@ -1357,7 +1357,7 @@ Environment variable options.
 
 ---
 
-##### `addLayers` <a name="addLayers" id="cdk-nextjs-standalone.NextjsImage.addLayers"></a>
+##### `addLayers` <a name="addLayers" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addLayers"></a>
 
 ```typescript
 public addLayers(layers: ...ILayerVersion[]): void
@@ -1365,7 +1365,7 @@ public addLayers(layers: ...ILayerVersion[]): void
 
 Adds one or more Lambda Layers to this Lambda function.
 
-###### `layers`<sup>Required</sup> <a name="layers" id="cdk-nextjs-standalone.NextjsImage.addLayers.parameter.layers"></a>
+###### `layers`<sup>Required</sup> <a name="layers" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.addLayers.parameter.layers"></a>
 
 - *Type:* ...aws-cdk-lib.aws_lambda.ILayerVersion[]
 
@@ -1373,7 +1373,7 @@ the layers to be added.
 
 ---
 
-##### `invalidateVersionBasedOn` <a name="invalidateVersionBasedOn" id="cdk-nextjs-standalone.NextjsImage.invalidateVersionBasedOn"></a>
+##### `invalidateVersionBasedOn` <a name="invalidateVersionBasedOn" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.invalidateVersionBasedOn"></a>
 
 ```typescript
 public invalidateVersionBasedOn(x: string): void
@@ -1396,7 +1396,7 @@ a new Version needs to be created.
 
 This method may be called more than once.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsImage.invalidateVersionBasedOn.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.invalidateVersionBasedOn.parameter.x"></a>
 
 - *Type:* string
 
@@ -1406,34 +1406,34 @@ This method may be called more than once.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.isOwnedResource">isOwnedResource</a></code> | Returns true if the construct was created by CDK, and false otherwise. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.isResource">isResource</a></code> | Check whether the given construct is a Resource. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.classifyVersionProperty">classifyVersionProperty</a></code> | Record whether specific properties in the `AWS::Lambda::Function` resource should also be associated to the Version resource. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.fromFunctionArn">fromFunctionArn</a></code> | Import a lambda function into the CDK using its ARN. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.fromFunctionAttributes">fromFunctionAttributes</a></code> | Creates a Lambda function object which represents a function not defined within this stack. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.fromFunctionName">fromFunctionName</a></code> | Import a lambda function into the CDK using its name. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.metricAll">metricAll</a></code> | Return the given named metric for this Lambda. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.metricAllConcurrentExecutions">metricAllConcurrentExecutions</a></code> | Metric for the number of concurrent executions across all Lambdas. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.metricAllDuration">metricAllDuration</a></code> | Metric for the Duration executing all Lambdas. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.metricAllErrors">metricAllErrors</a></code> | Metric for the number of Errors executing all Lambdas. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.metricAllInvocations">metricAllInvocations</a></code> | Metric for the number of invocations of all Lambdas. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.metricAllThrottles">metricAllThrottles</a></code> | Metric for the number of throttled invocations of all Lambdas. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.metricAllUnreservedConcurrentExecutions">metricAllUnreservedConcurrentExecutions</a></code> | Metric for the number of unreserved concurrent executions across all Lambdas. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.isOwnedResource">isOwnedResource</a></code> | Returns true if the construct was created by CDK, and false otherwise. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.isResource">isResource</a></code> | Check whether the given construct is a Resource. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.classifyVersionProperty">classifyVersionProperty</a></code> | Record whether specific properties in the `AWS::Lambda::Function` resource should also be associated to the Version resource. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionArn">fromFunctionArn</a></code> | Import a lambda function into the CDK using its ARN. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionAttributes">fromFunctionAttributes</a></code> | Creates a Lambda function object which represents a function not defined within this stack. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionName">fromFunctionName</a></code> | Import a lambda function into the CDK using its name. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAll">metricAll</a></code> | Return the given named metric for this Lambda. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllConcurrentExecutions">metricAllConcurrentExecutions</a></code> | Metric for the number of concurrent executions across all Lambdas. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllDuration">metricAllDuration</a></code> | Metric for the Duration executing all Lambdas. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllErrors">metricAllErrors</a></code> | Metric for the number of Errors executing all Lambdas. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllInvocations">metricAllInvocations</a></code> | Metric for the number of invocations of all Lambdas. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllThrottles">metricAllThrottles</a></code> | Metric for the number of throttled invocations of all Lambdas. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllUnreservedConcurrentExecutions">metricAllUnreservedConcurrentExecutions</a></code> | Metric for the number of unreserved concurrent executions across all Lambdas. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsImage.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.isConstruct"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsImage.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -1441,42 +1441,42 @@ Any object.
 
 ---
 
-##### `isOwnedResource` <a name="isOwnedResource" id="cdk-nextjs-standalone.NextjsImage.isOwnedResource"></a>
+##### `isOwnedResource` <a name="isOwnedResource" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.isOwnedResource"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.isOwnedResource(construct: IConstruct)
 ```
 
 Returns true if the construct was created by CDK, and false otherwise.
 
-###### `construct`<sup>Required</sup> <a name="construct" id="cdk-nextjs-standalone.NextjsImage.isOwnedResource.parameter.construct"></a>
+###### `construct`<sup>Required</sup> <a name="construct" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.isOwnedResource.parameter.construct"></a>
 
 - *Type:* constructs.IConstruct
 
 ---
 
-##### `isResource` <a name="isResource" id="cdk-nextjs-standalone.NextjsImage.isResource"></a>
+##### `isResource` <a name="isResource" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.isResource"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.isResource(construct: IConstruct)
 ```
 
 Check whether the given construct is a Resource.
 
-###### `construct`<sup>Required</sup> <a name="construct" id="cdk-nextjs-standalone.NextjsImage.isResource.parameter.construct"></a>
+###### `construct`<sup>Required</sup> <a name="construct" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.isResource.parameter.construct"></a>
 
 - *Type:* constructs.IConstruct
 
 ---
 
-##### `classifyVersionProperty` <a name="classifyVersionProperty" id="cdk-nextjs-standalone.NextjsImage.classifyVersionProperty"></a>
+##### `classifyVersionProperty` <a name="classifyVersionProperty" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.classifyVersionProperty"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.classifyVersionProperty(propertyName: string, locked: boolean)
 ```
@@ -1485,7 +1485,7 @@ Record whether specific properties in the `AWS::Lambda::Function` resource shoul
 
 See 'currentVersion' section in the module README for more details.
 
-###### `propertyName`<sup>Required</sup> <a name="propertyName" id="cdk-nextjs-standalone.NextjsImage.classifyVersionProperty.parameter.propertyName"></a>
+###### `propertyName`<sup>Required</sup> <a name="propertyName" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.classifyVersionProperty.parameter.propertyName"></a>
 
 - *Type:* string
 
@@ -1493,7 +1493,7 @@ The property to classify.
 
 ---
 
-###### `locked`<sup>Required</sup> <a name="locked" id="cdk-nextjs-standalone.NextjsImage.classifyVersionProperty.parameter.locked"></a>
+###### `locked`<sup>Required</sup> <a name="locked" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.classifyVersionProperty.parameter.locked"></a>
 
 - *Type:* boolean
 
@@ -1501,10 +1501,10 @@ whether the property should be associated to the version or not.
 
 ---
 
-##### `fromFunctionArn` <a name="fromFunctionArn" id="cdk-nextjs-standalone.NextjsImage.fromFunctionArn"></a>
+##### `fromFunctionArn` <a name="fromFunctionArn" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionArn"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.fromFunctionArn(scope: Construct, id: string, functionArn: string)
 ```
@@ -1514,28 +1514,28 @@ Import a lambda function into the CDK using its ARN.
 For `Function.addPermissions()` to work on this imported lambda, make sure that is
 in the same account and region as the stack you are importing it into.
 
-###### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsImage.fromFunctionArn.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionArn.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsImage.fromFunctionArn.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionArn.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-###### `functionArn`<sup>Required</sup> <a name="functionArn" id="cdk-nextjs-standalone.NextjsImage.fromFunctionArn.parameter.functionArn"></a>
+###### `functionArn`<sup>Required</sup> <a name="functionArn" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionArn.parameter.functionArn"></a>
 
 - *Type:* string
 
 ---
 
-##### `fromFunctionAttributes` <a name="fromFunctionAttributes" id="cdk-nextjs-standalone.NextjsImage.fromFunctionAttributes"></a>
+##### `fromFunctionAttributes` <a name="fromFunctionAttributes" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionAttributes"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.fromFunctionAttributes(scope: Construct, id: string, attrs: FunctionAttributes)
 ```
@@ -1545,7 +1545,7 @@ Creates a Lambda function object which represents a function not defined within 
 For `Function.addPermissions()` to work on this imported lambda, set the sameEnvironment property to true
 if this imported lambda is in the same account and region as the stack you are importing it into.
 
-###### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsImage.fromFunctionAttributes.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionAttributes.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
@@ -1553,7 +1553,7 @@ The parent construct.
 
 ---
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsImage.fromFunctionAttributes.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionAttributes.parameter.id"></a>
 
 - *Type:* string
 
@@ -1561,7 +1561,7 @@ The name of the lambda construct.
 
 ---
 
-###### `attrs`<sup>Required</sup> <a name="attrs" id="cdk-nextjs-standalone.NextjsImage.fromFunctionAttributes.parameter.attrs"></a>
+###### `attrs`<sup>Required</sup> <a name="attrs" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionAttributes.parameter.attrs"></a>
 
 - *Type:* aws-cdk-lib.aws_lambda.FunctionAttributes
 
@@ -1569,147 +1569,147 @@ the attributes of the function to import.
 
 ---
 
-##### `fromFunctionName` <a name="fromFunctionName" id="cdk-nextjs-standalone.NextjsImage.fromFunctionName"></a>
+##### `fromFunctionName` <a name="fromFunctionName" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionName"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.fromFunctionName(scope: Construct, id: string, functionName: string)
 ```
 
 Import a lambda function into the CDK using its name.
 
-###### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsImage.fromFunctionName.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionName.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-###### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsImage.fromFunctionName.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionName.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-###### `functionName`<sup>Required</sup> <a name="functionName" id="cdk-nextjs-standalone.NextjsImage.fromFunctionName.parameter.functionName"></a>
+###### `functionName`<sup>Required</sup> <a name="functionName" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.fromFunctionName.parameter.functionName"></a>
 
 - *Type:* string
 
 ---
 
-##### `metricAll` <a name="metricAll" id="cdk-nextjs-standalone.NextjsImage.metricAll"></a>
+##### `metricAll` <a name="metricAll" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAll"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.metricAll(metricName: string, props?: MetricOptions)
 ```
 
 Return the given named metric for this Lambda.
 
-###### `metricName`<sup>Required</sup> <a name="metricName" id="cdk-nextjs-standalone.NextjsImage.metricAll.parameter.metricName"></a>
+###### `metricName`<sup>Required</sup> <a name="metricName" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAll.parameter.metricName"></a>
 
 - *Type:* string
 
 ---
 
-###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.metricAll.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAll.parameter.props"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
 
 ---
 
-##### `metricAllConcurrentExecutions` <a name="metricAllConcurrentExecutions" id="cdk-nextjs-standalone.NextjsImage.metricAllConcurrentExecutions"></a>
+##### `metricAllConcurrentExecutions` <a name="metricAllConcurrentExecutions" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllConcurrentExecutions"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.metricAllConcurrentExecutions(props?: MetricOptions)
 ```
 
 Metric for the number of concurrent executions across all Lambdas.
 
-###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.metricAllConcurrentExecutions.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllConcurrentExecutions.parameter.props"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
 
 ---
 
-##### `metricAllDuration` <a name="metricAllDuration" id="cdk-nextjs-standalone.NextjsImage.metricAllDuration"></a>
+##### `metricAllDuration` <a name="metricAllDuration" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllDuration"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.metricAllDuration(props?: MetricOptions)
 ```
 
 Metric for the Duration executing all Lambdas.
 
-###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.metricAllDuration.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllDuration.parameter.props"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
 
 ---
 
-##### `metricAllErrors` <a name="metricAllErrors" id="cdk-nextjs-standalone.NextjsImage.metricAllErrors"></a>
+##### `metricAllErrors` <a name="metricAllErrors" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllErrors"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.metricAllErrors(props?: MetricOptions)
 ```
 
 Metric for the number of Errors executing all Lambdas.
 
-###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.metricAllErrors.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllErrors.parameter.props"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
 
 ---
 
-##### `metricAllInvocations` <a name="metricAllInvocations" id="cdk-nextjs-standalone.NextjsImage.metricAllInvocations"></a>
+##### `metricAllInvocations` <a name="metricAllInvocations" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllInvocations"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.metricAllInvocations(props?: MetricOptions)
 ```
 
 Metric for the number of invocations of all Lambdas.
 
-###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.metricAllInvocations.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllInvocations.parameter.props"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
 
 ---
 
-##### `metricAllThrottles` <a name="metricAllThrottles" id="cdk-nextjs-standalone.NextjsImage.metricAllThrottles"></a>
+##### `metricAllThrottles` <a name="metricAllThrottles" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllThrottles"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.metricAllThrottles(props?: MetricOptions)
 ```
 
 Metric for the number of throttled invocations of all Lambdas.
 
-###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.metricAllThrottles.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllThrottles.parameter.props"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
 
 ---
 
-##### `metricAllUnreservedConcurrentExecutions` <a name="metricAllUnreservedConcurrentExecutions" id="cdk-nextjs-standalone.NextjsImage.metricAllUnreservedConcurrentExecutions"></a>
+##### `metricAllUnreservedConcurrentExecutions` <a name="metricAllUnreservedConcurrentExecutions" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllUnreservedConcurrentExecutions"></a>
 
 ```typescript
-import { NextjsImage } from 'cdk-nextjs-standalone'
+import { NextjsImage } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsImage.metricAllUnreservedConcurrentExecutions(props?: MetricOptions)
 ```
 
 Metric for the number of unreserved concurrent executions across all Lambdas.
 
-###### `props`<sup>Optional</sup> <a name="props" id="cdk-nextjs-standalone.NextjsImage.metricAllUnreservedConcurrentExecutions.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.metricAllUnreservedConcurrentExecutions.parameter.props"></a>
 
 - *Type:* aws-cdk-lib.aws_cloudwatch.MetricOptions
 
@@ -1719,29 +1719,29 @@ Metric for the number of unreserved concurrent executions across all Lambdas.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The architecture of this Lambda Function (this is an optional attribute and defaults to X86_64). |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.connections">connections</a></code> | <code>aws-cdk-lib.aws_ec2.Connections</code> | Access the Connections object. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.functionArn">functionArn</a></code> | <code>string</code> | ARN of this function. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.functionName">functionName</a></code> | <code>string</code> | Name of this function. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.grantPrincipal">grantPrincipal</a></code> | <code>aws-cdk-lib.aws_iam.IPrincipal</code> | The principal this Lambda Function is running as. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.isBoundToVpc">isBoundToVpc</a></code> | <code>boolean</code> | Whether or not this Lambda function was bound to a VPC. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.latestVersion">latestVersion</a></code> | <code>aws-cdk-lib.aws_lambda.IVersion</code> | The `$LATEST` version of this function. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.permissionsNode">permissionsNode</a></code> | <code>constructs.Node</code> | The construct node where permissions are attached. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.resourceArnsForGrantInvoke">resourceArnsForGrantInvoke</a></code> | <code>string[]</code> | The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke(). |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | Execution role associated with this function. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.currentVersion">currentVersion</a></code> | <code>aws-cdk-lib.aws_lambda.Version</code> | Returns a `lambda.Version` which represents the current version of this Lambda function. A new version will be created every time the function's configuration changes. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The LogGroup where the Lambda function's logs are made available. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime</code> | The runtime configured for this lambda. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.deadLetterQueue">deadLetterQueue</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | The DLQ (as queue) associated with this Lambda Function (this is an optional attribute). |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.deadLetterTopic">deadLetterTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | The DLQ (as topic) associated with this Lambda Function (this is an optional attribute). |
-| <code><a href="#cdk-nextjs-standalone.NextjsImage.property.timeout">timeout</a></code> | <code>aws-cdk-lib.Duration</code> | The timeout configured for this lambda. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The architecture of this Lambda Function (this is an optional attribute and defaults to X86_64). |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.connections">connections</a></code> | <code>aws-cdk-lib.aws_ec2.Connections</code> | Access the Connections object. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.functionArn">functionArn</a></code> | <code>string</code> | ARN of this function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.functionName">functionName</a></code> | <code>string</code> | Name of this function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.grantPrincipal">grantPrincipal</a></code> | <code>aws-cdk-lib.aws_iam.IPrincipal</code> | The principal this Lambda Function is running as. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.isBoundToVpc">isBoundToVpc</a></code> | <code>boolean</code> | Whether or not this Lambda function was bound to a VPC. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.latestVersion">latestVersion</a></code> | <code>aws-cdk-lib.aws_lambda.IVersion</code> | The `$LATEST` version of this function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.permissionsNode">permissionsNode</a></code> | <code>constructs.Node</code> | The construct node where permissions are attached. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.resourceArnsForGrantInvoke">resourceArnsForGrantInvoke</a></code> | <code>string[]</code> | The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke(). |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | Execution role associated with this function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.currentVersion">currentVersion</a></code> | <code>aws-cdk-lib.aws_lambda.Version</code> | Returns a `lambda.Version` which represents the current version of this Lambda function. A new version will be created every time the function's configuration changes. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The LogGroup where the Lambda function's logs are made available. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime</code> | The runtime configured for this lambda. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.deadLetterQueue">deadLetterQueue</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | The DLQ (as queue) associated with this Lambda Function (this is an optional attribute). |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.deadLetterTopic">deadLetterTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | The DLQ (as topic) associated with this Lambda Function (this is an optional attribute). |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.timeout">timeout</a></code> | <code>aws-cdk-lib.Duration</code> | The timeout configured for this lambda. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsImage.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -1753,7 +1753,7 @@ The tree node.
 
 ---
 
-##### `env`<sup>Required</sup> <a name="env" id="cdk-nextjs-standalone.NextjsImage.property.env"></a>
+##### `env`<sup>Required</sup> <a name="env" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.env"></a>
 
 ```typescript
 public readonly env: ResourceEnvironment;
@@ -1772,7 +1772,7 @@ that might be different than the stack they were imported into.
 
 ---
 
-##### `stack`<sup>Required</sup> <a name="stack" id="cdk-nextjs-standalone.NextjsImage.property.stack"></a>
+##### `stack`<sup>Required</sup> <a name="stack" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.stack"></a>
 
 ```typescript
 public readonly stack: Stack;
@@ -1784,7 +1784,7 @@ The stack in which this resource is defined.
 
 ---
 
-##### `architecture`<sup>Required</sup> <a name="architecture" id="cdk-nextjs-standalone.NextjsImage.property.architecture"></a>
+##### `architecture`<sup>Required</sup> <a name="architecture" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.architecture"></a>
 
 ```typescript
 public readonly architecture: Architecture;
@@ -1796,7 +1796,7 @@ The architecture of this Lambda Function (this is an optional attribute and defa
 
 ---
 
-##### `connections`<sup>Required</sup> <a name="connections" id="cdk-nextjs-standalone.NextjsImage.property.connections"></a>
+##### `connections`<sup>Required</sup> <a name="connections" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.connections"></a>
 
 ```typescript
 public readonly connections: Connections;
@@ -1810,7 +1810,7 @@ Will fail if not a VPC-enabled Lambda Function
 
 ---
 
-##### `functionArn`<sup>Required</sup> <a name="functionArn" id="cdk-nextjs-standalone.NextjsImage.property.functionArn"></a>
+##### `functionArn`<sup>Required</sup> <a name="functionArn" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.functionArn"></a>
 
 ```typescript
 public readonly functionArn: string;
@@ -1822,7 +1822,7 @@ ARN of this function.
 
 ---
 
-##### `functionName`<sup>Required</sup> <a name="functionName" id="cdk-nextjs-standalone.NextjsImage.property.functionName"></a>
+##### `functionName`<sup>Required</sup> <a name="functionName" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.functionName"></a>
 
 ```typescript
 public readonly functionName: string;
@@ -1834,7 +1834,7 @@ Name of this function.
 
 ---
 
-##### `grantPrincipal`<sup>Required</sup> <a name="grantPrincipal" id="cdk-nextjs-standalone.NextjsImage.property.grantPrincipal"></a>
+##### `grantPrincipal`<sup>Required</sup> <a name="grantPrincipal" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.grantPrincipal"></a>
 
 ```typescript
 public readonly grantPrincipal: IPrincipal;
@@ -1846,7 +1846,7 @@ The principal this Lambda Function is running as.
 
 ---
 
-##### `isBoundToVpc`<sup>Required</sup> <a name="isBoundToVpc" id="cdk-nextjs-standalone.NextjsImage.property.isBoundToVpc"></a>
+##### `isBoundToVpc`<sup>Required</sup> <a name="isBoundToVpc" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.isBoundToVpc"></a>
 
 ```typescript
 public readonly isBoundToVpc: boolean;
@@ -1860,7 +1860,7 @@ If this is is `false`, trying to access the `connections` object will fail.
 
 ---
 
-##### `latestVersion`<sup>Required</sup> <a name="latestVersion" id="cdk-nextjs-standalone.NextjsImage.property.latestVersion"></a>
+##### `latestVersion`<sup>Required</sup> <a name="latestVersion" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.latestVersion"></a>
 
 ```typescript
 public readonly latestVersion: IVersion;
@@ -1879,7 +1879,7 @@ function configuration, use `lambdaFunction.currentVersion` instead.
 
 ---
 
-##### `permissionsNode`<sup>Required</sup> <a name="permissionsNode" id="cdk-nextjs-standalone.NextjsImage.property.permissionsNode"></a>
+##### `permissionsNode`<sup>Required</sup> <a name="permissionsNode" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.permissionsNode"></a>
 
 ```typescript
 public readonly permissionsNode: Node;
@@ -1891,7 +1891,7 @@ The construct node where permissions are attached.
 
 ---
 
-##### `resourceArnsForGrantInvoke`<sup>Required</sup> <a name="resourceArnsForGrantInvoke" id="cdk-nextjs-standalone.NextjsImage.property.resourceArnsForGrantInvoke"></a>
+##### `resourceArnsForGrantInvoke`<sup>Required</sup> <a name="resourceArnsForGrantInvoke" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.resourceArnsForGrantInvoke"></a>
 
 ```typescript
 public readonly resourceArnsForGrantInvoke: string[];
@@ -1903,7 +1903,7 @@ The ARN(s) to put into the resource field of the generated IAM policy for grantI
 
 ---
 
-##### `role`<sup>Optional</sup> <a name="role" id="cdk-nextjs-standalone.NextjsImage.property.role"></a>
+##### `role`<sup>Optional</sup> <a name="role" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.role"></a>
 
 ```typescript
 public readonly role: IRole;
@@ -1915,7 +1915,7 @@ Execution role associated with this function.
 
 ---
 
-##### `currentVersion`<sup>Required</sup> <a name="currentVersion" id="cdk-nextjs-standalone.NextjsImage.property.currentVersion"></a>
+##### `currentVersion`<sup>Required</sup> <a name="currentVersion" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.currentVersion"></a>
 
 ```typescript
 public readonly currentVersion: Version;
@@ -1930,7 +1930,7 @@ prop when initializing the `lambda.Function`.
 
 ---
 
-##### `logGroup`<sup>Required</sup> <a name="logGroup" id="cdk-nextjs-standalone.NextjsImage.property.logGroup"></a>
+##### `logGroup`<sup>Required</sup> <a name="logGroup" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.logGroup"></a>
 
 ```typescript
 public readonly logGroup: ILogGroup;
@@ -1949,7 +1949,7 @@ to never expire even if it was configured with a different value.
 
 ---
 
-##### `runtime`<sup>Required</sup> <a name="runtime" id="cdk-nextjs-standalone.NextjsImage.property.runtime"></a>
+##### `runtime`<sup>Required</sup> <a name="runtime" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.runtime"></a>
 
 ```typescript
 public readonly runtime: Runtime;
@@ -1961,7 +1961,7 @@ The runtime configured for this lambda.
 
 ---
 
-##### `deadLetterQueue`<sup>Optional</sup> <a name="deadLetterQueue" id="cdk-nextjs-standalone.NextjsImage.property.deadLetterQueue"></a>
+##### `deadLetterQueue`<sup>Optional</sup> <a name="deadLetterQueue" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.deadLetterQueue"></a>
 
 ```typescript
 public readonly deadLetterQueue: IQueue;
@@ -1973,7 +1973,7 @@ The DLQ (as queue) associated with this Lambda Function (this is an optional att
 
 ---
 
-##### `deadLetterTopic`<sup>Optional</sup> <a name="deadLetterTopic" id="cdk-nextjs-standalone.NextjsImage.property.deadLetterTopic"></a>
+##### `deadLetterTopic`<sup>Optional</sup> <a name="deadLetterTopic" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.deadLetterTopic"></a>
 
 ```typescript
 public readonly deadLetterTopic: ITopic;
@@ -1985,7 +1985,7 @@ The DLQ (as topic) associated with this Lambda Function (this is an optional att
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="cdk-nextjs-standalone.NextjsImage.property.timeout"></a>
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@funkepublishing/cdk-nextjs-standalone.NextjsImage.property.timeout"></a>
 
 ```typescript
 public readonly timeout: Duration;
@@ -1998,39 +1998,39 @@ The timeout configured for this lambda.
 ---
 
 
-### NextjsInvalidation <a name="NextjsInvalidation" id="cdk-nextjs-standalone.NextjsInvalidation"></a>
+### NextjsInvalidation <a name="NextjsInvalidation" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation"></a>
 
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsInvalidation.Initializer"></a>
+#### Initializers <a name="Initializers" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.Initializer"></a>
 
 ```typescript
-import { NextjsInvalidation } from 'cdk-nextjs-standalone'
+import { NextjsInvalidation } from '@funkepublishing/cdk-nextjs-standalone'
 
 new NextjsInvalidation(scope: Construct, id: string, props: NextjsInvalidationProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps">NextjsInvalidationProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.props">props</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationProps">NextjsInvalidationProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsInvalidationProps">NextjsInvalidationProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationProps">NextjsInvalidationProps</a>
 
 ---
 
@@ -2038,11 +2038,11 @@ new NextjsInvalidation(scope: Construct, id: string, props: NextjsInvalidationPr
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsInvalidation.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsInvalidation.toString"></a>
+##### `toString` <a name="toString" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.toString"></a>
 
 ```typescript
 public toString(): string
@@ -2054,21 +2054,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsInvalidation.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsInvalidation.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.isConstruct"></a>
 
 ```typescript
-import { NextjsInvalidation } from 'cdk-nextjs-standalone'
+import { NextjsInvalidation } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsInvalidation.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsInvalidation.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -2080,11 +2080,11 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsInvalidation.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsInvalidation.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidation.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -2097,43 +2097,43 @@ The tree node.
 ---
 
 
-### NextjsRevalidation <a name="NextjsRevalidation" id="cdk-nextjs-standalone.NextjsRevalidation"></a>
+### NextjsRevalidation <a name="NextjsRevalidation" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation"></a>
 
 Builds the system for revalidating Next.js resources. This includes a Lambda function handler and queue system as well as the DynamoDB table and provider function.
 
 > [{@link https://github.com/serverless-stack/open-next/blob/main/README.md?plain=1#L65}]({@link https://github.com/serverless-stack/open-next/blob/main/README.md?plain=1#L65})
 
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsRevalidation.Initializer"></a>
+#### Initializers <a name="Initializers" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.Initializer"></a>
 
 ```typescript
-import { NextjsRevalidation } from 'cdk-nextjs-standalone'
+import { NextjsRevalidation } from '@funkepublishing/cdk-nextjs-standalone'
 
 new NextjsRevalidation(scope: Construct, id: string, props: NextjsRevalidationProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps">NextjsRevalidationProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.props">props</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps">NextjsRevalidationProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsRevalidationProps">NextjsRevalidationProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps">NextjsRevalidationProps</a>
 
 ---
 
@@ -2141,11 +2141,11 @@ new NextjsRevalidation(scope: Construct, id: string, props: NextjsRevalidationPr
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsRevalidation.toString"></a>
+##### `toString` <a name="toString" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.toString"></a>
 
 ```typescript
 public toString(): string
@@ -2157,21 +2157,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsRevalidation.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.isConstruct"></a>
 
 ```typescript
-import { NextjsRevalidation } from 'cdk-nextjs-standalone'
+import { NextjsRevalidation } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsRevalidation.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsRevalidation.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -2183,15 +2183,15 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.queue">queue</a></code> | <code>aws-cdk-lib.aws_sqs.Queue</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.queueFunction">queueFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.table">table</a></code> | <code>aws-cdk-lib.aws_dynamodb.TableV2</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidation.property.tableFunction">tableFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.property.queue">queue</a></code> | <code>aws-cdk-lib.aws_sqs.Queue</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.property.queueFunction">queueFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.property.table">table</a></code> | <code>aws-cdk-lib.aws_dynamodb.TableV2</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.property.tableFunction">tableFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsRevalidation.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -2203,7 +2203,7 @@ The tree node.
 
 ---
 
-##### `queue`<sup>Required</sup> <a name="queue" id="cdk-nextjs-standalone.NextjsRevalidation.property.queue"></a>
+##### `queue`<sup>Required</sup> <a name="queue" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.property.queue"></a>
 
 ```typescript
 public readonly queue: Queue;
@@ -2213,7 +2213,7 @@ public readonly queue: Queue;
 
 ---
 
-##### `queueFunction`<sup>Required</sup> <a name="queueFunction" id="cdk-nextjs-standalone.NextjsRevalidation.property.queueFunction"></a>
+##### `queueFunction`<sup>Required</sup> <a name="queueFunction" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.property.queueFunction"></a>
 
 ```typescript
 public readonly queueFunction: Function;
@@ -2223,7 +2223,7 @@ public readonly queueFunction: Function;
 
 ---
 
-##### `table`<sup>Required</sup> <a name="table" id="cdk-nextjs-standalone.NextjsRevalidation.property.table"></a>
+##### `table`<sup>Required</sup> <a name="table" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.property.table"></a>
 
 ```typescript
 public readonly table: TableV2;
@@ -2233,7 +2233,7 @@ public readonly table: TableV2;
 
 ---
 
-##### `tableFunction`<sup>Optional</sup> <a name="tableFunction" id="cdk-nextjs-standalone.NextjsRevalidation.property.tableFunction"></a>
+##### `tableFunction`<sup>Optional</sup> <a name="tableFunction" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidation.property.tableFunction"></a>
 
 ```typescript
 public readonly tableFunction: Function;
@@ -2244,41 +2244,41 @@ public readonly tableFunction: Function;
 ---
 
 
-### NextjsServer <a name="NextjsServer" id="cdk-nextjs-standalone.NextjsServer"></a>
+### NextjsServer <a name="NextjsServer" id="@funkepublishing/cdk-nextjs-standalone.NextjsServer"></a>
 
 Build a lambda function from a NextJS application to handle server-side rendering, API routes, and image optimization.
 
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsServer.Initializer"></a>
+#### Initializers <a name="Initializers" id="@funkepublishing/cdk-nextjs-standalone.NextjsServer.Initializer"></a>
 
 ```typescript
-import { NextjsServer } from 'cdk-nextjs-standalone'
+import { NextjsServer } from '@funkepublishing/cdk-nextjs-standalone'
 
 new NextjsServer(scope: Construct, id: string, props: NextjsServerProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsServer.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsServer.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsServer.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServerProps">NextjsServerProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer.Initializer.parameter.props">props</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerProps">NextjsServerProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsServer.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsServer.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsServer.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsServer.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsServer.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsServer.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsServerProps">NextjsServerProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerProps">NextjsServerProps</a>
 
 ---
 
@@ -2286,11 +2286,11 @@ new NextjsServer(scope: Construct, id: string, props: NextjsServerProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsServer.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsServer.toString"></a>
+##### `toString` <a name="toString" id="@funkepublishing/cdk-nextjs-standalone.NextjsServer.toString"></a>
 
 ```typescript
 public toString(): string
@@ -2302,21 +2302,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsServer.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsServer.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@funkepublishing/cdk-nextjs-standalone.NextjsServer.isConstruct"></a>
 
 ```typescript
-import { NextjsServer } from 'cdk-nextjs-standalone'
+import { NextjsServer } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsServer.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsServer.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@funkepublishing/cdk-nextjs-standalone.NextjsServer.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -2328,13 +2328,13 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsServer.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServer.property.lambdaFunction">lambdaFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsServer.property.configBucket">configBucket</a></code> | <code>aws-cdk-lib.aws_s3.Bucket</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer.property.lambdaFunction">lambdaFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer.property.configBucket">configBucket</a></code> | <code>aws-cdk-lib.aws_s3.Bucket</code> | *No description.* |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsServer.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@funkepublishing/cdk-nextjs-standalone.NextjsServer.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -2346,7 +2346,7 @@ The tree node.
 
 ---
 
-##### `lambdaFunction`<sup>Required</sup> <a name="lambdaFunction" id="cdk-nextjs-standalone.NextjsServer.property.lambdaFunction"></a>
+##### `lambdaFunction`<sup>Required</sup> <a name="lambdaFunction" id="@funkepublishing/cdk-nextjs-standalone.NextjsServer.property.lambdaFunction"></a>
 
 ```typescript
 public readonly lambdaFunction: Function;
@@ -2356,7 +2356,7 @@ public readonly lambdaFunction: Function;
 
 ---
 
-##### `configBucket`<sup>Optional</sup> <a name="configBucket" id="cdk-nextjs-standalone.NextjsServer.property.configBucket"></a>
+##### `configBucket`<sup>Optional</sup> <a name="configBucket" id="@funkepublishing/cdk-nextjs-standalone.NextjsServer.property.configBucket"></a>
 
 ```typescript
 public readonly configBucket: Bucket;
@@ -2367,44 +2367,44 @@ public readonly configBucket: Bucket;
 ---
 
 
-### NextjsStaticAssets <a name="NextjsStaticAssets" id="cdk-nextjs-standalone.NextjsStaticAssets"></a>
+### NextjsStaticAssets <a name="NextjsStaticAssets" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets"></a>
 
 Uploads Nextjs built static and public files to S3.
 
 Will inject resolved environment variables that are unresolved at synthesis
 in CloudFormation Custom Resource.
 
-#### Initializers <a name="Initializers" id="cdk-nextjs-standalone.NextjsStaticAssets.Initializer"></a>
+#### Initializers <a name="Initializers" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.Initializer"></a>
 
 ```typescript
-import { NextjsStaticAssets } from 'cdk-nextjs-standalone'
+import { NextjsStaticAssets } from '@funkepublishing/cdk-nextjs-standalone'
 
 new NextjsStaticAssets(scope: Construct, id: string, props: NextjsStaticAssetsProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.props">props</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps">NextjsStaticAssetsProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.props">props</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps">NextjsStaticAssetsProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps">NextjsStaticAssetsProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps">NextjsStaticAssetsProps</a>
 
 ---
 
@@ -2412,11 +2412,11 @@ new NextjsStaticAssets(scope: Construct, id: string, props: NextjsStaticAssetsPr
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="cdk-nextjs-standalone.NextjsStaticAssets.toString"></a>
+##### `toString` <a name="toString" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.toString"></a>
 
 ```typescript
 public toString(): string
@@ -2428,21 +2428,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="cdk-nextjs-standalone.NextjsStaticAssets.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.isConstruct"></a>
 
 ```typescript
-import { NextjsStaticAssets } from 'cdk-nextjs-standalone'
+import { NextjsStaticAssets } from '@funkepublishing/cdk-nextjs-standalone'
 
 NextjsStaticAssets.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="cdk-nextjs-standalone.NextjsStaticAssets.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -2454,12 +2454,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssets.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing assets. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing assets. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="cdk-nextjs-standalone.NextjsStaticAssets.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -2471,7 +2471,7 @@ The tree node.
 
 ---
 
-##### `bucket`<sup>Required</sup> <a name="bucket" id="cdk-nextjs-standalone.NextjsStaticAssets.property.bucket"></a>
+##### `bucket`<sup>Required</sup> <a name="bucket" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssets.property.bucket"></a>
 
 ```typescript
 public readonly bucket: IBucket;
@@ -2486,12 +2486,12 @@ Bucket containing assets.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### NextjsBucketDeploymentOverrides <a name="NextjsBucketDeploymentOverrides" id="cdk-nextjs-standalone.NextjsBucketDeploymentOverrides"></a>
+### NextjsBucketDeploymentOverrides <a name="NextjsBucketDeploymentOverrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentOverrides"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsBucketDeploymentOverrides.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentOverrides.Initializer"></a>
 
 ```typescript
-import { NextjsBucketDeploymentOverrides } from 'cdk-nextjs-standalone'
+import { NextjsBucketDeploymentOverrides } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsBucketDeploymentOverrides: NextjsBucketDeploymentOverrides = { ... }
 ```
@@ -2500,37 +2500,37 @@ const nextjsBucketDeploymentOverrides: NextjsBucketDeploymentOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides.property.customResourceProps">customResourceProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalCustomResourceProps">OptionalCustomResourceProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides.property.functionProps">functionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentOverrides.property.customResourceProps">customResourceProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps">OptionalCustomResourceProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentOverrides.property.functionProps">functionProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a></code> | *No description.* |
 
 ---
 
-##### `customResourceProps`<sup>Optional</sup> <a name="customResourceProps" id="cdk-nextjs-standalone.NextjsBucketDeploymentOverrides.property.customResourceProps"></a>
+##### `customResourceProps`<sup>Optional</sup> <a name="customResourceProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentOverrides.property.customResourceProps"></a>
 
 ```typescript
 public readonly customResourceProps: OptionalCustomResourceProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalCustomResourceProps">OptionalCustomResourceProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps">OptionalCustomResourceProps</a>
 
 ---
 
-##### `functionProps`<sup>Optional</sup> <a name="functionProps" id="cdk-nextjs-standalone.NextjsBucketDeploymentOverrides.property.functionProps"></a>
+##### `functionProps`<sup>Optional</sup> <a name="functionProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentOverrides.property.functionProps"></a>
 
 ```typescript
 public readonly functionProps: OptionalFunctionProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a>
 
 ---
 
-### NextjsBucketDeploymentProps <a name="NextjsBucketDeploymentProps" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps"></a>
+### NextjsBucketDeploymentProps <a name="NextjsBucketDeploymentProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.Initializer"></a>
 
 ```typescript
-import { NextjsBucketDeploymentProps } from 'cdk-nextjs-standalone'
+import { NextjsBucketDeploymentProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsBucketDeploymentProps: NextjsBucketDeploymentProps = { ... }
 ```
@@ -2539,20 +2539,20 @@ const nextjsBucketDeploymentProps: NextjsBucketDeploymentProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.asset">asset</a></code> | <code>aws-cdk-lib.aws_s3_assets.Asset</code> | Source `Asset`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationBucket">destinationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Destination S3 Bucket. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.debug">debug</a></code> | <code>boolean</code> | Enable verbose output of Custom Resource Lambda. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationKeyPrefix">destinationKeyPrefix</a></code> | <code>string</code> | Destination S3 Bucket Key Prefix. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a></code> | Override props for every construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects. Only applies if `zip` is `false`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.putConfig">putConfig</a></code> | <code>{[ key: string ]: {[ key: string ]: string}}</code> | Mapping of files to PUT options for `PutObjectCommand`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.queueSize">queueSize</a></code> | <code>number</code> | The number of files to upload in parallel. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.substitutionConfig">substitutionConfig</a></code> | <code>{[ key: string ]: string}</code> | Replace placeholders in all files in `asset`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.zip">zip</a></code> | <code>boolean</code> | If `true` then files will be zipped before writing to destination bucket. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.asset">asset</a></code> | <code>aws-cdk-lib.aws_s3_assets.Asset</code> | Source `Asset`. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationBucket">destinationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Destination S3 Bucket. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.debug">debug</a></code> | <code>boolean</code> | Enable verbose output of Custom Resource Lambda. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationKeyPrefix">destinationKeyPrefix</a></code> | <code>string</code> | Destination S3 Bucket Key Prefix. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects. Only applies if `zip` is `false`. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.putConfig">putConfig</a></code> | <code>{[ key: string ]: {[ key: string ]: string}}</code> | Mapping of files to PUT options for `PutObjectCommand`. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.queueSize">queueSize</a></code> | <code>number</code> | The number of files to upload in parallel. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.substitutionConfig">substitutionConfig</a></code> | <code>{[ key: string ]: string}</code> | Replace placeholders in all files in `asset`. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.zip">zip</a></code> | <code>boolean</code> | If `true` then files will be zipped before writing to destination bucket. |
 
 ---
 
-##### `asset`<sup>Required</sup> <a name="asset" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.asset"></a>
+##### `asset`<sup>Required</sup> <a name="asset" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.asset"></a>
 
 ```typescript
 public readonly asset: Asset;
@@ -2564,7 +2564,7 @@ Source `Asset`.
 
 ---
 
-##### `destinationBucket`<sup>Required</sup> <a name="destinationBucket" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationBucket"></a>
+##### `destinationBucket`<sup>Required</sup> <a name="destinationBucket" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationBucket"></a>
 
 ```typescript
 public readonly destinationBucket: IBucket;
@@ -2576,7 +2576,7 @@ Destination S3 Bucket.
 
 ---
 
-##### `debug`<sup>Optional</sup> <a name="debug" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.debug"></a>
+##### `debug`<sup>Optional</sup> <a name="debug" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.debug"></a>
 
 ```typescript
 public readonly debug: boolean;
@@ -2589,7 +2589,7 @@ Enable verbose output of Custom Resource Lambda.
 
 ---
 
-##### `destinationKeyPrefix`<sup>Optional</sup> <a name="destinationKeyPrefix" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationKeyPrefix"></a>
+##### `destinationKeyPrefix`<sup>Optional</sup> <a name="destinationKeyPrefix" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.destinationKeyPrefix"></a>
 
 ```typescript
 public readonly destinationKeyPrefix: string;
@@ -2601,19 +2601,19 @@ Destination S3 Bucket Key Prefix.
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsBucketDeploymentOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a>
 
 Override props for every construct.
 
 ---
 
-##### `prune`<sup>Optional</sup> <a name="prune" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.prune"></a>
+##### `prune`<sup>Optional</sup> <a name="prune" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.prune"></a>
 
 ```typescript
 public readonly prune: boolean;
@@ -2633,7 +2633,7 @@ will reference JS, CSS files that do not exist in S3 reslting in 404s.
 
 ---
 
-##### `putConfig`<sup>Optional</sup> <a name="putConfig" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.putConfig"></a>
+##### `putConfig`<sup>Optional</sup> <a name="putConfig" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.putConfig"></a>
 
 ```typescript
 public readonly putConfig: {[ key: string ]: {[ key: string ]: string}};
@@ -2653,7 +2653,7 @@ merged. Later entries override earlier entries.
 
 ---
 
-##### `queueSize`<sup>Optional</sup> <a name="queueSize" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.queueSize"></a>
+##### `queueSize`<sup>Optional</sup> <a name="queueSize" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.queueSize"></a>
 
 ```typescript
 public readonly queueSize: number;
@@ -2665,7 +2665,7 @@ The number of files to upload in parallel.
 
 ---
 
-##### `substitutionConfig`<sup>Optional</sup> <a name="substitutionConfig" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.substitutionConfig"></a>
+##### `substitutionConfig`<sup>Optional</sup> <a name="substitutionConfig" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.substitutionConfig"></a>
 
 ```typescript
 public readonly substitutionConfig: {[ key: string ]: string};
@@ -2681,7 +2681,7 @@ by values of record.
 
 ---
 
-##### `zip`<sup>Optional</sup> <a name="zip" id="cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.zip"></a>
+##### `zip`<sup>Optional</sup> <a name="zip" id="@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps.property.zip"></a>
 
 ```typescript
 public readonly zip: boolean;
@@ -2696,12 +2696,12 @@ Useful for Lambda functions.
 
 ---
 
-### NextjsBuildProps <a name="NextjsBuildProps" id="cdk-nextjs-standalone.NextjsBuildProps"></a>
+### NextjsBuildProps <a name="NextjsBuildProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsBuildProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.Initializer"></a>
 
 ```typescript
-import { NextjsBuildProps } from 'cdk-nextjs-standalone'
+import { NextjsBuildProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsBuildProps: NextjsBuildProps = { ... }
 ```
@@ -2710,17 +2710,17 @@ const nextjsBuildProps: NextjsBuildProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.buildPath">buildPath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsBuildProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.buildPath">buildPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
-##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsBuildProps.property.nextjsPath"></a>
+##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.nextjsPath"></a>
 
 ```typescript
 public readonly nextjsPath: string;
@@ -2732,7 +2732,7 @@ public readonly nextjsPath: string;
 
 ---
 
-##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.NextjsBuildProps.property.buildCommand"></a>
+##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.buildCommand"></a>
 
 ```typescript
 public readonly buildCommand: string;
@@ -2744,7 +2744,7 @@ public readonly buildCommand: string;
 
 ---
 
-##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.NextjsBuildProps.property.buildPath"></a>
+##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.buildPath"></a>
 
 ```typescript
 public readonly buildPath: string;
@@ -2756,7 +2756,7 @@ public readonly buildPath: string;
 
 ---
 
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsBuildProps.property.environment"></a>
+##### `environment`<sup>Optional</sup> <a name="environment" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.environment"></a>
 
 ```typescript
 public readonly environment: {[ key: string ]: string};
@@ -2768,7 +2768,7 @@ public readonly environment: {[ key: string ]: string};
 
 ---
 
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsBuildProps.property.quiet"></a>
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.quiet"></a>
 
 ```typescript
 public readonly quiet: boolean;
@@ -2780,7 +2780,7 @@ public readonly quiet: boolean;
 
 ---
 
-##### `skipBuild`<sup>Optional</sup> <a name="skipBuild" id="cdk-nextjs-standalone.NextjsBuildProps.property.skipBuild"></a>
+##### `skipBuild`<sup>Optional</sup> <a name="skipBuild" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.skipBuild"></a>
 
 ```typescript
 public readonly skipBuild: boolean;
@@ -2792,7 +2792,7 @@ public readonly skipBuild: boolean;
 
 ---
 
-##### `streaming`<sup>Optional</sup> <a name="streaming" id="cdk-nextjs-standalone.NextjsBuildProps.property.streaming"></a>
+##### `streaming`<sup>Optional</sup> <a name="streaming" id="@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps.property.streaming"></a>
 
 ```typescript
 public readonly streaming: boolean;
@@ -2804,12 +2804,12 @@ public readonly streaming: boolean;
 
 ---
 
-### NextjsConstructOverrides <a name="NextjsConstructOverrides" id="cdk-nextjs-standalone.NextjsConstructOverrides"></a>
+### NextjsConstructOverrides <a name="NextjsConstructOverrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsConstructOverrides.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.Initializer"></a>
 
 ```typescript
-import { NextjsConstructOverrides } from 'cdk-nextjs-standalone'
+import { NextjsConstructOverrides } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsConstructOverrides: NextjsConstructOverrides = { ... }
 ```
@@ -2818,200 +2818,103 @@ const nextjsConstructOverrides: NextjsConstructOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsBuildProps">nextjsBuildProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps">OptionalNextjsBuildProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsDistributionProps">nextjsDistributionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps">OptionalNextjsDistributionProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsDomainProps">nextjsDomainProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps">OptionalNextjsDomainProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsImageProps">nextjsImageProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsImageProps">OptionalNextjsImageProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsInvalidationProps">nextjsInvalidationProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsInvalidationProps">OptionalNextjsInvalidationProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsRevalidationProps">nextjsRevalidationProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsRevalidationProps">OptionalNextjsRevalidationProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsServerProps">nextjsServerProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps">OptionalNextjsServerProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsStaticAssetsProps">nextjsStaticAssetsProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps">OptionalNextjsStaticAssetsProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsBuildProps">nextjsBuildProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps">OptionalNextjsBuildProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsDistributionProps">nextjsDistributionProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps">OptionalNextjsDistributionProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsDomainProps">nextjsDomainProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps">OptionalNextjsDomainProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsImageProps">nextjsImageProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsImageProps">OptionalNextjsImageProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsInvalidationProps">nextjsInvalidationProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsInvalidationProps">OptionalNextjsInvalidationProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsRevalidationProps">nextjsRevalidationProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsRevalidationProps">OptionalNextjsRevalidationProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsServerProps">nextjsServerProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps">OptionalNextjsServerProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsStaticAssetsProps">nextjsStaticAssetsProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps">OptionalNextjsStaticAssetsProps</a></code> | *No description.* |
 
 ---
 
-##### `nextjsBuildProps`<sup>Optional</sup> <a name="nextjsBuildProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsBuildProps"></a>
+##### `nextjsBuildProps`<sup>Optional</sup> <a name="nextjsBuildProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsBuildProps"></a>
 
 ```typescript
 public readonly nextjsBuildProps: OptionalNextjsBuildProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps">OptionalNextjsBuildProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps">OptionalNextjsBuildProps</a>
 
 ---
 
-##### `nextjsDistributionProps`<sup>Optional</sup> <a name="nextjsDistributionProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsDistributionProps"></a>
+##### `nextjsDistributionProps`<sup>Optional</sup> <a name="nextjsDistributionProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsDistributionProps"></a>
 
 ```typescript
 public readonly nextjsDistributionProps: OptionalNextjsDistributionProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps">OptionalNextjsDistributionProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps">OptionalNextjsDistributionProps</a>
 
 ---
 
-##### `nextjsDomainProps`<sup>Optional</sup> <a name="nextjsDomainProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsDomainProps"></a>
+##### `nextjsDomainProps`<sup>Optional</sup> <a name="nextjsDomainProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsDomainProps"></a>
 
 ```typescript
 public readonly nextjsDomainProps: OptionalNextjsDomainProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps">OptionalNextjsDomainProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps">OptionalNextjsDomainProps</a>
 
 ---
 
-##### `nextjsImageProps`<sup>Optional</sup> <a name="nextjsImageProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsImageProps"></a>
+##### `nextjsImageProps`<sup>Optional</sup> <a name="nextjsImageProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsImageProps"></a>
 
 ```typescript
 public readonly nextjsImageProps: OptionalNextjsImageProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsImageProps">OptionalNextjsImageProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsImageProps">OptionalNextjsImageProps</a>
 
 ---
 
-##### `nextjsInvalidationProps`<sup>Optional</sup> <a name="nextjsInvalidationProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsInvalidationProps"></a>
+##### `nextjsInvalidationProps`<sup>Optional</sup> <a name="nextjsInvalidationProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsInvalidationProps"></a>
 
 ```typescript
 public readonly nextjsInvalidationProps: OptionalNextjsInvalidationProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsInvalidationProps">OptionalNextjsInvalidationProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsInvalidationProps">OptionalNextjsInvalidationProps</a>
 
 ---
 
-##### `nextjsRevalidationProps`<sup>Optional</sup> <a name="nextjsRevalidationProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsRevalidationProps"></a>
+##### `nextjsRevalidationProps`<sup>Optional</sup> <a name="nextjsRevalidationProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsRevalidationProps"></a>
 
 ```typescript
 public readonly nextjsRevalidationProps: OptionalNextjsRevalidationProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsRevalidationProps">OptionalNextjsRevalidationProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsRevalidationProps">OptionalNextjsRevalidationProps</a>
 
 ---
 
-##### `nextjsServerProps`<sup>Optional</sup> <a name="nextjsServerProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsServerProps"></a>
+##### `nextjsServerProps`<sup>Optional</sup> <a name="nextjsServerProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsServerProps"></a>
 
 ```typescript
 public readonly nextjsServerProps: OptionalNextjsServerProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsServerProps">OptionalNextjsServerProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps">OptionalNextjsServerProps</a>
 
 ---
 
-##### `nextjsStaticAssetsProps`<sup>Optional</sup> <a name="nextjsStaticAssetsProps" id="cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsStaticAssetsProps"></a>
+##### `nextjsStaticAssetsProps`<sup>Optional</sup> <a name="nextjsStaticAssetsProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides.property.nextjsStaticAssetsProps"></a>
 
 ```typescript
 public readonly nextjsStaticAssetsProps: OptionalNextjsStaticAssetsProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps">OptionalNextjsStaticAssetsProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps">OptionalNextjsStaticAssetsProps</a>
 
 ---
 
-### NextjsDistributionDefaults <a name="NextjsDistributionDefaults" id="cdk-nextjs-standalone.NextjsDistributionDefaults"></a>
+### NextjsDistributionOverrides <a name="NextjsDistributionOverrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsDistributionDefaults.Initializer"></a>
-
-```typescript
-import { NextjsDistributionDefaults } from 'cdk-nextjs-standalone'
-
-const nextjsDistributionDefaults: NextjsDistributionDefaults = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults.property.imageCachePolicy">imageCachePolicy</a></code> | <code>boolean</code> | Prevent the creation of a default cache policy for image requests. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults.property.imageResponseHeadersPolicy">imageResponseHeadersPolicy</a></code> | <code>boolean</code> | Prevent the creation of a default response headers policy for image requests. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults.property.serverCachePolicy">serverCachePolicy</a></code> | <code>boolean</code> | Prevent the creation of a default cache policy for server requests. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults.property.serverResponseHeadersPolicy">serverResponseHeadersPolicy</a></code> | <code>boolean</code> | Prevent the creation of a default response headers policy for server requests. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults.property.staticResponseHeadersPolicy">staticResponseHeadersPolicy</a></code> | <code>boolean</code> | Prevent the creation of a default response headers policy for static requests. |
-
----
-
-##### `imageCachePolicy`<sup>Optional</sup> <a name="imageCachePolicy" id="cdk-nextjs-standalone.NextjsDistributionDefaults.property.imageCachePolicy"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.Initializer"></a>
 
 ```typescript
-public readonly imageCachePolicy: boolean;
-```
-
-- *Type:* boolean
-- *Default:* false
-
-Prevent the creation of a default cache policy for image requests.
-
-Has no effect if a `imageBehaviorOptions.cachePolicy` is provided in {@link NextjsDistributionProps.overrides}
-
----
-
-##### `imageResponseHeadersPolicy`<sup>Optional</sup> <a name="imageResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsDistributionDefaults.property.imageResponseHeadersPolicy"></a>
-
-```typescript
-public readonly imageResponseHeadersPolicy: boolean;
-```
-
-- *Type:* boolean
-- *Default:* false
-
-Prevent the creation of a default response headers policy for image requests.
-
-Has no effect if a `imageBehaviorOptions.responseHeadersPolicy` is provided in {@link NextjsDistributionProps.overrides}
-
----
-
-##### `serverCachePolicy`<sup>Optional</sup> <a name="serverCachePolicy" id="cdk-nextjs-standalone.NextjsDistributionDefaults.property.serverCachePolicy"></a>
-
-```typescript
-public readonly serverCachePolicy: boolean;
-```
-
-- *Type:* boolean
-- *Default:* false
-
-Prevent the creation of a default cache policy for server requests.
-
-Has no effect if a `serverBehaviorOptions.cachePolicy` is provided in {@link NextjsDistributionProps.overrides}
-
----
-
-##### `serverResponseHeadersPolicy`<sup>Optional</sup> <a name="serverResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsDistributionDefaults.property.serverResponseHeadersPolicy"></a>
-
-```typescript
-public readonly serverResponseHeadersPolicy: boolean;
-```
-
-- *Type:* boolean
-- *Default:* false
-
-Prevent the creation of a default response headers policy for server requests.
-
-Has no effect if a `serverBehaviorOptions.responseHeadersPolicy` is provided in {@link NextjsDistributionProps.overrides}
-
----
-
-##### `staticResponseHeadersPolicy`<sup>Optional</sup> <a name="staticResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsDistributionDefaults.property.staticResponseHeadersPolicy"></a>
-
-```typescript
-public readonly staticResponseHeadersPolicy: boolean;
-```
-
-- *Type:* boolean
-- *Default:* false
-
-Prevent the creation of a default response headers policy for static requests.
-
-Has no effect if a `staticBehaviorOptions.responseHeadersPolicy` is provided in {@link NextjsDistributionProps.overrides}
-
----
-
-### NextjsDistributionOverrides <a name="NextjsDistributionOverrides" id="cdk-nextjs-standalone.NextjsDistributionOverrides"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsDistributionOverrides.Initializer"></a>
-
-```typescript
-import { NextjsDistributionOverrides } from 'cdk-nextjs-standalone'
+import { NextjsDistributionOverrides } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsDistributionOverrides: NextjsDistributionOverrides = { ... }
 ```
@@ -3020,44 +2923,44 @@ const nextjsDistributionOverrides: NextjsDistributionOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.distributionProps">distributionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps">OptionalDistributionProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.edgeFunctionProps">edgeFunctionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps">OptionalEdgeFunctionProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageBehaviorOptions">imageBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.AddBehaviorOptions</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageCachePolicyProps">imageCachePolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.CachePolicyProps</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageHttpOriginProps">imageHttpOriginProps</a></code> | <code>aws-cdk-lib.aws_cloudfront_origins.HttpOriginProps</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageResponseHeadersPolicyProps">imageResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.s3OriginProps">s3OriginProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps">OptionalS3OriginProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverBehaviorOptions">serverBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.AddBehaviorOptions</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverCachePolicyProps">serverCachePolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.CachePolicyProps</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverHttpOriginProps">serverHttpOriginProps</a></code> | <code>aws-cdk-lib.aws_cloudfront_origins.HttpOriginProps</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverResponseHeadersPolicyProps">serverResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticBehaviorOptions">staticBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.AddBehaviorOptions</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticResponseHeadersPolicyProps">staticResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides.property.viewerRequestFunctionProps">viewerRequestFunctionProps</a></code> | <code><a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps">ViewerRequestFunctionProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.distributionProps">distributionProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps">OptionalDistributionProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.edgeFunctionProps">edgeFunctionProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps">OptionalEdgeFunctionProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageBehaviorOptions">imageBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.AddBehaviorOptions</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageCachePolicyProps">imageCachePolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.CachePolicyProps</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageHttpOriginProps">imageHttpOriginProps</a></code> | <code>aws-cdk-lib.aws_cloudfront_origins.HttpOriginProps</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageResponseHeadersPolicyProps">imageResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.s3OriginProps">s3OriginProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps">OptionalS3OriginProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverBehaviorOptions">serverBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.AddBehaviorOptions</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverCachePolicyProps">serverCachePolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.CachePolicyProps</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverHttpOriginProps">serverHttpOriginProps</a></code> | <code>aws-cdk-lib.aws_cloudfront_origins.HttpOriginProps</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverResponseHeadersPolicyProps">serverResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticBehaviorOptions">staticBehaviorOptions</a></code> | <code>aws-cdk-lib.aws_cloudfront.AddBehaviorOptions</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticResponseHeadersPolicyProps">staticResponseHeadersPolicyProps</a></code> | <code>aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicyProps</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.viewerRequestFunctionProps">viewerRequestFunctionProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps">ViewerRequestFunctionProps</a></code> | *No description.* |
 
 ---
 
-##### `distributionProps`<sup>Optional</sup> <a name="distributionProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.distributionProps"></a>
+##### `distributionProps`<sup>Optional</sup> <a name="distributionProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.distributionProps"></a>
 
 ```typescript
 public readonly distributionProps: OptionalDistributionProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalDistributionProps">OptionalDistributionProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps">OptionalDistributionProps</a>
 
 ---
 
-##### `edgeFunctionProps`<sup>Optional</sup> <a name="edgeFunctionProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.edgeFunctionProps"></a>
+##### `edgeFunctionProps`<sup>Optional</sup> <a name="edgeFunctionProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.edgeFunctionProps"></a>
 
 ```typescript
 public readonly edgeFunctionProps: OptionalEdgeFunctionProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps">OptionalEdgeFunctionProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps">OptionalEdgeFunctionProps</a>
 
 ---
 
-##### `imageBehaviorOptions`<sup>Optional</sup> <a name="imageBehaviorOptions" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageBehaviorOptions"></a>
+##### `imageBehaviorOptions`<sup>Optional</sup> <a name="imageBehaviorOptions" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageBehaviorOptions"></a>
 
 ```typescript
 public readonly imageBehaviorOptions: AddBehaviorOptions;
@@ -3067,7 +2970,7 @@ public readonly imageBehaviorOptions: AddBehaviorOptions;
 
 ---
 
-##### `imageCachePolicyProps`<sup>Optional</sup> <a name="imageCachePolicyProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageCachePolicyProps"></a>
+##### `imageCachePolicyProps`<sup>Optional</sup> <a name="imageCachePolicyProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageCachePolicyProps"></a>
 
 ```typescript
 public readonly imageCachePolicyProps: CachePolicyProps;
@@ -3077,7 +2980,7 @@ public readonly imageCachePolicyProps: CachePolicyProps;
 
 ---
 
-##### `imageHttpOriginProps`<sup>Optional</sup> <a name="imageHttpOriginProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageHttpOriginProps"></a>
+##### `imageHttpOriginProps`<sup>Optional</sup> <a name="imageHttpOriginProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageHttpOriginProps"></a>
 
 ```typescript
 public readonly imageHttpOriginProps: HttpOriginProps;
@@ -3087,7 +2990,7 @@ public readonly imageHttpOriginProps: HttpOriginProps;
 
 ---
 
-##### `imageResponseHeadersPolicyProps`<sup>Optional</sup> <a name="imageResponseHeadersPolicyProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageResponseHeadersPolicyProps"></a>
+##### `imageResponseHeadersPolicyProps`<sup>Optional</sup> <a name="imageResponseHeadersPolicyProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.imageResponseHeadersPolicyProps"></a>
 
 ```typescript
 public readonly imageResponseHeadersPolicyProps: ResponseHeadersPolicyProps;
@@ -3097,17 +3000,17 @@ public readonly imageResponseHeadersPolicyProps: ResponseHeadersPolicyProps;
 
 ---
 
-##### `s3OriginProps`<sup>Optional</sup> <a name="s3OriginProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.s3OriginProps"></a>
+##### `s3OriginProps`<sup>Optional</sup> <a name="s3OriginProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.s3OriginProps"></a>
 
 ```typescript
 public readonly s3OriginProps: OptionalS3OriginProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalS3OriginProps">OptionalS3OriginProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps">OptionalS3OriginProps</a>
 
 ---
 
-##### `serverBehaviorOptions`<sup>Optional</sup> <a name="serverBehaviorOptions" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverBehaviorOptions"></a>
+##### `serverBehaviorOptions`<sup>Optional</sup> <a name="serverBehaviorOptions" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverBehaviorOptions"></a>
 
 ```typescript
 public readonly serverBehaviorOptions: AddBehaviorOptions;
@@ -3117,7 +3020,7 @@ public readonly serverBehaviorOptions: AddBehaviorOptions;
 
 ---
 
-##### `serverCachePolicyProps`<sup>Optional</sup> <a name="serverCachePolicyProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverCachePolicyProps"></a>
+##### `serverCachePolicyProps`<sup>Optional</sup> <a name="serverCachePolicyProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverCachePolicyProps"></a>
 
 ```typescript
 public readonly serverCachePolicyProps: CachePolicyProps;
@@ -3127,7 +3030,7 @@ public readonly serverCachePolicyProps: CachePolicyProps;
 
 ---
 
-##### `serverHttpOriginProps`<sup>Optional</sup> <a name="serverHttpOriginProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverHttpOriginProps"></a>
+##### `serverHttpOriginProps`<sup>Optional</sup> <a name="serverHttpOriginProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverHttpOriginProps"></a>
 
 ```typescript
 public readonly serverHttpOriginProps: HttpOriginProps;
@@ -3137,7 +3040,7 @@ public readonly serverHttpOriginProps: HttpOriginProps;
 
 ---
 
-##### `serverResponseHeadersPolicyProps`<sup>Optional</sup> <a name="serverResponseHeadersPolicyProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverResponseHeadersPolicyProps"></a>
+##### `serverResponseHeadersPolicyProps`<sup>Optional</sup> <a name="serverResponseHeadersPolicyProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.serverResponseHeadersPolicyProps"></a>
 
 ```typescript
 public readonly serverResponseHeadersPolicyProps: ResponseHeadersPolicyProps;
@@ -3147,7 +3050,7 @@ public readonly serverResponseHeadersPolicyProps: ResponseHeadersPolicyProps;
 
 ---
 
-##### `staticBehaviorOptions`<sup>Optional</sup> <a name="staticBehaviorOptions" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticBehaviorOptions"></a>
+##### `staticBehaviorOptions`<sup>Optional</sup> <a name="staticBehaviorOptions" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticBehaviorOptions"></a>
 
 ```typescript
 public readonly staticBehaviorOptions: AddBehaviorOptions;
@@ -3157,7 +3060,7 @@ public readonly staticBehaviorOptions: AddBehaviorOptions;
 
 ---
 
-##### `staticResponseHeadersPolicyProps`<sup>Optional</sup> <a name="staticResponseHeadersPolicyProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticResponseHeadersPolicyProps"></a>
+##### `staticResponseHeadersPolicyProps`<sup>Optional</sup> <a name="staticResponseHeadersPolicyProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.staticResponseHeadersPolicyProps"></a>
 
 ```typescript
 public readonly staticResponseHeadersPolicyProps: ResponseHeadersPolicyProps;
@@ -3167,22 +3070,22 @@ public readonly staticResponseHeadersPolicyProps: ResponseHeadersPolicyProps;
 
 ---
 
-##### `viewerRequestFunctionProps`<sup>Optional</sup> <a name="viewerRequestFunctionProps" id="cdk-nextjs-standalone.NextjsDistributionOverrides.property.viewerRequestFunctionProps"></a>
+##### `viewerRequestFunctionProps`<sup>Optional</sup> <a name="viewerRequestFunctionProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides.property.viewerRequestFunctionProps"></a>
 
 ```typescript
 public readonly viewerRequestFunctionProps: ViewerRequestFunctionProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps">ViewerRequestFunctionProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps">ViewerRequestFunctionProps</a>
 
 ---
 
-### NextjsDistributionProps <a name="NextjsDistributionProps" id="cdk-nextjs-standalone.NextjsDistributionProps"></a>
+### NextjsDistributionProps <a name="NextjsDistributionProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsDistributionProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.Initializer"></a>
 
 ```typescript
-import { NextjsDistributionProps } from 'cdk-nextjs-standalone'
+import { NextjsDistributionProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsDistributionProps: NextjsDistributionProps = { ... }
 ```
@@ -3191,22 +3094,21 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.imageOptFunction">imageOptFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to optimize images. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | Override props for every construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.supressDefaults">supressDefaults</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults">NextjsDistributionDefaults</a></code> | Supress the creation of default policies if none are provided by you. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.imageOptFunction">imageOptFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to optimize images. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
-##### `imageOptFunction`<sup>Required</sup> <a name="imageOptFunction" id="cdk-nextjs-standalone.NextjsDistributionProps.property.imageOptFunction"></a>
+##### `imageOptFunction`<sup>Required</sup> <a name="imageOptFunction" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.imageOptFunction"></a>
 
 ```typescript
 public readonly imageOptFunction: IFunction;
@@ -3220,19 +3122,19 @@ Must be provided if you want to serve dynamic requests.
 
 ---
 
-##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild"></a>
+##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.nextBuild"></a>
 
 ```typescript
 public readonly nextBuild: NextjsBuild;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 > [{@link NextjsBuild }]({@link NextjsBuild })
 
 ---
 
-##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath"></a>
+##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.nextjsPath"></a>
 
 ```typescript
 public readonly nextjsPath: string;
@@ -3244,7 +3146,7 @@ public readonly nextjsPath: string;
 
 ---
 
-##### `serverFunction`<sup>Required</sup> <a name="serverFunction" id="cdk-nextjs-standalone.NextjsDistributionProps.property.serverFunction"></a>
+##### `serverFunction`<sup>Required</sup> <a name="serverFunction" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.serverFunction"></a>
 
 ```typescript
 public readonly serverFunction: IFunction;
@@ -3258,7 +3160,7 @@ Must be provided if you want to serve dynamic requests.
 
 ---
 
-##### `staticAssetsBucket`<sup>Required</sup> <a name="staticAssetsBucket" id="cdk-nextjs-standalone.NextjsDistributionProps.property.staticAssetsBucket"></a>
+##### `staticAssetsBucket`<sup>Required</sup> <a name="staticAssetsBucket" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.staticAssetsBucket"></a>
 
 ```typescript
 public readonly staticAssetsBucket: IBucket;
@@ -3272,7 +3174,7 @@ Must be provided if you want to serve static files.
 
 ---
 
-##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsDistributionProps.property.basePath"></a>
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.basePath"></a>
 
 ```typescript
 public readonly basePath: string;
@@ -3284,7 +3186,7 @@ public readonly basePath: string;
 
 ---
 
-##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsDistributionProps.property.distribution"></a>
+##### `distribution`<sup>Optional</sup> <a name="distribution" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.distribution"></a>
 
 ```typescript
 public readonly distribution: Distribution;
@@ -3296,7 +3198,7 @@ public readonly distribution: Distribution;
 
 ---
 
-##### `functionUrlAuthType`<sup>Optional</sup> <a name="functionUrlAuthType" id="cdk-nextjs-standalone.NextjsDistributionProps.property.functionUrlAuthType"></a>
+##### `functionUrlAuthType`<sup>Optional</sup> <a name="functionUrlAuthType" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.functionUrlAuthType"></a>
 
 ```typescript
 public readonly functionUrlAuthType: FunctionUrlAuthType;
@@ -3309,31 +3211,31 @@ Override lambda function url auth type.
 
 ---
 
-##### `nextDomain`<sup>Optional</sup> <a name="nextDomain" id="cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain"></a>
+##### `nextDomain`<sup>Optional</sup> <a name="nextDomain" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain"></a>
 
 ```typescript
 public readonly nextDomain: NextjsDomain;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a>
 
 > [{@link NextjsDomain }]({@link NextjsDomain })
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.NextjsDistributionProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsDistributionOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a>
 
 Override props for every construct.
 
 ---
 
-##### `streaming`<sup>Optional</sup> <a name="streaming" id="cdk-nextjs-standalone.NextjsDistributionProps.property.streaming"></a>
+##### `streaming`<sup>Optional</sup> <a name="streaming" id="@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps.property.streaming"></a>
 
 ```typescript
 public readonly streaming: boolean;
@@ -3345,24 +3247,12 @@ public readonly streaming: boolean;
 
 ---
 
-##### `supressDefaults`<sup>Optional</sup> <a name="supressDefaults" id="cdk-nextjs-standalone.NextjsDistributionProps.property.supressDefaults"></a>
+### NextjsDomainOverrides <a name="NextjsDomainOverrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides"></a>
+
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides.Initializer"></a>
 
 ```typescript
-public readonly supressDefaults: NextjsDistributionDefaults;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionDefaults">NextjsDistributionDefaults</a>
-
-Supress the creation of default policies if none are provided by you.
-
----
-
-### NextjsDomainOverrides <a name="NextjsDomainOverrides" id="cdk-nextjs-standalone.NextjsDomainOverrides"></a>
-
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsDomainOverrides.Initializer"></a>
-
-```typescript
-import { NextjsDomainOverrides } from 'cdk-nextjs-standalone'
+import { NextjsDomainOverrides } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsDomainOverrides: NextjsDomainOverrides = { ... }
 ```
@@ -3371,59 +3261,59 @@ const nextjsDomainOverrides: NextjsDomainOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainOverrides.property.aaaaRecordProps">aaaaRecordProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps">OptionalAaaaRecordProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainOverrides.property.aRecordProps">aRecordProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalARecordProps">OptionalARecordProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainOverrides.property.certificateProps">certificateProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps">OptionalCertificateProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainOverrides.property.hostedZoneProviderProps">hostedZoneProviderProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalHostedZoneProviderProps">OptionalHostedZoneProviderProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides.property.aaaaRecordProps">aaaaRecordProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps">OptionalAaaaRecordProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides.property.aRecordProps">aRecordProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps">OptionalARecordProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides.property.certificateProps">certificateProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps">OptionalCertificateProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides.property.hostedZoneProviderProps">hostedZoneProviderProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalHostedZoneProviderProps">OptionalHostedZoneProviderProps</a></code> | *No description.* |
 
 ---
 
-##### `aaaaRecordProps`<sup>Optional</sup> <a name="aaaaRecordProps" id="cdk-nextjs-standalone.NextjsDomainOverrides.property.aaaaRecordProps"></a>
+##### `aaaaRecordProps`<sup>Optional</sup> <a name="aaaaRecordProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides.property.aaaaRecordProps"></a>
 
 ```typescript
 public readonly aaaaRecordProps: OptionalAaaaRecordProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps">OptionalAaaaRecordProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps">OptionalAaaaRecordProps</a>
 
 ---
 
-##### `aRecordProps`<sup>Optional</sup> <a name="aRecordProps" id="cdk-nextjs-standalone.NextjsDomainOverrides.property.aRecordProps"></a>
+##### `aRecordProps`<sup>Optional</sup> <a name="aRecordProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides.property.aRecordProps"></a>
 
 ```typescript
 public readonly aRecordProps: OptionalARecordProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalARecordProps">OptionalARecordProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps">OptionalARecordProps</a>
 
 ---
 
-##### `certificateProps`<sup>Optional</sup> <a name="certificateProps" id="cdk-nextjs-standalone.NextjsDomainOverrides.property.certificateProps"></a>
+##### `certificateProps`<sup>Optional</sup> <a name="certificateProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides.property.certificateProps"></a>
 
 ```typescript
 public readonly certificateProps: OptionalCertificateProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalCertificateProps">OptionalCertificateProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps">OptionalCertificateProps</a>
 
 ---
 
-##### `hostedZoneProviderProps`<sup>Optional</sup> <a name="hostedZoneProviderProps" id="cdk-nextjs-standalone.NextjsDomainOverrides.property.hostedZoneProviderProps"></a>
+##### `hostedZoneProviderProps`<sup>Optional</sup> <a name="hostedZoneProviderProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides.property.hostedZoneProviderProps"></a>
 
 ```typescript
 public readonly hostedZoneProviderProps: OptionalHostedZoneProviderProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalHostedZoneProviderProps">OptionalHostedZoneProviderProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalHostedZoneProviderProps">OptionalHostedZoneProviderProps</a>
 
 ---
 
-### NextjsDomainProps <a name="NextjsDomainProps" id="cdk-nextjs-standalone.NextjsDomainProps"></a>
+### NextjsDomainProps <a name="NextjsDomainProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsDomainProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.Initializer"></a>
 
 ```typescript
-import { NextjsDomainProps } from 'cdk-nextjs-standalone'
+import { NextjsDomainProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsDomainProps: NextjsDomainProps = { ... }
 ```
@@ -3432,16 +3322,16 @@ const nextjsDomainProps: NextjsDomainProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.domainName">domainName</a></code> | <code>string</code> | An easy to remember address of your website. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.alternateNames">alternateNames</a></code> | <code>string[]</code> | Alternate domain names that should route to the Cloudfront Distribution. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | If this prop is `undefined` then an ACM `Certificate` will be created based on {@link NextjsDomainProps.domainName} with DNS Validation. This prop allows you to control the TLS/SSL certificate created. The certificate you create must be in the `us-east-1` (N. Virginia) region as required by AWS CloudFront. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.certificateDomainName">certificateDomainName</a></code> | <code>string</code> | The domain name used in this construct when creating an ACM `Certificate`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | You must create the hosted zone out-of-band. |
-| <code><a href="#cdk-nextjs-standalone.NextjsDomainProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.property.domainName">domainName</a></code> | <code>string</code> | An easy to remember address of your website. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.property.alternateNames">alternateNames</a></code> | <code>string[]</code> | Alternate domain names that should route to the Cloudfront Distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | If this prop is `undefined` then an ACM `Certificate` will be created based on {@link NextjsDomainProps.domainName} with DNS Validation. This prop allows you to control the TLS/SSL certificate created. The certificate you create must be in the `us-east-1` (N. Virginia) region as required by AWS CloudFront. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.property.certificateDomainName">certificateDomainName</a></code> | <code>string</code> | The domain name used in this construct when creating an ACM `Certificate`. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | You must create the hosted zone out-of-band. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a></code> | Override props for every construct. |
 
 ---
 
-##### `domainName`<sup>Required</sup> <a name="domainName" id="cdk-nextjs-standalone.NextjsDomainProps.property.domainName"></a>
+##### `domainName`<sup>Required</sup> <a name="domainName" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.property.domainName"></a>
 
 ```typescript
 public readonly domainName: string;
@@ -3465,7 +3355,7 @@ ACM `Certificate` if {@link NextjsDomainProps.certificate} and
 ```
 
 
-##### `alternateNames`<sup>Optional</sup> <a name="alternateNames" id="cdk-nextjs-standalone.NextjsDomainProps.property.alternateNames"></a>
+##### `alternateNames`<sup>Optional</sup> <a name="alternateNames" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.property.alternateNames"></a>
 
 ```typescript
 public readonly alternateNames: string[];
@@ -3500,7 +3390,7 @@ alternative names specified here.
 ```
 
 
-##### `certificate`<sup>Optional</sup> <a name="certificate" id="cdk-nextjs-standalone.NextjsDomainProps.property.certificate"></a>
+##### `certificate`<sup>Optional</sup> <a name="certificate" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.property.certificate"></a>
 
 ```typescript
 public readonly certificate: ICertificate;
@@ -3514,7 +3404,7 @@ Set this option if you have an existing certificate in the `us-east-1` region in
 
 ---
 
-##### `certificateDomainName`<sup>Optional</sup> <a name="certificateDomainName" id="cdk-nextjs-standalone.NextjsDomainProps.property.certificateDomainName"></a>
+##### `certificateDomainName`<sup>Optional</sup> <a name="certificateDomainName" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.property.certificateDomainName"></a>
 
 ```typescript
 public readonly certificateDomainName: string;
@@ -3533,7 +3423,7 @@ If {@link NextjsDomainProps.certificate} is passed, then this prop is ignored.
 
 ---
 
-##### `hostedZone`<sup>Optional</sup> <a name="hostedZone" id="cdk-nextjs-standalone.NextjsDomainProps.property.hostedZone"></a>
+##### `hostedZone`<sup>Optional</sup> <a name="hostedZone" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.property.hostedZone"></a>
 
 ```typescript
 public readonly hostedZone: IHostedZone;
@@ -3549,24 +3439,24 @@ Alternatively if this prop is `undefined`, then the hosted zone will be
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.NextjsDomainProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsDomainOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a>
 
 Override props for every construct.
 
 ---
 
-### NextjsImageOverrides <a name="NextjsImageOverrides" id="cdk-nextjs-standalone.NextjsImageOverrides"></a>
+### NextjsImageOverrides <a name="NextjsImageOverrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsImageOverrides"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsImageOverrides.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsImageOverrides.Initializer"></a>
 
 ```typescript
-import { NextjsImageOverrides } from 'cdk-nextjs-standalone'
+import { NextjsImageOverrides } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsImageOverrides: NextjsImageOverrides = { ... }
 ```
@@ -3575,26 +3465,26 @@ const nextjsImageOverrides: NextjsImageOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageOverrides.property.functionProps">functionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageOverrides.property.functionProps">functionProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a></code> | *No description.* |
 
 ---
 
-##### `functionProps`<sup>Optional</sup> <a name="functionProps" id="cdk-nextjs-standalone.NextjsImageOverrides.property.functionProps"></a>
+##### `functionProps`<sup>Optional</sup> <a name="functionProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsImageOverrides.property.functionProps"></a>
 
 ```typescript
 public readonly functionProps: OptionalFunctionProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a>
 
 ---
 
-### NextjsImageProps <a name="NextjsImageProps" id="cdk-nextjs-standalone.NextjsImageProps"></a>
+### NextjsImageProps <a name="NextjsImageProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsImageProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsImageProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsImageProps.Initializer"></a>
 
 ```typescript
-import { NextjsImageProps } from 'cdk-nextjs-standalone'
+import { NextjsImageProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsImageProps: NextjsImageProps = { ... }
 ```
@@ -3603,14 +3493,14 @@ const nextjsImageProps: NextjsImageProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
-| <code><a href="#cdk-nextjs-standalone.NextjsImageProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageProps.property.nextBuild">nextBuild</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a></code> | Override props for every construct. |
 
 ---
 
-##### `bucket`<sup>Required</sup> <a name="bucket" id="cdk-nextjs-standalone.NextjsImageProps.property.bucket"></a>
+##### `bucket`<sup>Required</sup> <a name="bucket" id="@funkepublishing/cdk-nextjs-standalone.NextjsImageProps.property.bucket"></a>
 
 ```typescript
 public readonly bucket: IBucket;
@@ -3622,19 +3512,19 @@ The S3 bucket holding application images.
 
 ---
 
-##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.NextjsImageProps.property.nextBuild"></a>
+##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="@funkepublishing/cdk-nextjs-standalone.NextjsImageProps.property.nextBuild"></a>
 
 ```typescript
 public readonly nextBuild: NextjsBuild;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 > [{@link NextjsBuild }]({@link NextjsBuild })
 
 ---
 
-##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="cdk-nextjs-standalone.NextjsImageProps.property.lambdaOptions"></a>
+##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="@funkepublishing/cdk-nextjs-standalone.NextjsImageProps.property.lambdaOptions"></a>
 
 ```typescript
 public readonly lambdaOptions: FunctionOptions;
@@ -3646,24 +3536,24 @@ Override function properties.
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.NextjsImageProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsImageProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsImageOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a>
 
 Override props for every construct.
 
 ---
 
-### NextjsInvalidationOverrides <a name="NextjsInvalidationOverrides" id="cdk-nextjs-standalone.NextjsInvalidationOverrides"></a>
+### NextjsInvalidationOverrides <a name="NextjsInvalidationOverrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationOverrides"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsInvalidationOverrides.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationOverrides.Initializer"></a>
 
 ```typescript
-import { NextjsInvalidationOverrides } from 'cdk-nextjs-standalone'
+import { NextjsInvalidationOverrides } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsInvalidationOverrides: NextjsInvalidationOverrides = { ... }
 ```
@@ -3672,11 +3562,11 @@ const nextjsInvalidationOverrides: NextjsInvalidationOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsInvalidationOverrides.property.awsCustomResourceProps">awsCustomResourceProps</a></code> | <code>aws-cdk-lib.custom_resources.AwsCustomResourceProps</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationOverrides.property.awsCustomResourceProps">awsCustomResourceProps</a></code> | <code>aws-cdk-lib.custom_resources.AwsCustomResourceProps</code> | *No description.* |
 
 ---
 
-##### `awsCustomResourceProps`<sup>Optional</sup> <a name="awsCustomResourceProps" id="cdk-nextjs-standalone.NextjsInvalidationOverrides.property.awsCustomResourceProps"></a>
+##### `awsCustomResourceProps`<sup>Optional</sup> <a name="awsCustomResourceProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationOverrides.property.awsCustomResourceProps"></a>
 
 ```typescript
 public readonly awsCustomResourceProps: AwsCustomResourceProps;
@@ -3686,12 +3576,12 @@ public readonly awsCustomResourceProps: AwsCustomResourceProps;
 
 ---
 
-### NextjsInvalidationProps <a name="NextjsInvalidationProps" id="cdk-nextjs-standalone.NextjsInvalidationProps"></a>
+### NextjsInvalidationProps <a name="NextjsInvalidationProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsInvalidationProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationProps.Initializer"></a>
 
 ```typescript
-import { NextjsInvalidationProps } from 'cdk-nextjs-standalone'
+import { NextjsInvalidationProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsInvalidationProps: NextjsInvalidationProps = { ... }
 ```
@@ -3700,13 +3590,13 @@ const nextjsInvalidationProps: NextjsInvalidationProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps.property.dependencies">dependencies</a></code> | <code>constructs.Construct[]</code> | Constructs that should complete before invalidating CloudFront Distribution. |
-| <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | CloudFront Distribution to invalidate. |
-| <code><a href="#cdk-nextjs-standalone.NextjsInvalidationProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationProps.property.dependencies">dependencies</a></code> | <code>constructs.Construct[]</code> | Constructs that should complete before invalidating CloudFront Distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | CloudFront Distribution to invalidate. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a></code> | Override props for every construct. |
 
 ---
 
-##### `dependencies`<sup>Required</sup> <a name="dependencies" id="cdk-nextjs-standalone.NextjsInvalidationProps.property.dependencies"></a>
+##### `dependencies`<sup>Required</sup> <a name="dependencies" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationProps.property.dependencies"></a>
 
 ```typescript
 public readonly dependencies: Construct[];
@@ -3720,7 +3610,7 @@ Useful for assets that must be deployed/updated before invalidating.
 
 ---
 
-##### `distribution`<sup>Required</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsInvalidationProps.property.distribution"></a>
+##### `distribution`<sup>Required</sup> <a name="distribution" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationProps.property.distribution"></a>
 
 ```typescript
 public readonly distribution: IDistribution;
@@ -3732,26 +3622,26 @@ CloudFront Distribution to invalidate.
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.NextjsInvalidationProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsInvalidationOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a>
 
 Override props for every construct.
 
 ---
 
-### NextjsOverrides <a name="NextjsOverrides" id="cdk-nextjs-standalone.NextjsOverrides"></a>
+### NextjsOverrides <a name="NextjsOverrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsOverrides"></a>
 
 Override props for every construct.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsOverrides.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.Initializer"></a>
 
 ```typescript
-import { NextjsOverrides } from 'cdk-nextjs-standalone'
+import { NextjsOverrides } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsOverrides: NextjsOverrides = { ... }
 ```
@@ -3760,114 +3650,114 @@ const nextjsOverrides: NextjsOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjs">nextjs</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsConstructOverrides">NextjsConstructOverrides</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsBucketDeployment">nextjsBucketDeployment</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsDistribution">nextjsDistribution</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsDomain">nextjsDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsImage">nextjsImage</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsInvalidation">nextjsInvalidation</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsRevalidation">nextjsRevalidation</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsServer">nextjsServer</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsOverrides.property.nextjsStaticAssets">nextjsStaticAssets</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjs">nextjs</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides">NextjsConstructOverrides</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsBucketDeployment">nextjsBucketDeployment</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsDistribution">nextjsDistribution</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsDomain">nextjsDomain</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsImage">nextjsImage</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsInvalidation">nextjsInvalidation</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsRevalidation">nextjsRevalidation</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsServer">nextjsServer</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsStaticAssets">nextjsStaticAssets</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a></code> | *No description.* |
 
 ---
 
-##### `nextjs`<sup>Optional</sup> <a name="nextjs" id="cdk-nextjs-standalone.NextjsOverrides.property.nextjs"></a>
+##### `nextjs`<sup>Optional</sup> <a name="nextjs" id="@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjs"></a>
 
 ```typescript
 public readonly nextjs: NextjsConstructOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsConstructOverrides">NextjsConstructOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsConstructOverrides">NextjsConstructOverrides</a>
 
 ---
 
-##### `nextjsBucketDeployment`<sup>Optional</sup> <a name="nextjsBucketDeployment" id="cdk-nextjs-standalone.NextjsOverrides.property.nextjsBucketDeployment"></a>
+##### `nextjsBucketDeployment`<sup>Optional</sup> <a name="nextjsBucketDeployment" id="@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsBucketDeployment"></a>
 
 ```typescript
 public readonly nextjsBucketDeployment: NextjsBucketDeploymentOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a>
 
 ---
 
-##### `nextjsDistribution`<sup>Optional</sup> <a name="nextjsDistribution" id="cdk-nextjs-standalone.NextjsOverrides.property.nextjsDistribution"></a>
+##### `nextjsDistribution`<sup>Optional</sup> <a name="nextjsDistribution" id="@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsDistribution"></a>
 
 ```typescript
 public readonly nextjsDistribution: NextjsDistributionOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a>
 
 ---
 
-##### `nextjsDomain`<sup>Optional</sup> <a name="nextjsDomain" id="cdk-nextjs-standalone.NextjsOverrides.property.nextjsDomain"></a>
+##### `nextjsDomain`<sup>Optional</sup> <a name="nextjsDomain" id="@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsDomain"></a>
 
 ```typescript
 public readonly nextjsDomain: NextjsDomainOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a>
 
 ---
 
-##### `nextjsImage`<sup>Optional</sup> <a name="nextjsImage" id="cdk-nextjs-standalone.NextjsOverrides.property.nextjsImage"></a>
+##### `nextjsImage`<sup>Optional</sup> <a name="nextjsImage" id="@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsImage"></a>
 
 ```typescript
 public readonly nextjsImage: NextjsImageOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a>
 
 ---
 
-##### `nextjsInvalidation`<sup>Optional</sup> <a name="nextjsInvalidation" id="cdk-nextjs-standalone.NextjsOverrides.property.nextjsInvalidation"></a>
+##### `nextjsInvalidation`<sup>Optional</sup> <a name="nextjsInvalidation" id="@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsInvalidation"></a>
 
 ```typescript
 public readonly nextjsInvalidation: NextjsInvalidationOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a>
 
 ---
 
-##### `nextjsRevalidation`<sup>Optional</sup> <a name="nextjsRevalidation" id="cdk-nextjs-standalone.NextjsOverrides.property.nextjsRevalidation"></a>
+##### `nextjsRevalidation`<sup>Optional</sup> <a name="nextjsRevalidation" id="@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsRevalidation"></a>
 
 ```typescript
 public readonly nextjsRevalidation: NextjsRevalidationOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a>
 
 ---
 
-##### `nextjsServer`<sup>Optional</sup> <a name="nextjsServer" id="cdk-nextjs-standalone.NextjsOverrides.property.nextjsServer"></a>
+##### `nextjsServer`<sup>Optional</sup> <a name="nextjsServer" id="@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsServer"></a>
 
 ```typescript
 public readonly nextjsServer: NextjsServerOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a>
 
 ---
 
-##### `nextjsStaticAssets`<sup>Optional</sup> <a name="nextjsStaticAssets" id="cdk-nextjs-standalone.NextjsOverrides.property.nextjsStaticAssets"></a>
+##### `nextjsStaticAssets`<sup>Optional</sup> <a name="nextjsStaticAssets" id="@funkepublishing/cdk-nextjs-standalone.NextjsOverrides.property.nextjsStaticAssets"></a>
 
 ```typescript
 public readonly nextjsStaticAssets: NextjsStaticAssetOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a>
 
 ---
 
-### NextjsProps <a name="NextjsProps" id="cdk-nextjs-standalone.NextjsProps"></a>
+### NextjsProps <a name="NextjsProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.Initializer"></a>
 
 ```typescript
-import { NextjsProps } from 'cdk-nextjs-standalone'
+import { NextjsProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsProps: NextjsProps = { ... }
 ```
@@ -3876,23 +3766,23 @@ const nextjsProps: NextjsProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional build command override value. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | Optional CloudFront Distribution created outside of this construct that will be used to add Next.js behaviors and origins onto. Useful with `basePath`. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.domainProps">domainProps</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | Props to configure {@link NextjsDomain}. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build **and** runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket">imageOptimizationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Optional S3 Bucket to use, defaults to assets bucket. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsOverrides">NextjsOverrides</a></code> | Override props for every construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | Skips running Next.js build. Useful if you want to deploy `Nextjs` but haven't made any changes to Next.js app code. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
-| <code><a href="#cdk-nextjs-standalone.NextjsProps.property.streaming">streaming</a></code> | <code>boolean</code> | Streaming allows you to send data to the client as it's generated instead of waiting for the entire response to be generated. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | Relative path to the directory where the NextJS project is located. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | Optional build command override value. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.buildPath">buildPath</a></code> | <code>string</code> | The directory to execute `npm run build` from. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | Optional CloudFront Distribution created outside of this construct that will be used to add Next.js behaviors and origins onto. Useful with `basePath`. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.domainProps">domainProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a></code> | Props to configure {@link NextjsDomain}. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build **and** runtime. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket">imageOptimizationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Optional S3 Bucket to use, defaults to assets bucket. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsOverrides">NextjsOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.quiet">quiet</a></code> | <code>boolean</code> | Less build output. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | Skips running Next.js build. Useful if you want to deploy `Nextjs` but haven't made any changes to Next.js app code. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation">skipFullInvalidation</a></code> | <code>boolean</code> | By default all CloudFront cache will be invalidated on deployment. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.streaming">streaming</a></code> | <code>boolean</code> | Streaming allows you to send data to the client as it's generated instead of waiting for the entire response to be generated. |
 
 ---
 
-##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.NextjsProps.property.nextjsPath"></a>
+##### `nextjsPath`<sup>Required</sup> <a name="nextjsPath" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.nextjsPath"></a>
 
 ```typescript
 public readonly nextjsPath: string;
@@ -3906,7 +3796,7 @@ Can be the root of your project (`.`) or a subdirectory (`packages/web`).
 
 ---
 
-##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsProps.property.basePath"></a>
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.basePath"></a>
 
 ```typescript
 public readonly basePath: string;
@@ -3929,7 +3819,7 @@ folder have correct prefix.
 ```
 
 
-##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.NextjsProps.property.buildCommand"></a>
+##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.buildCommand"></a>
 
 ```typescript
 public readonly buildCommand: string;
@@ -3942,7 +3832,7 @@ Optional build command override value.
 
 ---
 
-##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.NextjsProps.property.buildPath"></a>
+##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.buildPath"></a>
 
 ```typescript
 public readonly buildPath: string;
@@ -3958,7 +3848,7 @@ at the root of the project.
 
 ---
 
-##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.NextjsProps.property.distribution"></a>
+##### `distribution`<sup>Optional</sup> <a name="distribution" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.distribution"></a>
 
 ```typescript
 public readonly distribution: Distribution;
@@ -3970,13 +3860,13 @@ Optional CloudFront Distribution created outside of this construct that will be 
 
 ---
 
-##### `domainProps`<sup>Optional</sup> <a name="domainProps" id="cdk-nextjs-standalone.NextjsProps.property.domainProps"></a>
+##### `domainProps`<sup>Optional</sup> <a name="domainProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.domainProps"></a>
 
 ```typescript
 public readonly domainProps: NextjsDomainProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps">NextjsDomainProps</a>
 
 Props to configure {@link NextjsDomain}.
 
@@ -3985,7 +3875,7 @@ See details on how to customize at
 
 ---
 
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsProps.property.environment"></a>
+##### `environment`<sup>Optional</sup> <a name="environment" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.environment"></a>
 
 ```typescript
 public readonly environment: {[ key: string ]: string};
@@ -3997,7 +3887,7 @@ Custom environment variables to pass to the NextJS build **and** runtime.
 
 ---
 
-##### `imageOptimizationBucket`<sup>Optional</sup> <a name="imageOptimizationBucket" id="cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket"></a>
+##### `imageOptimizationBucket`<sup>Optional</sup> <a name="imageOptimizationBucket" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.imageOptimizationBucket"></a>
 
 ```typescript
 public readonly imageOptimizationBucket: IBucket;
@@ -4009,13 +3899,13 @@ Optional S3 Bucket to use, defaults to assets bucket.
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.NextjsProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsOverrides">NextjsOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsOverrides">NextjsOverrides</a>
 
 Override props for every construct.
 
@@ -4025,7 +3915,7 @@ you'll be overriding before using.
 
 ---
 
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsProps.property.quiet"></a>
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.quiet"></a>
 
 ```typescript
 public readonly quiet: boolean;
@@ -4037,7 +3927,7 @@ Less build output.
 
 ---
 
-##### `skipBuild`<sup>Optional</sup> <a name="skipBuild" id="cdk-nextjs-standalone.NextjsProps.property.skipBuild"></a>
+##### `skipBuild`<sup>Optional</sup> <a name="skipBuild" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.skipBuild"></a>
 
 ```typescript
 public readonly skipBuild: boolean;
@@ -4050,7 +3940,7 @@ Skips running Next.js build. Useful if you want to deploy `Nextjs` but haven't m
 
 ---
 
-##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation"></a>
+##### `skipFullInvalidation`<sup>Optional</sup> <a name="skipFullInvalidation" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.skipFullInvalidation"></a>
 
 ```typescript
 public readonly skipFullInvalidation: boolean;
@@ -4065,7 +3955,7 @@ could be important for some users.
 
 ---
 
-##### `streaming`<sup>Optional</sup> <a name="streaming" id="cdk-nextjs-standalone.NextjsProps.property.streaming"></a>
+##### `streaming`<sup>Optional</sup> <a name="streaming" id="@funkepublishing/cdk-nextjs-standalone.NextjsProps.property.streaming"></a>
 
 ```typescript
 public readonly streaming: boolean;
@@ -4077,12 +3967,12 @@ Streaming allows you to send data to the client as it's generated instead of wai
 
 ---
 
-### NextjsRevalidationOverrides <a name="NextjsRevalidationOverrides" id="cdk-nextjs-standalone.NextjsRevalidationOverrides"></a>
+### NextjsRevalidationOverrides <a name="NextjsRevalidationOverrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsRevalidationOverrides.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.Initializer"></a>
 
 ```typescript
-import { NextjsRevalidationOverrides } from 'cdk-nextjs-standalone'
+import { NextjsRevalidationOverrides } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsRevalidationOverrides: NextjsRevalidationOverrides = { ... }
 ```
@@ -4091,56 +3981,56 @@ const nextjsRevalidationOverrides: NextjsRevalidationOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides.property.insertCustomResourceProps">insertCustomResourceProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalCustomResourceProps">OptionalCustomResourceProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides.property.insertFunctionProps">insertFunctionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides.property.insertProviderProps">insertProviderProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalProviderProps">OptionalProviderProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides.property.queueFunctionProps">queueFunctionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides.property.queueProps">queueProps</a></code> | <code>aws-cdk-lib.aws_sqs.QueueProps</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides.property.tableProps">tableProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2">OptionalTablePropsV2</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.property.insertCustomResourceProps">insertCustomResourceProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps">OptionalCustomResourceProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.property.insertFunctionProps">insertFunctionProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.property.insertProviderProps">insertProviderProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps">OptionalProviderProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.property.queueFunctionProps">queueFunctionProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.property.queueProps">queueProps</a></code> | <code>aws-cdk-lib.aws_sqs.QueueProps</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.property.tableProps">tableProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2">OptionalTablePropsV2</a></code> | *No description.* |
 
 ---
 
-##### `insertCustomResourceProps`<sup>Optional</sup> <a name="insertCustomResourceProps" id="cdk-nextjs-standalone.NextjsRevalidationOverrides.property.insertCustomResourceProps"></a>
+##### `insertCustomResourceProps`<sup>Optional</sup> <a name="insertCustomResourceProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.property.insertCustomResourceProps"></a>
 
 ```typescript
 public readonly insertCustomResourceProps: OptionalCustomResourceProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalCustomResourceProps">OptionalCustomResourceProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps">OptionalCustomResourceProps</a>
 
 ---
 
-##### `insertFunctionProps`<sup>Optional</sup> <a name="insertFunctionProps" id="cdk-nextjs-standalone.NextjsRevalidationOverrides.property.insertFunctionProps"></a>
+##### `insertFunctionProps`<sup>Optional</sup> <a name="insertFunctionProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.property.insertFunctionProps"></a>
 
 ```typescript
 public readonly insertFunctionProps: OptionalFunctionProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a>
 
 ---
 
-##### `insertProviderProps`<sup>Optional</sup> <a name="insertProviderProps" id="cdk-nextjs-standalone.NextjsRevalidationOverrides.property.insertProviderProps"></a>
+##### `insertProviderProps`<sup>Optional</sup> <a name="insertProviderProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.property.insertProviderProps"></a>
 
 ```typescript
 public readonly insertProviderProps: OptionalProviderProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalProviderProps">OptionalProviderProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps">OptionalProviderProps</a>
 
 ---
 
-##### `queueFunctionProps`<sup>Optional</sup> <a name="queueFunctionProps" id="cdk-nextjs-standalone.NextjsRevalidationOverrides.property.queueFunctionProps"></a>
+##### `queueFunctionProps`<sup>Optional</sup> <a name="queueFunctionProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.property.queueFunctionProps"></a>
 
 ```typescript
 public readonly queueFunctionProps: OptionalFunctionProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a>
 
 ---
 
-##### `queueProps`<sup>Optional</sup> <a name="queueProps" id="cdk-nextjs-standalone.NextjsRevalidationOverrides.property.queueProps"></a>
+##### `queueProps`<sup>Optional</sup> <a name="queueProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.property.queueProps"></a>
 
 ```typescript
 public readonly queueProps: QueueProps;
@@ -4150,22 +4040,22 @@ public readonly queueProps: QueueProps;
 
 ---
 
-##### `tableProps`<sup>Optional</sup> <a name="tableProps" id="cdk-nextjs-standalone.NextjsRevalidationOverrides.property.tableProps"></a>
+##### `tableProps`<sup>Optional</sup> <a name="tableProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides.property.tableProps"></a>
 
 ```typescript
 public readonly tableProps: OptionalTablePropsV2;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalTablePropsV2">OptionalTablePropsV2</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2">OptionalTablePropsV2</a>
 
 ---
 
-### NextjsRevalidationProps <a name="NextjsRevalidationProps" id="cdk-nextjs-standalone.NextjsRevalidationProps"></a>
+### NextjsRevalidationProps <a name="NextjsRevalidationProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsRevalidationProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps.Initializer"></a>
 
 ```typescript
-import { NextjsRevalidationProps } from 'cdk-nextjs-standalone'
+import { NextjsRevalidationProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsRevalidationProps: NextjsRevalidationProps = { ... }
 ```
@@ -4174,38 +4064,38 @@ const nextjsRevalidationProps: NextjsRevalidationProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
-| <code><a href="#cdk-nextjs-standalone.NextjsRevalidationProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a></code> | Override props for every construct. |
 
 ---
 
-##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.nextBuild"></a>
+##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps.property.nextBuild"></a>
 
 ```typescript
 public readonly nextBuild: NextjsBuild;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 > [{@link NextjsBuild }]({@link NextjsBuild })
 
 ---
 
-##### `serverFunction`<sup>Required</sup> <a name="serverFunction" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.serverFunction"></a>
+##### `serverFunction`<sup>Required</sup> <a name="serverFunction" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps.property.serverFunction"></a>
 
 ```typescript
 public readonly serverFunction: NextjsServer;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer">NextjsServer</a>
 
 > [{@link NextjsServer }]({@link NextjsServer })
 
 ---
 
-##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.lambdaOptions"></a>
+##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps.property.lambdaOptions"></a>
 
 ```typescript
 public readonly lambdaOptions: FunctionOptions;
@@ -4217,24 +4107,24 @@ Override function properties.
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.NextjsRevalidationProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsRevalidationOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a>
 
 Override props for every construct.
 
 ---
 
-### NextjsServerOverrides <a name="NextjsServerOverrides" id="cdk-nextjs-standalone.NextjsServerOverrides"></a>
+### NextjsServerOverrides <a name="NextjsServerOverrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsServerOverrides.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides.Initializer"></a>
 
 ```typescript
-import { NextjsServerOverrides } from 'cdk-nextjs-standalone'
+import { NextjsServerOverrides } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsServerOverrides: NextjsServerOverrides = { ... }
 ```
@@ -4243,59 +4133,59 @@ const nextjsServerOverrides: NextjsServerOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.destinationCodeAssetProps">destinationCodeAssetProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.functionProps">functionProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.nextjsBucketDeploymentProps">nextjsBucketDeploymentProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides.property.sourceCodeAssetProps">sourceCodeAssetProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides.property.destinationCodeAssetProps">destinationCodeAssetProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides.property.functionProps">functionProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides.property.nextjsBucketDeploymentProps">nextjsBucketDeploymentProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides.property.sourceCodeAssetProps">sourceCodeAssetProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
 
 ---
 
-##### `destinationCodeAssetProps`<sup>Optional</sup> <a name="destinationCodeAssetProps" id="cdk-nextjs-standalone.NextjsServerOverrides.property.destinationCodeAssetProps"></a>
+##### `destinationCodeAssetProps`<sup>Optional</sup> <a name="destinationCodeAssetProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides.property.destinationCodeAssetProps"></a>
 
 ```typescript
 public readonly destinationCodeAssetProps: OptionalAssetProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a>
 
 ---
 
-##### `functionProps`<sup>Optional</sup> <a name="functionProps" id="cdk-nextjs-standalone.NextjsServerOverrides.property.functionProps"></a>
+##### `functionProps`<sup>Optional</sup> <a name="functionProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides.property.functionProps"></a>
 
 ```typescript
 public readonly functionProps: OptionalFunctionProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps">OptionalFunctionProps</a>
 
 ---
 
-##### `nextjsBucketDeploymentProps`<sup>Optional</sup> <a name="nextjsBucketDeploymentProps" id="cdk-nextjs-standalone.NextjsServerOverrides.property.nextjsBucketDeploymentProps"></a>
+##### `nextjsBucketDeploymentProps`<sup>Optional</sup> <a name="nextjsBucketDeploymentProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides.property.nextjsBucketDeploymentProps"></a>
 
 ```typescript
 public readonly nextjsBucketDeploymentProps: OptionalNextjsBucketDeploymentProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a>
 
 ---
 
-##### `sourceCodeAssetProps`<sup>Optional</sup> <a name="sourceCodeAssetProps" id="cdk-nextjs-standalone.NextjsServerOverrides.property.sourceCodeAssetProps"></a>
+##### `sourceCodeAssetProps`<sup>Optional</sup> <a name="sourceCodeAssetProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides.property.sourceCodeAssetProps"></a>
 
 ```typescript
 public readonly sourceCodeAssetProps: OptionalAssetProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a>
 
 ---
 
-### NextjsServerProps <a name="NextjsServerProps" id="cdk-nextjs-standalone.NextjsServerProps"></a>
+### NextjsServerProps <a name="NextjsServerProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsServerProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.Initializer"></a>
 
 ```typescript
-import { NextjsServerProps } from 'cdk-nextjs-standalone'
+import { NextjsServerProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsServerProps: NextjsServerProps = { ... }
 ```
@@ -4304,28 +4194,28 @@ const nextjsServerProps: NextjsServerProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.staticAssetBucket">staticAssetBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Static asset bucket. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a></code> | Override props for every construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsServerProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.property.nextBuild">nextBuild</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.property.staticAssetBucket">staticAssetBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Static asset bucket. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
-##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.NextjsServerProps.property.nextBuild"></a>
+##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.property.nextBuild"></a>
 
 ```typescript
 public readonly nextBuild: NextjsBuild;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 > [{@link NextjsBuild }]({@link NextjsBuild })
 
 ---
 
-##### `staticAssetBucket`<sup>Required</sup> <a name="staticAssetBucket" id="cdk-nextjs-standalone.NextjsServerProps.property.staticAssetBucket"></a>
+##### `staticAssetBucket`<sup>Required</sup> <a name="staticAssetBucket" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.property.staticAssetBucket"></a>
 
 ```typescript
 public readonly staticAssetBucket: IBucket;
@@ -4339,7 +4229,7 @@ Function needs bucket to read from cache.
 
 ---
 
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsServerProps.property.environment"></a>
+##### `environment`<sup>Optional</sup> <a name="environment" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.property.environment"></a>
 
 ```typescript
 public readonly environment: {[ key: string ]: string};
@@ -4351,7 +4241,7 @@ public readonly environment: {[ key: string ]: string};
 
 ---
 
-##### `lambda`<sup>Optional</sup> <a name="lambda" id="cdk-nextjs-standalone.NextjsServerProps.property.lambda"></a>
+##### `lambda`<sup>Optional</sup> <a name="lambda" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.property.lambda"></a>
 
 ```typescript
 public readonly lambda: FunctionOptions;
@@ -4363,19 +4253,19 @@ Override function properties.
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.NextjsServerProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsServerOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a>
 
 Override props for every construct.
 
 ---
 
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.NextjsServerProps.property.quiet"></a>
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="@funkepublishing/cdk-nextjs-standalone.NextjsServerProps.property.quiet"></a>
 
 ```typescript
 public readonly quiet: boolean;
@@ -4387,12 +4277,12 @@ public readonly quiet: boolean;
 
 ---
 
-### NextjsStaticAssetOverrides <a name="NextjsStaticAssetOverrides" id="cdk-nextjs-standalone.NextjsStaticAssetOverrides"></a>
+### NextjsStaticAssetOverrides <a name="NextjsStaticAssetOverrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsStaticAssetOverrides.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides.Initializer"></a>
 
 ```typescript
-import { NextjsStaticAssetOverrides } from 'cdk-nextjs-standalone'
+import { NextjsStaticAssetOverrides } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsStaticAssetOverrides: NextjsStaticAssetOverrides = { ... }
 ```
@@ -4401,23 +4291,23 @@ const nextjsStaticAssetOverrides: NextjsStaticAssetOverrides = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.assetProps">assetProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.bucketProps">bucketProps</a></code> | <code>aws-cdk-lib.aws_s3.BucketProps</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.nextjsBucketDeploymentProps">nextjsBucketDeploymentProps</a></code> | <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.assetProps">assetProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.bucketProps">bucketProps</a></code> | <code>aws-cdk-lib.aws_s3.BucketProps</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.nextjsBucketDeploymentProps">nextjsBucketDeploymentProps</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a></code> | *No description.* |
 
 ---
 
-##### `assetProps`<sup>Optional</sup> <a name="assetProps" id="cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.assetProps"></a>
+##### `assetProps`<sup>Optional</sup> <a name="assetProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.assetProps"></a>
 
 ```typescript
 public readonly assetProps: OptionalAssetProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps">OptionalAssetProps</a>
 
 ---
 
-##### `bucketProps`<sup>Optional</sup> <a name="bucketProps" id="cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.bucketProps"></a>
+##### `bucketProps`<sup>Optional</sup> <a name="bucketProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.bucketProps"></a>
 
 ```typescript
 public readonly bucketProps: BucketProps;
@@ -4427,22 +4317,22 @@ public readonly bucketProps: BucketProps;
 
 ---
 
-##### `nextjsBucketDeploymentProps`<sup>Optional</sup> <a name="nextjsBucketDeploymentProps" id="cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.nextjsBucketDeploymentProps"></a>
+##### `nextjsBucketDeploymentProps`<sup>Optional</sup> <a name="nextjsBucketDeploymentProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides.property.nextjsBucketDeploymentProps"></a>
 
 ```typescript
 public readonly nextjsBucketDeploymentProps: OptionalNextjsBucketDeploymentProps;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps">OptionalNextjsBucketDeploymentProps</a>
 
 ---
 
-### NextjsStaticAssetsProps <a name="NextjsStaticAssetsProps" id="cdk-nextjs-standalone.NextjsStaticAssetsProps"></a>
+### NextjsStaticAssetsProps <a name="NextjsStaticAssetsProps" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.Initializer"></a>
 
 ```typescript
-import { NextjsStaticAssetsProps } from 'cdk-nextjs-standalone'
+import { NextjsStaticAssetsProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const nextjsStaticAssetsProps: NextjsStaticAssetsProps = { ... }
 ```
@@ -4451,28 +4341,28 @@ const nextjsStaticAssetsProps: NextjsStaticAssetsProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Define your own bucket to store static assets. |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a></code> | Override props for every construct. |
-| <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetsProps.property.prune">prune</a></code> | <code>boolean</code> | If `true` (default), then removes old static assets after upload new static assets. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.property.nextBuild">nextBuild</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Define your own bucket to store static assets. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.property.prune">prune</a></code> | <code>boolean</code> | If `true` (default), then removes old static assets after upload new static assets. |
 
 ---
 
-##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.nextBuild"></a>
+##### `nextBuild`<sup>Required</sup> <a name="nextBuild" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.property.nextBuild"></a>
 
 ```typescript
 public readonly nextBuild: NextjsBuild;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 The `NextjsBuild` instance representing the built Nextjs application.
 
 ---
 
-##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.basePath"></a>
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.property.basePath"></a>
 
 ```typescript
 public readonly basePath: string;
@@ -4495,7 +4385,7 @@ folder have correct prefix.
 ```
 
 
-##### `bucket`<sup>Optional</sup> <a name="bucket" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.bucket"></a>
+##### `bucket`<sup>Optional</sup> <a name="bucket" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.property.bucket"></a>
 
 ```typescript
 public readonly bucket: IBucket;
@@ -4507,7 +4397,7 @@ Define your own bucket to store static assets.
 
 ---
 
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment"></a>
+##### `environment`<sup>Optional</sup> <a name="environment" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.property.environment"></a>
 
 ```typescript
 public readonly environment: {[ key: string ]: string};
@@ -4519,19 +4409,19 @@ Custom environment variables to pass to the NextJS build and runtime.
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsStaticAssetOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a>
 
 Override props for every construct.
 
 ---
 
-##### `prune`<sup>Optional</sup> <a name="prune" id="cdk-nextjs-standalone.NextjsStaticAssetsProps.property.prune"></a>
+##### `prune`<sup>Optional</sup> <a name="prune" id="@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps.property.prune"></a>
 
 ```typescript
 public readonly prune: boolean;
@@ -4544,14 +4434,14 @@ If `true` (default), then removes old static assets after upload new static asse
 
 ---
 
-### OptionalAaaaRecordProps <a name="OptionalAaaaRecordProps" id="cdk-nextjs-standalone.OptionalAaaaRecordProps"></a>
+### OptionalAaaaRecordProps <a name="OptionalAaaaRecordProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps"></a>
 
 OptionalAaaaRecordProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.Initializer"></a>
 
 ```typescript
-import { OptionalAaaaRecordProps } from 'cdk-nextjs-standalone'
+import { OptionalAaaaRecordProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalAaaaRecordProps: OptionalAaaaRecordProps = { ... }
 ```
@@ -4560,21 +4450,21 @@ const optionalAaaaRecordProps: OptionalAaaaRecordProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.comment">comment</a></code> | <code>string</code> | A comment to add on the record. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.deleteExisting">deleteExisting</a></code> | <code>boolean</code> | Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.geoLocation">geoLocation</a></code> | <code>aws-cdk-lib.aws_route53.GeoLocation</code> | The geographical origin for this record to return DNS records based on the user's location. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.multiValueAnswer">multiValueAnswer</a></code> | <code>boolean</code> | Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.recordName">recordName</a></code> | <code>string</code> | The subdomain name for this record. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.region">region</a></code> | <code>string</code> | The Amazon EC2 Region where you created the resource that this resource record set refers to. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.setIdentifier">setIdentifier</a></code> | <code>string</code> | A string used to distinguish between different records with the same combination of DNS name and type. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.target">target</a></code> | <code>aws-cdk-lib.aws_route53.RecordTarget</code> | The target. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.ttl">ttl</a></code> | <code>aws-cdk-lib.Duration</code> | The resource record cache time to live (TTL). |
-| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.weight">weight</a></code> | <code>number</code> | Among resource record sets that have the same combination of DNS name and type, a value that determines the proportion of DNS queries that Amazon Route 53 responds to using the current resource record set. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAaaaRecordProps.property.zone">zone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | The hosted zone in which to define the new record. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.comment">comment</a></code> | <code>string</code> | A comment to add on the record. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.deleteExisting">deleteExisting</a></code> | <code>boolean</code> | Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.geoLocation">geoLocation</a></code> | <code>aws-cdk-lib.aws_route53.GeoLocation</code> | The geographical origin for this record to return DNS records based on the user's location. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.multiValueAnswer">multiValueAnswer</a></code> | <code>boolean</code> | Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.recordName">recordName</a></code> | <code>string</code> | The subdomain name for this record. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.region">region</a></code> | <code>string</code> | The Amazon EC2 Region where you created the resource that this resource record set refers to. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.setIdentifier">setIdentifier</a></code> | <code>string</code> | A string used to distinguish between different records with the same combination of DNS name and type. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.target">target</a></code> | <code>aws-cdk-lib.aws_route53.RecordTarget</code> | The target. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.ttl">ttl</a></code> | <code>aws-cdk-lib.Duration</code> | The resource record cache time to live (TTL). |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.weight">weight</a></code> | <code>number</code> | Among resource record sets that have the same combination of DNS name and type, a value that determines the proportion of DNS queries that Amazon Route 53 responds to using the current resource record set. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.zone">zone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | The hosted zone in which to define the new record. |
 
 ---
 
-##### `comment`<sup>Optional</sup> <a name="comment" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.comment"></a>
+##### `comment`<sup>Optional</sup> <a name="comment" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.comment"></a>
 
 ```typescript
 public readonly comment: string;
@@ -4587,7 +4477,7 @@ A comment to add on the record.
 
 ---
 
-##### `deleteExisting`<sup>Optional</sup> <a name="deleteExisting" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.deleteExisting"></a>
+##### `deleteExisting`<sup>Optional</sup> <a name="deleteExisting" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.deleteExisting"></a>
 
 ```typescript
 public readonly deleteExisting: boolean;
@@ -4605,7 +4495,7 @@ Whether to delete the same record set in the hosted zone if it already exists (d
 
 ---
 
-##### `geoLocation`<sup>Optional</sup> <a name="geoLocation" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.geoLocation"></a>
+##### `geoLocation`<sup>Optional</sup> <a name="geoLocation" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.geoLocation"></a>
 
 ```typescript
 public readonly geoLocation: GeoLocation;
@@ -4617,7 +4507,7 @@ The geographical origin for this record to return DNS records based on the user'
 
 ---
 
-##### `multiValueAnswer`<sup>Optional</sup> <a name="multiValueAnswer" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.multiValueAnswer"></a>
+##### `multiValueAnswer`<sup>Optional</sup> <a name="multiValueAnswer" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.multiValueAnswer"></a>
 
 ```typescript
 public readonly multiValueAnswer: boolean;
@@ -4630,7 +4520,7 @@ Whether to return multiple values, such as IP addresses for your web servers, in
 
 ---
 
-##### `recordName`<sup>Optional</sup> <a name="recordName" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.recordName"></a>
+##### `recordName`<sup>Optional</sup> <a name="recordName" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.recordName"></a>
 
 ```typescript
 public readonly recordName: string;
@@ -4650,7 +4540,7 @@ You can also specify the fully qualified domain name which terminates with a
 
 ---
 
-##### `region`<sup>Optional</sup> <a name="region" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.region"></a>
+##### `region`<sup>Optional</sup> <a name="region" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.region"></a>
 
 ```typescript
 public readonly region: string;
@@ -4670,7 +4560,7 @@ Route 53 then returns the value that is associated with the selected resource re
 
 ---
 
-##### `setIdentifier`<sup>Optional</sup> <a name="setIdentifier" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.setIdentifier"></a>
+##### `setIdentifier`<sup>Optional</sup> <a name="setIdentifier" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.setIdentifier"></a>
 
 ```typescript
 public readonly setIdentifier: string;
@@ -4687,7 +4577,7 @@ This parameter must be between 1 and 128 characters in length.
 
 ---
 
-##### `target`<sup>Optional</sup> <a name="target" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.target"></a>
+##### `target`<sup>Optional</sup> <a name="target" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.target"></a>
 
 ```typescript
 public readonly target: RecordTarget;
@@ -4699,7 +4589,7 @@ The target.
 
 ---
 
-##### `ttl`<sup>Optional</sup> <a name="ttl" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.ttl"></a>
+##### `ttl`<sup>Optional</sup> <a name="ttl" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.ttl"></a>
 
 ```typescript
 public readonly ttl: Duration;
@@ -4712,7 +4602,7 @@ The resource record cache time to live (TTL).
 
 ---
 
-##### `weight`<sup>Optional</sup> <a name="weight" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.weight"></a>
+##### `weight`<sup>Optional</sup> <a name="weight" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.weight"></a>
 
 ```typescript
 public readonly weight: number;
@@ -4730,7 +4620,7 @@ This value can be a number between 0 and 255.
 
 ---
 
-##### `zone`<sup>Optional</sup> <a name="zone" id="cdk-nextjs-standalone.OptionalAaaaRecordProps.property.zone"></a>
+##### `zone`<sup>Optional</sup> <a name="zone" id="@funkepublishing/cdk-nextjs-standalone.OptionalAaaaRecordProps.property.zone"></a>
 
 ```typescript
 public readonly zone: IHostedZone;
@@ -4742,14 +4632,14 @@ The hosted zone in which to define the new record.
 
 ---
 
-### OptionalARecordProps <a name="OptionalARecordProps" id="cdk-nextjs-standalone.OptionalARecordProps"></a>
+### OptionalARecordProps <a name="OptionalARecordProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps"></a>
 
 OptionalARecordProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalARecordProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.Initializer"></a>
 
 ```typescript
-import { OptionalARecordProps } from 'cdk-nextjs-standalone'
+import { OptionalARecordProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalARecordProps: OptionalARecordProps = { ... }
 ```
@@ -4758,21 +4648,21 @@ const optionalARecordProps: OptionalARecordProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.comment">comment</a></code> | <code>string</code> | A comment to add on the record. |
-| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.deleteExisting">deleteExisting</a></code> | <code>boolean</code> | Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. |
-| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.geoLocation">geoLocation</a></code> | <code>aws-cdk-lib.aws_route53.GeoLocation</code> | The geographical origin for this record to return DNS records based on the user's location. |
-| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.multiValueAnswer">multiValueAnswer</a></code> | <code>boolean</code> | Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. |
-| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.recordName">recordName</a></code> | <code>string</code> | The subdomain name for this record. |
-| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.region">region</a></code> | <code>string</code> | The Amazon EC2 Region where you created the resource that this resource record set refers to. |
-| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.setIdentifier">setIdentifier</a></code> | <code>string</code> | A string used to distinguish between different records with the same combination of DNS name and type. |
-| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.target">target</a></code> | <code>aws-cdk-lib.aws_route53.RecordTarget</code> | The target. |
-| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.ttl">ttl</a></code> | <code>aws-cdk-lib.Duration</code> | The resource record cache time to live (TTL). |
-| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.weight">weight</a></code> | <code>number</code> | Among resource record sets that have the same combination of DNS name and type, a value that determines the proportion of DNS queries that Amazon Route 53 responds to using the current resource record set. |
-| <code><a href="#cdk-nextjs-standalone.OptionalARecordProps.property.zone">zone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | The hosted zone in which to define the new record. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.comment">comment</a></code> | <code>string</code> | A comment to add on the record. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.deleteExisting">deleteExisting</a></code> | <code>boolean</code> | Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.geoLocation">geoLocation</a></code> | <code>aws-cdk-lib.aws_route53.GeoLocation</code> | The geographical origin for this record to return DNS records based on the user's location. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.multiValueAnswer">multiValueAnswer</a></code> | <code>boolean</code> | Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.recordName">recordName</a></code> | <code>string</code> | The subdomain name for this record. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.region">region</a></code> | <code>string</code> | The Amazon EC2 Region where you created the resource that this resource record set refers to. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.setIdentifier">setIdentifier</a></code> | <code>string</code> | A string used to distinguish between different records with the same combination of DNS name and type. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.target">target</a></code> | <code>aws-cdk-lib.aws_route53.RecordTarget</code> | The target. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.ttl">ttl</a></code> | <code>aws-cdk-lib.Duration</code> | The resource record cache time to live (TTL). |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.weight">weight</a></code> | <code>number</code> | Among resource record sets that have the same combination of DNS name and type, a value that determines the proportion of DNS queries that Amazon Route 53 responds to using the current resource record set. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.zone">zone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | The hosted zone in which to define the new record. |
 
 ---
 
-##### `comment`<sup>Optional</sup> <a name="comment" id="cdk-nextjs-standalone.OptionalARecordProps.property.comment"></a>
+##### `comment`<sup>Optional</sup> <a name="comment" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.comment"></a>
 
 ```typescript
 public readonly comment: string;
@@ -4785,7 +4675,7 @@ A comment to add on the record.
 
 ---
 
-##### `deleteExisting`<sup>Optional</sup> <a name="deleteExisting" id="cdk-nextjs-standalone.OptionalARecordProps.property.deleteExisting"></a>
+##### `deleteExisting`<sup>Optional</sup> <a name="deleteExisting" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.deleteExisting"></a>
 
 ```typescript
 public readonly deleteExisting: boolean;
@@ -4803,7 +4693,7 @@ Whether to delete the same record set in the hosted zone if it already exists (d
 
 ---
 
-##### `geoLocation`<sup>Optional</sup> <a name="geoLocation" id="cdk-nextjs-standalone.OptionalARecordProps.property.geoLocation"></a>
+##### `geoLocation`<sup>Optional</sup> <a name="geoLocation" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.geoLocation"></a>
 
 ```typescript
 public readonly geoLocation: GeoLocation;
@@ -4815,7 +4705,7 @@ The geographical origin for this record to return DNS records based on the user'
 
 ---
 
-##### `multiValueAnswer`<sup>Optional</sup> <a name="multiValueAnswer" id="cdk-nextjs-standalone.OptionalARecordProps.property.multiValueAnswer"></a>
+##### `multiValueAnswer`<sup>Optional</sup> <a name="multiValueAnswer" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.multiValueAnswer"></a>
 
 ```typescript
 public readonly multiValueAnswer: boolean;
@@ -4828,7 +4718,7 @@ Whether to return multiple values, such as IP addresses for your web servers, in
 
 ---
 
-##### `recordName`<sup>Optional</sup> <a name="recordName" id="cdk-nextjs-standalone.OptionalARecordProps.property.recordName"></a>
+##### `recordName`<sup>Optional</sup> <a name="recordName" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.recordName"></a>
 
 ```typescript
 public readonly recordName: string;
@@ -4848,7 +4738,7 @@ You can also specify the fully qualified domain name which terminates with a
 
 ---
 
-##### `region`<sup>Optional</sup> <a name="region" id="cdk-nextjs-standalone.OptionalARecordProps.property.region"></a>
+##### `region`<sup>Optional</sup> <a name="region" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.region"></a>
 
 ```typescript
 public readonly region: string;
@@ -4868,7 +4758,7 @@ Route 53 then returns the value that is associated with the selected resource re
 
 ---
 
-##### `setIdentifier`<sup>Optional</sup> <a name="setIdentifier" id="cdk-nextjs-standalone.OptionalARecordProps.property.setIdentifier"></a>
+##### `setIdentifier`<sup>Optional</sup> <a name="setIdentifier" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.setIdentifier"></a>
 
 ```typescript
 public readonly setIdentifier: string;
@@ -4885,7 +4775,7 @@ This parameter must be between 1 and 128 characters in length.
 
 ---
 
-##### `target`<sup>Optional</sup> <a name="target" id="cdk-nextjs-standalone.OptionalARecordProps.property.target"></a>
+##### `target`<sup>Optional</sup> <a name="target" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.target"></a>
 
 ```typescript
 public readonly target: RecordTarget;
@@ -4897,7 +4787,7 @@ The target.
 
 ---
 
-##### `ttl`<sup>Optional</sup> <a name="ttl" id="cdk-nextjs-standalone.OptionalARecordProps.property.ttl"></a>
+##### `ttl`<sup>Optional</sup> <a name="ttl" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.ttl"></a>
 
 ```typescript
 public readonly ttl: Duration;
@@ -4910,7 +4800,7 @@ The resource record cache time to live (TTL).
 
 ---
 
-##### `weight`<sup>Optional</sup> <a name="weight" id="cdk-nextjs-standalone.OptionalARecordProps.property.weight"></a>
+##### `weight`<sup>Optional</sup> <a name="weight" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.weight"></a>
 
 ```typescript
 public readonly weight: number;
@@ -4928,7 +4818,7 @@ This value can be a number between 0 and 255.
 
 ---
 
-##### `zone`<sup>Optional</sup> <a name="zone" id="cdk-nextjs-standalone.OptionalARecordProps.property.zone"></a>
+##### `zone`<sup>Optional</sup> <a name="zone" id="@funkepublishing/cdk-nextjs-standalone.OptionalARecordProps.property.zone"></a>
 
 ```typescript
 public readonly zone: IHostedZone;
@@ -4940,14 +4830,14 @@ The hosted zone in which to define the new record.
 
 ---
 
-### OptionalAssetProps <a name="OptionalAssetProps" id="cdk-nextjs-standalone.OptionalAssetProps"></a>
+### OptionalAssetProps <a name="OptionalAssetProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps"></a>
 
 OptionalAssetProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalAssetProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.Initializer"></a>
 
 ```typescript
-import { OptionalAssetProps } from 'cdk-nextjs-standalone'
+import { OptionalAssetProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalAssetProps: OptionalAssetProps = { ... }
 ```
@@ -4956,19 +4846,19 @@ const optionalAssetProps: OptionalAssetProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalAssetProps.property.assetHash">assetHash</a></code> | <code>string</code> | Specify a custom hash for this asset. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAssetProps.property.assetHashType">assetHashType</a></code> | <code>aws-cdk-lib.AssetHashType</code> | Specifies the type of hash to calculate for this asset. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAssetProps.property.bundling">bundling</a></code> | <code>aws-cdk-lib.BundlingOptions</code> | Bundle the asset by executing a command in a Docker container or a custom bundling provider. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAssetProps.property.deployTime">deployTime</a></code> | <code>boolean</code> | Whether or not the asset needs to exist beyond deployment time; |
-| <code><a href="#cdk-nextjs-standalone.OptionalAssetProps.property.exclude">exclude</a></code> | <code>string[]</code> | File paths matching the patterns will be excluded. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAssetProps.property.followSymlinks">followSymlinks</a></code> | <code>aws-cdk-lib.SymlinkFollowMode</code> | A strategy for how to handle symlinks. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAssetProps.property.ignoreMode">ignoreMode</a></code> | <code>aws-cdk-lib.IgnoreMode</code> | The ignore behavior to use for `exclude` patterns. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAssetProps.property.path">path</a></code> | <code>string</code> | The disk location of the asset. |
-| <code><a href="#cdk-nextjs-standalone.OptionalAssetProps.property.readers">readers</a></code> | <code>aws-cdk-lib.aws_iam.IGrantable[]</code> | A list of principals that should be able to read this asset from S3. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.assetHash">assetHash</a></code> | <code>string</code> | Specify a custom hash for this asset. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.assetHashType">assetHashType</a></code> | <code>aws-cdk-lib.AssetHashType</code> | Specifies the type of hash to calculate for this asset. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.bundling">bundling</a></code> | <code>aws-cdk-lib.BundlingOptions</code> | Bundle the asset by executing a command in a Docker container or a custom bundling provider. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.deployTime">deployTime</a></code> | <code>boolean</code> | Whether or not the asset needs to exist beyond deployment time; |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.exclude">exclude</a></code> | <code>string[]</code> | File paths matching the patterns will be excluded. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.followSymlinks">followSymlinks</a></code> | <code>aws-cdk-lib.SymlinkFollowMode</code> | A strategy for how to handle symlinks. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.ignoreMode">ignoreMode</a></code> | <code>aws-cdk-lib.IgnoreMode</code> | The ignore behavior to use for `exclude` patterns. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.path">path</a></code> | <code>string</code> | The disk location of the asset. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.readers">readers</a></code> | <code>aws-cdk-lib.aws_iam.IGrantable[]</code> | A list of principals that should be able to read this asset from S3. |
 
 ---
 
-##### `assetHash`<sup>Optional</sup> <a name="assetHash" id="cdk-nextjs-standalone.OptionalAssetProps.property.assetHash"></a>
+##### `assetHash`<sup>Optional</sup> <a name="assetHash" id="@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.assetHash"></a>
 
 ```typescript
 public readonly assetHash: string;
@@ -4992,7 +4882,7 @@ possible that some deployments will not be invalidated.
 
 ---
 
-##### `assetHashType`<sup>Optional</sup> <a name="assetHashType" id="cdk-nextjs-standalone.OptionalAssetProps.property.assetHashType"></a>
+##### `assetHashType`<sup>Optional</sup> <a name="assetHashType" id="@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.assetHashType"></a>
 
 ```typescript
 public readonly assetHashType: AssetHashType;
@@ -5008,7 +4898,7 @@ If `assetHash` is configured, this option must be `undefined` or
 
 ---
 
-##### `bundling`<sup>Optional</sup> <a name="bundling" id="cdk-nextjs-standalone.OptionalAssetProps.property.bundling"></a>
+##### `bundling`<sup>Optional</sup> <a name="bundling" id="@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.bundling"></a>
 
 ```typescript
 public readonly bundling: BundlingOptions;
@@ -5026,7 +4916,7 @@ final asset.
 
 ---
 
-##### `deployTime`<sup>Optional</sup> <a name="deployTime" id="cdk-nextjs-standalone.OptionalAssetProps.property.deployTime"></a>
+##### `deployTime`<sup>Optional</sup> <a name="deployTime" id="@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.deployTime"></a>
 
 ```typescript
 public readonly deployTime: boolean;
@@ -5049,7 +4939,7 @@ we consider those deployTime assets.
 
 ---
 
-##### `exclude`<sup>Optional</sup> <a name="exclude" id="cdk-nextjs-standalone.OptionalAssetProps.property.exclude"></a>
+##### `exclude`<sup>Optional</sup> <a name="exclude" id="@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.exclude"></a>
 
 ```typescript
 public readonly exclude: string[];
@@ -5065,7 +4955,7 @@ Has no effect on Assets bundled using the `bundling` property.
 
 ---
 
-##### `followSymlinks`<sup>Optional</sup> <a name="followSymlinks" id="cdk-nextjs-standalone.OptionalAssetProps.property.followSymlinks"></a>
+##### `followSymlinks`<sup>Optional</sup> <a name="followSymlinks" id="@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.followSymlinks"></a>
 
 ```typescript
 public readonly followSymlinks: SymlinkFollowMode;
@@ -5078,7 +4968,7 @@ A strategy for how to handle symlinks.
 
 ---
 
-##### `ignoreMode`<sup>Optional</sup> <a name="ignoreMode" id="cdk-nextjs-standalone.OptionalAssetProps.property.ignoreMode"></a>
+##### `ignoreMode`<sup>Optional</sup> <a name="ignoreMode" id="@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.ignoreMode"></a>
 
 ```typescript
 public readonly ignoreMode: IgnoreMode;
@@ -5091,7 +4981,7 @@ The ignore behavior to use for `exclude` patterns.
 
 ---
 
-##### `path`<sup>Optional</sup> <a name="path" id="cdk-nextjs-standalone.OptionalAssetProps.property.path"></a>
+##### `path`<sup>Optional</sup> <a name="path" id="@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.path"></a>
 
 ```typescript
 public readonly path: string;
@@ -5107,7 +4997,7 @@ The path should refer to one of the following:
 
 ---
 
-##### `readers`<sup>Optional</sup> <a name="readers" id="cdk-nextjs-standalone.OptionalAssetProps.property.readers"></a>
+##### `readers`<sup>Optional</sup> <a name="readers" id="@funkepublishing/cdk-nextjs-standalone.OptionalAssetProps.property.readers"></a>
 
 ```typescript
 public readonly readers: IGrantable[];
@@ -5122,14 +5012,14 @@ You can use `asset.grantRead(principal)` to grant read permissions later.
 
 ---
 
-### OptionalCertificateProps <a name="OptionalCertificateProps" id="cdk-nextjs-standalone.OptionalCertificateProps"></a>
+### OptionalCertificateProps <a name="OptionalCertificateProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps"></a>
 
 OptionalCertificateProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalCertificateProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.Initializer"></a>
 
 ```typescript
-import { OptionalCertificateProps } from 'cdk-nextjs-standalone'
+import { OptionalCertificateProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalCertificateProps: OptionalCertificateProps = { ... }
 ```
@@ -5138,16 +5028,16 @@ const optionalCertificateProps: OptionalCertificateProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps.property.certificateName">certificateName</a></code> | <code>string</code> | The Certificate name. |
-| <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps.property.domainName">domainName</a></code> | <code>string</code> | Fully-qualified domain name to request a certificate for. |
-| <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps.property.keyAlgorithm">keyAlgorithm</a></code> | <code>aws-cdk-lib.aws_certificatemanager.KeyAlgorithm</code> | Specifies the algorithm of the public and private key pair that your certificate uses to encrypt data. |
-| <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps.property.subjectAlternativeNames">subjectAlternativeNames</a></code> | <code>string[]</code> | Alternative domain names on your certificate. |
-| <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps.property.transparencyLoggingEnabled">transparencyLoggingEnabled</a></code> | <code>boolean</code> | Enable or disable transparency logging for this certificate. |
-| <code><a href="#cdk-nextjs-standalone.OptionalCertificateProps.property.validation">validation</a></code> | <code>aws-cdk-lib.aws_certificatemanager.CertificateValidation</code> | How to validate this certificate. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.property.certificateName">certificateName</a></code> | <code>string</code> | The Certificate name. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.property.domainName">domainName</a></code> | <code>string</code> | Fully-qualified domain name to request a certificate for. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.property.keyAlgorithm">keyAlgorithm</a></code> | <code>aws-cdk-lib.aws_certificatemanager.KeyAlgorithm</code> | Specifies the algorithm of the public and private key pair that your certificate uses to encrypt data. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.property.subjectAlternativeNames">subjectAlternativeNames</a></code> | <code>string[]</code> | Alternative domain names on your certificate. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.property.transparencyLoggingEnabled">transparencyLoggingEnabled</a></code> | <code>boolean</code> | Enable or disable transparency logging for this certificate. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.property.validation">validation</a></code> | <code>aws-cdk-lib.aws_certificatemanager.CertificateValidation</code> | How to validate this certificate. |
 
 ---
 
-##### `certificateName`<sup>Optional</sup> <a name="certificateName" id="cdk-nextjs-standalone.OptionalCertificateProps.property.certificateName"></a>
+##### `certificateName`<sup>Optional</sup> <a name="certificateName" id="@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.property.certificateName"></a>
 
 ```typescript
 public readonly certificateName: string;
@@ -5162,7 +5052,7 @@ Since the Certificate resource doesn't support providing a physical name, the va
 
 ---
 
-##### `domainName`<sup>Optional</sup> <a name="domainName" id="cdk-nextjs-standalone.OptionalCertificateProps.property.domainName"></a>
+##### `domainName`<sup>Optional</sup> <a name="domainName" id="@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.property.domainName"></a>
 
 ```typescript
 public readonly domainName: string;
@@ -5176,7 +5066,7 @@ May contain wildcards, such as ``*.domain.com``.
 
 ---
 
-##### `keyAlgorithm`<sup>Optional</sup> <a name="keyAlgorithm" id="cdk-nextjs-standalone.OptionalCertificateProps.property.keyAlgorithm"></a>
+##### `keyAlgorithm`<sup>Optional</sup> <a name="keyAlgorithm" id="@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.property.keyAlgorithm"></a>
 
 ```typescript
 public readonly keyAlgorithm: KeyAlgorithm;
@@ -5189,7 +5079,7 @@ Specifies the algorithm of the public and private key pair that your certificate
 
 ---
 
-##### `subjectAlternativeNames`<sup>Optional</sup> <a name="subjectAlternativeNames" id="cdk-nextjs-standalone.OptionalCertificateProps.property.subjectAlternativeNames"></a>
+##### `subjectAlternativeNames`<sup>Optional</sup> <a name="subjectAlternativeNames" id="@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.property.subjectAlternativeNames"></a>
 
 ```typescript
 public readonly subjectAlternativeNames: string[];
@@ -5204,7 +5094,7 @@ Use this to register alternative domain names that represent the same site.
 
 ---
 
-##### `transparencyLoggingEnabled`<sup>Optional</sup> <a name="transparencyLoggingEnabled" id="cdk-nextjs-standalone.OptionalCertificateProps.property.transparencyLoggingEnabled"></a>
+##### `transparencyLoggingEnabled`<sup>Optional</sup> <a name="transparencyLoggingEnabled" id="@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.property.transparencyLoggingEnabled"></a>
 
 ```typescript
 public readonly transparencyLoggingEnabled: boolean;
@@ -5223,7 +5113,7 @@ If you want the certificate to be logged immediately, we recommend that you issu
 
 ---
 
-##### `validation`<sup>Optional</sup> <a name="validation" id="cdk-nextjs-standalone.OptionalCertificateProps.property.validation"></a>
+##### `validation`<sup>Optional</sup> <a name="validation" id="@funkepublishing/cdk-nextjs-standalone.OptionalCertificateProps.property.validation"></a>
 
 ```typescript
 public readonly validation: CertificateValidation;
@@ -5236,14 +5126,14 @@ How to validate this certificate.
 
 ---
 
-### OptionalCloudFrontFunctionProps <a name="OptionalCloudFrontFunctionProps" id="cdk-nextjs-standalone.OptionalCloudFrontFunctionProps"></a>
+### OptionalCloudFrontFunctionProps <a name="OptionalCloudFrontFunctionProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalCloudFrontFunctionProps"></a>
 
 OptionalCloudFrontFunctionProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.Initializer"></a>
 
 ```typescript
-import { OptionalCloudFrontFunctionProps } from 'cdk-nextjs-standalone'
+import { OptionalCloudFrontFunctionProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalCloudFrontFunctionProps: OptionalCloudFrontFunctionProps = { ... }
 ```
@@ -5252,14 +5142,14 @@ const optionalCloudFrontFunctionProps: OptionalCloudFrontFunctionProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.comment">comment</a></code> | <code>string</code> | A comment to describe the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.functionName">functionName</a></code> | <code>string</code> | A name to identify the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.keyValueStore">keyValueStore</a></code> | <code>aws-cdk-lib.aws_cloudfront.IKeyValueStore</code> | The Key Value Store to associate with this function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_cloudfront.FunctionRuntime</code> | The runtime environment for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.comment">comment</a></code> | <code>string</code> | A comment to describe the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.functionName">functionName</a></code> | <code>string</code> | A name to identify the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.keyValueStore">keyValueStore</a></code> | <code>aws-cdk-lib.aws_cloudfront.IKeyValueStore</code> | The Key Value Store to associate with this function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_cloudfront.FunctionRuntime</code> | The runtime environment for the function. |
 
 ---
 
-##### `comment`<sup>Optional</sup> <a name="comment" id="cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.comment"></a>
+##### `comment`<sup>Optional</sup> <a name="comment" id="@funkepublishing/cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.comment"></a>
 
 ```typescript
 public readonly comment: string;
@@ -5272,7 +5162,7 @@ A comment to describe the function.
 
 ---
 
-##### `functionName`<sup>Optional</sup> <a name="functionName" id="cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.functionName"></a>
+##### `functionName`<sup>Optional</sup> <a name="functionName" id="@funkepublishing/cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.functionName"></a>
 
 ```typescript
 public readonly functionName: string;
@@ -5285,7 +5175,7 @@ A name to identify the function.
 
 ---
 
-##### `keyValueStore`<sup>Optional</sup> <a name="keyValueStore" id="cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.keyValueStore"></a>
+##### `keyValueStore`<sup>Optional</sup> <a name="keyValueStore" id="@funkepublishing/cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.keyValueStore"></a>
 
 ```typescript
 public readonly keyValueStore: IKeyValueStore;
@@ -5301,7 +5191,7 @@ In order to associate a Key Value Store, the `runtime` must be
 
 ---
 
-##### `runtime`<sup>Optional</sup> <a name="runtime" id="cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.runtime"></a>
+##### `runtime`<sup>Optional</sup> <a name="runtime" id="@funkepublishing/cdk-nextjs-standalone.OptionalCloudFrontFunctionProps.property.runtime"></a>
 
 ```typescript
 public readonly runtime: FunctionRuntime;
@@ -5314,14 +5204,14 @@ The runtime environment for the function.
 
 ---
 
-### OptionalCustomResourceProps <a name="OptionalCustomResourceProps" id="cdk-nextjs-standalone.OptionalCustomResourceProps"></a>
+### OptionalCustomResourceProps <a name="OptionalCustomResourceProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps"></a>
 
 OptionalCustomResourceProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalCustomResourceProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps.Initializer"></a>
 
 ```typescript
-import { OptionalCustomResourceProps } from 'cdk-nextjs-standalone'
+import { OptionalCustomResourceProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalCustomResourceProps: OptionalCustomResourceProps = { ... }
 ```
@@ -5330,15 +5220,15 @@ const optionalCustomResourceProps: OptionalCustomResourceProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalCustomResourceProps.property.pascalCaseProperties">pascalCaseProperties</a></code> | <code>boolean</code> | Convert all property keys to pascal case. |
-| <code><a href="#cdk-nextjs-standalone.OptionalCustomResourceProps.property.properties">properties</a></code> | <code>{[ key: string ]: any}</code> | Properties to pass to the Lambda. |
-| <code><a href="#cdk-nextjs-standalone.OptionalCustomResourceProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | The policy to apply when this resource is removed from the application. |
-| <code><a href="#cdk-nextjs-standalone.OptionalCustomResourceProps.property.resourceType">resourceType</a></code> | <code>string</code> | For custom resources, you can specify AWS::CloudFormation::CustomResource (the default) as the resource type, or you can specify your own resource type name. |
-| <code><a href="#cdk-nextjs-standalone.OptionalCustomResourceProps.property.serviceToken">serviceToken</a></code> | <code>string</code> | The ARN of the provider which implements this custom resource type. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps.property.pascalCaseProperties">pascalCaseProperties</a></code> | <code>boolean</code> | Convert all property keys to pascal case. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps.property.properties">properties</a></code> | <code>{[ key: string ]: any}</code> | Properties to pass to the Lambda. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | The policy to apply when this resource is removed from the application. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps.property.resourceType">resourceType</a></code> | <code>string</code> | For custom resources, you can specify AWS::CloudFormation::CustomResource (the default) as the resource type, or you can specify your own resource type name. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps.property.serviceToken">serviceToken</a></code> | <code>string</code> | The ARN of the provider which implements this custom resource type. |
 
 ---
 
-##### `pascalCaseProperties`<sup>Optional</sup> <a name="pascalCaseProperties" id="cdk-nextjs-standalone.OptionalCustomResourceProps.property.pascalCaseProperties"></a>
+##### `pascalCaseProperties`<sup>Optional</sup> <a name="pascalCaseProperties" id="@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps.property.pascalCaseProperties"></a>
 
 ```typescript
 public readonly pascalCaseProperties: boolean;
@@ -5351,7 +5241,7 @@ Convert all property keys to pascal case.
 
 ---
 
-##### `properties`<sup>Optional</sup> <a name="properties" id="cdk-nextjs-standalone.OptionalCustomResourceProps.property.properties"></a>
+##### `properties`<sup>Optional</sup> <a name="properties" id="@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps.property.properties"></a>
 
 ```typescript
 public readonly properties: {[ key: string ]: any};
@@ -5364,7 +5254,7 @@ Properties to pass to the Lambda.
 
 ---
 
-##### `removalPolicy`<sup>Optional</sup> <a name="removalPolicy" id="cdk-nextjs-standalone.OptionalCustomResourceProps.property.removalPolicy"></a>
+##### `removalPolicy`<sup>Optional</sup> <a name="removalPolicy" id="@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps.property.removalPolicy"></a>
 
 ```typescript
 public readonly removalPolicy: RemovalPolicy;
@@ -5377,7 +5267,7 @@ The policy to apply when this resource is removed from the application.
 
 ---
 
-##### `resourceType`<sup>Optional</sup> <a name="resourceType" id="cdk-nextjs-standalone.OptionalCustomResourceProps.property.resourceType"></a>
+##### `resourceType`<sup>Optional</sup> <a name="resourceType" id="@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps.property.resourceType"></a>
 
 ```typescript
 public readonly resourceType: string;
@@ -5403,7 +5293,7 @@ as Custom::PingTester to make them easily identifiable as ping testers
 
 ---
 
-##### `serviceToken`<sup>Optional</sup> <a name="serviceToken" id="cdk-nextjs-standalone.OptionalCustomResourceProps.property.serviceToken"></a>
+##### `serviceToken`<sup>Optional</sup> <a name="serviceToken" id="@funkepublishing/cdk-nextjs-standalone.OptionalCustomResourceProps.property.serviceToken"></a>
 
 ```typescript
 public readonly serviceToken: string;
@@ -5457,14 +5347,14 @@ new CustomResource(this, 'MyResource', {
 
 ---
 
-### OptionalDistributionProps <a name="OptionalDistributionProps" id="cdk-nextjs-standalone.OptionalDistributionProps"></a>
+### OptionalDistributionProps <a name="OptionalDistributionProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps"></a>
 
 OptionalDistributionProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalDistributionProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.Initializer"></a>
 
 ```typescript
-import { OptionalDistributionProps } from 'cdk-nextjs-standalone'
+import { OptionalDistributionProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalDistributionProps: OptionalDistributionProps = { ... }
 ```
@@ -5473,30 +5363,30 @@ const optionalDistributionProps: OptionalDistributionProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.additionalBehaviors">additionalBehaviors</a></code> | <code>{[ key: string ]: aws-cdk-lib.aws_cloudfront.BehaviorOptions}</code> | Additional behaviors for the distribution, mapped by the pathPattern that specifies which requests to apply the behavior to. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | A certificate to associate with the distribution. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.comment">comment</a></code> | <code>string</code> | Any comments you want to include about the distribution. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.defaultBehavior">defaultBehavior</a></code> | <code>aws-cdk-lib.aws_cloudfront.BehaviorOptions</code> | The default behavior for the distribution. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.defaultRootObject">defaultRootObject</a></code> | <code>string</code> | The object that you want CloudFront to request from your origin (for example, index.html) when a viewer requests the root URL for your distribution. If no default object is set, the request goes to the origin's root (e.g., example.com/). |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.domainNames">domainNames</a></code> | <code>string[]</code> | Alternative domain names for this distribution. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.enabled">enabled</a></code> | <code>boolean</code> | Enable or disable the distribution. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.enableIpv6">enableIpv6</a></code> | <code>boolean</code> | Whether CloudFront will respond to IPv6 DNS requests with an IPv6 address. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.enableLogging">enableLogging</a></code> | <code>boolean</code> | Enable access logging for the distribution. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.errorResponses">errorResponses</a></code> | <code>aws-cdk-lib.aws_cloudfront.ErrorResponse[]</code> | How CloudFront should handle requests that are not successful (e.g., PageNotFound). |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.geoRestriction">geoRestriction</a></code> | <code>aws-cdk-lib.aws_cloudfront.GeoRestriction</code> | Controls the countries in which your content is distributed. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.httpVersion">httpVersion</a></code> | <code>aws-cdk-lib.aws_cloudfront.HttpVersion</code> | Specify the maximum HTTP version that you want viewers to use to communicate with CloudFront. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.logBucket">logBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The Amazon S3 bucket to store the access logs in. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.logFilePrefix">logFilePrefix</a></code> | <code>string</code> | An optional string that you want CloudFront to prefix to the access log filenames for this distribution. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.logIncludesCookies">logIncludesCookies</a></code> | <code>boolean</code> | Specifies whether you want CloudFront to include cookies in access logs. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.minimumProtocolVersion">minimumProtocolVersion</a></code> | <code>aws-cdk-lib.aws_cloudfront.SecurityPolicyProtocol</code> | The minimum version of the SSL protocol that you want CloudFront to use for HTTPS connections. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.priceClass">priceClass</a></code> | <code>aws-cdk-lib.aws_cloudfront.PriceClass</code> | The price class that corresponds with the maximum price that you want to pay for CloudFront service. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.publishAdditionalMetrics">publishAdditionalMetrics</a></code> | <code>boolean</code> | Whether to enable additional CloudWatch metrics. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.sslSupportMethod">sslSupportMethod</a></code> | <code>aws-cdk-lib.aws_cloudfront.SSLMethod</code> | The SSL method CloudFront will use for your distribution. |
-| <code><a href="#cdk-nextjs-standalone.OptionalDistributionProps.property.webAclId">webAclId</a></code> | <code>string</code> | Unique identifier that specifies the AWS WAF web ACL to associate with this CloudFront distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.additionalBehaviors">additionalBehaviors</a></code> | <code>{[ key: string ]: aws-cdk-lib.aws_cloudfront.BehaviorOptions}</code> | Additional behaviors for the distribution, mapped by the pathPattern that specifies which requests to apply the behavior to. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | A certificate to associate with the distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.comment">comment</a></code> | <code>string</code> | Any comments you want to include about the distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.defaultBehavior">defaultBehavior</a></code> | <code>aws-cdk-lib.aws_cloudfront.BehaviorOptions</code> | The default behavior for the distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.defaultRootObject">defaultRootObject</a></code> | <code>string</code> | The object that you want CloudFront to request from your origin (for example, index.html) when a viewer requests the root URL for your distribution. If no default object is set, the request goes to the origin's root (e.g., example.com/). |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.domainNames">domainNames</a></code> | <code>string[]</code> | Alternative domain names for this distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.enabled">enabled</a></code> | <code>boolean</code> | Enable or disable the distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.enableIpv6">enableIpv6</a></code> | <code>boolean</code> | Whether CloudFront will respond to IPv6 DNS requests with an IPv6 address. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.enableLogging">enableLogging</a></code> | <code>boolean</code> | Enable access logging for the distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.errorResponses">errorResponses</a></code> | <code>aws-cdk-lib.aws_cloudfront.ErrorResponse[]</code> | How CloudFront should handle requests that are not successful (e.g., PageNotFound). |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.geoRestriction">geoRestriction</a></code> | <code>aws-cdk-lib.aws_cloudfront.GeoRestriction</code> | Controls the countries in which your content is distributed. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.httpVersion">httpVersion</a></code> | <code>aws-cdk-lib.aws_cloudfront.HttpVersion</code> | Specify the maximum HTTP version that you want viewers to use to communicate with CloudFront. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.logBucket">logBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The Amazon S3 bucket to store the access logs in. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.logFilePrefix">logFilePrefix</a></code> | <code>string</code> | An optional string that you want CloudFront to prefix to the access log filenames for this distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.logIncludesCookies">logIncludesCookies</a></code> | <code>boolean</code> | Specifies whether you want CloudFront to include cookies in access logs. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.minimumProtocolVersion">minimumProtocolVersion</a></code> | <code>aws-cdk-lib.aws_cloudfront.SecurityPolicyProtocol</code> | The minimum version of the SSL protocol that you want CloudFront to use for HTTPS connections. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.priceClass">priceClass</a></code> | <code>aws-cdk-lib.aws_cloudfront.PriceClass</code> | The price class that corresponds with the maximum price that you want to pay for CloudFront service. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.publishAdditionalMetrics">publishAdditionalMetrics</a></code> | <code>boolean</code> | Whether to enable additional CloudWatch metrics. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.sslSupportMethod">sslSupportMethod</a></code> | <code>aws-cdk-lib.aws_cloudfront.SSLMethod</code> | The SSL method CloudFront will use for your distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.webAclId">webAclId</a></code> | <code>string</code> | Unique identifier that specifies the AWS WAF web ACL to associate with this CloudFront distribution. |
 
 ---
 
-##### `additionalBehaviors`<sup>Optional</sup> <a name="additionalBehaviors" id="cdk-nextjs-standalone.OptionalDistributionProps.property.additionalBehaviors"></a>
+##### `additionalBehaviors`<sup>Optional</sup> <a name="additionalBehaviors" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.additionalBehaviors"></a>
 
 ```typescript
 public readonly additionalBehaviors: {[ key: string ]: BehaviorOptions};
@@ -5509,7 +5399,7 @@ Additional behaviors for the distribution, mapped by the pathPattern that specif
 
 ---
 
-##### `certificate`<sup>Optional</sup> <a name="certificate" id="cdk-nextjs-standalone.OptionalDistributionProps.property.certificate"></a>
+##### `certificate`<sup>Optional</sup> <a name="certificate" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.certificate"></a>
 
 ```typescript
 public readonly certificate: ICertificate;
@@ -5524,7 +5414,7 @@ The certificate must be located in N. Virginia (us-east-1).
 
 ---
 
-##### `comment`<sup>Optional</sup> <a name="comment" id="cdk-nextjs-standalone.OptionalDistributionProps.property.comment"></a>
+##### `comment`<sup>Optional</sup> <a name="comment" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.comment"></a>
 
 ```typescript
 public readonly comment: string;
@@ -5537,7 +5427,7 @@ Any comments you want to include about the distribution.
 
 ---
 
-##### `defaultBehavior`<sup>Optional</sup> <a name="defaultBehavior" id="cdk-nextjs-standalone.OptionalDistributionProps.property.defaultBehavior"></a>
+##### `defaultBehavior`<sup>Optional</sup> <a name="defaultBehavior" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.defaultBehavior"></a>
 
 ```typescript
 public readonly defaultBehavior: BehaviorOptions;
@@ -5549,7 +5439,7 @@ The default behavior for the distribution.
 
 ---
 
-##### `defaultRootObject`<sup>Optional</sup> <a name="defaultRootObject" id="cdk-nextjs-standalone.OptionalDistributionProps.property.defaultRootObject"></a>
+##### `defaultRootObject`<sup>Optional</sup> <a name="defaultRootObject" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.defaultRootObject"></a>
 
 ```typescript
 public readonly defaultRootObject: string;
@@ -5562,7 +5452,7 @@ The object that you want CloudFront to request from your origin (for example, in
 
 ---
 
-##### `domainNames`<sup>Optional</sup> <a name="domainNames" id="cdk-nextjs-standalone.OptionalDistributionProps.property.domainNames"></a>
+##### `domainNames`<sup>Optional</sup> <a name="domainNames" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.domainNames"></a>
 
 ```typescript
 public readonly domainNames: string[];
@@ -5579,7 +5469,7 @@ you must add (at least one of) the domain names of the certificate to this list.
 
 ---
 
-##### `enabled`<sup>Optional</sup> <a name="enabled" id="cdk-nextjs-standalone.OptionalDistributionProps.property.enabled"></a>
+##### `enabled`<sup>Optional</sup> <a name="enabled" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.enabled"></a>
 
 ```typescript
 public readonly enabled: boolean;
@@ -5592,7 +5482,7 @@ Enable or disable the distribution.
 
 ---
 
-##### `enableIpv6`<sup>Optional</sup> <a name="enableIpv6" id="cdk-nextjs-standalone.OptionalDistributionProps.property.enableIpv6"></a>
+##### `enableIpv6`<sup>Optional</sup> <a name="enableIpv6" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.enableIpv6"></a>
 
 ```typescript
 public readonly enableIpv6: boolean;
@@ -5608,7 +5498,7 @@ This allows viewers to submit a second request, for an IPv4 address for your dis
 
 ---
 
-##### `enableLogging`<sup>Optional</sup> <a name="enableLogging" id="cdk-nextjs-standalone.OptionalDistributionProps.property.enableLogging"></a>
+##### `enableLogging`<sup>Optional</sup> <a name="enableLogging" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.enableLogging"></a>
 
 ```typescript
 public readonly enableLogging: boolean;
@@ -5621,7 +5511,7 @@ Enable access logging for the distribution.
 
 ---
 
-##### `errorResponses`<sup>Optional</sup> <a name="errorResponses" id="cdk-nextjs-standalone.OptionalDistributionProps.property.errorResponses"></a>
+##### `errorResponses`<sup>Optional</sup> <a name="errorResponses" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.errorResponses"></a>
 
 ```typescript
 public readonly errorResponses: ErrorResponse[];
@@ -5634,7 +5524,7 @@ How CloudFront should handle requests that are not successful (e.g., PageNotFoun
 
 ---
 
-##### `geoRestriction`<sup>Optional</sup> <a name="geoRestriction" id="cdk-nextjs-standalone.OptionalDistributionProps.property.geoRestriction"></a>
+##### `geoRestriction`<sup>Optional</sup> <a name="geoRestriction" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.geoRestriction"></a>
 
 ```typescript
 public readonly geoRestriction: GeoRestriction;
@@ -5647,7 +5537,7 @@ Controls the countries in which your content is distributed.
 
 ---
 
-##### `httpVersion`<sup>Optional</sup> <a name="httpVersion" id="cdk-nextjs-standalone.OptionalDistributionProps.property.httpVersion"></a>
+##### `httpVersion`<sup>Optional</sup> <a name="httpVersion" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.httpVersion"></a>
 
 ```typescript
 public readonly httpVersion: HttpVersion;
@@ -5662,7 +5552,7 @@ For viewers and CloudFront to use HTTP/2, viewers must support TLS 1.2 or later,
 
 ---
 
-##### `logBucket`<sup>Optional</sup> <a name="logBucket" id="cdk-nextjs-standalone.OptionalDistributionProps.property.logBucket"></a>
+##### `logBucket`<sup>Optional</sup> <a name="logBucket" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.logBucket"></a>
 
 ```typescript
 public readonly logBucket: IBucket;
@@ -5677,7 +5567,7 @@ Make sure to set `objectOwnership` to `s3.ObjectOwnership.OBJECT_WRITER` in your
 
 ---
 
-##### `logFilePrefix`<sup>Optional</sup> <a name="logFilePrefix" id="cdk-nextjs-standalone.OptionalDistributionProps.property.logFilePrefix"></a>
+##### `logFilePrefix`<sup>Optional</sup> <a name="logFilePrefix" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.logFilePrefix"></a>
 
 ```typescript
 public readonly logFilePrefix: string;
@@ -5690,7 +5580,7 @@ An optional string that you want CloudFront to prefix to the access log filename
 
 ---
 
-##### `logIncludesCookies`<sup>Optional</sup> <a name="logIncludesCookies" id="cdk-nextjs-standalone.OptionalDistributionProps.property.logIncludesCookies"></a>
+##### `logIncludesCookies`<sup>Optional</sup> <a name="logIncludesCookies" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.logIncludesCookies"></a>
 
 ```typescript
 public readonly logIncludesCookies: boolean;
@@ -5703,7 +5593,7 @@ Specifies whether you want CloudFront to include cookies in access logs.
 
 ---
 
-##### `minimumProtocolVersion`<sup>Optional</sup> <a name="minimumProtocolVersion" id="cdk-nextjs-standalone.OptionalDistributionProps.property.minimumProtocolVersion"></a>
+##### `minimumProtocolVersion`<sup>Optional</sup> <a name="minimumProtocolVersion" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.minimumProtocolVersion"></a>
 
 ```typescript
 public readonly minimumProtocolVersion: SecurityPolicyProtocol;
@@ -5719,7 +5609,7 @@ least the SSL version that you specify.
 
 ---
 
-##### `priceClass`<sup>Optional</sup> <a name="priceClass" id="cdk-nextjs-standalone.OptionalDistributionProps.property.priceClass"></a>
+##### `priceClass`<sup>Optional</sup> <a name="priceClass" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.priceClass"></a>
 
 ```typescript
 public readonly priceClass: PriceClass;
@@ -5736,7 +5626,7 @@ that has the lowest latency among the edge locations in your price class.
 
 ---
 
-##### `publishAdditionalMetrics`<sup>Optional</sup> <a name="publishAdditionalMetrics" id="cdk-nextjs-standalone.OptionalDistributionProps.property.publishAdditionalMetrics"></a>
+##### `publishAdditionalMetrics`<sup>Optional</sup> <a name="publishAdditionalMetrics" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.publishAdditionalMetrics"></a>
 
 ```typescript
 public readonly publishAdditionalMetrics: boolean;
@@ -5749,7 +5639,7 @@ Whether to enable additional CloudWatch metrics.
 
 ---
 
-##### `sslSupportMethod`<sup>Optional</sup> <a name="sslSupportMethod" id="cdk-nextjs-standalone.OptionalDistributionProps.property.sslSupportMethod"></a>
+##### `sslSupportMethod`<sup>Optional</sup> <a name="sslSupportMethod" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.sslSupportMethod"></a>
 
 ```typescript
 public readonly sslSupportMethod: SSLMethod;
@@ -5774,7 +5664,7 @@ See the CloudFront SSL for more details about pricing : https://aws.amazon.com/c
 
 ---
 
-##### `webAclId`<sup>Optional</sup> <a name="webAclId" id="cdk-nextjs-standalone.OptionalDistributionProps.property.webAclId"></a>
+##### `webAclId`<sup>Optional</sup> <a name="webAclId" id="@funkepublishing/cdk-nextjs-standalone.OptionalDistributionProps.property.webAclId"></a>
 
 ```typescript
 public readonly webAclId: string;
@@ -5791,14 +5681,14 @@ To specify a web ACL created using AWS WAF Classic, use the ACL ID, for example 
 
 ---
 
-### OptionalEdgeFunctionProps <a name="OptionalEdgeFunctionProps" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps"></a>
+### OptionalEdgeFunctionProps <a name="OptionalEdgeFunctionProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps"></a>
 
 OptionalEdgeFunctionProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.Initializer"></a>
 
 ```typescript
-import { OptionalEdgeFunctionProps } from 'cdk-nextjs-standalone'
+import { OptionalEdgeFunctionProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalEdgeFunctionProps: OptionalEdgeFunctionProps = { ... }
 ```
@@ -5807,59 +5697,59 @@ const optionalEdgeFunctionProps: OptionalEdgeFunctionProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.adotInstrumentation">adotInstrumentation</a></code> | <code>aws-cdk-lib.aws_lambda.AdotInstrumentationConfig</code> | Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.allowAllOutbound">allowAllOutbound</a></code> | <code>boolean</code> | Whether to allow the Lambda to send all network traffic. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.allowPublicSubnet">allowPublicSubnet</a></code> | <code>boolean</code> | Lambda Functions in a public subnet can NOT access the internet. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.applicationLogLevel">applicationLogLevel</a></code> | <code>string</code> | Sets the application log level for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The system architectures compatible with this lambda function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.code">code</a></code> | <code>aws-cdk-lib.aws_lambda.Code</code> | The source code of your Lambda function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.codeSigningConfig">codeSigningConfig</a></code> | <code>aws-cdk-lib.aws_lambda.ICodeSigningConfig</code> | Code signing config associated with this function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.currentVersionOptions">currentVersionOptions</a></code> | <code>aws-cdk-lib.aws_lambda.VersionOptions</code> | Options for the `lambda.Version` resource automatically created by the `fn.currentVersion` method. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.deadLetterQueue">deadLetterQueue</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | The SQS queue to use if DLQ is enabled. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.deadLetterQueueEnabled">deadLetterQueueEnabled</a></code> | <code>boolean</code> | Enabled DLQ. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.deadLetterTopic">deadLetterTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | The SNS topic to use as a DLQ. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.description">description</a></code> | <code>string</code> | A description of the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Key-value pairs that Lambda caches and makes available for your Lambda functions. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.environmentEncryption">environmentEncryption</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The AWS KMS key that's used to encrypt your function's environment variables. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.ephemeralStorageSize">ephemeralStorageSize</a></code> | <code>aws-cdk-lib.Size</code> | The size of the function’s /tmp directory in MiB. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.events">events</a></code> | <code>aws-cdk-lib.aws_lambda.IEventSource[]</code> | Event sources for this function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.filesystem">filesystem</a></code> | <code>aws-cdk-lib.aws_lambda.FileSystem</code> | The filesystem configuration for the lambda function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.functionName">functionName</a></code> | <code>string</code> | A name for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.handler">handler</a></code> | <code>string</code> | The name of the method within your code that Lambda calls to execute your function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.initialPolicy">initialPolicy</a></code> | <code>aws-cdk-lib.aws_iam.PolicyStatement[]</code> | Initial policy statements to add to the created Lambda Role. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.insightsVersion">insightsVersion</a></code> | <code>aws-cdk-lib.aws_lambda.LambdaInsightsVersion</code> | Specify the version of CloudWatch Lambda insights to use for monitoring. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.ipv6AllowedForDualStack">ipv6AllowedForDualStack</a></code> | <code>boolean</code> | Allows outbound IPv6 traffic on VPC functions that are connected to dual-stack subnets. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.layers">layers</a></code> | <code>aws-cdk-lib.aws_lambda.ILayerVersion[]</code> | A list of layers to add to the function's execution environment. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logFormat">logFormat</a></code> | <code>string</code> | Sets the logFormat for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.loggingFormat">loggingFormat</a></code> | <code>aws-cdk-lib.aws_lambda.LoggingFormat</code> | Sets the loggingFormat for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The log group the function sends logs to. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The number of days log events are kept in CloudWatch Logs. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetentionRetryOptions">logRetentionRetryOptions</a></code> | <code>aws-cdk-lib.aws_lambda.LogRetentionRetryOptions</code> | When log retention is specified, a custom resource attempts to create the CloudWatch log group. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetentionRole">logRetentionRole</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The IAM role for the Lambda function associated with the custom resource that sets the retention policy. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.maxEventAge">maxEventAge</a></code> | <code>aws-cdk-lib.Duration</code> | The maximum age of a request that Lambda sends to a function for processing. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.memorySize">memorySize</a></code> | <code>number</code> | The amount of memory, in MB, that is allocated to your Lambda function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.onFailure">onFailure</a></code> | <code>aws-cdk-lib.aws_lambda.IDestination</code> | The destination for failed invocations. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.onSuccess">onSuccess</a></code> | <code>aws-cdk-lib.aws_lambda.IDestination</code> | The destination for successful invocations. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.paramsAndSecrets">paramsAndSecrets</a></code> | <code>aws-cdk-lib.aws_lambda.ParamsAndSecretsLayerVersion</code> | Specify the configuration of Parameters and Secrets Extension. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.profiling">profiling</a></code> | <code>boolean</code> | Enable profiling. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.profilingGroup">profilingGroup</a></code> | <code>aws-cdk-lib.aws_codeguruprofiler.IProfilingGroup</code> | Profiling Group. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.reservedConcurrentExecutions">reservedConcurrentExecutions</a></code> | <code>number</code> | The maximum of concurrent executions you want to reserve for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.retryAttempts">retryAttempts</a></code> | <code>number</code> | The maximum number of times to retry when the function returns an error. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | Lambda execution role. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime</code> | The runtime environment for the Lambda function that you are uploading. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.runtimeManagementMode">runtimeManagementMode</a></code> | <code>aws-cdk-lib.aws_lambda.RuntimeManagementMode</code> | Sets the runtime management configuration for a function's version. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.securityGroups">securityGroups</a></code> | <code>aws-cdk-lib.aws_ec2.ISecurityGroup[]</code> | The list of security groups to associate with the Lambda's network interfaces. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.snapStart">snapStart</a></code> | <code>aws-cdk-lib.aws_lambda.SnapStartConf</code> | Enable SnapStart for Lambda Function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.stackId">stackId</a></code> | <code>string</code> | The stack ID of Lambda@Edge function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.systemLogLevel">systemLogLevel</a></code> | <code>string</code> | Sets the system log level for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.timeout">timeout</a></code> | <code>aws-cdk-lib.Duration</code> | The function execution time (in seconds) after which Lambda terminates the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.tracing">tracing</a></code> | <code>aws-cdk-lib.aws_lambda.Tracing</code> | Enable AWS X-Ray Tracing for Lambda Function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | VPC network to place Lambda network interfaces. |
-| <code><a href="#cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.vpcSubnets">vpcSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | Where to place the network interfaces within the VPC. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.adotInstrumentation">adotInstrumentation</a></code> | <code>aws-cdk-lib.aws_lambda.AdotInstrumentationConfig</code> | Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.allowAllOutbound">allowAllOutbound</a></code> | <code>boolean</code> | Whether to allow the Lambda to send all network traffic. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.allowPublicSubnet">allowPublicSubnet</a></code> | <code>boolean</code> | Lambda Functions in a public subnet can NOT access the internet. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.applicationLogLevel">applicationLogLevel</a></code> | <code>string</code> | Sets the application log level for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The system architectures compatible with this lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.code">code</a></code> | <code>aws-cdk-lib.aws_lambda.Code</code> | The source code of your Lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.codeSigningConfig">codeSigningConfig</a></code> | <code>aws-cdk-lib.aws_lambda.ICodeSigningConfig</code> | Code signing config associated with this function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.currentVersionOptions">currentVersionOptions</a></code> | <code>aws-cdk-lib.aws_lambda.VersionOptions</code> | Options for the `lambda.Version` resource automatically created by the `fn.currentVersion` method. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.deadLetterQueue">deadLetterQueue</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | The SQS queue to use if DLQ is enabled. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.deadLetterQueueEnabled">deadLetterQueueEnabled</a></code> | <code>boolean</code> | Enabled DLQ. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.deadLetterTopic">deadLetterTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | The SNS topic to use as a DLQ. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.description">description</a></code> | <code>string</code> | A description of the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Key-value pairs that Lambda caches and makes available for your Lambda functions. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.environmentEncryption">environmentEncryption</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The AWS KMS key that's used to encrypt your function's environment variables. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.ephemeralStorageSize">ephemeralStorageSize</a></code> | <code>aws-cdk-lib.Size</code> | The size of the function’s /tmp directory in MiB. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.events">events</a></code> | <code>aws-cdk-lib.aws_lambda.IEventSource[]</code> | Event sources for this function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.filesystem">filesystem</a></code> | <code>aws-cdk-lib.aws_lambda.FileSystem</code> | The filesystem configuration for the lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.functionName">functionName</a></code> | <code>string</code> | A name for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.handler">handler</a></code> | <code>string</code> | The name of the method within your code that Lambda calls to execute your function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.initialPolicy">initialPolicy</a></code> | <code>aws-cdk-lib.aws_iam.PolicyStatement[]</code> | Initial policy statements to add to the created Lambda Role. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.insightsVersion">insightsVersion</a></code> | <code>aws-cdk-lib.aws_lambda.LambdaInsightsVersion</code> | Specify the version of CloudWatch Lambda insights to use for monitoring. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.ipv6AllowedForDualStack">ipv6AllowedForDualStack</a></code> | <code>boolean</code> | Allows outbound IPv6 traffic on VPC functions that are connected to dual-stack subnets. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.layers">layers</a></code> | <code>aws-cdk-lib.aws_lambda.ILayerVersion[]</code> | A list of layers to add to the function's execution environment. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logFormat">logFormat</a></code> | <code>string</code> | Sets the logFormat for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.loggingFormat">loggingFormat</a></code> | <code>aws-cdk-lib.aws_lambda.LoggingFormat</code> | Sets the loggingFormat for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The log group the function sends logs to. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The number of days log events are kept in CloudWatch Logs. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetentionRetryOptions">logRetentionRetryOptions</a></code> | <code>aws-cdk-lib.aws_lambda.LogRetentionRetryOptions</code> | When log retention is specified, a custom resource attempts to create the CloudWatch log group. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetentionRole">logRetentionRole</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The IAM role for the Lambda function associated with the custom resource that sets the retention policy. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.maxEventAge">maxEventAge</a></code> | <code>aws-cdk-lib.Duration</code> | The maximum age of a request that Lambda sends to a function for processing. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.memorySize">memorySize</a></code> | <code>number</code> | The amount of memory, in MB, that is allocated to your Lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.onFailure">onFailure</a></code> | <code>aws-cdk-lib.aws_lambda.IDestination</code> | The destination for failed invocations. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.onSuccess">onSuccess</a></code> | <code>aws-cdk-lib.aws_lambda.IDestination</code> | The destination for successful invocations. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.paramsAndSecrets">paramsAndSecrets</a></code> | <code>aws-cdk-lib.aws_lambda.ParamsAndSecretsLayerVersion</code> | Specify the configuration of Parameters and Secrets Extension. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.profiling">profiling</a></code> | <code>boolean</code> | Enable profiling. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.profilingGroup">profilingGroup</a></code> | <code>aws-cdk-lib.aws_codeguruprofiler.IProfilingGroup</code> | Profiling Group. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.reservedConcurrentExecutions">reservedConcurrentExecutions</a></code> | <code>number</code> | The maximum of concurrent executions you want to reserve for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.retryAttempts">retryAttempts</a></code> | <code>number</code> | The maximum number of times to retry when the function returns an error. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | Lambda execution role. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime</code> | The runtime environment for the Lambda function that you are uploading. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.runtimeManagementMode">runtimeManagementMode</a></code> | <code>aws-cdk-lib.aws_lambda.RuntimeManagementMode</code> | Sets the runtime management configuration for a function's version. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.securityGroups">securityGroups</a></code> | <code>aws-cdk-lib.aws_ec2.ISecurityGroup[]</code> | The list of security groups to associate with the Lambda's network interfaces. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.snapStart">snapStart</a></code> | <code>aws-cdk-lib.aws_lambda.SnapStartConf</code> | Enable SnapStart for Lambda Function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.stackId">stackId</a></code> | <code>string</code> | The stack ID of Lambda@Edge function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.systemLogLevel">systemLogLevel</a></code> | <code>string</code> | Sets the system log level for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.timeout">timeout</a></code> | <code>aws-cdk-lib.Duration</code> | The function execution time (in seconds) after which Lambda terminates the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.tracing">tracing</a></code> | <code>aws-cdk-lib.aws_lambda.Tracing</code> | Enable AWS X-Ray Tracing for Lambda Function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | VPC network to place Lambda network interfaces. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.vpcSubnets">vpcSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | Where to place the network interfaces within the VPC. |
 
 ---
 
-##### `adotInstrumentation`<sup>Optional</sup> <a name="adotInstrumentation" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.adotInstrumentation"></a>
+##### `adotInstrumentation`<sup>Optional</sup> <a name="adotInstrumentation" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.adotInstrumentation"></a>
 
 ```typescript
 public readonly adotInstrumentation: AdotInstrumentationConfig;
@@ -5872,7 +5762,7 @@ Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation
 
 ---
 
-##### `allowAllOutbound`<sup>Optional</sup> <a name="allowAllOutbound" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.allowAllOutbound"></a>
+##### `allowAllOutbound`<sup>Optional</sup> <a name="allowAllOutbound" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.allowAllOutbound"></a>
 
 ```typescript
 public readonly allowAllOutbound: boolean;
@@ -5891,7 +5781,7 @@ Instead, configure `allowAllOutbound` directly on the security group.
 
 ---
 
-##### `allowPublicSubnet`<sup>Optional</sup> <a name="allowPublicSubnet" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.allowPublicSubnet"></a>
+##### `allowPublicSubnet`<sup>Optional</sup> <a name="allowPublicSubnet" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.allowPublicSubnet"></a>
 
 ```typescript
 public readonly allowPublicSubnet: boolean;
@@ -5906,7 +5796,7 @@ Use this property to acknowledge this limitation and still place the function in
 
 ---
 
-##### `applicationLogLevel`<sup>Optional</sup> <a name="applicationLogLevel" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.applicationLogLevel"></a>
+##### `applicationLogLevel`<sup>Optional</sup> <a name="applicationLogLevel" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.applicationLogLevel"></a>
 
 ```typescript
 public readonly applicationLogLevel: string;
@@ -5919,7 +5809,7 @@ Sets the application log level for the function.
 
 ---
 
-##### `architecture`<sup>Optional</sup> <a name="architecture" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.architecture"></a>
+##### `architecture`<sup>Optional</sup> <a name="architecture" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.architecture"></a>
 
 ```typescript
 public readonly architecture: Architecture;
@@ -5932,7 +5822,7 @@ The system architectures compatible with this lambda function.
 
 ---
 
-##### `code`<sup>Optional</sup> <a name="code" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.code"></a>
+##### `code`<sup>Optional</sup> <a name="code" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.code"></a>
 
 ```typescript
 public readonly code: Code;
@@ -5948,7 +5838,7 @@ code as inline text.
 
 ---
 
-##### `codeSigningConfig`<sup>Optional</sup> <a name="codeSigningConfig" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.codeSigningConfig"></a>
+##### `codeSigningConfig`<sup>Optional</sup> <a name="codeSigningConfig" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.codeSigningConfig"></a>
 
 ```typescript
 public readonly codeSigningConfig: ICodeSigningConfig;
@@ -5961,7 +5851,7 @@ Code signing config associated with this function.
 
 ---
 
-##### `currentVersionOptions`<sup>Optional</sup> <a name="currentVersionOptions" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.currentVersionOptions"></a>
+##### `currentVersionOptions`<sup>Optional</sup> <a name="currentVersionOptions" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.currentVersionOptions"></a>
 
 ```typescript
 public readonly currentVersionOptions: VersionOptions;
@@ -5974,7 +5864,7 @@ Options for the `lambda.Version` resource automatically created by the `fn.curre
 
 ---
 
-##### `deadLetterQueue`<sup>Optional</sup> <a name="deadLetterQueue" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.deadLetterQueue"></a>
+##### `deadLetterQueue`<sup>Optional</sup> <a name="deadLetterQueue" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.deadLetterQueue"></a>
 
 ```typescript
 public readonly deadLetterQueue: IQueue;
@@ -5989,7 +5879,7 @@ If SNS topic is desired, specify `deadLetterTopic` property instead.
 
 ---
 
-##### `deadLetterQueueEnabled`<sup>Optional</sup> <a name="deadLetterQueueEnabled" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.deadLetterQueueEnabled"></a>
+##### `deadLetterQueueEnabled`<sup>Optional</sup> <a name="deadLetterQueueEnabled" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.deadLetterQueueEnabled"></a>
 
 ```typescript
 public readonly deadLetterQueueEnabled: boolean;
@@ -6005,7 +5895,7 @@ an SQS queue with default options will be defined for your Function.
 
 ---
 
-##### `deadLetterTopic`<sup>Optional</sup> <a name="deadLetterTopic" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.deadLetterTopic"></a>
+##### `deadLetterTopic`<sup>Optional</sup> <a name="deadLetterTopic" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.deadLetterTopic"></a>
 
 ```typescript
 public readonly deadLetterTopic: ITopic;
@@ -6021,7 +5911,7 @@ rather than an SNS topic. Using an SNS topic as a DLQ requires this property to 
 
 ---
 
-##### `description`<sup>Optional</sup> <a name="description" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.description"></a>
+##### `description`<sup>Optional</sup> <a name="description" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.description"></a>
 
 ```typescript
 public readonly description: string;
@@ -6034,7 +5924,7 @@ A description of the function.
 
 ---
 
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.environment"></a>
+##### `environment`<sup>Optional</sup> <a name="environment" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.environment"></a>
 
 ```typescript
 public readonly environment: {[ key: string ]: string};
@@ -6051,7 +5941,7 @@ Lambda function source code.
 
 ---
 
-##### `environmentEncryption`<sup>Optional</sup> <a name="environmentEncryption" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.environmentEncryption"></a>
+##### `environmentEncryption`<sup>Optional</sup> <a name="environmentEncryption" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.environmentEncryption"></a>
 
 ```typescript
 public readonly environmentEncryption: IKey;
@@ -6064,7 +5954,7 @@ The AWS KMS key that's used to encrypt your function's environment variables.
 
 ---
 
-##### `ephemeralStorageSize`<sup>Optional</sup> <a name="ephemeralStorageSize" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.ephemeralStorageSize"></a>
+##### `ephemeralStorageSize`<sup>Optional</sup> <a name="ephemeralStorageSize" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.ephemeralStorageSize"></a>
 
 ```typescript
 public readonly ephemeralStorageSize: Size;
@@ -6077,7 +5967,7 @@ The size of the function’s /tmp directory in MiB.
 
 ---
 
-##### `events`<sup>Optional</sup> <a name="events" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.events"></a>
+##### `events`<sup>Optional</sup> <a name="events" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.events"></a>
 
 ```typescript
 public readonly events: IEventSource[];
@@ -6092,7 +5982,7 @@ You can also add event sources using `addEventSource`.
 
 ---
 
-##### `filesystem`<sup>Optional</sup> <a name="filesystem" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.filesystem"></a>
+##### `filesystem`<sup>Optional</sup> <a name="filesystem" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.filesystem"></a>
 
 ```typescript
 public readonly filesystem: FileSystem;
@@ -6105,7 +5995,7 @@ The filesystem configuration for the lambda function.
 
 ---
 
-##### `functionName`<sup>Optional</sup> <a name="functionName" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.functionName"></a>
+##### `functionName`<sup>Optional</sup> <a name="functionName" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.functionName"></a>
 
 ```typescript
 public readonly functionName: string;
@@ -6118,7 +6008,7 @@ A name for the function.
 
 ---
 
-##### `handler`<sup>Optional</sup> <a name="handler" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.handler"></a>
+##### `handler`<sup>Optional</sup> <a name="handler" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.handler"></a>
 
 ```typescript
 public readonly handler: string;
@@ -6140,7 +6030,7 @@ the handler.
 
 ---
 
-##### `initialPolicy`<sup>Optional</sup> <a name="initialPolicy" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.initialPolicy"></a>
+##### `initialPolicy`<sup>Optional</sup> <a name="initialPolicy" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.initialPolicy"></a>
 
 ```typescript
 public readonly initialPolicy: PolicyStatement[];
@@ -6155,7 +6045,7 @@ You can call `addToRolePolicy` to the created lambda to add statements post crea
 
 ---
 
-##### `insightsVersion`<sup>Optional</sup> <a name="insightsVersion" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.insightsVersion"></a>
+##### `insightsVersion`<sup>Optional</sup> <a name="insightsVersion" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.insightsVersion"></a>
 
 ```typescript
 public readonly insightsVersion: LambdaInsightsVersion;
@@ -6168,7 +6058,7 @@ Specify the version of CloudWatch Lambda insights to use for monitoring.
 
 ---
 
-##### `ipv6AllowedForDualStack`<sup>Optional</sup> <a name="ipv6AllowedForDualStack" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.ipv6AllowedForDualStack"></a>
+##### `ipv6AllowedForDualStack`<sup>Optional</sup> <a name="ipv6AllowedForDualStack" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.ipv6AllowedForDualStack"></a>
 
 ```typescript
 public readonly ipv6AllowedForDualStack: boolean;
@@ -6183,7 +6073,7 @@ Only used if 'vpc' is supplied.
 
 ---
 
-##### `layers`<sup>Optional</sup> <a name="layers" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.layers"></a>
+##### `layers`<sup>Optional</sup> <a name="layers" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.layers"></a>
 
 ```typescript
 public readonly layers: ILayerVersion[];
@@ -6200,7 +6090,7 @@ that can be used by multiple functions.
 
 ---
 
-##### `logFormat`<sup>Optional</sup> <a name="logFormat" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logFormat"></a>
+##### `logFormat`<sup>Optional</sup> <a name="logFormat" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logFormat"></a>
 
 ```typescript
 public readonly logFormat: string;
@@ -6213,7 +6103,7 @@ Sets the logFormat for the function.
 
 ---
 
-##### `loggingFormat`<sup>Optional</sup> <a name="loggingFormat" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.loggingFormat"></a>
+##### `loggingFormat`<sup>Optional</sup> <a name="loggingFormat" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.loggingFormat"></a>
 
 ```typescript
 public readonly loggingFormat: LoggingFormat;
@@ -6226,7 +6116,7 @@ Sets the loggingFormat for the function.
 
 ---
 
-##### `logGroup`<sup>Optional</sup> <a name="logGroup" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logGroup"></a>
+##### `logGroup`<sup>Optional</sup> <a name="logGroup" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logGroup"></a>
 
 ```typescript
 public readonly logGroup: ILogGroup;
@@ -6247,7 +6137,7 @@ If you are deploying to another type of region, please check regional availabili
 
 ---
 
-##### `logRetention`<sup>Optional</sup> <a name="logRetention" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetention"></a>
+##### `logRetention`<sup>Optional</sup> <a name="logRetention" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetention"></a>
 
 ```typescript
 public readonly logRetention: RetentionDays;
@@ -6278,7 +6168,7 @@ myLogGroup.logGroupName;
 
 ---
 
-##### `logRetentionRetryOptions`<sup>Optional</sup> <a name="logRetentionRetryOptions" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetentionRetryOptions"></a>
+##### `logRetentionRetryOptions`<sup>Optional</sup> <a name="logRetentionRetryOptions" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetentionRetryOptions"></a>
 
 ```typescript
 public readonly logRetentionRetryOptions: LogRetentionRetryOptions;
@@ -6296,7 +6186,7 @@ This is a legacy API and we strongly recommend you migrate to `logGroup` if you 
 
 ---
 
-##### `logRetentionRole`<sup>Optional</sup> <a name="logRetentionRole" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetentionRole"></a>
+##### `logRetentionRole`<sup>Optional</sup> <a name="logRetentionRole" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.logRetentionRole"></a>
 
 ```typescript
 public readonly logRetentionRole: IRole;
@@ -6312,7 +6202,7 @@ This is a legacy API and we strongly recommend you migrate to `logGroup` if you 
 
 ---
 
-##### `maxEventAge`<sup>Optional</sup> <a name="maxEventAge" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.maxEventAge"></a>
+##### `maxEventAge`<sup>Optional</sup> <a name="maxEventAge" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.maxEventAge"></a>
 
 ```typescript
 public readonly maxEventAge: Duration;
@@ -6328,7 +6218,7 @@ Maximum: 6 hours
 
 ---
 
-##### `memorySize`<sup>Optional</sup> <a name="memorySize" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.memorySize"></a>
+##### `memorySize`<sup>Optional</sup> <a name="memorySize" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.memorySize"></a>
 
 ```typescript
 public readonly memorySize: number;
@@ -6345,7 +6235,7 @@ Developer Guide.
 
 ---
 
-##### `onFailure`<sup>Optional</sup> <a name="onFailure" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.onFailure"></a>
+##### `onFailure`<sup>Optional</sup> <a name="onFailure" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.onFailure"></a>
 
 ```typescript
 public readonly onFailure: IDestination;
@@ -6358,7 +6248,7 @@ The destination for failed invocations.
 
 ---
 
-##### `onSuccess`<sup>Optional</sup> <a name="onSuccess" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.onSuccess"></a>
+##### `onSuccess`<sup>Optional</sup> <a name="onSuccess" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.onSuccess"></a>
 
 ```typescript
 public readonly onSuccess: IDestination;
@@ -6371,7 +6261,7 @@ The destination for successful invocations.
 
 ---
 
-##### `paramsAndSecrets`<sup>Optional</sup> <a name="paramsAndSecrets" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.paramsAndSecrets"></a>
+##### `paramsAndSecrets`<sup>Optional</sup> <a name="paramsAndSecrets" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.paramsAndSecrets"></a>
 
 ```typescript
 public readonly paramsAndSecrets: ParamsAndSecretsLayerVersion;
@@ -6384,7 +6274,7 @@ Specify the configuration of Parameters and Secrets Extension.
 
 ---
 
-##### `profiling`<sup>Optional</sup> <a name="profiling" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.profiling"></a>
+##### `profiling`<sup>Optional</sup> <a name="profiling" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.profiling"></a>
 
 ```typescript
 public readonly profiling: boolean;
@@ -6397,7 +6287,7 @@ Enable profiling.
 
 ---
 
-##### `profilingGroup`<sup>Optional</sup> <a name="profilingGroup" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.profilingGroup"></a>
+##### `profilingGroup`<sup>Optional</sup> <a name="profilingGroup" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.profilingGroup"></a>
 
 ```typescript
 public readonly profilingGroup: IProfilingGroup;
@@ -6410,7 +6300,7 @@ Profiling Group.
 
 ---
 
-##### `reservedConcurrentExecutions`<sup>Optional</sup> <a name="reservedConcurrentExecutions" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.reservedConcurrentExecutions"></a>
+##### `reservedConcurrentExecutions`<sup>Optional</sup> <a name="reservedConcurrentExecutions" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.reservedConcurrentExecutions"></a>
 
 ```typescript
 public readonly reservedConcurrentExecutions: number;
@@ -6423,7 +6313,7 @@ The maximum of concurrent executions you want to reserve for the function.
 
 ---
 
-##### `retryAttempts`<sup>Optional</sup> <a name="retryAttempts" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.retryAttempts"></a>
+##### `retryAttempts`<sup>Optional</sup> <a name="retryAttempts" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.retryAttempts"></a>
 
 ```typescript
 public readonly retryAttempts: number;
@@ -6439,7 +6329,7 @@ Maximum: 2
 
 ---
 
-##### `role`<sup>Optional</sup> <a name="role" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.role"></a>
+##### `role`<sup>Optional</sup> <a name="role" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.role"></a>
 
 ```typescript
 public readonly role: IRole;
@@ -6462,7 +6352,7 @@ The relevant managed policies are "service-role/AWSLambdaBasicExecutionRole" and
 
 ---
 
-##### `runtime`<sup>Optional</sup> <a name="runtime" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.runtime"></a>
+##### `runtime`<sup>Optional</sup> <a name="runtime" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.runtime"></a>
 
 ```typescript
 public readonly runtime: Runtime;
@@ -6479,7 +6369,7 @@ Use `Runtime.FROM_IMAGE` when defining a function from a Docker image.
 
 ---
 
-##### `runtimeManagementMode`<sup>Optional</sup> <a name="runtimeManagementMode" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.runtimeManagementMode"></a>
+##### `runtimeManagementMode`<sup>Optional</sup> <a name="runtimeManagementMode" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.runtimeManagementMode"></a>
 
 ```typescript
 public readonly runtimeManagementMode: RuntimeManagementMode;
@@ -6492,7 +6382,7 @@ Sets the runtime management configuration for a function's version.
 
 ---
 
-##### `securityGroups`<sup>Optional</sup> <a name="securityGroups" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.securityGroups"></a>
+##### `securityGroups`<sup>Optional</sup> <a name="securityGroups" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.securityGroups"></a>
 
 ```typescript
 public readonly securityGroups: ISecurityGroup[];
@@ -6507,7 +6397,7 @@ Only used if 'vpc' is supplied.
 
 ---
 
-##### `snapStart`<sup>Optional</sup> <a name="snapStart" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.snapStart"></a>
+##### `snapStart`<sup>Optional</sup> <a name="snapStart" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.snapStart"></a>
 
 ```typescript
 public readonly snapStart: SnapStartConf;
@@ -6522,7 +6412,7 @@ SnapStart is currently supported only for Java 11, 17 runtime
 
 ---
 
-##### `stackId`<sup>Optional</sup> <a name="stackId" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.stackId"></a>
+##### `stackId`<sup>Optional</sup> <a name="stackId" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.stackId"></a>
 
 ```typescript
 public readonly stackId: string;
@@ -6535,7 +6425,7 @@ The stack ID of Lambda@Edge function.
 
 ---
 
-##### `systemLogLevel`<sup>Optional</sup> <a name="systemLogLevel" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.systemLogLevel"></a>
+##### `systemLogLevel`<sup>Optional</sup> <a name="systemLogLevel" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.systemLogLevel"></a>
 
 ```typescript
 public readonly systemLogLevel: string;
@@ -6548,7 +6438,7 @@ Sets the system log level for the function.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.timeout"></a>
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.timeout"></a>
 
 ```typescript
 public readonly timeout: Duration;
@@ -6564,7 +6454,7 @@ based on the function's expected execution time.
 
 ---
 
-##### `tracing`<sup>Optional</sup> <a name="tracing" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.tracing"></a>
+##### `tracing`<sup>Optional</sup> <a name="tracing" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.tracing"></a>
 
 ```typescript
 public readonly tracing: Tracing;
@@ -6577,7 +6467,7 @@ Enable AWS X-Ray Tracing for Lambda Function.
 
 ---
 
-##### `vpc`<sup>Optional</sup> <a name="vpc" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.vpc"></a>
+##### `vpc`<sup>Optional</sup> <a name="vpc" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.vpc"></a>
 
 ```typescript
 public readonly vpc: IVpc;
@@ -6593,7 +6483,7 @@ This is required when `vpcSubnets` is specified.
 
 ---
 
-##### `vpcSubnets`<sup>Optional</sup> <a name="vpcSubnets" id="cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.vpcSubnets"></a>
+##### `vpcSubnets`<sup>Optional</sup> <a name="vpcSubnets" id="@funkepublishing/cdk-nextjs-standalone.OptionalEdgeFunctionProps.property.vpcSubnets"></a>
 
 ```typescript
 public readonly vpcSubnets: SubnetSelection;
@@ -6612,14 +6502,14 @@ public subnets is not allowed (unless `allowPublicSubnet` is set to `true`).
 
 ---
 
-### OptionalFunctionProps <a name="OptionalFunctionProps" id="cdk-nextjs-standalone.OptionalFunctionProps"></a>
+### OptionalFunctionProps <a name="OptionalFunctionProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps"></a>
 
 OptionalFunctionProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalFunctionProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.Initializer"></a>
 
 ```typescript
-import { OptionalFunctionProps } from 'cdk-nextjs-standalone'
+import { OptionalFunctionProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalFunctionProps: OptionalFunctionProps = { ... }
 ```
@@ -6628,58 +6518,58 @@ const optionalFunctionProps: OptionalFunctionProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.adotInstrumentation">adotInstrumentation</a></code> | <code>aws-cdk-lib.aws_lambda.AdotInstrumentationConfig</code> | Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.allowAllOutbound">allowAllOutbound</a></code> | <code>boolean</code> | Whether to allow the Lambda to send all network traffic. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.allowPublicSubnet">allowPublicSubnet</a></code> | <code>boolean</code> | Lambda Functions in a public subnet can NOT access the internet. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.applicationLogLevel">applicationLogLevel</a></code> | <code>string</code> | Sets the application log level for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The system architectures compatible with this lambda function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.code">code</a></code> | <code>aws-cdk-lib.aws_lambda.Code</code> | The source code of your Lambda function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.codeSigningConfig">codeSigningConfig</a></code> | <code>aws-cdk-lib.aws_lambda.ICodeSigningConfig</code> | Code signing config associated with this function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.currentVersionOptions">currentVersionOptions</a></code> | <code>aws-cdk-lib.aws_lambda.VersionOptions</code> | Options for the `lambda.Version` resource automatically created by the `fn.currentVersion` method. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.deadLetterQueue">deadLetterQueue</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | The SQS queue to use if DLQ is enabled. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.deadLetterQueueEnabled">deadLetterQueueEnabled</a></code> | <code>boolean</code> | Enabled DLQ. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.deadLetterTopic">deadLetterTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | The SNS topic to use as a DLQ. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.description">description</a></code> | <code>string</code> | A description of the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Key-value pairs that Lambda caches and makes available for your Lambda functions. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.environmentEncryption">environmentEncryption</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The AWS KMS key that's used to encrypt your function's environment variables. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.ephemeralStorageSize">ephemeralStorageSize</a></code> | <code>aws-cdk-lib.Size</code> | The size of the function’s /tmp directory in MiB. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.events">events</a></code> | <code>aws-cdk-lib.aws_lambda.IEventSource[]</code> | Event sources for this function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.filesystem">filesystem</a></code> | <code>aws-cdk-lib.aws_lambda.FileSystem</code> | The filesystem configuration for the lambda function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.functionName">functionName</a></code> | <code>string</code> | A name for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.handler">handler</a></code> | <code>string</code> | The name of the method within your code that Lambda calls to execute your function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.initialPolicy">initialPolicy</a></code> | <code>aws-cdk-lib.aws_iam.PolicyStatement[]</code> | Initial policy statements to add to the created Lambda Role. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.insightsVersion">insightsVersion</a></code> | <code>aws-cdk-lib.aws_lambda.LambdaInsightsVersion</code> | Specify the version of CloudWatch Lambda insights to use for monitoring. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.ipv6AllowedForDualStack">ipv6AllowedForDualStack</a></code> | <code>boolean</code> | Allows outbound IPv6 traffic on VPC functions that are connected to dual-stack subnets. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.layers">layers</a></code> | <code>aws-cdk-lib.aws_lambda.ILayerVersion[]</code> | A list of layers to add to the function's execution environment. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.logFormat">logFormat</a></code> | <code>string</code> | Sets the logFormat for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.loggingFormat">loggingFormat</a></code> | <code>aws-cdk-lib.aws_lambda.LoggingFormat</code> | Sets the loggingFormat for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The log group the function sends logs to. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The number of days log events are kept in CloudWatch Logs. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.logRetentionRetryOptions">logRetentionRetryOptions</a></code> | <code>aws-cdk-lib.aws_lambda.LogRetentionRetryOptions</code> | When log retention is specified, a custom resource attempts to create the CloudWatch log group. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.logRetentionRole">logRetentionRole</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The IAM role for the Lambda function associated with the custom resource that sets the retention policy. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.maxEventAge">maxEventAge</a></code> | <code>aws-cdk-lib.Duration</code> | The maximum age of a request that Lambda sends to a function for processing. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.memorySize">memorySize</a></code> | <code>number</code> | The amount of memory, in MB, that is allocated to your Lambda function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.onFailure">onFailure</a></code> | <code>aws-cdk-lib.aws_lambda.IDestination</code> | The destination for failed invocations. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.onSuccess">onSuccess</a></code> | <code>aws-cdk-lib.aws_lambda.IDestination</code> | The destination for successful invocations. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.paramsAndSecrets">paramsAndSecrets</a></code> | <code>aws-cdk-lib.aws_lambda.ParamsAndSecretsLayerVersion</code> | Specify the configuration of Parameters and Secrets Extension. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.profiling">profiling</a></code> | <code>boolean</code> | Enable profiling. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.profilingGroup">profilingGroup</a></code> | <code>aws-cdk-lib.aws_codeguruprofiler.IProfilingGroup</code> | Profiling Group. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.reservedConcurrentExecutions">reservedConcurrentExecutions</a></code> | <code>number</code> | The maximum of concurrent executions you want to reserve for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.retryAttempts">retryAttempts</a></code> | <code>number</code> | The maximum number of times to retry when the function returns an error. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | Lambda execution role. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime</code> | The runtime environment for the Lambda function that you are uploading. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.runtimeManagementMode">runtimeManagementMode</a></code> | <code>aws-cdk-lib.aws_lambda.RuntimeManagementMode</code> | Sets the runtime management configuration for a function's version. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.securityGroups">securityGroups</a></code> | <code>aws-cdk-lib.aws_ec2.ISecurityGroup[]</code> | The list of security groups to associate with the Lambda's network interfaces. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.snapStart">snapStart</a></code> | <code>aws-cdk-lib.aws_lambda.SnapStartConf</code> | Enable SnapStart for Lambda Function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.systemLogLevel">systemLogLevel</a></code> | <code>string</code> | Sets the system log level for the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.timeout">timeout</a></code> | <code>aws-cdk-lib.Duration</code> | The function execution time (in seconds) after which Lambda terminates the function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.tracing">tracing</a></code> | <code>aws-cdk-lib.aws_lambda.Tracing</code> | Enable AWS X-Ray Tracing for Lambda Function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | VPC network to place Lambda network interfaces. |
-| <code><a href="#cdk-nextjs-standalone.OptionalFunctionProps.property.vpcSubnets">vpcSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | Where to place the network interfaces within the VPC. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.adotInstrumentation">adotInstrumentation</a></code> | <code>aws-cdk-lib.aws_lambda.AdotInstrumentationConfig</code> | Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.allowAllOutbound">allowAllOutbound</a></code> | <code>boolean</code> | Whether to allow the Lambda to send all network traffic. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.allowPublicSubnet">allowPublicSubnet</a></code> | <code>boolean</code> | Lambda Functions in a public subnet can NOT access the internet. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.applicationLogLevel">applicationLogLevel</a></code> | <code>string</code> | Sets the application log level for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The system architectures compatible with this lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.code">code</a></code> | <code>aws-cdk-lib.aws_lambda.Code</code> | The source code of your Lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.codeSigningConfig">codeSigningConfig</a></code> | <code>aws-cdk-lib.aws_lambda.ICodeSigningConfig</code> | Code signing config associated with this function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.currentVersionOptions">currentVersionOptions</a></code> | <code>aws-cdk-lib.aws_lambda.VersionOptions</code> | Options for the `lambda.Version` resource automatically created by the `fn.currentVersion` method. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.deadLetterQueue">deadLetterQueue</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | The SQS queue to use if DLQ is enabled. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.deadLetterQueueEnabled">deadLetterQueueEnabled</a></code> | <code>boolean</code> | Enabled DLQ. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.deadLetterTopic">deadLetterTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | The SNS topic to use as a DLQ. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.description">description</a></code> | <code>string</code> | A description of the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Key-value pairs that Lambda caches and makes available for your Lambda functions. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.environmentEncryption">environmentEncryption</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The AWS KMS key that's used to encrypt your function's environment variables. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.ephemeralStorageSize">ephemeralStorageSize</a></code> | <code>aws-cdk-lib.Size</code> | The size of the function’s /tmp directory in MiB. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.events">events</a></code> | <code>aws-cdk-lib.aws_lambda.IEventSource[]</code> | Event sources for this function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.filesystem">filesystem</a></code> | <code>aws-cdk-lib.aws_lambda.FileSystem</code> | The filesystem configuration for the lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.functionName">functionName</a></code> | <code>string</code> | A name for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.handler">handler</a></code> | <code>string</code> | The name of the method within your code that Lambda calls to execute your function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.initialPolicy">initialPolicy</a></code> | <code>aws-cdk-lib.aws_iam.PolicyStatement[]</code> | Initial policy statements to add to the created Lambda Role. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.insightsVersion">insightsVersion</a></code> | <code>aws-cdk-lib.aws_lambda.LambdaInsightsVersion</code> | Specify the version of CloudWatch Lambda insights to use for monitoring. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.ipv6AllowedForDualStack">ipv6AllowedForDualStack</a></code> | <code>boolean</code> | Allows outbound IPv6 traffic on VPC functions that are connected to dual-stack subnets. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.layers">layers</a></code> | <code>aws-cdk-lib.aws_lambda.ILayerVersion[]</code> | A list of layers to add to the function's execution environment. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.logFormat">logFormat</a></code> | <code>string</code> | Sets the logFormat for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.loggingFormat">loggingFormat</a></code> | <code>aws-cdk-lib.aws_lambda.LoggingFormat</code> | Sets the loggingFormat for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The log group the function sends logs to. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The number of days log events are kept in CloudWatch Logs. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.logRetentionRetryOptions">logRetentionRetryOptions</a></code> | <code>aws-cdk-lib.aws_lambda.LogRetentionRetryOptions</code> | When log retention is specified, a custom resource attempts to create the CloudWatch log group. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.logRetentionRole">logRetentionRole</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | The IAM role for the Lambda function associated with the custom resource that sets the retention policy. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.maxEventAge">maxEventAge</a></code> | <code>aws-cdk-lib.Duration</code> | The maximum age of a request that Lambda sends to a function for processing. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.memorySize">memorySize</a></code> | <code>number</code> | The amount of memory, in MB, that is allocated to your Lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.onFailure">onFailure</a></code> | <code>aws-cdk-lib.aws_lambda.IDestination</code> | The destination for failed invocations. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.onSuccess">onSuccess</a></code> | <code>aws-cdk-lib.aws_lambda.IDestination</code> | The destination for successful invocations. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.paramsAndSecrets">paramsAndSecrets</a></code> | <code>aws-cdk-lib.aws_lambda.ParamsAndSecretsLayerVersion</code> | Specify the configuration of Parameters and Secrets Extension. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.profiling">profiling</a></code> | <code>boolean</code> | Enable profiling. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.profilingGroup">profilingGroup</a></code> | <code>aws-cdk-lib.aws_codeguruprofiler.IProfilingGroup</code> | Profiling Group. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.reservedConcurrentExecutions">reservedConcurrentExecutions</a></code> | <code>number</code> | The maximum of concurrent executions you want to reserve for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.retryAttempts">retryAttempts</a></code> | <code>number</code> | The maximum number of times to retry when the function returns an error. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | Lambda execution role. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime</code> | The runtime environment for the Lambda function that you are uploading. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.runtimeManagementMode">runtimeManagementMode</a></code> | <code>aws-cdk-lib.aws_lambda.RuntimeManagementMode</code> | Sets the runtime management configuration for a function's version. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.securityGroups">securityGroups</a></code> | <code>aws-cdk-lib.aws_ec2.ISecurityGroup[]</code> | The list of security groups to associate with the Lambda's network interfaces. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.snapStart">snapStart</a></code> | <code>aws-cdk-lib.aws_lambda.SnapStartConf</code> | Enable SnapStart for Lambda Function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.systemLogLevel">systemLogLevel</a></code> | <code>string</code> | Sets the system log level for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.timeout">timeout</a></code> | <code>aws-cdk-lib.Duration</code> | The function execution time (in seconds) after which Lambda terminates the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.tracing">tracing</a></code> | <code>aws-cdk-lib.aws_lambda.Tracing</code> | Enable AWS X-Ray Tracing for Lambda Function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | VPC network to place Lambda network interfaces. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.vpcSubnets">vpcSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | Where to place the network interfaces within the VPC. |
 
 ---
 
-##### `adotInstrumentation`<sup>Optional</sup> <a name="adotInstrumentation" id="cdk-nextjs-standalone.OptionalFunctionProps.property.adotInstrumentation"></a>
+##### `adotInstrumentation`<sup>Optional</sup> <a name="adotInstrumentation" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.adotInstrumentation"></a>
 
 ```typescript
 public readonly adotInstrumentation: AdotInstrumentationConfig;
@@ -6692,7 +6582,7 @@ Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation
 
 ---
 
-##### `allowAllOutbound`<sup>Optional</sup> <a name="allowAllOutbound" id="cdk-nextjs-standalone.OptionalFunctionProps.property.allowAllOutbound"></a>
+##### `allowAllOutbound`<sup>Optional</sup> <a name="allowAllOutbound" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.allowAllOutbound"></a>
 
 ```typescript
 public readonly allowAllOutbound: boolean;
@@ -6711,7 +6601,7 @@ Instead, configure `allowAllOutbound` directly on the security group.
 
 ---
 
-##### `allowPublicSubnet`<sup>Optional</sup> <a name="allowPublicSubnet" id="cdk-nextjs-standalone.OptionalFunctionProps.property.allowPublicSubnet"></a>
+##### `allowPublicSubnet`<sup>Optional</sup> <a name="allowPublicSubnet" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.allowPublicSubnet"></a>
 
 ```typescript
 public readonly allowPublicSubnet: boolean;
@@ -6726,7 +6616,7 @@ Use this property to acknowledge this limitation and still place the function in
 
 ---
 
-##### `applicationLogLevel`<sup>Optional</sup> <a name="applicationLogLevel" id="cdk-nextjs-standalone.OptionalFunctionProps.property.applicationLogLevel"></a>
+##### `applicationLogLevel`<sup>Optional</sup> <a name="applicationLogLevel" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.applicationLogLevel"></a>
 
 ```typescript
 public readonly applicationLogLevel: string;
@@ -6739,7 +6629,7 @@ Sets the application log level for the function.
 
 ---
 
-##### `architecture`<sup>Optional</sup> <a name="architecture" id="cdk-nextjs-standalone.OptionalFunctionProps.property.architecture"></a>
+##### `architecture`<sup>Optional</sup> <a name="architecture" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.architecture"></a>
 
 ```typescript
 public readonly architecture: Architecture;
@@ -6752,7 +6642,7 @@ The system architectures compatible with this lambda function.
 
 ---
 
-##### `code`<sup>Optional</sup> <a name="code" id="cdk-nextjs-standalone.OptionalFunctionProps.property.code"></a>
+##### `code`<sup>Optional</sup> <a name="code" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.code"></a>
 
 ```typescript
 public readonly code: Code;
@@ -6768,7 +6658,7 @@ code as inline text.
 
 ---
 
-##### `codeSigningConfig`<sup>Optional</sup> <a name="codeSigningConfig" id="cdk-nextjs-standalone.OptionalFunctionProps.property.codeSigningConfig"></a>
+##### `codeSigningConfig`<sup>Optional</sup> <a name="codeSigningConfig" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.codeSigningConfig"></a>
 
 ```typescript
 public readonly codeSigningConfig: ICodeSigningConfig;
@@ -6781,7 +6671,7 @@ Code signing config associated with this function.
 
 ---
 
-##### `currentVersionOptions`<sup>Optional</sup> <a name="currentVersionOptions" id="cdk-nextjs-standalone.OptionalFunctionProps.property.currentVersionOptions"></a>
+##### `currentVersionOptions`<sup>Optional</sup> <a name="currentVersionOptions" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.currentVersionOptions"></a>
 
 ```typescript
 public readonly currentVersionOptions: VersionOptions;
@@ -6794,7 +6684,7 @@ Options for the `lambda.Version` resource automatically created by the `fn.curre
 
 ---
 
-##### `deadLetterQueue`<sup>Optional</sup> <a name="deadLetterQueue" id="cdk-nextjs-standalone.OptionalFunctionProps.property.deadLetterQueue"></a>
+##### `deadLetterQueue`<sup>Optional</sup> <a name="deadLetterQueue" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.deadLetterQueue"></a>
 
 ```typescript
 public readonly deadLetterQueue: IQueue;
@@ -6809,7 +6699,7 @@ If SNS topic is desired, specify `deadLetterTopic` property instead.
 
 ---
 
-##### `deadLetterQueueEnabled`<sup>Optional</sup> <a name="deadLetterQueueEnabled" id="cdk-nextjs-standalone.OptionalFunctionProps.property.deadLetterQueueEnabled"></a>
+##### `deadLetterQueueEnabled`<sup>Optional</sup> <a name="deadLetterQueueEnabled" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.deadLetterQueueEnabled"></a>
 
 ```typescript
 public readonly deadLetterQueueEnabled: boolean;
@@ -6825,7 +6715,7 @@ an SQS queue with default options will be defined for your Function.
 
 ---
 
-##### `deadLetterTopic`<sup>Optional</sup> <a name="deadLetterTopic" id="cdk-nextjs-standalone.OptionalFunctionProps.property.deadLetterTopic"></a>
+##### `deadLetterTopic`<sup>Optional</sup> <a name="deadLetterTopic" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.deadLetterTopic"></a>
 
 ```typescript
 public readonly deadLetterTopic: ITopic;
@@ -6841,7 +6731,7 @@ rather than an SNS topic. Using an SNS topic as a DLQ requires this property to 
 
 ---
 
-##### `description`<sup>Optional</sup> <a name="description" id="cdk-nextjs-standalone.OptionalFunctionProps.property.description"></a>
+##### `description`<sup>Optional</sup> <a name="description" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.description"></a>
 
 ```typescript
 public readonly description: string;
@@ -6854,7 +6744,7 @@ A description of the function.
 
 ---
 
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.OptionalFunctionProps.property.environment"></a>
+##### `environment`<sup>Optional</sup> <a name="environment" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.environment"></a>
 
 ```typescript
 public readonly environment: {[ key: string ]: string};
@@ -6871,7 +6761,7 @@ Lambda function source code.
 
 ---
 
-##### `environmentEncryption`<sup>Optional</sup> <a name="environmentEncryption" id="cdk-nextjs-standalone.OptionalFunctionProps.property.environmentEncryption"></a>
+##### `environmentEncryption`<sup>Optional</sup> <a name="environmentEncryption" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.environmentEncryption"></a>
 
 ```typescript
 public readonly environmentEncryption: IKey;
@@ -6884,7 +6774,7 @@ The AWS KMS key that's used to encrypt your function's environment variables.
 
 ---
 
-##### `ephemeralStorageSize`<sup>Optional</sup> <a name="ephemeralStorageSize" id="cdk-nextjs-standalone.OptionalFunctionProps.property.ephemeralStorageSize"></a>
+##### `ephemeralStorageSize`<sup>Optional</sup> <a name="ephemeralStorageSize" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.ephemeralStorageSize"></a>
 
 ```typescript
 public readonly ephemeralStorageSize: Size;
@@ -6897,7 +6787,7 @@ The size of the function’s /tmp directory in MiB.
 
 ---
 
-##### `events`<sup>Optional</sup> <a name="events" id="cdk-nextjs-standalone.OptionalFunctionProps.property.events"></a>
+##### `events`<sup>Optional</sup> <a name="events" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.events"></a>
 
 ```typescript
 public readonly events: IEventSource[];
@@ -6912,7 +6802,7 @@ You can also add event sources using `addEventSource`.
 
 ---
 
-##### `filesystem`<sup>Optional</sup> <a name="filesystem" id="cdk-nextjs-standalone.OptionalFunctionProps.property.filesystem"></a>
+##### `filesystem`<sup>Optional</sup> <a name="filesystem" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.filesystem"></a>
 
 ```typescript
 public readonly filesystem: FileSystem;
@@ -6925,7 +6815,7 @@ The filesystem configuration for the lambda function.
 
 ---
 
-##### `functionName`<sup>Optional</sup> <a name="functionName" id="cdk-nextjs-standalone.OptionalFunctionProps.property.functionName"></a>
+##### `functionName`<sup>Optional</sup> <a name="functionName" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.functionName"></a>
 
 ```typescript
 public readonly functionName: string;
@@ -6938,7 +6828,7 @@ A name for the function.
 
 ---
 
-##### `handler`<sup>Optional</sup> <a name="handler" id="cdk-nextjs-standalone.OptionalFunctionProps.property.handler"></a>
+##### `handler`<sup>Optional</sup> <a name="handler" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.handler"></a>
 
 ```typescript
 public readonly handler: string;
@@ -6960,7 +6850,7 @@ the handler.
 
 ---
 
-##### `initialPolicy`<sup>Optional</sup> <a name="initialPolicy" id="cdk-nextjs-standalone.OptionalFunctionProps.property.initialPolicy"></a>
+##### `initialPolicy`<sup>Optional</sup> <a name="initialPolicy" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.initialPolicy"></a>
 
 ```typescript
 public readonly initialPolicy: PolicyStatement[];
@@ -6975,7 +6865,7 @@ You can call `addToRolePolicy` to the created lambda to add statements post crea
 
 ---
 
-##### `insightsVersion`<sup>Optional</sup> <a name="insightsVersion" id="cdk-nextjs-standalone.OptionalFunctionProps.property.insightsVersion"></a>
+##### `insightsVersion`<sup>Optional</sup> <a name="insightsVersion" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.insightsVersion"></a>
 
 ```typescript
 public readonly insightsVersion: LambdaInsightsVersion;
@@ -6988,7 +6878,7 @@ Specify the version of CloudWatch Lambda insights to use for monitoring.
 
 ---
 
-##### `ipv6AllowedForDualStack`<sup>Optional</sup> <a name="ipv6AllowedForDualStack" id="cdk-nextjs-standalone.OptionalFunctionProps.property.ipv6AllowedForDualStack"></a>
+##### `ipv6AllowedForDualStack`<sup>Optional</sup> <a name="ipv6AllowedForDualStack" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.ipv6AllowedForDualStack"></a>
 
 ```typescript
 public readonly ipv6AllowedForDualStack: boolean;
@@ -7003,7 +6893,7 @@ Only used if 'vpc' is supplied.
 
 ---
 
-##### `layers`<sup>Optional</sup> <a name="layers" id="cdk-nextjs-standalone.OptionalFunctionProps.property.layers"></a>
+##### `layers`<sup>Optional</sup> <a name="layers" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.layers"></a>
 
 ```typescript
 public readonly layers: ILayerVersion[];
@@ -7020,7 +6910,7 @@ that can be used by multiple functions.
 
 ---
 
-##### `logFormat`<sup>Optional</sup> <a name="logFormat" id="cdk-nextjs-standalone.OptionalFunctionProps.property.logFormat"></a>
+##### `logFormat`<sup>Optional</sup> <a name="logFormat" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.logFormat"></a>
 
 ```typescript
 public readonly logFormat: string;
@@ -7033,7 +6923,7 @@ Sets the logFormat for the function.
 
 ---
 
-##### `loggingFormat`<sup>Optional</sup> <a name="loggingFormat" id="cdk-nextjs-standalone.OptionalFunctionProps.property.loggingFormat"></a>
+##### `loggingFormat`<sup>Optional</sup> <a name="loggingFormat" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.loggingFormat"></a>
 
 ```typescript
 public readonly loggingFormat: LoggingFormat;
@@ -7046,7 +6936,7 @@ Sets the loggingFormat for the function.
 
 ---
 
-##### `logGroup`<sup>Optional</sup> <a name="logGroup" id="cdk-nextjs-standalone.OptionalFunctionProps.property.logGroup"></a>
+##### `logGroup`<sup>Optional</sup> <a name="logGroup" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.logGroup"></a>
 
 ```typescript
 public readonly logGroup: ILogGroup;
@@ -7067,7 +6957,7 @@ If you are deploying to another type of region, please check regional availabili
 
 ---
 
-##### `logRetention`<sup>Optional</sup> <a name="logRetention" id="cdk-nextjs-standalone.OptionalFunctionProps.property.logRetention"></a>
+##### `logRetention`<sup>Optional</sup> <a name="logRetention" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.logRetention"></a>
 
 ```typescript
 public readonly logRetention: RetentionDays;
@@ -7098,7 +6988,7 @@ myLogGroup.logGroupName;
 
 ---
 
-##### `logRetentionRetryOptions`<sup>Optional</sup> <a name="logRetentionRetryOptions" id="cdk-nextjs-standalone.OptionalFunctionProps.property.logRetentionRetryOptions"></a>
+##### `logRetentionRetryOptions`<sup>Optional</sup> <a name="logRetentionRetryOptions" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.logRetentionRetryOptions"></a>
 
 ```typescript
 public readonly logRetentionRetryOptions: LogRetentionRetryOptions;
@@ -7116,7 +7006,7 @@ This is a legacy API and we strongly recommend you migrate to `logGroup` if you 
 
 ---
 
-##### `logRetentionRole`<sup>Optional</sup> <a name="logRetentionRole" id="cdk-nextjs-standalone.OptionalFunctionProps.property.logRetentionRole"></a>
+##### `logRetentionRole`<sup>Optional</sup> <a name="logRetentionRole" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.logRetentionRole"></a>
 
 ```typescript
 public readonly logRetentionRole: IRole;
@@ -7132,7 +7022,7 @@ This is a legacy API and we strongly recommend you migrate to `logGroup` if you 
 
 ---
 
-##### `maxEventAge`<sup>Optional</sup> <a name="maxEventAge" id="cdk-nextjs-standalone.OptionalFunctionProps.property.maxEventAge"></a>
+##### `maxEventAge`<sup>Optional</sup> <a name="maxEventAge" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.maxEventAge"></a>
 
 ```typescript
 public readonly maxEventAge: Duration;
@@ -7148,7 +7038,7 @@ Maximum: 6 hours
 
 ---
 
-##### `memorySize`<sup>Optional</sup> <a name="memorySize" id="cdk-nextjs-standalone.OptionalFunctionProps.property.memorySize"></a>
+##### `memorySize`<sup>Optional</sup> <a name="memorySize" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.memorySize"></a>
 
 ```typescript
 public readonly memorySize: number;
@@ -7165,7 +7055,7 @@ Developer Guide.
 
 ---
 
-##### `onFailure`<sup>Optional</sup> <a name="onFailure" id="cdk-nextjs-standalone.OptionalFunctionProps.property.onFailure"></a>
+##### `onFailure`<sup>Optional</sup> <a name="onFailure" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.onFailure"></a>
 
 ```typescript
 public readonly onFailure: IDestination;
@@ -7178,7 +7068,7 @@ The destination for failed invocations.
 
 ---
 
-##### `onSuccess`<sup>Optional</sup> <a name="onSuccess" id="cdk-nextjs-standalone.OptionalFunctionProps.property.onSuccess"></a>
+##### `onSuccess`<sup>Optional</sup> <a name="onSuccess" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.onSuccess"></a>
 
 ```typescript
 public readonly onSuccess: IDestination;
@@ -7191,7 +7081,7 @@ The destination for successful invocations.
 
 ---
 
-##### `paramsAndSecrets`<sup>Optional</sup> <a name="paramsAndSecrets" id="cdk-nextjs-standalone.OptionalFunctionProps.property.paramsAndSecrets"></a>
+##### `paramsAndSecrets`<sup>Optional</sup> <a name="paramsAndSecrets" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.paramsAndSecrets"></a>
 
 ```typescript
 public readonly paramsAndSecrets: ParamsAndSecretsLayerVersion;
@@ -7204,7 +7094,7 @@ Specify the configuration of Parameters and Secrets Extension.
 
 ---
 
-##### `profiling`<sup>Optional</sup> <a name="profiling" id="cdk-nextjs-standalone.OptionalFunctionProps.property.profiling"></a>
+##### `profiling`<sup>Optional</sup> <a name="profiling" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.profiling"></a>
 
 ```typescript
 public readonly profiling: boolean;
@@ -7217,7 +7107,7 @@ Enable profiling.
 
 ---
 
-##### `profilingGroup`<sup>Optional</sup> <a name="profilingGroup" id="cdk-nextjs-standalone.OptionalFunctionProps.property.profilingGroup"></a>
+##### `profilingGroup`<sup>Optional</sup> <a name="profilingGroup" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.profilingGroup"></a>
 
 ```typescript
 public readonly profilingGroup: IProfilingGroup;
@@ -7230,7 +7120,7 @@ Profiling Group.
 
 ---
 
-##### `reservedConcurrentExecutions`<sup>Optional</sup> <a name="reservedConcurrentExecutions" id="cdk-nextjs-standalone.OptionalFunctionProps.property.reservedConcurrentExecutions"></a>
+##### `reservedConcurrentExecutions`<sup>Optional</sup> <a name="reservedConcurrentExecutions" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.reservedConcurrentExecutions"></a>
 
 ```typescript
 public readonly reservedConcurrentExecutions: number;
@@ -7243,7 +7133,7 @@ The maximum of concurrent executions you want to reserve for the function.
 
 ---
 
-##### `retryAttempts`<sup>Optional</sup> <a name="retryAttempts" id="cdk-nextjs-standalone.OptionalFunctionProps.property.retryAttempts"></a>
+##### `retryAttempts`<sup>Optional</sup> <a name="retryAttempts" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.retryAttempts"></a>
 
 ```typescript
 public readonly retryAttempts: number;
@@ -7259,7 +7149,7 @@ Maximum: 2
 
 ---
 
-##### `role`<sup>Optional</sup> <a name="role" id="cdk-nextjs-standalone.OptionalFunctionProps.property.role"></a>
+##### `role`<sup>Optional</sup> <a name="role" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.role"></a>
 
 ```typescript
 public readonly role: IRole;
@@ -7282,7 +7172,7 @@ The relevant managed policies are "service-role/AWSLambdaBasicExecutionRole" and
 
 ---
 
-##### `runtime`<sup>Optional</sup> <a name="runtime" id="cdk-nextjs-standalone.OptionalFunctionProps.property.runtime"></a>
+##### `runtime`<sup>Optional</sup> <a name="runtime" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.runtime"></a>
 
 ```typescript
 public readonly runtime: Runtime;
@@ -7299,7 +7189,7 @@ Use `Runtime.FROM_IMAGE` when defining a function from a Docker image.
 
 ---
 
-##### `runtimeManagementMode`<sup>Optional</sup> <a name="runtimeManagementMode" id="cdk-nextjs-standalone.OptionalFunctionProps.property.runtimeManagementMode"></a>
+##### `runtimeManagementMode`<sup>Optional</sup> <a name="runtimeManagementMode" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.runtimeManagementMode"></a>
 
 ```typescript
 public readonly runtimeManagementMode: RuntimeManagementMode;
@@ -7312,7 +7202,7 @@ Sets the runtime management configuration for a function's version.
 
 ---
 
-##### `securityGroups`<sup>Optional</sup> <a name="securityGroups" id="cdk-nextjs-standalone.OptionalFunctionProps.property.securityGroups"></a>
+##### `securityGroups`<sup>Optional</sup> <a name="securityGroups" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.securityGroups"></a>
 
 ```typescript
 public readonly securityGroups: ISecurityGroup[];
@@ -7327,7 +7217,7 @@ Only used if 'vpc' is supplied.
 
 ---
 
-##### `snapStart`<sup>Optional</sup> <a name="snapStart" id="cdk-nextjs-standalone.OptionalFunctionProps.property.snapStart"></a>
+##### `snapStart`<sup>Optional</sup> <a name="snapStart" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.snapStart"></a>
 
 ```typescript
 public readonly snapStart: SnapStartConf;
@@ -7342,7 +7232,7 @@ SnapStart is currently supported only for Java 11, 17 runtime
 
 ---
 
-##### `systemLogLevel`<sup>Optional</sup> <a name="systemLogLevel" id="cdk-nextjs-standalone.OptionalFunctionProps.property.systemLogLevel"></a>
+##### `systemLogLevel`<sup>Optional</sup> <a name="systemLogLevel" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.systemLogLevel"></a>
 
 ```typescript
 public readonly systemLogLevel: string;
@@ -7355,7 +7245,7 @@ Sets the system log level for the function.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="cdk-nextjs-standalone.OptionalFunctionProps.property.timeout"></a>
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.timeout"></a>
 
 ```typescript
 public readonly timeout: Duration;
@@ -7371,7 +7261,7 @@ based on the function's expected execution time.
 
 ---
 
-##### `tracing`<sup>Optional</sup> <a name="tracing" id="cdk-nextjs-standalone.OptionalFunctionProps.property.tracing"></a>
+##### `tracing`<sup>Optional</sup> <a name="tracing" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.tracing"></a>
 
 ```typescript
 public readonly tracing: Tracing;
@@ -7384,7 +7274,7 @@ Enable AWS X-Ray Tracing for Lambda Function.
 
 ---
 
-##### `vpc`<sup>Optional</sup> <a name="vpc" id="cdk-nextjs-standalone.OptionalFunctionProps.property.vpc"></a>
+##### `vpc`<sup>Optional</sup> <a name="vpc" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.vpc"></a>
 
 ```typescript
 public readonly vpc: IVpc;
@@ -7400,7 +7290,7 @@ This is required when `vpcSubnets` is specified.
 
 ---
 
-##### `vpcSubnets`<sup>Optional</sup> <a name="vpcSubnets" id="cdk-nextjs-standalone.OptionalFunctionProps.property.vpcSubnets"></a>
+##### `vpcSubnets`<sup>Optional</sup> <a name="vpcSubnets" id="@funkepublishing/cdk-nextjs-standalone.OptionalFunctionProps.property.vpcSubnets"></a>
 
 ```typescript
 public readonly vpcSubnets: SubnetSelection;
@@ -7419,14 +7309,14 @@ public subnets is not allowed (unless `allowPublicSubnet` is set to `true`).
 
 ---
 
-### OptionalHostedZoneProviderProps <a name="OptionalHostedZoneProviderProps" id="cdk-nextjs-standalone.OptionalHostedZoneProviderProps"></a>
+### OptionalHostedZoneProviderProps <a name="OptionalHostedZoneProviderProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalHostedZoneProviderProps"></a>
 
 OptionalHostedZoneProviderProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalHostedZoneProviderProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalHostedZoneProviderProps.Initializer"></a>
 
 ```typescript
-import { OptionalHostedZoneProviderProps } from 'cdk-nextjs-standalone'
+import { OptionalHostedZoneProviderProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalHostedZoneProviderProps: OptionalHostedZoneProviderProps = { ... }
 ```
@@ -7435,13 +7325,13 @@ const optionalHostedZoneProviderProps: OptionalHostedZoneProviderProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalHostedZoneProviderProps.property.domainName">domainName</a></code> | <code>string</code> | The zone domain e.g. example.com. |
-| <code><a href="#cdk-nextjs-standalone.OptionalHostedZoneProviderProps.property.privateZone">privateZone</a></code> | <code>boolean</code> | Whether the zone that is being looked up is a private hosted zone. |
-| <code><a href="#cdk-nextjs-standalone.OptionalHostedZoneProviderProps.property.vpcId">vpcId</a></code> | <code>string</code> | Specifies the ID of the VPC associated with a private hosted zone. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalHostedZoneProviderProps.property.domainName">domainName</a></code> | <code>string</code> | The zone domain e.g. example.com. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalHostedZoneProviderProps.property.privateZone">privateZone</a></code> | <code>boolean</code> | Whether the zone that is being looked up is a private hosted zone. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalHostedZoneProviderProps.property.vpcId">vpcId</a></code> | <code>string</code> | Specifies the ID of the VPC associated with a private hosted zone. |
 
 ---
 
-##### `domainName`<sup>Optional</sup> <a name="domainName" id="cdk-nextjs-standalone.OptionalHostedZoneProviderProps.property.domainName"></a>
+##### `domainName`<sup>Optional</sup> <a name="domainName" id="@funkepublishing/cdk-nextjs-standalone.OptionalHostedZoneProviderProps.property.domainName"></a>
 
 ```typescript
 public readonly domainName: string;
@@ -7453,7 +7343,7 @@ The zone domain e.g. example.com.
 
 ---
 
-##### `privateZone`<sup>Optional</sup> <a name="privateZone" id="cdk-nextjs-standalone.OptionalHostedZoneProviderProps.property.privateZone"></a>
+##### `privateZone`<sup>Optional</sup> <a name="privateZone" id="@funkepublishing/cdk-nextjs-standalone.OptionalHostedZoneProviderProps.property.privateZone"></a>
 
 ```typescript
 public readonly privateZone: boolean;
@@ -7466,7 +7356,7 @@ Whether the zone that is being looked up is a private hosted zone.
 
 ---
 
-##### `vpcId`<sup>Optional</sup> <a name="vpcId" id="cdk-nextjs-standalone.OptionalHostedZoneProviderProps.property.vpcId"></a>
+##### `vpcId`<sup>Optional</sup> <a name="vpcId" id="@funkepublishing/cdk-nextjs-standalone.OptionalHostedZoneProviderProps.property.vpcId"></a>
 
 ```typescript
 public readonly vpcId: string;
@@ -7482,14 +7372,14 @@ and an error will be raised
 
 ---
 
-### OptionalNextjsBucketDeploymentProps <a name="OptionalNextjsBucketDeploymentProps" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps"></a>
+### OptionalNextjsBucketDeploymentProps <a name="OptionalNextjsBucketDeploymentProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps"></a>
 
 OptionalNextjsBucketDeploymentProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.Initializer"></a>
 
 ```typescript
-import { OptionalNextjsBucketDeploymentProps } from 'cdk-nextjs-standalone'
+import { OptionalNextjsBucketDeploymentProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalNextjsBucketDeploymentProps: OptionalNextjsBucketDeploymentProps = { ... }
 ```
@@ -7498,20 +7388,20 @@ const optionalNextjsBucketDeploymentProps: OptionalNextjsBucketDeploymentProps =
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.asset">asset</a></code> | <code>aws-cdk-lib.aws_s3_assets.Asset</code> | Source `Asset`. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.debug">debug</a></code> | <code>boolean</code> | Enable verbose output of Custom Resource Lambda. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.destinationBucket">destinationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Destination S3 Bucket. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.destinationKeyPrefix">destinationKeyPrefix</a></code> | <code>string</code> | Destination S3 Bucket Key Prefix. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a></code> | Override props for every construct. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.putConfig">putConfig</a></code> | <code>{[ key: string ]: {[ key: string ]: string}}</code> | Mapping of files to PUT options for `PutObjectCommand`. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.queueSize">queueSize</a></code> | <code>number</code> | The number of files to upload in parallel. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.substitutionConfig">substitutionConfig</a></code> | <code>{[ key: string ]: string}</code> | Replace placeholders in all files in `asset`. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.zip">zip</a></code> | <code>boolean</code> | If `true` then files will be zipped before writing to destination bucket. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.asset">asset</a></code> | <code>aws-cdk-lib.aws_s3_assets.Asset</code> | Source `Asset`. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.debug">debug</a></code> | <code>boolean</code> | Enable verbose output of Custom Resource Lambda. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.destinationBucket">destinationBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Destination S3 Bucket. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.destinationKeyPrefix">destinationKeyPrefix</a></code> | <code>string</code> | Destination S3 Bucket Key Prefix. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.prune">prune</a></code> | <code>boolean</code> | If `true`, then delete old objects in `destinationBucket`/`destinationKeyPrefix` **after** uploading new objects. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.putConfig">putConfig</a></code> | <code>{[ key: string ]: {[ key: string ]: string}}</code> | Mapping of files to PUT options for `PutObjectCommand`. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.queueSize">queueSize</a></code> | <code>number</code> | The number of files to upload in parallel. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.substitutionConfig">substitutionConfig</a></code> | <code>{[ key: string ]: string}</code> | Replace placeholders in all files in `asset`. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.zip">zip</a></code> | <code>boolean</code> | If `true` then files will be zipped before writing to destination bucket. |
 
 ---
 
-##### `asset`<sup>Optional</sup> <a name="asset" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.asset"></a>
+##### `asset`<sup>Optional</sup> <a name="asset" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.asset"></a>
 
 ```typescript
 public readonly asset: Asset;
@@ -7523,7 +7413,7 @@ Source `Asset`.
 
 ---
 
-##### `debug`<sup>Optional</sup> <a name="debug" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.debug"></a>
+##### `debug`<sup>Optional</sup> <a name="debug" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.debug"></a>
 
 ```typescript
 public readonly debug: boolean;
@@ -7536,7 +7426,7 @@ Enable verbose output of Custom Resource Lambda.
 
 ---
 
-##### `destinationBucket`<sup>Optional</sup> <a name="destinationBucket" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.destinationBucket"></a>
+##### `destinationBucket`<sup>Optional</sup> <a name="destinationBucket" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.destinationBucket"></a>
 
 ```typescript
 public readonly destinationBucket: IBucket;
@@ -7548,7 +7438,7 @@ Destination S3 Bucket.
 
 ---
 
-##### `destinationKeyPrefix`<sup>Optional</sup> <a name="destinationKeyPrefix" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.destinationKeyPrefix"></a>
+##### `destinationKeyPrefix`<sup>Optional</sup> <a name="destinationKeyPrefix" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.destinationKeyPrefix"></a>
 
 ```typescript
 public readonly destinationKeyPrefix: string;
@@ -7560,19 +7450,19 @@ Destination S3 Bucket Key Prefix.
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsBucketDeploymentOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentOverrides">NextjsBucketDeploymentOverrides</a>
 
 Override props for every construct.
 
 ---
 
-##### `prune`<sup>Optional</sup> <a name="prune" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.prune"></a>
+##### `prune`<sup>Optional</sup> <a name="prune" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.prune"></a>
 
 ```typescript
 public readonly prune: boolean;
@@ -7593,7 +7483,7 @@ will reference JS, CSS files that do not exist in S3 reslting in 404s.
 
 ---
 
-##### `putConfig`<sup>Optional</sup> <a name="putConfig" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.putConfig"></a>
+##### `putConfig`<sup>Optional</sup> <a name="putConfig" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.putConfig"></a>
 
 ```typescript
 public readonly putConfig: {[ key: string ]: {[ key: string ]: string}};
@@ -7613,7 +7503,7 @@ merged. Later entries override earlier entries.
 
 ---
 
-##### `queueSize`<sup>Optional</sup> <a name="queueSize" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.queueSize"></a>
+##### `queueSize`<sup>Optional</sup> <a name="queueSize" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.queueSize"></a>
 
 ```typescript
 public readonly queueSize: number;
@@ -7625,7 +7515,7 @@ The number of files to upload in parallel.
 
 ---
 
-##### `substitutionConfig`<sup>Optional</sup> <a name="substitutionConfig" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.substitutionConfig"></a>
+##### `substitutionConfig`<sup>Optional</sup> <a name="substitutionConfig" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.substitutionConfig"></a>
 
 ```typescript
 public readonly substitutionConfig: {[ key: string ]: string};
@@ -7641,7 +7531,7 @@ by values of record.
 
 ---
 
-##### `zip`<sup>Optional</sup> <a name="zip" id="cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.zip"></a>
+##### `zip`<sup>Optional</sup> <a name="zip" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBucketDeploymentProps.property.zip"></a>
 
 ```typescript
 public readonly zip: boolean;
@@ -7656,14 +7546,14 @@ Useful for Lambda functions.
 
 ---
 
-### OptionalNextjsBuildProps <a name="OptionalNextjsBuildProps" id="cdk-nextjs-standalone.OptionalNextjsBuildProps"></a>
+### OptionalNextjsBuildProps <a name="OptionalNextjsBuildProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps"></a>
 
 OptionalNextjsBuildProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.Initializer"></a>
 
 ```typescript
-import { OptionalNextjsBuildProps } from 'cdk-nextjs-standalone'
+import { OptionalNextjsBuildProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalNextjsBuildProps: OptionalNextjsBuildProps = { ... }
 ```
@@ -7672,17 +7562,17 @@ const optionalNextjsBuildProps: OptionalNextjsBuildProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.buildPath">buildPath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsBuildProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.buildCommand">buildCommand</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.buildPath">buildPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.skipBuild">skipBuild</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
-##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.buildCommand"></a>
+##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.buildCommand"></a>
 
 ```typescript
 public readonly buildCommand: string;
@@ -7692,7 +7582,7 @@ public readonly buildCommand: string;
 
 ---
 
-##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.buildPath"></a>
+##### `buildPath`<sup>Optional</sup> <a name="buildPath" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.buildPath"></a>
 
 ```typescript
 public readonly buildPath: string;
@@ -7702,7 +7592,7 @@ public readonly buildPath: string;
 
 ---
 
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.environment"></a>
+##### `environment`<sup>Optional</sup> <a name="environment" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.environment"></a>
 
 ```typescript
 public readonly environment: {[ key: string ]: string};
@@ -7712,7 +7602,7 @@ public readonly environment: {[ key: string ]: string};
 
 ---
 
-##### `nextjsPath`<sup>Optional</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.nextjsPath"></a>
+##### `nextjsPath`<sup>Optional</sup> <a name="nextjsPath" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.nextjsPath"></a>
 
 ```typescript
 public readonly nextjsPath: string;
@@ -7722,7 +7612,7 @@ public readonly nextjsPath: string;
 
 ---
 
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.quiet"></a>
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.quiet"></a>
 
 ```typescript
 public readonly quiet: boolean;
@@ -7732,7 +7622,7 @@ public readonly quiet: boolean;
 
 ---
 
-##### `skipBuild`<sup>Optional</sup> <a name="skipBuild" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.skipBuild"></a>
+##### `skipBuild`<sup>Optional</sup> <a name="skipBuild" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.skipBuild"></a>
 
 ```typescript
 public readonly skipBuild: boolean;
@@ -7742,7 +7632,7 @@ public readonly skipBuild: boolean;
 
 ---
 
-##### `streaming`<sup>Optional</sup> <a name="streaming" id="cdk-nextjs-standalone.OptionalNextjsBuildProps.property.streaming"></a>
+##### `streaming`<sup>Optional</sup> <a name="streaming" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsBuildProps.property.streaming"></a>
 
 ```typescript
 public readonly streaming: boolean;
@@ -7752,14 +7642,14 @@ public readonly streaming: boolean;
 
 ---
 
-### OptionalNextjsDistributionProps <a name="OptionalNextjsDistributionProps" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps"></a>
+### OptionalNextjsDistributionProps <a name="OptionalNextjsDistributionProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps"></a>
 
 OptionalNextjsDistributionProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.Initializer"></a>
 
 ```typescript
-import { OptionalNextjsDistributionProps } from 'cdk-nextjs-standalone'
+import { OptionalNextjsDistributionProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalNextjsDistributionProps: OptionalNextjsDistributionProps = { ... }
 ```
@@ -7768,22 +7658,21 @@ const optionalNextjsDistributionProps: OptionalNextjsDistributionProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.imageOptFunction">imageOptFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to optimize images. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | Override props for every construct. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.supressDefaults">supressDefaults</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults">NextjsDistributionDefaults</a></code> | Supress the creation of default policies if none are provided by you. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.basePath">basePath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.Distribution</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.functionUrlAuthType">functionUrlAuthType</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionUrlAuthType</code> | Override lambda function url auth type. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.imageOptFunction">imageOptFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to optimize images. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextBuild">nextBuild</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextjsPath">nextjsPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
-##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.basePath"></a>
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.basePath"></a>
 
 ```typescript
 public readonly basePath: string;
@@ -7793,7 +7682,7 @@ public readonly basePath: string;
 
 ---
 
-##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.distribution"></a>
+##### `distribution`<sup>Optional</sup> <a name="distribution" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.distribution"></a>
 
 ```typescript
 public readonly distribution: Distribution;
@@ -7803,7 +7692,7 @@ public readonly distribution: Distribution;
 
 ---
 
-##### `functionUrlAuthType`<sup>Optional</sup> <a name="functionUrlAuthType" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.functionUrlAuthType"></a>
+##### `functionUrlAuthType`<sup>Optional</sup> <a name="functionUrlAuthType" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.functionUrlAuthType"></a>
 
 ```typescript
 public readonly functionUrlAuthType: FunctionUrlAuthType;
@@ -7816,7 +7705,7 @@ Override lambda function url auth type.
 
 ---
 
-##### `imageOptFunction`<sup>Optional</sup> <a name="imageOptFunction" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.imageOptFunction"></a>
+##### `imageOptFunction`<sup>Optional</sup> <a name="imageOptFunction" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.imageOptFunction"></a>
 
 ```typescript
 public readonly imageOptFunction: IFunction;
@@ -7830,27 +7719,27 @@ Must be provided if you want to serve dynamic requests.
 
 ---
 
-##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextBuild"></a>
+##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextBuild"></a>
 
 ```typescript
 public readonly nextBuild: NextjsBuild;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 ---
 
-##### `nextDomain`<sup>Optional</sup> <a name="nextDomain" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextDomain"></a>
+##### `nextDomain`<sup>Optional</sup> <a name="nextDomain" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextDomain"></a>
 
 ```typescript
 public readonly nextDomain: NextjsDomain;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a>
 
 ---
 
-##### `nextjsPath`<sup>Optional</sup> <a name="nextjsPath" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextjsPath"></a>
+##### `nextjsPath`<sup>Optional</sup> <a name="nextjsPath" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.nextjsPath"></a>
 
 ```typescript
 public readonly nextjsPath: string;
@@ -7860,19 +7749,19 @@ public readonly nextjsPath: string;
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsDistributionOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a>
 
 Override props for every construct.
 
 ---
 
-##### `serverFunction`<sup>Optional</sup> <a name="serverFunction" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverFunction"></a>
+##### `serverFunction`<sup>Optional</sup> <a name="serverFunction" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverFunction"></a>
 
 ```typescript
 public readonly serverFunction: IFunction;
@@ -7886,7 +7775,7 @@ Must be provided if you want to serve dynamic requests.
 
 ---
 
-##### `staticAssetsBucket`<sup>Optional</sup> <a name="staticAssetsBucket" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.staticAssetsBucket"></a>
+##### `staticAssetsBucket`<sup>Optional</sup> <a name="staticAssetsBucket" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.staticAssetsBucket"></a>
 
 ```typescript
 public readonly staticAssetsBucket: IBucket;
@@ -7900,7 +7789,7 @@ Must be provided if you want to serve static files.
 
 ---
 
-##### `streaming`<sup>Optional</sup> <a name="streaming" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.streaming"></a>
+##### `streaming`<sup>Optional</sup> <a name="streaming" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.streaming"></a>
 
 ```typescript
 public readonly streaming: boolean;
@@ -7910,26 +7799,14 @@ public readonly streaming: boolean;
 
 ---
 
-##### `supressDefaults`<sup>Optional</sup> <a name="supressDefaults" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.supressDefaults"></a>
-
-```typescript
-public readonly supressDefaults: NextjsDistributionDefaults;
-```
-
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionDefaults">NextjsDistributionDefaults</a>
-
-Supress the creation of default policies if none are provided by you.
-
----
-
-### OptionalNextjsDomainProps <a name="OptionalNextjsDomainProps" id="cdk-nextjs-standalone.OptionalNextjsDomainProps"></a>
+### OptionalNextjsDomainProps <a name="OptionalNextjsDomainProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps"></a>
 
 OptionalNextjsDomainProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.Initializer"></a>
 
 ```typescript
-import { OptionalNextjsDomainProps } from 'cdk-nextjs-standalone'
+import { OptionalNextjsDomainProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalNextjsDomainProps: OptionalNextjsDomainProps = { ... }
 ```
@@ -7938,16 +7815,16 @@ const optionalNextjsDomainProps: OptionalNextjsDomainProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps.property.alternateNames">alternateNames</a></code> | <code>string[]</code> | Alternate domain names that should route to the Cloudfront Distribution. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | If this prop is `undefined` then an ACM `Certificate` will be created based on {@link NextjsDomainProps.domainName } with DNS Validation. This prop allows you to control the TLS/SSL certificate created. The certificate you create must be in the `us-east-1` (N. Virginia) region as required by AWS CloudFront. Set this option if you have an existing certificate in the `us-east-1` region in AWS Certificate Manager you want to use. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps.property.certificateDomainName">certificateDomainName</a></code> | <code>string</code> | The domain name used in this construct when creating an ACM `Certificate`. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps.property.domainName">domainName</a></code> | <code>string</code> | An easy to remember address of your website. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | You must create the hosted zone out-of-band. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDomainProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.property.alternateNames">alternateNames</a></code> | <code>string[]</code> | Alternate domain names that should route to the Cloudfront Distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.property.certificate">certificate</a></code> | <code>aws-cdk-lib.aws_certificatemanager.ICertificate</code> | If this prop is `undefined` then an ACM `Certificate` will be created based on {@link NextjsDomainProps.domainName } with DNS Validation. This prop allows you to control the TLS/SSL certificate created. The certificate you create must be in the `us-east-1` (N. Virginia) region as required by AWS CloudFront. Set this option if you have an existing certificate in the `us-east-1` region in AWS Certificate Manager you want to use. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.property.certificateDomainName">certificateDomainName</a></code> | <code>string</code> | The domain name used in this construct when creating an ACM `Certificate`. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.property.domainName">domainName</a></code> | <code>string</code> | An easy to remember address of your website. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.property.hostedZone">hostedZone</a></code> | <code>aws-cdk-lib.aws_route53.IHostedZone</code> | You must create the hosted zone out-of-band. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a></code> | Override props for every construct. |
 
 ---
 
-##### `alternateNames`<sup>Optional</sup> <a name="alternateNames" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.property.alternateNames"></a>
+##### `alternateNames`<sup>Optional</sup> <a name="alternateNames" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.property.alternateNames"></a>
 
 ```typescript
 public readonly alternateNames: string[];
@@ -7975,7 +7852,7 @@ alternative names specified here.
 
 ---
 
-##### `certificate`<sup>Optional</sup> <a name="certificate" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.property.certificate"></a>
+##### `certificate`<sup>Optional</sup> <a name="certificate" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.property.certificate"></a>
 
 ```typescript
 public readonly certificate: ICertificate;
@@ -7987,7 +7864,7 @@ If this prop is `undefined` then an ACM `Certificate` will be created based on {
 
 ---
 
-##### `certificateDomainName`<sup>Optional</sup> <a name="certificateDomainName" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.property.certificateDomainName"></a>
+##### `certificateDomainName`<sup>Optional</sup> <a name="certificateDomainName" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.property.certificateDomainName"></a>
 
 ```typescript
 public readonly certificateDomainName: string;
@@ -8006,7 +7883,7 @@ If {@link NextjsDomainProps.certificate } is passed, then this prop is ignored.
 
 ---
 
-##### `domainName`<sup>Optional</sup> <a name="domainName" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.property.domainName"></a>
+##### `domainName`<sup>Optional</sup> <a name="domainName" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.property.domainName"></a>
 
 ```typescript
 public readonly domainName: string;
@@ -8023,7 +7900,7 @@ ACM `Certificate` if {@link NextjsDomainProps.certificate } and
 
 ---
 
-##### `hostedZone`<sup>Optional</sup> <a name="hostedZone" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.property.hostedZone"></a>
+##### `hostedZone`<sup>Optional</sup> <a name="hostedZone" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.property.hostedZone"></a>
 
 ```typescript
 public readonly hostedZone: IHostedZone;
@@ -8039,26 +7916,26 @@ Alternatively if this prop is `undefined`, then the hosted zone will be
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsDomainProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsDomainProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsDomainOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsDomainOverrides">NextjsDomainOverrides</a>
 
 Override props for every construct.
 
 ---
 
-### OptionalNextjsImageProps <a name="OptionalNextjsImageProps" id="cdk-nextjs-standalone.OptionalNextjsImageProps"></a>
+### OptionalNextjsImageProps <a name="OptionalNextjsImageProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsImageProps"></a>
 
 OptionalNextjsImageProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsImageProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsImageProps.Initializer"></a>
 
 ```typescript
-import { OptionalNextjsImageProps } from 'cdk-nextjs-standalone'
+import { OptionalNextjsImageProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalNextjsImageProps: OptionalNextjsImageProps = { ... }
 ```
@@ -8067,14 +7944,14 @@ const optionalNextjsImageProps: OptionalNextjsImageProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsImageProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsImageProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsImageProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsImageProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsImageProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | The S3 bucket holding application images. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsImageProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsImageProps.property.nextBuild">nextBuild</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsImageProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a></code> | Override props for every construct. |
 
 ---
 
-##### `bucket`<sup>Optional</sup> <a name="bucket" id="cdk-nextjs-standalone.OptionalNextjsImageProps.property.bucket"></a>
+##### `bucket`<sup>Optional</sup> <a name="bucket" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsImageProps.property.bucket"></a>
 
 ```typescript
 public readonly bucket: IBucket;
@@ -8086,7 +7963,7 @@ The S3 bucket holding application images.
 
 ---
 
-##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="cdk-nextjs-standalone.OptionalNextjsImageProps.property.lambdaOptions"></a>
+##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsImageProps.property.lambdaOptions"></a>
 
 ```typescript
 public readonly lambdaOptions: FunctionOptions;
@@ -8098,36 +7975,36 @@ Override function properties.
 
 ---
 
-##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="cdk-nextjs-standalone.OptionalNextjsImageProps.property.nextBuild"></a>
+##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsImageProps.property.nextBuild"></a>
 
 ```typescript
 public readonly nextBuild: NextjsBuild;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsImageProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsImageProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsImageOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsImageOverrides">NextjsImageOverrides</a>
 
 Override props for every construct.
 
 ---
 
-### OptionalNextjsInvalidationProps <a name="OptionalNextjsInvalidationProps" id="cdk-nextjs-standalone.OptionalNextjsInvalidationProps"></a>
+### OptionalNextjsInvalidationProps <a name="OptionalNextjsInvalidationProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsInvalidationProps"></a>
 
 OptionalNextjsInvalidationProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsInvalidationProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsInvalidationProps.Initializer"></a>
 
 ```typescript
-import { OptionalNextjsInvalidationProps } from 'cdk-nextjs-standalone'
+import { OptionalNextjsInvalidationProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalNextjsInvalidationProps: OptionalNextjsInvalidationProps = { ... }
 ```
@@ -8136,13 +8013,13 @@ const optionalNextjsInvalidationProps: OptionalNextjsInvalidationProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.dependencies">dependencies</a></code> | <code>constructs.Construct[]</code> | Constructs that should complete before invalidating CloudFront Distribution. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | CloudFront Distribution to invalidate. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.dependencies">dependencies</a></code> | <code>constructs.Construct[]</code> | Constructs that should complete before invalidating CloudFront Distribution. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | CloudFront Distribution to invalidate. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a></code> | Override props for every construct. |
 
 ---
 
-##### `dependencies`<sup>Optional</sup> <a name="dependencies" id="cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.dependencies"></a>
+##### `dependencies`<sup>Optional</sup> <a name="dependencies" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.dependencies"></a>
 
 ```typescript
 public readonly dependencies: Construct[];
@@ -8156,7 +8033,7 @@ Useful for assets that must be deployed/updated before invalidating.
 
 ---
 
-##### `distribution`<sup>Optional</sup> <a name="distribution" id="cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.distribution"></a>
+##### `distribution`<sup>Optional</sup> <a name="distribution" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.distribution"></a>
 
 ```typescript
 public readonly distribution: IDistribution;
@@ -8168,26 +8045,26 @@ CloudFront Distribution to invalidate.
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsInvalidationProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsInvalidationOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationOverrides">NextjsInvalidationOverrides</a>
 
 Override props for every construct.
 
 ---
 
-### OptionalNextjsRevalidationProps <a name="OptionalNextjsRevalidationProps" id="cdk-nextjs-standalone.OptionalNextjsRevalidationProps"></a>
+### OptionalNextjsRevalidationProps <a name="OptionalNextjsRevalidationProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsRevalidationProps"></a>
 
 OptionalNextjsRevalidationProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsRevalidationProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsRevalidationProps.Initializer"></a>
 
 ```typescript
-import { OptionalNextjsRevalidationProps } from 'cdk-nextjs-standalone'
+import { OptionalNextjsRevalidationProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalNextjsRevalidationProps: OptionalNextjsRevalidationProps = { ... }
 ```
@@ -8196,14 +8073,14 @@ const optionalNextjsRevalidationProps: OptionalNextjsRevalidationProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a></code> | Override props for every construct. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.lambdaOptions">lambdaOptions</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.nextBuild">nextBuild</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.serverFunction">serverFunction</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer">NextjsServer</a></code> | *No description.* |
 
 ---
 
-##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.lambdaOptions"></a>
+##### `lambdaOptions`<sup>Optional</sup> <a name="lambdaOptions" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.lambdaOptions"></a>
 
 ```typescript
 public readonly lambdaOptions: FunctionOptions;
@@ -8215,46 +8092,46 @@ Override function properties.
 
 ---
 
-##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.nextBuild"></a>
+##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.nextBuild"></a>
 
 ```typescript
 public readonly nextBuild: NextjsBuild;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsRevalidationOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationOverrides">NextjsRevalidationOverrides</a>
 
 Override props for every construct.
 
 ---
 
-##### `serverFunction`<sup>Optional</sup> <a name="serverFunction" id="cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.serverFunction"></a>
+##### `serverFunction`<sup>Optional</sup> <a name="serverFunction" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsRevalidationProps.property.serverFunction"></a>
 
 ```typescript
 public readonly serverFunction: NextjsServer;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsServer">NextjsServer</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServer">NextjsServer</a>
 
 ---
 
-### OptionalNextjsServerProps <a name="OptionalNextjsServerProps" id="cdk-nextjs-standalone.OptionalNextjsServerProps"></a>
+### OptionalNextjsServerProps <a name="OptionalNextjsServerProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps"></a>
 
 OptionalNextjsServerProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsServerProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.Initializer"></a>
 
 ```typescript
-import { OptionalNextjsServerProps } from 'cdk-nextjs-standalone'
+import { OptionalNextjsServerProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalNextjsServerProps: OptionalNextjsServerProps = { ... }
 ```
@@ -8263,16 +8140,16 @@ const optionalNextjsServerProps: OptionalNextjsServerProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a></code> | Override props for every construct. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsServerProps.property.staticAssetBucket">staticAssetBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Static asset bucket. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.property.lambda">lambda</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionOptions</code> | Override function properties. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.property.nextBuild">nextBuild</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.property.quiet">quiet</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.property.staticAssetBucket">staticAssetBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Static asset bucket. |
 
 ---
 
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.OptionalNextjsServerProps.property.environment"></a>
+##### `environment`<sup>Optional</sup> <a name="environment" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.property.environment"></a>
 
 ```typescript
 public readonly environment: {[ key: string ]: string};
@@ -8282,7 +8159,7 @@ public readonly environment: {[ key: string ]: string};
 
 ---
 
-##### `lambda`<sup>Optional</sup> <a name="lambda" id="cdk-nextjs-standalone.OptionalNextjsServerProps.property.lambda"></a>
+##### `lambda`<sup>Optional</sup> <a name="lambda" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.property.lambda"></a>
 
 ```typescript
 public readonly lambda: FunctionOptions;
@@ -8294,29 +8171,29 @@ Override function properties.
 
 ---
 
-##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="cdk-nextjs-standalone.OptionalNextjsServerProps.property.nextBuild"></a>
+##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.property.nextBuild"></a>
 
 ```typescript
 public readonly nextBuild: NextjsBuild;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsServerProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsServerOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsServerOverrides">NextjsServerOverrides</a>
 
 Override props for every construct.
 
 ---
 
-##### `quiet`<sup>Optional</sup> <a name="quiet" id="cdk-nextjs-standalone.OptionalNextjsServerProps.property.quiet"></a>
+##### `quiet`<sup>Optional</sup> <a name="quiet" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.property.quiet"></a>
 
 ```typescript
 public readonly quiet: boolean;
@@ -8326,7 +8203,7 @@ public readonly quiet: boolean;
 
 ---
 
-##### `staticAssetBucket`<sup>Optional</sup> <a name="staticAssetBucket" id="cdk-nextjs-standalone.OptionalNextjsServerProps.property.staticAssetBucket"></a>
+##### `staticAssetBucket`<sup>Optional</sup> <a name="staticAssetBucket" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsServerProps.property.staticAssetBucket"></a>
 
 ```typescript
 public readonly staticAssetBucket: IBucket;
@@ -8340,14 +8217,14 @@ Function needs bucket to read from cache.
 
 ---
 
-### OptionalNextjsStaticAssetsProps <a name="OptionalNextjsStaticAssetsProps" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps"></a>
+### OptionalNextjsStaticAssetsProps <a name="OptionalNextjsStaticAssetsProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps"></a>
 
 OptionalNextjsStaticAssetsProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.Initializer"></a>
 
 ```typescript
-import { OptionalNextjsStaticAssetsProps } from 'cdk-nextjs-standalone'
+import { OptionalNextjsStaticAssetsProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalNextjsStaticAssetsProps: OptionalNextjsStaticAssetsProps = { ... }
 ```
@@ -8356,16 +8233,16 @@ const optionalNextjsStaticAssetsProps: OptionalNextjsStaticAssetsProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. Note, you'll need to set [basePath](https://nextjs.org/docs/app/api-reference/next-config-js/basePath) in your `next.config.ts` to this value and ensure any files in `public` folder have correct prefix. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Define your own bucket to store static assets. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.nextBuild">nextBuild</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a></code> | Override props for every construct. |
-| <code><a href="#cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.prune">prune</a></code> | <code>boolean</code> | If `true` (default), then removes old static assets after upload new static assets. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.basePath">basePath</a></code> | <code>string</code> | Optional value to prefix the Next.js site under a /prefix path on CloudFront. Usually used when you deploy multiple Next.js sites on same domain using /sub-path. Note, you'll need to set [basePath](https://nextjs.org/docs/app/api-reference/next-config-js/basePath) in your `next.config.ts` to this value and ensure any files in `public` folder have correct prefix. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.bucket">bucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Define your own bucket to store static assets. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Custom environment variables to pass to the NextJS build and runtime. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.nextBuild">nextBuild</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a></code> | The `NextjsBuild` instance representing the built Nextjs application. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.overrides">overrides</a></code> | <code><a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a></code> | Override props for every construct. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.prune">prune</a></code> | <code>boolean</code> | If `true` (default), then removes old static assets after upload new static assets. |
 
 ---
 
-##### `basePath`<sup>Optional</sup> <a name="basePath" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.basePath"></a>
+##### `basePath`<sup>Optional</sup> <a name="basePath" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.basePath"></a>
 
 ```typescript
 public readonly basePath: string;
@@ -8377,7 +8254,7 @@ Optional value to prefix the Next.js site under a /prefix path on CloudFront. Us
 
 ---
 
-##### `bucket`<sup>Optional</sup> <a name="bucket" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.bucket"></a>
+##### `bucket`<sup>Optional</sup> <a name="bucket" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.bucket"></a>
 
 ```typescript
 public readonly bucket: IBucket;
@@ -8389,7 +8266,7 @@ Define your own bucket to store static assets.
 
 ---
 
-##### `environment`<sup>Optional</sup> <a name="environment" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.environment"></a>
+##### `environment`<sup>Optional</sup> <a name="environment" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.environment"></a>
 
 ```typescript
 public readonly environment: {[ key: string ]: string};
@@ -8401,31 +8278,31 @@ Custom environment variables to pass to the NextJS build and runtime.
 
 ---
 
-##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.nextBuild"></a>
+##### `nextBuild`<sup>Optional</sup> <a name="nextBuild" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.nextBuild"></a>
 
 ```typescript
 public readonly nextBuild: NextjsBuild;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsBuild">NextjsBuild</a>
 
 The `NextjsBuild` instance representing the built Nextjs application.
 
 ---
 
-##### `overrides`<sup>Optional</sup> <a name="overrides" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.overrides"></a>
+##### `overrides`<sup>Optional</sup> <a name="overrides" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.overrides"></a>
 
 ```typescript
 public readonly overrides: NextjsStaticAssetOverrides;
 ```
 
-- *Type:* <a href="#cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a>
+- *Type:* <a href="#@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetOverrides">NextjsStaticAssetOverrides</a>
 
 Override props for every construct.
 
 ---
 
-##### `prune`<sup>Optional</sup> <a name="prune" id="cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.prune"></a>
+##### `prune`<sup>Optional</sup> <a name="prune" id="@funkepublishing/cdk-nextjs-standalone.OptionalNextjsStaticAssetsProps.property.prune"></a>
 
 ```typescript
 public readonly prune: boolean;
@@ -8438,14 +8315,14 @@ If `true` (default), then removes old static assets after upload new static asse
 
 ---
 
-### OptionalProviderProps <a name="OptionalProviderProps" id="cdk-nextjs-standalone.OptionalProviderProps"></a>
+### OptionalProviderProps <a name="OptionalProviderProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps"></a>
 
 OptionalProviderProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalProviderProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.Initializer"></a>
 
 ```typescript
-import { OptionalProviderProps } from 'cdk-nextjs-standalone'
+import { OptionalProviderProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalProviderProps: OptionalProviderProps = { ... }
 ```
@@ -8454,22 +8331,22 @@ const optionalProviderProps: OptionalProviderProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.isCompleteHandler">isCompleteHandler</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The AWS Lambda function to invoke in order to determine if the operation is complete. |
-| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The Log Group used for logging of events emitted by the custom resource's lambda function. |
-| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The number of days framework log events are kept in CloudWatch Logs. |
-| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.onEventHandler">onEventHandler</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The AWS Lambda function to invoke for all resource lifecycle operations (CREATE/UPDATE/DELETE). |
-| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.providerFunctionEnvEncryption">providerFunctionEnvEncryption</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | AWS KMS key used to encrypt provider lambda's environment variables. |
-| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.providerFunctionName">providerFunctionName</a></code> | <code>string</code> | Provider Lambda name. |
-| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.queryInterval">queryInterval</a></code> | <code>aws-cdk-lib.Duration</code> | Time between calls to the `isComplete` handler which determines if the resource has been stabilized. |
-| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | AWS Lambda execution role. |
-| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.securityGroups">securityGroups</a></code> | <code>aws-cdk-lib.aws_ec2.ISecurityGroup[]</code> | Security groups to attach to the provider functions. |
-| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.totalTimeout">totalTimeout</a></code> | <code>aws-cdk-lib.Duration</code> | Total timeout for the entire operation. |
-| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | The vpc to provision the lambda functions in. |
-| <code><a href="#cdk-nextjs-standalone.OptionalProviderProps.property.vpcSubnets">vpcSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | Which subnets from the VPC to place the lambda functions in. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.isCompleteHandler">isCompleteHandler</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The AWS Lambda function to invoke in order to determine if the operation is complete. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The Log Group used for logging of events emitted by the custom resource's lambda function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | The number of days framework log events are kept in CloudWatch Logs. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.onEventHandler">onEventHandler</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The AWS Lambda function to invoke for all resource lifecycle operations (CREATE/UPDATE/DELETE). |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.providerFunctionEnvEncryption">providerFunctionEnvEncryption</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | AWS KMS key used to encrypt provider lambda's environment variables. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.providerFunctionName">providerFunctionName</a></code> | <code>string</code> | Provider Lambda name. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.queryInterval">queryInterval</a></code> | <code>aws-cdk-lib.Duration</code> | Time between calls to the `isComplete` handler which determines if the resource has been stabilized. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | AWS Lambda execution role. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.securityGroups">securityGroups</a></code> | <code>aws-cdk-lib.aws_ec2.ISecurityGroup[]</code> | Security groups to attach to the provider functions. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.totalTimeout">totalTimeout</a></code> | <code>aws-cdk-lib.Duration</code> | Total timeout for the entire operation. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | The vpc to provision the lambda functions in. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.vpcSubnets">vpcSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | Which subnets from the VPC to place the lambda functions in. |
 
 ---
 
-##### `isCompleteHandler`<sup>Optional</sup> <a name="isCompleteHandler" id="cdk-nextjs-standalone.OptionalProviderProps.property.isCompleteHandler"></a>
+##### `isCompleteHandler`<sup>Optional</sup> <a name="isCompleteHandler" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.isCompleteHandler"></a>
 
 ```typescript
 public readonly isCompleteHandler: IFunction;
@@ -8487,7 +8364,7 @@ passed, the operation will fail.
 
 ---
 
-##### `logGroup`<sup>Optional</sup> <a name="logGroup" id="cdk-nextjs-standalone.OptionalProviderProps.property.logGroup"></a>
+##### `logGroup`<sup>Optional</sup> <a name="logGroup" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.logGroup"></a>
 
 ```typescript
 public readonly logGroup: ILogGroup;
@@ -8503,7 +8380,7 @@ If you are deploying to another type of region, please check regional availabili
 
 ---
 
-##### `logRetention`<sup>Optional</sup> <a name="logRetention" id="cdk-nextjs-standalone.OptionalProviderProps.property.logRetention"></a>
+##### `logRetention`<sup>Optional</sup> <a name="logRetention" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.logRetention"></a>
 
 ```typescript
 public readonly logRetention: RetentionDays;
@@ -8523,7 +8400,7 @@ This is a legacy API and we strongly recommend you migrate to `logGroup` if you 
 
 ---
 
-##### `onEventHandler`<sup>Optional</sup> <a name="onEventHandler" id="cdk-nextjs-standalone.OptionalProviderProps.property.onEventHandler"></a>
+##### `onEventHandler`<sup>Optional</sup> <a name="onEventHandler" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.onEventHandler"></a>
 
 ```typescript
 public readonly onEventHandler: IFunction;
@@ -8540,7 +8417,7 @@ property must be included in the response.
 
 ---
 
-##### `providerFunctionEnvEncryption`<sup>Optional</sup> <a name="providerFunctionEnvEncryption" id="cdk-nextjs-standalone.OptionalProviderProps.property.providerFunctionEnvEncryption"></a>
+##### `providerFunctionEnvEncryption`<sup>Optional</sup> <a name="providerFunctionEnvEncryption" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.providerFunctionEnvEncryption"></a>
 
 ```typescript
 public readonly providerFunctionEnvEncryption: IKey;
@@ -8553,7 +8430,7 @@ AWS KMS key used to encrypt provider lambda's environment variables.
 
 ---
 
-##### `providerFunctionName`<sup>Optional</sup> <a name="providerFunctionName" id="cdk-nextjs-standalone.OptionalProviderProps.property.providerFunctionName"></a>
+##### `providerFunctionName`<sup>Optional</sup> <a name="providerFunctionName" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.providerFunctionName"></a>
 
 ```typescript
 public readonly providerFunctionName: string;
@@ -8568,7 +8445,7 @@ The provider lambda function name.
 
 ---
 
-##### `queryInterval`<sup>Optional</sup> <a name="queryInterval" id="cdk-nextjs-standalone.OptionalProviderProps.property.queryInterval"></a>
+##### `queryInterval`<sup>Optional</sup> <a name="queryInterval" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.queryInterval"></a>
 
 ```typescript
 public readonly queryInterval: Duration;
@@ -8585,7 +8462,7 @@ every `queryInterval` seconds, and until `timeout` has been reached or until
 
 ---
 
-##### `role`<sup>Optional</sup> <a name="role" id="cdk-nextjs-standalone.OptionalProviderProps.property.role"></a>
+##### `role`<sup>Optional</sup> <a name="role" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.role"></a>
 
 ```typescript
 public readonly role: IRole;
@@ -8601,7 +8478,7 @@ Must be assumable by the 'lambda.amazonaws.com' service principal.
 
 ---
 
-##### `securityGroups`<sup>Optional</sup> <a name="securityGroups" id="cdk-nextjs-standalone.OptionalProviderProps.property.securityGroups"></a>
+##### `securityGroups`<sup>Optional</sup> <a name="securityGroups" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.securityGroups"></a>
 
 ```typescript
 public readonly securityGroups: ISecurityGroup[];
@@ -8616,7 +8493,7 @@ Only used if 'vpc' is supplied
 
 ---
 
-##### `totalTimeout`<sup>Optional</sup> <a name="totalTimeout" id="cdk-nextjs-standalone.OptionalProviderProps.property.totalTimeout"></a>
+##### `totalTimeout`<sup>Optional</sup> <a name="totalTimeout" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.totalTimeout"></a>
 
 ```typescript
 public readonly totalTimeout: Duration;
@@ -8631,7 +8508,7 @@ The maximum timeout is 1 hour (yes, it can exceed the AWS Lambda 15 minutes)
 
 ---
 
-##### `vpc`<sup>Optional</sup> <a name="vpc" id="cdk-nextjs-standalone.OptionalProviderProps.property.vpc"></a>
+##### `vpc`<sup>Optional</sup> <a name="vpc" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.vpc"></a>
 
 ```typescript
 public readonly vpc: IVpc;
@@ -8644,7 +8521,7 @@ The vpc to provision the lambda functions in.
 
 ---
 
-##### `vpcSubnets`<sup>Optional</sup> <a name="vpcSubnets" id="cdk-nextjs-standalone.OptionalProviderProps.property.vpcSubnets"></a>
+##### `vpcSubnets`<sup>Optional</sup> <a name="vpcSubnets" id="@funkepublishing/cdk-nextjs-standalone.OptionalProviderProps.property.vpcSubnets"></a>
 
 ```typescript
 public readonly vpcSubnets: SubnetSelection;
@@ -8660,14 +8537,14 @@ requires a NAT gateway, so picking Public subnets is not allowed.
 
 ---
 
-### OptionalS3OriginProps <a name="OptionalS3OriginProps" id="cdk-nextjs-standalone.OptionalS3OriginProps"></a>
+### OptionalS3OriginProps <a name="OptionalS3OriginProps" id="@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps"></a>
 
 OptionalS3OriginProps.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalS3OriginProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.Initializer"></a>
 
 ```typescript
-import { OptionalS3OriginProps } from 'cdk-nextjs-standalone'
+import { OptionalS3OriginProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalS3OriginProps: OptionalS3OriginProps = { ... }
 ```
@@ -8676,18 +8553,18 @@ const optionalS3OriginProps: OptionalS3OriginProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.connectionAttempts">connectionAttempts</a></code> | <code>number</code> | The number of times that CloudFront attempts to connect to the origin; |
-| <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.connectionTimeout">connectionTimeout</a></code> | <code>aws-cdk-lib.Duration</code> | The number of seconds that CloudFront waits when trying to establish a connection to the origin. |
-| <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.customHeaders">customHeaders</a></code> | <code>{[ key: string ]: string}</code> | A list of HTTP header names and values that CloudFront adds to requests it sends to the origin. |
-| <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.originAccessIdentity">originAccessIdentity</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginAccessIdentity</code> | An optional Origin Access Identity of the origin identity cloudfront will use when calling your s3 bucket. |
-| <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.originId">originId</a></code> | <code>string</code> | A unique identifier for the origin. |
-| <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.originPath">originPath</a></code> | <code>string</code> | An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin. |
-| <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.originShieldEnabled">originShieldEnabled</a></code> | <code>boolean</code> | Origin Shield is enabled by setting originShieldRegion to a valid region, after this to disable Origin Shield again you must set this flag to false. |
-| <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.originShieldRegion">originShieldRegion</a></code> | <code>string</code> | When you enable Origin Shield in the AWS Region that has the lowest latency to your origin, you can get better network performance. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.connectionAttempts">connectionAttempts</a></code> | <code>number</code> | The number of times that CloudFront attempts to connect to the origin; |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.connectionTimeout">connectionTimeout</a></code> | <code>aws-cdk-lib.Duration</code> | The number of seconds that CloudFront waits when trying to establish a connection to the origin. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.customHeaders">customHeaders</a></code> | <code>{[ key: string ]: string}</code> | A list of HTTP header names and values that CloudFront adds to requests it sends to the origin. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.originAccessIdentity">originAccessIdentity</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginAccessIdentity</code> | An optional Origin Access Identity of the origin identity cloudfront will use when calling your s3 bucket. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.originId">originId</a></code> | <code>string</code> | A unique identifier for the origin. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.originPath">originPath</a></code> | <code>string</code> | An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.originShieldEnabled">originShieldEnabled</a></code> | <code>boolean</code> | Origin Shield is enabled by setting originShieldRegion to a valid region, after this to disable Origin Shield again you must set this flag to false. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.originShieldRegion">originShieldRegion</a></code> | <code>string</code> | When you enable Origin Shield in the AWS Region that has the lowest latency to your origin, you can get better network performance. |
 
 ---
 
-##### `connectionAttempts`<sup>Optional</sup> <a name="connectionAttempts" id="cdk-nextjs-standalone.OptionalS3OriginProps.property.connectionAttempts"></a>
+##### `connectionAttempts`<sup>Optional</sup> <a name="connectionAttempts" id="@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.connectionAttempts"></a>
 
 ```typescript
 public readonly connectionAttempts: number;
@@ -8702,7 +8579,7 @@ valid values are 1, 2, or 3 attempts.
 
 ---
 
-##### `connectionTimeout`<sup>Optional</sup> <a name="connectionTimeout" id="cdk-nextjs-standalone.OptionalS3OriginProps.property.connectionTimeout"></a>
+##### `connectionTimeout`<sup>Optional</sup> <a name="connectionTimeout" id="@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.connectionTimeout"></a>
 
 ```typescript
 public readonly connectionTimeout: Duration;
@@ -8717,7 +8594,7 @@ Valid values are 1-10 seconds, inclusive.
 
 ---
 
-##### `customHeaders`<sup>Optional</sup> <a name="customHeaders" id="cdk-nextjs-standalone.OptionalS3OriginProps.property.customHeaders"></a>
+##### `customHeaders`<sup>Optional</sup> <a name="customHeaders" id="@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.customHeaders"></a>
 
 ```typescript
 public readonly customHeaders: {[ key: string ]: string};
@@ -8730,7 +8607,7 @@ A list of HTTP header names and values that CloudFront adds to requests it sends
 
 ---
 
-##### `originAccessIdentity`<sup>Optional</sup> <a name="originAccessIdentity" id="cdk-nextjs-standalone.OptionalS3OriginProps.property.originAccessIdentity"></a>
+##### `originAccessIdentity`<sup>Optional</sup> <a name="originAccessIdentity" id="@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.originAccessIdentity"></a>
 
 ```typescript
 public readonly originAccessIdentity: IOriginAccessIdentity;
@@ -8743,7 +8620,7 @@ An optional Origin Access Identity of the origin identity cloudfront will use wh
 
 ---
 
-##### `originId`<sup>Optional</sup> <a name="originId" id="cdk-nextjs-standalone.OptionalS3OriginProps.property.originId"></a>
+##### `originId`<sup>Optional</sup> <a name="originId" id="@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.originId"></a>
 
 ```typescript
 public readonly originId: string;
@@ -8758,7 +8635,7 @@ This value must be unique within the distribution.
 
 ---
 
-##### `originPath`<sup>Optional</sup> <a name="originPath" id="cdk-nextjs-standalone.OptionalS3OriginProps.property.originPath"></a>
+##### `originPath`<sup>Optional</sup> <a name="originPath" id="@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.originPath"></a>
 
 ```typescript
 public readonly originPath: string;
@@ -8773,7 +8650,7 @@ Must begin, but not end, with '/' (e.g., '/production/images').
 
 ---
 
-##### `originShieldEnabled`<sup>Optional</sup> <a name="originShieldEnabled" id="cdk-nextjs-standalone.OptionalS3OriginProps.property.originShieldEnabled"></a>
+##### `originShieldEnabled`<sup>Optional</sup> <a name="originShieldEnabled" id="@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.originShieldEnabled"></a>
 
 ```typescript
 public readonly originShieldEnabled: boolean;
@@ -8786,7 +8663,7 @@ Origin Shield is enabled by setting originShieldRegion to a valid region, after 
 
 ---
 
-##### `originShieldRegion`<sup>Optional</sup> <a name="originShieldRegion" id="cdk-nextjs-standalone.OptionalS3OriginProps.property.originShieldRegion"></a>
+##### `originShieldRegion`<sup>Optional</sup> <a name="originShieldRegion" id="@funkepublishing/cdk-nextjs-standalone.OptionalS3OriginProps.property.originShieldRegion"></a>
 
 ```typescript
 public readonly originShieldRegion: string;
@@ -8799,14 +8676,14 @@ When you enable Origin Shield in the AWS Region that has the lowest latency to y
 
 ---
 
-### OptionalTablePropsV2 <a name="OptionalTablePropsV2" id="cdk-nextjs-standalone.OptionalTablePropsV2"></a>
+### OptionalTablePropsV2 <a name="OptionalTablePropsV2" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2"></a>
 
 OptionalTablePropsV2.
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.OptionalTablePropsV2.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.Initializer"></a>
 
 ```typescript
-import { OptionalTablePropsV2 } from 'cdk-nextjs-standalone'
+import { OptionalTablePropsV2 } from '@funkepublishing/cdk-nextjs-standalone'
 
 const optionalTablePropsV2: OptionalTablePropsV2 = { ... }
 ```
@@ -8815,27 +8692,27 @@ const optionalTablePropsV2: OptionalTablePropsV2 = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.billing">billing</a></code> | <code>aws-cdk-lib.aws_dynamodb.Billing</code> | The billing mode and capacity settings to apply to the table. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.contributorInsights">contributorInsights</a></code> | <code>boolean</code> | Whether CloudWatch contributor insights is enabled. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.deletionProtection">deletionProtection</a></code> | <code>boolean</code> | Whether deletion protection is enabled. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.dynamoStream">dynamoStream</a></code> | <code>aws-cdk-lib.aws_dynamodb.StreamViewType</code> | When an item in the table is modified, StreamViewType determines what information is written to the stream. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.encryption">encryption</a></code> | <code>aws-cdk-lib.aws_dynamodb.TableEncryptionV2</code> | The server-side encryption. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.globalSecondaryIndexes">globalSecondaryIndexes</a></code> | <code>aws-cdk-lib.aws_dynamodb.GlobalSecondaryIndexPropsV2[]</code> | Global secondary indexes. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.kinesisStream">kinesisStream</a></code> | <code>aws-cdk-lib.aws_kinesis.IStream</code> | Kinesis Data Stream to capture item level changes. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.localSecondaryIndexes">localSecondaryIndexes</a></code> | <code>aws-cdk-lib.aws_dynamodb.LocalSecondaryIndexProps[]</code> | Local secondary indexes. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.partitionKey">partitionKey</a></code> | <code>aws-cdk-lib.aws_dynamodb.Attribute</code> | Partition key attribute definition. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.pointInTimeRecovery">pointInTimeRecovery</a></code> | <code>boolean</code> | Whether point-in-time recovery is enabled. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | The removal policy applied to the table. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.replicas">replicas</a></code> | <code>aws-cdk-lib.aws_dynamodb.ReplicaTableProps[]</code> | Replica tables to deploy with the primary table. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.sortKey">sortKey</a></code> | <code>aws-cdk-lib.aws_dynamodb.Attribute</code> | Sort key attribute definition. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.tableClass">tableClass</a></code> | <code>aws-cdk-lib.aws_dynamodb.TableClass</code> | The table class. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.tableName">tableName</a></code> | <code>string</code> | The name of the table. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.tags">tags</a></code> | <code>aws-cdk-lib.CfnTag[]</code> | Tags to be applied to the table or replica table. |
-| <code><a href="#cdk-nextjs-standalone.OptionalTablePropsV2.property.timeToLiveAttribute">timeToLiveAttribute</a></code> | <code>string</code> | The name of the TTL attribute. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.billing">billing</a></code> | <code>aws-cdk-lib.aws_dynamodb.Billing</code> | The billing mode and capacity settings to apply to the table. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.contributorInsights">contributorInsights</a></code> | <code>boolean</code> | Whether CloudWatch contributor insights is enabled. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.deletionProtection">deletionProtection</a></code> | <code>boolean</code> | Whether deletion protection is enabled. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.dynamoStream">dynamoStream</a></code> | <code>aws-cdk-lib.aws_dynamodb.StreamViewType</code> | When an item in the table is modified, StreamViewType determines what information is written to the stream. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.encryption">encryption</a></code> | <code>aws-cdk-lib.aws_dynamodb.TableEncryptionV2</code> | The server-side encryption. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.globalSecondaryIndexes">globalSecondaryIndexes</a></code> | <code>aws-cdk-lib.aws_dynamodb.GlobalSecondaryIndexPropsV2[]</code> | Global secondary indexes. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.kinesisStream">kinesisStream</a></code> | <code>aws-cdk-lib.aws_kinesis.IStream</code> | Kinesis Data Stream to capture item level changes. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.localSecondaryIndexes">localSecondaryIndexes</a></code> | <code>aws-cdk-lib.aws_dynamodb.LocalSecondaryIndexProps[]</code> | Local secondary indexes. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.partitionKey">partitionKey</a></code> | <code>aws-cdk-lib.aws_dynamodb.Attribute</code> | Partition key attribute definition. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.pointInTimeRecovery">pointInTimeRecovery</a></code> | <code>boolean</code> | Whether point-in-time recovery is enabled. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | The removal policy applied to the table. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.replicas">replicas</a></code> | <code>aws-cdk-lib.aws_dynamodb.ReplicaTableProps[]</code> | Replica tables to deploy with the primary table. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.sortKey">sortKey</a></code> | <code>aws-cdk-lib.aws_dynamodb.Attribute</code> | Sort key attribute definition. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.tableClass">tableClass</a></code> | <code>aws-cdk-lib.aws_dynamodb.TableClass</code> | The table class. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.tableName">tableName</a></code> | <code>string</code> | The name of the table. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.tags">tags</a></code> | <code>aws-cdk-lib.CfnTag[]</code> | Tags to be applied to the table or replica table. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.timeToLiveAttribute">timeToLiveAttribute</a></code> | <code>string</code> | The name of the TTL attribute. |
 
 ---
 
-##### `billing`<sup>Optional</sup> <a name="billing" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.billing"></a>
+##### `billing`<sup>Optional</sup> <a name="billing" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.billing"></a>
 
 ```typescript
 public readonly billing: Billing;
@@ -8848,7 +8725,7 @@ The billing mode and capacity settings to apply to the table.
 
 ---
 
-##### `contributorInsights`<sup>Optional</sup> <a name="contributorInsights" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.contributorInsights"></a>
+##### `contributorInsights`<sup>Optional</sup> <a name="contributorInsights" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.contributorInsights"></a>
 
 ```typescript
 public readonly contributorInsights: boolean;
@@ -8861,7 +8738,7 @@ Whether CloudWatch contributor insights is enabled.
 
 ---
 
-##### `deletionProtection`<sup>Optional</sup> <a name="deletionProtection" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.deletionProtection"></a>
+##### `deletionProtection`<sup>Optional</sup> <a name="deletionProtection" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.deletionProtection"></a>
 
 ```typescript
 public readonly deletionProtection: boolean;
@@ -8874,7 +8751,7 @@ Whether deletion protection is enabled.
 
 ---
 
-##### `dynamoStream`<sup>Optional</sup> <a name="dynamoStream" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.dynamoStream"></a>
+##### `dynamoStream`<sup>Optional</sup> <a name="dynamoStream" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.dynamoStream"></a>
 
 ```typescript
 public readonly dynamoStream: StreamViewType;
@@ -8887,7 +8764,7 @@ When an item in the table is modified, StreamViewType determines what informatio
 
 ---
 
-##### `encryption`<sup>Optional</sup> <a name="encryption" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.encryption"></a>
+##### `encryption`<sup>Optional</sup> <a name="encryption" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.encryption"></a>
 
 ```typescript
 public readonly encryption: TableEncryptionV2;
@@ -8900,7 +8777,7 @@ The server-side encryption.
 
 ---
 
-##### `globalSecondaryIndexes`<sup>Optional</sup> <a name="globalSecondaryIndexes" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.globalSecondaryIndexes"></a>
+##### `globalSecondaryIndexes`<sup>Optional</sup> <a name="globalSecondaryIndexes" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.globalSecondaryIndexes"></a>
 
 ```typescript
 public readonly globalSecondaryIndexes: GlobalSecondaryIndexPropsV2[];
@@ -8915,7 +8792,7 @@ Note: You can provide a maximum of 20 global secondary indexes.
 
 ---
 
-##### `kinesisStream`<sup>Optional</sup> <a name="kinesisStream" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.kinesisStream"></a>
+##### `kinesisStream`<sup>Optional</sup> <a name="kinesisStream" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.kinesisStream"></a>
 
 ```typescript
 public readonly kinesisStream: IStream;
@@ -8928,7 +8805,7 @@ Kinesis Data Stream to capture item level changes.
 
 ---
 
-##### `localSecondaryIndexes`<sup>Optional</sup> <a name="localSecondaryIndexes" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.localSecondaryIndexes"></a>
+##### `localSecondaryIndexes`<sup>Optional</sup> <a name="localSecondaryIndexes" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.localSecondaryIndexes"></a>
 
 ```typescript
 public readonly localSecondaryIndexes: LocalSecondaryIndexProps[];
@@ -8943,7 +8820,7 @@ Note: You can only provide a maximum of 5 local secondary indexes.
 
 ---
 
-##### `partitionKey`<sup>Optional</sup> <a name="partitionKey" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.partitionKey"></a>
+##### `partitionKey`<sup>Optional</sup> <a name="partitionKey" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.partitionKey"></a>
 
 ```typescript
 public readonly partitionKey: Attribute;
@@ -8955,7 +8832,7 @@ Partition key attribute definition.
 
 ---
 
-##### `pointInTimeRecovery`<sup>Optional</sup> <a name="pointInTimeRecovery" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.pointInTimeRecovery"></a>
+##### `pointInTimeRecovery`<sup>Optional</sup> <a name="pointInTimeRecovery" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.pointInTimeRecovery"></a>
 
 ```typescript
 public readonly pointInTimeRecovery: boolean;
@@ -8968,7 +8845,7 @@ Whether point-in-time recovery is enabled.
 
 ---
 
-##### `removalPolicy`<sup>Optional</sup> <a name="removalPolicy" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.removalPolicy"></a>
+##### `removalPolicy`<sup>Optional</sup> <a name="removalPolicy" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.removalPolicy"></a>
 
 ```typescript
 public readonly removalPolicy: RemovalPolicy;
@@ -8981,7 +8858,7 @@ The removal policy applied to the table.
 
 ---
 
-##### `replicas`<sup>Optional</sup> <a name="replicas" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.replicas"></a>
+##### `replicas`<sup>Optional</sup> <a name="replicas" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.replicas"></a>
 
 ```typescript
 public readonly replicas: ReplicaTableProps[];
@@ -8998,7 +8875,7 @@ to. Replica tables will only be supported if the stack deployment region is defi
 
 ---
 
-##### `sortKey`<sup>Optional</sup> <a name="sortKey" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.sortKey"></a>
+##### `sortKey`<sup>Optional</sup> <a name="sortKey" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.sortKey"></a>
 
 ```typescript
 public readonly sortKey: Attribute;
@@ -9011,7 +8888,7 @@ Sort key attribute definition.
 
 ---
 
-##### `tableClass`<sup>Optional</sup> <a name="tableClass" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.tableClass"></a>
+##### `tableClass`<sup>Optional</sup> <a name="tableClass" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.tableClass"></a>
 
 ```typescript
 public readonly tableClass: TableClass;
@@ -9024,7 +8901,7 @@ The table class.
 
 ---
 
-##### `tableName`<sup>Optional</sup> <a name="tableName" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.tableName"></a>
+##### `tableName`<sup>Optional</sup> <a name="tableName" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.tableName"></a>
 
 ```typescript
 public readonly tableName: string;
@@ -9037,7 +8914,7 @@ The name of the table.
 
 ---
 
-##### `tags`<sup>Optional</sup> <a name="tags" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.tags"></a>
+##### `tags`<sup>Optional</sup> <a name="tags" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.tags"></a>
 
 ```typescript
 public readonly tags: CfnTag[];
@@ -9050,7 +8927,7 @@ Tags to be applied to the table or replica table.
 
 ---
 
-##### `timeToLiveAttribute`<sup>Optional</sup> <a name="timeToLiveAttribute" id="cdk-nextjs-standalone.OptionalTablePropsV2.property.timeToLiveAttribute"></a>
+##### `timeToLiveAttribute`<sup>Optional</sup> <a name="timeToLiveAttribute" id="@funkepublishing/cdk-nextjs-standalone.OptionalTablePropsV2.property.timeToLiveAttribute"></a>
 
 ```typescript
 public readonly timeToLiveAttribute: string;
@@ -9063,12 +8940,12 @@ The name of the TTL attribute.
 
 ---
 
-### ViewerRequestFunctionProps <a name="ViewerRequestFunctionProps" id="cdk-nextjs-standalone.ViewerRequestFunctionProps"></a>
+### ViewerRequestFunctionProps <a name="ViewerRequestFunctionProps" id="@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps"></a>
 
-#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.ViewerRequestFunctionProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps.Initializer"></a>
 
 ```typescript
-import { ViewerRequestFunctionProps } from 'cdk-nextjs-standalone'
+import { ViewerRequestFunctionProps } from '@funkepublishing/cdk-nextjs-standalone'
 
 const viewerRequestFunctionProps: ViewerRequestFunctionProps = { ... }
 ```
@@ -9077,15 +8954,15 @@ const viewerRequestFunctionProps: ViewerRequestFunctionProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps.property.comment">comment</a></code> | <code>string</code> | A comment to describe the function. |
-| <code><a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps.property.functionName">functionName</a></code> | <code>string</code> | A name to identify the function. |
-| <code><a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps.property.keyValueStore">keyValueStore</a></code> | <code>aws-cdk-lib.aws_cloudfront.IKeyValueStore</code> | The Key Value Store to associate with this function. |
-| <code><a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_cloudfront.FunctionRuntime</code> | The runtime environment for the function. |
-| <code><a href="#cdk-nextjs-standalone.ViewerRequestFunctionProps.property.code">code</a></code> | <code>aws-cdk-lib.aws_cloudfront.FunctionCode</code> | Cloudfront function code that runs on VIEWER_REQUEST. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps.property.comment">comment</a></code> | <code>string</code> | A comment to describe the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps.property.functionName">functionName</a></code> | <code>string</code> | A name to identify the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps.property.keyValueStore">keyValueStore</a></code> | <code>aws-cdk-lib.aws_cloudfront.IKeyValueStore</code> | The Key Value Store to associate with this function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_cloudfront.FunctionRuntime</code> | The runtime environment for the function. |
+| <code><a href="#@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps.property.code">code</a></code> | <code>aws-cdk-lib.aws_cloudfront.FunctionCode</code> | Cloudfront function code that runs on VIEWER_REQUEST. |
 
 ---
 
-##### `comment`<sup>Optional</sup> <a name="comment" id="cdk-nextjs-standalone.ViewerRequestFunctionProps.property.comment"></a>
+##### `comment`<sup>Optional</sup> <a name="comment" id="@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps.property.comment"></a>
 
 ```typescript
 public readonly comment: string;
@@ -9098,7 +8975,7 @@ A comment to describe the function.
 
 ---
 
-##### `functionName`<sup>Optional</sup> <a name="functionName" id="cdk-nextjs-standalone.ViewerRequestFunctionProps.property.functionName"></a>
+##### `functionName`<sup>Optional</sup> <a name="functionName" id="@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps.property.functionName"></a>
 
 ```typescript
 public readonly functionName: string;
@@ -9111,7 +8988,7 @@ A name to identify the function.
 
 ---
 
-##### `keyValueStore`<sup>Optional</sup> <a name="keyValueStore" id="cdk-nextjs-standalone.ViewerRequestFunctionProps.property.keyValueStore"></a>
+##### `keyValueStore`<sup>Optional</sup> <a name="keyValueStore" id="@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps.property.keyValueStore"></a>
 
 ```typescript
 public readonly keyValueStore: IKeyValueStore;
@@ -9127,7 +9004,7 @@ In order to associate a Key Value Store, the `runtime` must be
 
 ---
 
-##### `runtime`<sup>Optional</sup> <a name="runtime" id="cdk-nextjs-standalone.ViewerRequestFunctionProps.property.runtime"></a>
+##### `runtime`<sup>Optional</sup> <a name="runtime" id="@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps.property.runtime"></a>
 
 ```typescript
 public readonly runtime: FunctionRuntime;
@@ -9140,7 +9017,7 @@ The runtime environment for the function.
 
 ---
 
-##### `code`<sup>Optional</sup> <a name="code" id="cdk-nextjs-standalone.ViewerRequestFunctionProps.property.code"></a>
+##### `code`<sup>Optional</sup> <a name="code" id="@funkepublishing/cdk-nextjs-standalone.ViewerRequestFunctionProps.property.code"></a>
 
 ```typescript
 public readonly code: FunctionCode;

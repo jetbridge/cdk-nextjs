@@ -1,5 +1,5 @@
 {
-  "name": "cdk-nextjs-standalone",
+  "name": "@funkepublishing/cdk-nextjs-standalone",
   "description": "Deploy a NextJS app to AWS using CDK and OpenNext.",
   "repository": {
     "type": "git",
@@ -103,8 +103,7 @@
   "main": "lib/index.js",
   "license": "Apache-2.0",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/",
-    "access": "public"
+    "registry": "https://npm.pkg.github.com/"
   },
   "version": "0.0.0",
   "jest": {

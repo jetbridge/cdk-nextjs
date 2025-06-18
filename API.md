@@ -2909,6 +2909,103 @@ public readonly nextjsStaticAssetsProps: OptionalNextjsStaticAssetsProps;
 
 ---
 
+### NextjsDistributionDefaults <a name="NextjsDistributionDefaults" id="cdk-nextjs-standalone.NextjsDistributionDefaults"></a>
+
+#### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsDistributionDefaults.Initializer"></a>
+
+```typescript
+import { NextjsDistributionDefaults } from 'cdk-nextjs-standalone'
+
+const nextjsDistributionDefaults: NextjsDistributionDefaults = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults.property.imageCachePolicy">imageCachePolicy</a></code> | <code>boolean</code> | Prevent the creation of a default cache policy for image requests. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults.property.imageResponseHeadersPolicy">imageResponseHeadersPolicy</a></code> | <code>boolean</code> | Prevent the creation of a default response headers policy for image requests. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults.property.serverCachePolicy">serverCachePolicy</a></code> | <code>boolean</code> | Prevent the creation of a default cache policy for server requests. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults.property.serverResponseHeadersPolicy">serverResponseHeadersPolicy</a></code> | <code>boolean</code> | Prevent the creation of a default response headers policy for server requests. |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults.property.staticResponseHeadersPolicy">staticResponseHeadersPolicy</a></code> | <code>boolean</code> | Prevent the creation of a default response headers policy for static requests. |
+
+---
+
+##### `imageCachePolicy`<sup>Optional</sup> <a name="imageCachePolicy" id="cdk-nextjs-standalone.NextjsDistributionDefaults.property.imageCachePolicy"></a>
+
+```typescript
+public readonly imageCachePolicy: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Prevent the creation of a default cache policy for image requests.
+
+Has no effect if a `imageBehaviorOptions.cachePolicy` is provided in {@link NextjsDistributionProps.overrides}
+
+---
+
+##### `imageResponseHeadersPolicy`<sup>Optional</sup> <a name="imageResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsDistributionDefaults.property.imageResponseHeadersPolicy"></a>
+
+```typescript
+public readonly imageResponseHeadersPolicy: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Prevent the creation of a default response headers policy for image requests.
+
+Has no effect if a `imageBehaviorOptions.responseHeadersPolicy` is provided in {@link NextjsDistributionProps.overrides}
+
+---
+
+##### `serverCachePolicy`<sup>Optional</sup> <a name="serverCachePolicy" id="cdk-nextjs-standalone.NextjsDistributionDefaults.property.serverCachePolicy"></a>
+
+```typescript
+public readonly serverCachePolicy: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Prevent the creation of a default cache policy for server requests.
+
+Has no effect if a `serverBehaviorOptions.cachePolicy` is provided in {@link NextjsDistributionProps.overrides}
+
+---
+
+##### `serverResponseHeadersPolicy`<sup>Optional</sup> <a name="serverResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsDistributionDefaults.property.serverResponseHeadersPolicy"></a>
+
+```typescript
+public readonly serverResponseHeadersPolicy: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Prevent the creation of a default response headers policy for server requests.
+
+Has no effect if a `serverBehaviorOptions.responseHeadersPolicy` is provided in {@link NextjsDistributionProps.overrides}
+
+---
+
+##### `staticResponseHeadersPolicy`<sup>Optional</sup> <a name="staticResponseHeadersPolicy" id="cdk-nextjs-standalone.NextjsDistributionDefaults.property.staticResponseHeadersPolicy"></a>
+
+```typescript
+public readonly staticResponseHeadersPolicy: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Prevent the creation of a default response headers policy for static requests.
+
+Has no effect if a `staticBehaviorOptions.responseHeadersPolicy` is provided in {@link NextjsDistributionProps.overrides}
+
+---
+
 ### NextjsDistributionOverrides <a name="NextjsDistributionOverrides" id="cdk-nextjs-standalone.NextjsDistributionOverrides"></a>
 
 #### Initializer <a name="Initializer" id="cdk-nextjs-standalone.NextjsDistributionOverrides.Initializer"></a>
@@ -3105,6 +3202,7 @@ const nextjsDistributionProps: NextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.nextDomain">nextDomain</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDomain">NextjsDomain</a></code> | *No description.* |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.overrides">overrides</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionOverrides">NextjsDistributionOverrides</a></code> | Override props for every construct. |
 | <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.NextjsDistributionProps.property.supressDefaults">supressDefaults</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults">NextjsDistributionDefaults</a></code> | Supress the creation of default policies if none are provided by you. |
 
 ---
 
@@ -3244,6 +3342,18 @@ public readonly streaming: boolean;
 - *Type:* boolean
 
 > [{@link NextjsProps.streaming }]({@link NextjsProps.streaming })
+
+---
+
+##### `supressDefaults`<sup>Optional</sup> <a name="supressDefaults" id="cdk-nextjs-standalone.NextjsDistributionProps.property.supressDefaults"></a>
+
+```typescript
+public readonly supressDefaults: NextjsDistributionDefaults;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionDefaults">NextjsDistributionDefaults</a>
+
+Supress the creation of default policies if none are provided by you.
 
 ---
 
@@ -7669,6 +7779,7 @@ const optionalNextjsDistributionProps: OptionalNextjsDistributionProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.serverFunction">serverFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Lambda function to route all non-static requests to. |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.staticAssetsBucket">staticAssetsBucket</a></code> | <code>aws-cdk-lib.aws_s3.IBucket</code> | Bucket containing static assets. |
 | <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.streaming">streaming</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.supressDefaults">supressDefaults</a></code> | <code><a href="#cdk-nextjs-standalone.NextjsDistributionDefaults">NextjsDistributionDefaults</a></code> | Supress the creation of default policies if none are provided by you. |
 
 ---
 
@@ -7796,6 +7907,18 @@ public readonly streaming: boolean;
 ```
 
 - *Type:* boolean
+
+---
+
+##### `supressDefaults`<sup>Optional</sup> <a name="supressDefaults" id="cdk-nextjs-standalone.OptionalNextjsDistributionProps.property.supressDefaults"></a>
+
+```typescript
+public readonly supressDefaults: NextjsDistributionDefaults;
+```
+
+- *Type:* <a href="#cdk-nextjs-standalone.NextjsDistributionDefaults">NextjsDistributionDefaults</a>
+
+Supress the creation of default policies if none are provided by you.
 
 ---
 

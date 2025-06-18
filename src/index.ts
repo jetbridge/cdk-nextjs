@@ -13,6 +13,7 @@ export {
   NextjsDistributionProps,
   NextjsDistributionOverrides,
   ViewerRequestFunctionProps,
+  NextjsDistributionDefaults,
 } from './NextjsDistribution';
 export { NextjsInvalidation, NextjsInvalidationProps, NextjsInvalidationOverrides } from './NextjsInvalidation';
 export { NextjsDomain, NextjsDomainProps, NextjsDomainOverrides } from './NextjsDomain';

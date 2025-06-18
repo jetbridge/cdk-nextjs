@@ -44,6 +44,40 @@ export interface ViewerRequestFunctionProps extends OptionalCloudFrontFunctionPr
    */
   readonly code?: cloudfront.FunctionCode;
 }
+
+export interface NextjsDistributionDefaults {
+  /**
+   * Prevent the creation of a default response headers policy for static requests.
+   * Has no effect if a `staticBehaviorOptions.responseHeadersPolicy` is provided in {@link NextjsDistributionProps.overrides}
+   * @default false
+   */
+  readonly staticResponseHeadersPolicy?: boolean;
+  /**
+   * Prevent the creation of a default cache policy for server requests.
+   * Has no effect if a `serverBehaviorOptions.cachePolicy` is provided in {@link NextjsDistributionProps.overrides}
+   * @default false
+   */
+  readonly serverCachePolicy?: boolean;
+  /**
+   * Prevent the creation of a default response headers policy for server requests.
+   * Has no effect if a `serverBehaviorOptions.responseHeadersPolicy` is provided in {@link NextjsDistributionProps.overrides}
+   * @default false
+   */
+  readonly serverResponseHeadersPolicy?: boolean;
+  /**
+   * Prevent the creation of a default cache policy for image requests.
+   * Has no effect if a `imageBehaviorOptions.cachePolicy` is provided in {@link NextjsDistributionProps.overrides}
+   * @default false
+   */
+  readonly imageCachePolicy?: boolean;
+  /**
+   * Prevent the creation of a default response headers policy for image requests.
+   * Has no effect if a `imageBehaviorOptions.responseHeadersPolicy` is provided in {@link NextjsDistributionProps.overrides}
+   * @default false
+   */
+  readonly imageResponseHeadersPolicy?: boolean;
+}
+
 export interface NextjsDistributionOverrides {
   readonly viewerRequestFunctionProps?: ViewerRequestFunctionProps;
   readonly distributionProps?: OptionalDistributionProps;
@@ -110,6 +144,12 @@ export interface NextjsDistributionProps {
    * @see {@link NextjsProps.streaming}
    */
   readonly streaming?: boolean;
+
+  /**
+   * Supress the creation of default policies if
+   * none are provided by you
+   */
+  readonly supressDefaults?: NextjsDistributionDefaults;
 }
 
 /**
@@ -205,10 +245,11 @@ export class NextjsDistribution extends Construct {
   private createStaticBehaviorOptions(): BehaviorOptions {
     const staticBehaviorOptions = this.props.overrides?.staticBehaviorOptions;
 
-    // create default response headers policy if not provided
-    const responseHeadersPolicy =
-      staticBehaviorOptions?.responseHeadersPolicy ??
-      new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
+    let responseHeadersPolicy = staticBehaviorOptions?.responseHeadersPolicy;
+
+    if (!responseHeadersPolicy && !this.props.supressDefaults?.staticResponseHeadersPolicy) {
+      // create default response headers policy if not provided
+      responseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
         // add default header for static assets
         customHeadersBehavior: {
           customHeaders: [
@@ -225,6 +266,7 @@ export class NextjsDistribution extends Construct {
         comment: 'Nextjs Static Response Headers Policy',
         ...this.props.overrides?.staticResponseHeadersPolicyProps,
       });
+    }
 
     return {
       ...this.commonBehaviorOptions,
@@ -284,10 +326,11 @@ export class NextjsDistribution extends Construct {
     const origin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), this.props.overrides?.serverHttpOriginProps);
     const serverBehaviorOptions = this.props.overrides?.serverBehaviorOptions;
 
-    // create default cache policy if not provided
-    const cachePolicy =
-      serverBehaviorOptions?.cachePolicy ??
-      new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
+    let cachePolicy = serverBehaviorOptions?.cachePolicy;
+
+    if (!cachePolicy && !this.props.supressDefaults?.serverCachePolicy) {
+      // create default cache policy if not provided
+      cachePolicy = new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
         queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
         headerBehavior: cloudfront.CacheHeaderBehavior.allowList('x-open-next-cache-key'),
         cookieBehavior: cloudfront.CacheCookieBehavior.all(),
@@ -299,11 +342,13 @@ export class NextjsDistribution extends Construct {
         comment: 'Nextjs Server Cache Policy',
         ...this.props.overrides?.serverCachePolicyProps,
       });
+    }
+
+    let responseHeadersPolicy = serverBehaviorOptions?.responseHeadersPolicy;
 
     // create default response headers policy if not provided
-    const responseHeadersPolicy =
-      serverBehaviorOptions?.responseHeadersPolicy ??
-      new ResponseHeadersPolicy(this, 'ServerResponseHeadersPolicy', {
+    if (!responseHeadersPolicy && !this.props.supressDefaults?.serverResponseHeadersPolicy) {
+      responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ServerResponseHeadersPolicy', {
         customHeadersBehavior: {
           customHeaders: [
             {
@@ -319,6 +364,7 @@ export class NextjsDistribution extends Construct {
         comment: 'Nextjs Server Response Headers Policy',
         ...this.props.overrides?.serverResponseHeadersPolicyProps,
       });
+    }
 
     return {
       ...this.commonBehaviorOptions,
@@ -419,10 +465,11 @@ async function handler(event) {
 
     const imageBehaviorOptions = this.props.overrides?.imageBehaviorOptions;
 
-    // add default cache policy if not provided
-    const cachePolicy =
-      imageBehaviorOptions?.cachePolicy ??
-      new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
+    let cachePolicy = imageBehaviorOptions?.cachePolicy;
+
+    if (!cachePolicy && !this.props.supressDefaults?.imageCachePolicy) {
+      // add default cache policy if not provided
+      cachePolicy = new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
         queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
         headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
         cookieBehavior: cloudfront.CacheCookieBehavior.none(),
@@ -434,11 +481,13 @@ async function handler(event) {
         comment: 'Nextjs Image Cache Policy',
         ...this.props.overrides?.imageCachePolicyProps,
       });
+    }
 
-    // add default response headers policy if not provided
-    const responseHeadersPolicy =
-      imageBehaviorOptions?.responseHeadersPolicy ??
-      new ResponseHeadersPolicy(this, 'ImageResponseHeadersPolicy', {
+    let responseHeadersPolicy = imageBehaviorOptions?.responseHeadersPolicy;
+
+    if (!responseHeadersPolicy && !this.props.supressDefaults?.imageResponseHeadersPolicy) {
+      // add default response headers policy if not provided
+      responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ImageResponseHeadersPolicy', {
         customHeadersBehavior: {
           customHeaders: [
             {
@@ -454,6 +503,7 @@ async function handler(event) {
         comment: 'Nextjs Image Response Headers Policy',
         ...this.props.overrides?.imageResponseHeadersPolicyProps,
       });
+    }
 
     return {
       ...this.commonBehaviorOptions,

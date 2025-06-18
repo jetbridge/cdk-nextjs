@@ -33,7 +33,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     },
   },
   // package config
-  name: 'cdk-nextjs-standalone',
+  name: '@funkepublishing/cdk-nextjs-standalone',
   packageName: '@funkepublishing/cdk-nextjs-standalone',
   majorVersion: 4,
   // prerelease: 'beta',
@@ -170,55 +170,55 @@ new ProjenStruct(project, {
   name: 'OptionalNextjsBucketDeploymentProps',
   filePath: getFilePath('OptionalNextjsBucketDeploymentProps'),
 })
-  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsBucketDeploymentProps'))
+  .mixin(Struct.fromFqn('@funkepublishing/cdk-nextjs-standalone.NextjsBucketDeploymentProps'))
   .allOptional();
 new ProjenStruct(project, {
   name: 'OptionalNextjsBuildProps',
   filePath: getFilePath('OptionalNextjsBuildProps'),
 })
-  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsBuildProps'))
+  .mixin(Struct.fromFqn('@funkepublishing/cdk-nextjs-standalone.NextjsBuildProps'))
   .allOptional();
 new ProjenStruct(project, {
   name: 'OptionalNextjsStaticAssetsProps',
   filePath: getFilePath('OptionalNextjsStaticAssetsProps'),
 })
-  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsStaticAssetsProps'))
+  .mixin(Struct.fromFqn('@funkepublishing/cdk-nextjs-standalone.NextjsStaticAssetsProps'))
   .allOptional();
 new ProjenStruct(project, {
   name: 'OptionalNextjsServerProps',
   filePath: getFilePath('OptionalNextjsServerProps'),
 })
-  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsServerProps'))
+  .mixin(Struct.fromFqn('@funkepublishing/cdk-nextjs-standalone.NextjsServerProps'))
   .allOptional();
 new ProjenStruct(project, {
   name: 'OptionalNextjsImageProps',
   filePath: getFilePath('OptionalNextjsImageProps'),
 })
-  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsImageProps'))
+  .mixin(Struct.fromFqn('@funkepublishing/cdk-nextjs-standalone.NextjsImageProps'))
   .allOptional();
 new ProjenStruct(project, {
   name: 'OptionalNextjsRevalidationProps',
   filePath: getFilePath('OptionalNextjsRevalidationProps'),
 })
-  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsRevalidationProps'))
+  .mixin(Struct.fromFqn('@funkepublishing/cdk-nextjs-standalone.NextjsRevalidationProps'))
   .allOptional();
 new ProjenStruct(project, {
   name: 'OptionalNextjsDomainProps',
   filePath: getFilePath('OptionalNextjsDomainProps'),
 })
-  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsDomainProps'))
+  .mixin(Struct.fromFqn('@funkepublishing/cdk-nextjs-standalone.NextjsDomainProps'))
   .allOptional();
 new ProjenStruct(project, {
   name: 'OptionalNextjsDistributionProps',
   filePath: getFilePath('OptionalNextjsDistributionProps'),
 })
-  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsDistributionProps'))
+  .mixin(Struct.fromFqn('@funkepublishing/cdk-nextjs-standalone.NextjsDistributionProps'))
   .allOptional();
 new ProjenStruct(project, {
   name: 'OptionalNextjsInvalidationProps',
   filePath: getFilePath('OptionalNextjsInvalidationProps'),
 })
-  .mixin(Struct.fromFqn('cdk-nextjs-standalone.NextjsInvalidationProps'))
+  .mixin(Struct.fromFqn('@funkepublishing/cdk-nextjs-standalone.NextjsInvalidationProps'))
   .allOptional();
 
 // const e2eTestsWorkflow = project.github?.addWorkflow('e2e-tests');

@@ -34,7 +34,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
   },
   // package config
   name: 'cdk-nextjs-standalone',
-  packageName: 'cdk-nextjs-standalone',
   majorVersion: 4,
   // prerelease: 'beta',
   minNodeVersion,
@@ -87,6 +86,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   ] /* Build dependencies for this module. */,
   // misc config
   sampleCode: false, // do not generate sample test files
+  npmRegistryUrl: 'https://npm.pkg.github.com',
 });
 
 project.bundler.addBundle('./src/lambdas/nextjs-bucket-deployment.ts', commonBundlingOptions);

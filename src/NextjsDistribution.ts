@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import * as path from 'path';
-import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
+import { Duration, Fn } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import {
   AddBehaviorOptions,
@@ -11,9 +11,8 @@ import {
 } from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import { HttpOriginProps } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { Runtime, InvokeMode } from 'aws-cdk-lib/aws-lambda';
+import { InvokeMode } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
@@ -205,9 +204,6 @@ export class NextjsDistribution extends Construct {
     // Create Behaviors
     this.s3Origin = new origins.S3Origin(this.props.staticAssetsBucket, this.props.overrides?.s3OriginProps);
     this.staticBehaviorOptions = this.createStaticBehaviorOptions();
-    if (this.isFnUrlIamAuth) {
-      this.edgeLambdas.push(this.createEdgeLambda());
-    }
     this.serverBehaviorOptions = this.createServerBehaviorOptions();
     this.imageBehaviorOptions = this.createImageBehaviorOptions();
 
@@ -236,10 +232,6 @@ export class NextjsDistribution extends Construct {
    */
   public get distributionDomain(): string {
     return this.distribution.distributionDomainName;
-  }
-
-  private get isFnUrlIamAuth() {
-    return this.props.functionUrlAuthType === lambda.FunctionUrlAuthType.AWS_IAM;
   }
 
   private createStaticBehaviorOptions(): BehaviorOptions {
@@ -281,41 +273,6 @@ export class NextjsDistribution extends Construct {
 
   private get fnUrlAuthType(): lambda.FunctionUrlAuthType {
     return this.props.functionUrlAuthType || lambda.FunctionUrlAuthType.NONE;
-  }
-
-  /**
-   * Once CloudFront OAC is released, remove this to reduce latency.
-   */
-  private createEdgeLambda(): cloudfront.EdgeLambda {
-    const signFnUrlDir = path.resolve(__dirname, '..', 'assets', 'lambdas', 'sign-fn-url');
-    const originRequestEdgeFn = new cloudfront.experimental.EdgeFunction(this, 'EdgeFn', {
-      runtime: Runtime.NODEJS_20_X,
-      handler: 'index.handler',
-      code: lambda.Code.fromAsset(signFnUrlDir),
-      currentVersionOptions: {
-        removalPolicy: RemovalPolicy.DESTROY, // destroy old versions
-        retryAttempts: 1, // async retry attempts
-      },
-      ...this.props.overrides?.edgeFunctionProps,
-    });
-    originRequestEdgeFn.currentVersion.grantInvoke(new ServicePrincipal('edgelambda.amazonaws.com'));
-    originRequestEdgeFn.currentVersion.grantInvoke(new ServicePrincipal('lambda.amazonaws.com'));
-    originRequestEdgeFn.addToRolePolicy(
-      new PolicyStatement({
-        actions: ['lambda:InvokeFunctionUrl'],
-        resources: [this.props.serverFunction.functionArn, this.props.imageOptFunction.functionArn],
-      })
-    );
-    const originRequestEdgeFnVersion = lambda.Version.fromVersionArn(
-      this,
-      'Version',
-      originRequestEdgeFn.currentVersion.functionArn
-    );
-    return {
-      eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
-      functionVersion: originRequestEdgeFnVersion,
-      includeBody: true,
-    };
   }
 
   private createServerBehaviorOptions(): cloudfront.BehaviorOptions {

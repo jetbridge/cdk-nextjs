@@ -1,7 +1,8 @@
-import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as s3 from 'aws-cdk-lib/aws-s3';
-import { Construct } from 'constructs';
+import { Distribution } from "aws-cdk-lib/aws-cloudfront";
+import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as s3 from "aws-cdk-lib/aws-s3";
+import { Construct } from "constructs";
+
 import {
   OptionalNextjsDistributionProps,
   OptionalNextjsDomainProps,
@@ -10,17 +11,18 @@ import {
   OptionalNextjsRevalidationProps,
   OptionalNextjsServerProps,
   OptionalNextjsStaticAssetsProps,
-} from './generated-structs';
-import { OptionalNextjsBuildProps } from './generated-structs/OptionalNextjsBuildProps';
-import { NextjsBuild } from './NextjsBuild';
-import { NextjsDistribution } from './NextjsDistribution';
-import { NextjsDomain, NextjsDomainProps } from './NextjsDomain';
-import { NextjsImage } from './NextjsImage';
-import { NextjsInvalidation } from './NextjsInvalidation';
-import { NextjsOverrides } from './NextjsOverrides';
-import { NextjsRevalidation } from './NextjsRevalidation';
-import { NextjsServer } from './NextjsServer';
-import { NextjsStaticAssets } from './NextjsStaticAssets';
+} from "./generated-structs";
+import { OptionalNextjsBuildProps } from "./generated-structs/OptionalNextjsBuildProps";
+import { NextjsBuild } from "./NextjsBuild";
+import { NextjsDistribution } from "./NextjsDistribution";
+import { NextjsDomain, NextjsDomainProps } from "./NextjsDomain";
+import { NextjsImage } from "./NextjsImage";
+import { NextjsInvalidation } from "./NextjsInvalidation";
+import { NextjsMultiServer } from "./NextjsMultiServer";
+import { NextjsOverrides } from "./NextjsOverrides";
+import { NextjsRevalidation } from "./NextjsRevalidation";
+import { NextjsServer } from "./NextjsServer";
+import { NextjsStaticAssets } from "./NextjsStaticAssets";
 
 export interface NextjsConstructOverrides {
   readonly nextjsBuildProps?: OptionalNextjsBuildProps;
@@ -105,6 +107,28 @@ export interface NextjsProps {
    * instead of waiting for the entire response to be generated.
    */
   readonly streaming?: boolean;
+  /**
+   * Enable multi-server mode based on open-next.output.json.
+   * This will create separate Lambda functions for different API routes
+   * based on the configuration in open-next.output.json.
+   * @default false
+   */
+  readonly enableMultiServer?: boolean;
+  /**
+   * Enable dynamic behaviors from open-next.output.json.
+   * This will automatically create CloudFront behaviors based on the
+   * patterns defined in open-next.output.json.
+   * Only works when enableMultiServer is true.
+   * @default false
+   */
+  readonly enableDynamicBehaviors?: boolean;
+  /**
+   * Only create Lambda functions that are actually used in CloudFront behaviors.
+   * This can significantly reduce costs by avoiding unused functions.
+   * Only works when enableMultiServer is true.
+   * @default false
+   */
+  readonly createOnlyUsedFunctions?: boolean;
 }
 
 /**
@@ -126,6 +150,10 @@ export class Nextjs extends Construct {
    * The main NextJS server handler lambda function.
    */
   public serverFunction: NextjsServer;
+  /**
+   * Multi-server instance for managing multiple Lambda functions (when enabled).
+   */
+  public multiServer?: NextjsMultiServer;
   /**
    * The image optimization handler lambda function.
    */
@@ -154,11 +182,15 @@ export class Nextjs extends Construct {
   public lambdaFunctionUrl!: lambda.FunctionUrl;
   public imageOptimizationLambdaFunctionUrl!: lambda.FunctionUrl;
 
-  constructor(scope: Construct, id: string, protected props: NextjsProps) {
+  constructor(
+    scope: Construct,
+    id: string,
+    protected props: NextjsProps,
+  ) {
     super(scope, id);
 
     // build nextjs app
-    this.nextBuild = new NextjsBuild(this, 'Build', {
+    this.nextBuild = new NextjsBuild(this, "Build", {
       nextjsPath: props.nextjsPath,
       buildCommand: props.buildCommand,
       buildPath: props.buildPath,
@@ -170,7 +202,7 @@ export class Nextjs extends Construct {
     });
 
     // deploy nextjs static assets to s3
-    this.staticAssets = new NextjsStaticAssets(this, 'StaticAssets', {
+    this.staticAssets = new NextjsStaticAssets(this, "StaticAssets", {
       basePath: props.basePath,
       environment: props.environment,
       nextBuild: this.nextBuild,
@@ -178,15 +210,33 @@ export class Nextjs extends Construct {
       ...props.overrides?.nextjs?.nextjsStaticAssetsProps,
     });
 
-    this.serverFunction = new NextjsServer(this, 'Server', {
-      environment: props.environment,
-      nextBuild: this.nextBuild,
-      staticAssetBucket: this.staticAssets.bucket,
-      overrides: props.overrides?.nextjsServer,
-      ...props.overrides?.nextjs?.nextjsServerProps,
-    });
+    // Create server function(s) - either single or multi-server mode
+    if (props.enableMultiServer) {
+      this.multiServer = new NextjsMultiServer(this, "MultiServer", {
+        environment: props.environment,
+        nextBuild: this.nextBuild,
+        staticAssetBucket: this.staticAssets.bucket,
+        enableMultiServer: true,
+        createOnlyUsedFunctions: props.createOnlyUsedFunctions,
+        overrides: props.overrides?.nextjsServer,
+        quiet: props.quiet,
+        ...props.overrides?.nextjs?.nextjsServerProps,
+      });
+      // For backwards compatibility, expose the main function as serverFunction
+      // Multi-server mode now uses enhanced behavior processing for better performance
+      this.serverFunction = this.multiServer.lambdaFunction as any;
+    } else {
+      this.serverFunction = new NextjsServer(this, "Server", {
+        environment: props.environment,
+        nextBuild: this.nextBuild,
+        staticAssetBucket: this.staticAssets.bucket,
+        overrides: props.overrides?.nextjsServer,
+        ...props.overrides?.nextjs?.nextjsServerProps,
+      });
+    }
+
     // build image optimization
-    this.imageOptimizationFunction = new NextjsImage(this, 'Image', {
+    this.imageOptimizationFunction = new NextjsImage(this, "Image", {
       bucket: props.imageOptimizationBucket || this.bucket,
       nextBuild: this.nextBuild,
       overrides: props.overrides?.nextjsImage,
@@ -194,21 +244,22 @@ export class Nextjs extends Construct {
     });
 
     // build revalidation queue and handler function
-    this.revalidation = new NextjsRevalidation(this, 'Revalidation', {
+    this.revalidation = new NextjsRevalidation(this, "Revalidation", {
       nextBuild: this.nextBuild,
-      serverFunction: this.serverFunction,
+      serverFunction: this.multiServer ? undefined : this.serverFunction,
+      multiServer: this.multiServer,
       overrides: props.overrides?.nextjsRevalidation,
       ...props.overrides?.nextjs?.nextjsRevalidationProps,
     });
 
     if (this.props.domainProps) {
-      this.domain = new NextjsDomain(this, 'Domain', {
+      this.domain = new NextjsDomain(this, "Domain", {
         ...this.props.domainProps,
         overrides: props.overrides?.nextjsDomain,
         ...props.overrides?.nextjs?.nextjsDomainProps,
       });
     }
-    this.distribution = new NextjsDistribution(this, 'Distribution', {
+    this.distribution = new NextjsDistribution(this, "Distribution", {
       nextjsPath: props.nextjsPath,
       basePath: props.basePath,
       distribution: props.distribution,
@@ -216,7 +267,11 @@ export class Nextjs extends Construct {
       staticAssetsBucket: this.staticAssets.bucket,
       nextBuild: this.nextBuild,
       nextDomain: this.domain,
-      serverFunction: this.serverFunction.lambdaFunction,
+      serverFunction: this.multiServer
+        ? undefined
+        : this.serverFunction.lambdaFunction,
+      multiServer: this.multiServer,
+      enableDynamicBehaviors: props.enableDynamicBehaviors,
       imageOptFunction: this.imageOptimizationFunction,
       overrides: props.overrides?.nextjsDistribution,
       ...props.overrides?.nextjs?.nextjsDistributionProps,
@@ -226,7 +281,7 @@ export class Nextjs extends Construct {
     }
 
     if (!this.props.skipFullInvalidation) {
-      new NextjsInvalidation(this, 'Invalidation', {
+      new NextjsInvalidation(this, "Invalidation", {
         distribution: this.distribution.distribution,
         dependencies: [], // [this.staticAssets, this.serverFunction, this.imageOptimizationFunction]
         overrides: props.overrides?.nextjsInvalidation,

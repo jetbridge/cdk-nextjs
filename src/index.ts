@@ -1,21 +1,22 @@
-export { NextjsStaticAssets, NextjsStaticAssetsProps, NextjsStaticAssetOverrides } from './NextjsStaticAssets';
-export { NextjsRevalidation, NextjsRevalidationProps, NextjsRevalidationOverrides } from './NextjsRevalidation';
-export { NextjsBuild, NextjsBuildProps } from './NextjsBuild';
-export { EnvironmentVars, NextjsServer, NextjsServerProps, NextjsServerOverrides } from './NextjsServer';
-export { NextjsImage, NextjsImageProps, NextjsImageOverrides } from './NextjsImage';
-export {
-  NextjsBucketDeployment,
-  NextjsBucketDeploymentProps,
-  NextjsBucketDeploymentOverrides,
-} from './NextjsBucketDeployment';
-export {
-  NextjsDistribution,
-  NextjsDistributionProps,
-  NextjsDistributionOverrides,
-  ViewerRequestFunctionProps,
-} from './NextjsDistribution';
-export { NextjsInvalidation, NextjsInvalidationProps, NextjsInvalidationOverrides } from './NextjsInvalidation';
-export { NextjsDomain, NextjsDomainProps, NextjsDomainOverrides } from './NextjsDomain';
-export { Nextjs, NextjsProps, NextjsConstructOverrides } from './Nextjs';
-export { NextjsOverrides } from './NextjsOverrides';
-export * from './generated-structs';
+export type { OptionalAaaaRecordProps } from "./OptionalAaaaRecordProps";
+export type { OptionalARecordProps } from "./OptionalARecordProps";
+export type { OptionalAssetProps } from "./OptionalAssetProps";
+export type { OptionalCertificateProps } from "./OptionalCertificateProps";
+export type { OptionalCloudFrontFunctionProps } from "./OptionalCloudFrontFunctionProps";
+export type { OptionalCustomResourceProps } from "./OptionalCustomResourceProps";
+export type { OptionalDistributionProps } from "./OptionalDistributionProps";
+export type { OptionalEdgeFunctionProps } from "./OptionalEdgeFunctionProps";
+export type { OptionalFunctionProps } from "./OptionalFunctionProps";
+export type { OptionalHostedZoneProviderProps } from "./OptionalHostedZoneProviderProps";
+export type { OptionalNextjsBucketDeploymentProps } from "./OptionalNextjsBucketDeploymentProps";
+export type { OptionalNextjsBuildProps } from "./OptionalNextjsBuildProps";
+export type { OptionalNextjsDistributionProps } from "./OptionalNextjsDistributionProps";
+export type { OptionalNextjsDomainProps } from "./OptionalNextjsDomainProps";
+export type { OptionalNextjsImageProps } from "./OptionalNextjsImageProps";
+export type { OptionalNextjsInvalidationProps } from "./OptionalNextjsInvalidationProps";
+export type { OptionalNextjsRevalidationProps } from "./OptionalNextjsRevalidationProps";
+export type { OptionalNextjsServerProps } from "./OptionalNextjsServerProps";
+export type { OptionalNextjsStaticAssetsProps } from "./OptionalNextjsStaticAssetsProps";
+export type { OptionalProviderProps } from "./OptionalProviderProps";
+export type { OptionalS3OriginProps } from "./OptionalS3OriginProps";
+export type { OptionalTablePropsV2 } from "./OptionalTablePropsV2";

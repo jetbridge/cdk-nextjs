@@ -1,41 +1,37 @@
-import * as fs from "node:fs";
-import * as path from "path";
-import { Duration, Fn, RemovalPolicy } from "aws-cdk-lib";
-import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
+import { Duration, Fn, RemovalPolicy } from 'aws-cdk-lib';
+import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import {
   AddBehaviorOptions,
   BehaviorOptions,
   CachePolicyProps,
   Distribution,
   ResponseHeadersPolicy,
-} from "aws-cdk-lib/aws-cloudfront";
-import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
-import { HttpOriginProps } from "aws-cdk-lib/aws-cloudfront-origins";
-import { PolicyStatement, ServicePrincipal } from "aws-cdk-lib/aws-iam";
-import * as lambda from "aws-cdk-lib/aws-lambda";
-import { Runtime } from "aws-cdk-lib/aws-lambda";
-import * as s3 from "aws-cdk-lib/aws-s3";
-import { Construct } from "constructs";
+} from 'aws-cdk-lib/aws-cloudfront';
+import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
+import { HttpOriginProps } from 'aws-cdk-lib/aws-cloudfront-origins';
+import { PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import { Construct } from 'constructs';
+import * as fs from 'node:fs';
+import * as path from 'path';
 
-import type { ProcessedBehaviorConfig } from "./utils/open-next-types";
-import { NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from "./constants";
+import { NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR } from './constants';
 import {
   OptionalCloudFrontFunctionProps,
   OptionalDistributionProps,
   OptionalEdgeFunctionProps,
   OptionalS3OriginProps,
-} from "./generated-structs";
-import { NextjsProps } from "./Nextjs";
-import { NextjsBuild } from "./NextjsBuild";
-import { NextjsDomain } from "./NextjsDomain";
-import { NextjsMultiServer } from "./NextjsMultiServer";
-import {
-  detectFunctionType,
-  getInvokeModeForType,
-} from "./utils/common-lambda-props";
+} from './generated-structs';
+import { NextjsProps } from './Nextjs';
+import { NextjsBuild } from './NextjsBuild';
+import { NextjsDomain } from './NextjsDomain';
+import { NextjsMultiServer } from './NextjsMultiServer';
+import { detectFunctionType, getInvokeModeForType } from './utils/common-lambda-props';
+import type { ProcessedBehaviorConfig } from './utils/open-next-types';
 
-export interface ViewerRequestFunctionProps
-  extends OptionalCloudFrontFunctionProps {
+export interface ViewerRequestFunctionProps extends OptionalCloudFrontFunctionProps {
   /**
    * Cloudfront function code that runs on VIEWER_REQUEST.
    * The following comments will be replaced with code snippets
@@ -52,6 +48,40 @@ export interface ViewerRequestFunctionProps
    */
   readonly code?: cloudfront.FunctionCode;
 }
+
+export interface NextjsDistributionDefaults {
+  /**
+   * Prevent the creation of a default response headers policy for static requests.
+   * Has no effect if a `staticBehaviorOptions.responseHeadersPolicy` is provided in {@link NextjsDistributionProps.overrides}
+   * @default false
+   */
+  readonly staticResponseHeadersPolicy?: boolean;
+  /**
+   * Prevent the creation of a default cache policy for server requests.
+   * Has no effect if a `serverBehaviorOptions.cachePolicy` is provided in {@link NextjsDistributionProps.overrides}
+   * @default false
+   */
+  readonly serverCachePolicy?: boolean;
+  /**
+   * Prevent the creation of a default response headers policy for server requests.
+   * Has no effect if a `serverBehaviorOptions.responseHeadersPolicy` is provided in {@link NextjsDistributionProps.overrides}
+   * @default false
+   */
+  readonly serverResponseHeadersPolicy?: boolean;
+  /**
+   * Prevent the creation of a default cache policy for image requests.
+   * Has no effect if a `imageBehaviorOptions.cachePolicy` is provided in {@link NextjsDistributionProps.overrides}
+   * @default false
+   */
+  readonly imageCachePolicy?: boolean;
+  /**
+   * Prevent the creation of a default response headers policy for image requests.
+   * Has no effect if a `imageBehaviorOptions.responseHeadersPolicy` is provided in {@link NextjsDistributionProps.overrides}
+   * @default false
+   */
+  readonly imageResponseHeadersPolicy?: boolean;
+}
+
 export interface NextjsDistributionOverrides {
   readonly viewerRequestFunctionProps?: ViewerRequestFunctionProps;
   readonly distributionProps?: OptionalDistributionProps;
@@ -73,14 +103,14 @@ export interface NextjsDistributionProps {
   /**
    * @see {@link NextjsProps.basePath}
    */
-  readonly basePath?: NextjsProps["basePath"];
+  readonly basePath?: NextjsProps['basePath'];
   /**
    * @see {@link NextjsProps.distribution}
    */
-  readonly distribution?: NextjsProps["distribution"];
+  readonly distribution?: NextjsProps['distribution'];
   /**
    * Override lambda function url auth type
-   * @default "NONE"
+   * @default 'NONE'
    */
   readonly functionUrlAuthType?: lambda.FunctionUrlAuthType;
   /**
@@ -99,7 +129,7 @@ export interface NextjsDistributionProps {
   /**
    * @see {@link NextjsProps.nextjsPath}
    */
-  readonly nextjsPath: NextjsProps["nextjsPath"];
+  readonly nextjsPath: NextjsProps['nextjsPath'];
   /**
    * Override props for every construct.
    */
@@ -129,6 +159,12 @@ export interface NextjsDistributionProps {
    * @default false
    */
   readonly enableDynamicBehaviors?: boolean;
+
+  /**
+   * Supress the creation of default policies if
+   * none are provided by you
+   */
+  readonly supressDefaults?: NextjsDistributionDefaults;
 }
 
 /**
@@ -141,34 +177,29 @@ export class NextjsDistribution extends Construct {
    */
   public distribution: Distribution;
 
-  private commonBehaviorOptions: Pick<
-    cloudfront.BehaviorOptions,
-    "viewerProtocolPolicy" | "compress"
-  > = {
+  private commonBehaviorOptions: Pick<cloudfront.BehaviorOptions, 'viewerProtocolPolicy' | 'compress'> = {
     viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
     compress: true,
   };
 
-  private commonSecurityHeadersBehavior: cloudfront.ResponseSecurityHeadersBehavior =
-    {
-      contentTypeOptions: {
-        override: true,
-      },
-      frameOptions: {
-        frameOption: cloudfront.HeadersFrameOption.DENY,
-        override: true,
-      },
-      referrerPolicy: {
-        referrerPolicy:
-          cloudfront.HeadersReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN,
-        override: true,
-      },
-      strictTransportSecurity: {
-        accessControlMaxAge: Duration.days(365 * 2),
-        includeSubdomains: true,
-        override: true,
-      },
-    };
+  private commonSecurityHeadersBehavior: cloudfront.ResponseSecurityHeadersBehavior = {
+    contentTypeOptions: {
+      override: true,
+    },
+    frameOptions: {
+      frameOption: cloudfront.HeadersFrameOption.DENY,
+      override: true,
+    },
+    referrerPolicy: {
+      referrerPolicy: cloudfront.HeadersReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN,
+      override: true,
+    },
+    strictTransportSecurity: {
+      accessControlMaxAge: Duration.days(365 * 2),
+      includeSubdomains: true,
+      override: true,
+    },
+  };
 
   private s3Origin: origins.S3Origin;
 
@@ -182,8 +213,7 @@ export class NextjsDistribution extends Construct {
 
   // Maps for multi-server support
   private serverOrigins: Map<string, origins.HttpOrigin> = new Map();
-  private serverBehaviorOptionsMap: Map<string, cloudfront.BehaviorOptions> =
-    new Map();
+  private serverBehaviorOptionsMap: Map<string, cloudfront.BehaviorOptions> = new Map();
 
   // Shared resources for optimization
   private sharedServerCachePolicy?: cloudfront.CachePolicy;
@@ -209,7 +239,7 @@ export class NextjsDistribution extends Construct {
    */
   private validateProps(): void {
     if (!this.props.serverFunction && !this.props.multiServer) {
-      throw new Error("Either serverFunction or multiServer must be provided");
+      throw new Error('Either serverFunction or multiServer must be provided');
     }
   }
 
@@ -217,10 +247,7 @@ export class NextjsDistribution extends Construct {
    * Initialize S3 origin and edge lambdas if needed
    */
   private initializeOrigins(): void {
-    this.s3Origin = new origins.S3Origin(
-      this.props.staticAssetsBucket,
-      this.props.overrides?.s3OriginProps,
-    );
+    this.s3Origin = new origins.S3Origin(this.props.staticAssetsBucket, this.props.overrides?.s3OriginProps);
 
     if (this.isFnUrlIamAuth) {
       this.edgeLambdas.push(this.createEdgeLambda());
@@ -258,12 +285,10 @@ export class NextjsDistribution extends Construct {
    * Creates behavior for single server function
    */
   private createSingleServerBehavior(): void {
-    const serverFunction =
-      this.props.serverFunction || this.props.multiServer?.lambdaFunction;
+    const serverFunction = this.props.serverFunction || this.props.multiServer?.lambdaFunction;
 
     if (serverFunction) {
-      this.serverBehaviorOptions =
-        this.createServerBehaviorOptions(serverFunction);
+      this.serverBehaviorOptions = this.createServerBehaviorOptions(serverFunction);
     }
   }
 
@@ -298,29 +323,34 @@ export class NextjsDistribution extends Construct {
   }
 
   private get isFnUrlIamAuth() {
-    return (
-      this.props.functionUrlAuthType === lambda.FunctionUrlAuthType.AWS_IAM
-    );
+    return this.props.functionUrlAuthType === lambda.FunctionUrlAuthType.AWS_IAM;
   }
 
   private createStaticBehaviorOptions(): BehaviorOptions {
     const staticBehaviorOptions = this.props.overrides?.staticBehaviorOptions;
 
-    // Create default response headers policy if not provided
-    const responseHeadersPolicy =
-      staticBehaviorOptions?.responseHeadersPolicy ??
-      this.createResponseHeadersPolicy(
-        "StaticResponseHeadersPolicy",
-        "Nextjs Static Response Headers Policy",
-        [
-          {
-            header: "cache-control",
-            value: "no-cache, no-store, must-revalidate, max-age=0",
-            override: false,
-          },
-        ],
-        this.props.overrides?.staticResponseHeadersPolicyProps,
-      );
+    let responseHeadersPolicy = staticBehaviorOptions?.responseHeadersPolicy;
+
+    if (!responseHeadersPolicy && !this.props.supressDefaults?.staticResponseHeadersPolicy) {
+      // create default response headers policy if not provided
+      responseHeadersPolicy = new ResponseHeadersPolicy(this, 'StaticResponseHeadersPolicy', {
+        // add default header for static assets
+        customHeadersBehavior: {
+          customHeaders: [
+            {
+              header: 'cache-control',
+              override: false,
+              // MDN Cache-Control Use Case: Caching static assets with "cache busting"
+              // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#caching_static_assets_with_cache_busting
+              value: 'no-cache, no-store, must-revalidate, max-age=0',
+            },
+          ],
+        },
+        securityHeadersBehavior: this.commonSecurityHeadersBehavior,
+        comment: 'Nextjs Static Response Headers Policy',
+        ...this.props.overrides?.staticResponseHeadersPolicyProps,
+      });
+    }
 
     return this.createBehaviorOptions(this.s3Origin, {
       allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
@@ -339,33 +369,19 @@ export class NextjsDistribution extends Construct {
    * Once CloudFront OAC is released, remove this to reduce latency.
    */
   private createEdgeLambda(): cloudfront.EdgeLambda {
-    const signFnUrlDir = path.resolve(
-      __dirname,
-      "..",
-      "assets",
-      "lambdas",
-      "sign-fn-url",
-    );
-    const originRequestEdgeFn = new cloudfront.experimental.EdgeFunction(
-      this,
-      "EdgeFn",
-      {
-        runtime: Runtime.NODEJS_20_X,
-        handler: "index.handler",
-        code: lambda.Code.fromAsset(signFnUrlDir),
-        currentVersionOptions: {
-          removalPolicy: RemovalPolicy.DESTROY, // destroy old versions
-          retryAttempts: 1, // async retry attempts
-        },
-        ...this.props.overrides?.edgeFunctionProps,
+    const signFnUrlDir = path.resolve(__dirname, '..', 'assets', 'lambdas', 'sign-fn-url');
+    const originRequestEdgeFn = new cloudfront.experimental.EdgeFunction(this, 'EdgeFn', {
+      runtime: Runtime.NODEJS_20_X,
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(signFnUrlDir),
+      currentVersionOptions: {
+        removalPolicy: RemovalPolicy.DESTROY, // destroy old versions
+        retryAttempts: 1, // async retry attempts
       },
-    );
-    originRequestEdgeFn.currentVersion.grantInvoke(
-      new ServicePrincipal("edgelambda.amazonaws.com"),
-    );
-    originRequestEdgeFn.currentVersion.grantInvoke(
-      new ServicePrincipal("lambda.amazonaws.com"),
-    );
+      ...this.props.overrides?.edgeFunctionProps,
+    });
+    originRequestEdgeFn.currentVersion.grantInvoke(new ServicePrincipal('edgelambda.amazonaws.com'));
+    originRequestEdgeFn.currentVersion.grantInvoke(new ServicePrincipal('lambda.amazonaws.com'));
 
     // Grant invoke permissions for all relevant functions
     const functionsToGrant: lambda.IFunction[] = [];
@@ -388,14 +404,14 @@ export class NextjsDistribution extends Construct {
 
     originRequestEdgeFn.addToRolePolicy(
       new PolicyStatement({
-        actions: ["lambda:InvokeFunctionUrl"],
+        actions: ['lambda:InvokeFunctionUrl'],
         resources: functionsToGrant.map((fn) => fn.functionArn),
-      }),
+      })
     );
     const originRequestEdgeFnVersion = lambda.Version.fromVersionArn(
       this,
-      "Version",
-      originRequestEdgeFn.currentVersion.functionArn,
+      'Version',
+      originRequestEdgeFn.currentVersion.functionArn
     );
     return {
       eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST,
@@ -404,35 +420,53 @@ export class NextjsDistribution extends Construct {
     };
   }
 
-  private createServerBehaviorOptions(
-    serverFunction: lambda.IFunction,
-  ): cloudfront.BehaviorOptions {
+  private createServerBehaviorOptions(serverFunction: lambda.IFunction): cloudfront.BehaviorOptions {
     const origin = this.createServerOrigin(serverFunction);
     const serverBehaviorOptions = this.props.overrides?.serverBehaviorOptions;
 
-    // Create default cache policy if not provided
-    const cachePolicy =
-      serverBehaviorOptions?.cachePolicy ??
-      this.createCachePolicy(
-        "ServerCachePolicy",
-        "Nextjs Server Cache Policy",
-        this.props.overrides?.serverCachePolicyProps,
-      );
+    let cachePolicy = serverBehaviorOptions?.cachePolicy;
 
-    // Create default response headers policy if not provided
-    const responseHeadersPolicy =
-      serverBehaviorOptions?.responseHeadersPolicy ??
-      this.createResponseHeadersPolicy(
-        "ServerResponseHeadersPolicy",
-        "Nextjs Server Response Headers Policy",
-        [{ header: "cache-control", value: "no-cache", override: false }],
-        this.props.overrides?.serverResponseHeadersPolicyProps,
-      );
+    if (!cachePolicy && !this.props.supressDefaults?.serverCachePolicy) {
+      // create default cache policy if not provided
+      cachePolicy = new cloudfront.CachePolicy(this, 'ServerCachePolicy', {
+        queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+        headerBehavior: cloudfront.CacheHeaderBehavior.allowList('x-open-next-cache-key'),
+        cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+        defaultTtl: Duration.seconds(0),
+        maxTtl: Duration.days(365),
+        minTtl: Duration.seconds(0),
+        enableAcceptEncodingBrotli: true,
+        enableAcceptEncodingGzip: true,
+        comment: 'Nextjs Server Cache Policy',
+        ...this.props.overrides?.serverCachePolicyProps,
+      });
+    }
+
+    let responseHeadersPolicy = serverBehaviorOptions?.responseHeadersPolicy;
+
+    // create default response headers policy if not provided
+    if (!responseHeadersPolicy && !this.props.supressDefaults?.serverResponseHeadersPolicy) {
+      responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ServerResponseHeadersPolicy', {
+        customHeadersBehavior: {
+          customHeaders: [
+            {
+              header: 'cache-control',
+              override: false,
+              // MDN Cache-Control Use Case: Up-to-date contents always
+              // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#up-to-date_contents_always
+              value: 'no-cache',
+            },
+          ],
+        },
+        securityHeadersBehavior: this.commonSecurityHeadersBehavior,
+        comment: 'Nextjs Server Response Headers Policy',
+        ...this.props.overrides?.serverResponseHeadersPolicyProps,
+      });
+    }
 
     return this.createBehaviorOptions(origin, {
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-      originRequestPolicy:
-        cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
       functionAssociations: this.createCloudFrontFnAssociations(),
       cachePolicy,
@@ -444,9 +478,7 @@ export class NextjsDistribution extends Construct {
   /**
    * Creates HTTP origin for server function
    */
-  private createServerOrigin(
-    serverFunction: lambda.IFunction,
-  ): origins.HttpOrigin {
+  private createServerOrigin(serverFunction: lambda.IFunction): origins.HttpOrigin {
     // Extract function name from the function ARN or use fallback logic
     const functionName = serverFunction.functionName;
     const functionType = detectFunctionType(functionName);
@@ -457,10 +489,7 @@ export class NextjsDistribution extends Construct {
       invokeMode: invokeMode,
     });
 
-    return new origins.HttpOrigin(
-      Fn.parseDomainName(fnUrl.url),
-      this.props.overrides?.serverHttpOriginProps,
-    );
+    return new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), this.props.overrides?.serverHttpOriginProps);
   }
 
   private useCloudFrontFunctionHostHeader() {
@@ -525,16 +554,14 @@ async function handler(event) {
     `;
     code = code.replace(
       /^\s*\/\/\s*INJECT_CLOUDFRONT_FUNCTION_HOST_HEADER.*$/im,
-      this.useCloudFrontFunctionHostHeader(),
+      this.useCloudFrontFunctionHostHeader()
     );
     code = code.replace(
       /^\s*\/\/\s*INJECT_CLOUDFRONT_FUNCTION_CACHE_HEADER_KEY.*$/im,
-      this.useCloudFrontFunctionCacheHeaderKey(),
+      this.useCloudFrontFunctionCacheHeaderKey()
     );
 
-    const cloudFrontFnId = functionId
-      ? `CloudFrontFn-${functionId}`
-      : "CloudFrontFn";
+    const cloudFrontFnId = functionId ? `CloudFrontFn-${functionId}` : 'CloudFrontFn';
     const cloudFrontFn = new cloudfront.Function(this, cloudFrontFnId, {
       runtime: cloudfront.FunctionRuntime.JS_2_0,
       ...this.props.overrides?.viewerRequestFunctionProps,
@@ -553,36 +580,50 @@ async function handler(event) {
     const origin = this.createImageOrigin();
     const imageBehaviorOptions = this.props.overrides?.imageBehaviorOptions;
 
-    // Create default cache policy if not provided
-    const cachePolicy =
-      imageBehaviorOptions?.cachePolicy ??
-      this.createCachePolicy(
-        "ImageCachePolicy",
-        "Nextjs Image Cache Policy",
-        this.props.overrides?.imageCachePolicyProps,
-        {
-          headerBehavior: cloudfront.CacheHeaderBehavior.allowList("accept"),
-          cookieBehavior: cloudfront.CacheCookieBehavior.none(),
-          defaultTtl: Duration.days(1),
-          minTtl: Duration.days(0),
-        },
-      );
+    let cachePolicy = imageBehaviorOptions?.cachePolicy;
 
-    // Create default response headers policy if not provided
-    const responseHeadersPolicy =
-      imageBehaviorOptions?.responseHeadersPolicy ??
-      this.createResponseHeadersPolicy(
-        "ImageResponseHeadersPolicy",
-        "Nextjs Image Response Headers Policy",
-        [{ header: "cache-control", value: "no-cache", override: false }],
-        this.props.overrides?.imageResponseHeadersPolicyProps,
-      );
+    if (!cachePolicy && !this.props.supressDefaults?.imageCachePolicy) {
+      // add default cache policy if not provided
+      cachePolicy = new cloudfront.CachePolicy(this, 'ImageCachePolicy', {
+        queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+        headerBehavior: cloudfront.CacheHeaderBehavior.allowList('accept'),
+        cookieBehavior: cloudfront.CacheCookieBehavior.none(),
+        defaultTtl: Duration.days(1),
+        maxTtl: Duration.days(365),
+        minTtl: Duration.days(0),
+        enableAcceptEncodingBrotli: true,
+        enableAcceptEncodingGzip: true,
+        comment: 'Nextjs Image Cache Policy',
+        ...this.props.overrides?.imageCachePolicyProps,
+      });
+    }
+
+    let responseHeadersPolicy = imageBehaviorOptions?.responseHeadersPolicy;
+
+    if (!responseHeadersPolicy && !this.props.supressDefaults?.imageResponseHeadersPolicy) {
+      // add default response headers policy if not provided
+      responseHeadersPolicy = new ResponseHeadersPolicy(this, 'ImageResponseHeadersPolicy', {
+        customHeadersBehavior: {
+          customHeaders: [
+            {
+              header: 'cache-control',
+              override: false,
+              // MDN Cache-Control Use Case: Up-to-date contents always
+              // @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#up-to-date_contents_always
+              value: 'no-cache',
+            },
+          ],
+        },
+        securityHeadersBehavior: this.commonSecurityHeadersBehavior,
+        comment: 'Nextjs Image Response Headers Policy',
+        ...this.props.overrides?.imageResponseHeadersPolicyProps,
+      });
+    }
 
     return this.createBehaviorOptions(origin, {
       allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
       cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
-      originRequestPolicy:
-        cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       edgeLambdas: this.edgeLambdas,
       cachePolicy,
       responseHeadersPolicy,
@@ -598,10 +639,7 @@ async function handler(event) {
       authType: this.fnUrlAuthType,
     });
 
-    return new origins.HttpOrigin(
-      Fn.parseDomainName(imageOptFnUrl.url),
-      this.props.overrides?.imageHttpOriginProps,
-    );
+    return new origins.HttpOrigin(Fn.parseDomainName(imageOptFnUrl.url), this.props.overrides?.imageHttpOriginProps);
   }
 
   /**
@@ -611,13 +649,11 @@ async function handler(event) {
     id: string,
     comment: string,
     overrides?: CachePolicyProps,
-    customConfig?: Partial<CachePolicyProps>,
+    customConfig?: Partial<CachePolicyProps>
   ): cloudfront.CachePolicy {
     const baseConfig: CachePolicyProps = {
       queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-      headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
-        "x-open-next-cache-key",
-      ),
+      headerBehavior: cloudfront.CacheHeaderBehavior.allowList('x-open-next-cache-key'),
       cookieBehavior: cloudfront.CacheCookieBehavior.all(),
       defaultTtl: Duration.seconds(0),
       maxTtl: Duration.days(365),
@@ -643,17 +679,15 @@ async function handler(event) {
       value: string;
       override?: boolean;
     }> = [],
-    overrides?: cloudfront.ResponseHeadersPolicyProps,
+    overrides?: cloudfront.ResponseHeadersPolicyProps
   ): ResponseHeadersPolicy {
     return new ResponseHeadersPolicy(this, id, {
       customHeadersBehavior: {
-        customHeaders: customHeaders.map(
-          ({ header, value, override = false }) => ({
-            header,
-            value,
-            override,
-          }),
-        ),
+        customHeaders: customHeaders.map(({ header, value, override = false }) => ({
+          header,
+          value,
+          override,
+        })),
       },
       securityHeadersBehavior: this.commonSecurityHeadersBehavior,
       comment,
@@ -675,13 +709,12 @@ async function handler(event) {
       functionAssociations?: cloudfront.FunctionAssociation[];
       edgeLambdas?: cloudfront.EdgeLambda[];
       overrides?: AddBehaviorOptions;
-    } = {},
+    } = {}
   ): cloudfront.BehaviorOptions {
     return {
       ...this.commonBehaviorOptions,
       origin,
-      allowedMethods:
-        options.allowedMethods || cloudfront.AllowedMethods.ALLOW_ALL,
+      allowedMethods: options.allowedMethods || cloudfront.AllowedMethods.ALLOW_ALL,
       cachedMethods: options.cachedMethods,
       cachePolicy: options.cachePolicy,
       responseHeadersPolicy: options.responseHeadersPolicy,
@@ -697,24 +730,18 @@ async function handler(event) {
    */
   private getSharedServerCachePolicy(): cloudfront.CachePolicy {
     if (!this.sharedServerCachePolicy) {
-      this.sharedServerCachePolicy = new cloudfront.CachePolicy(
-        this,
-        "SharedServerCachePolicy",
-        {
-          queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-          headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
-            "x-open-next-cache-key",
-          ),
-          cookieBehavior: cloudfront.CacheCookieBehavior.all(),
-          defaultTtl: Duration.seconds(0),
-          maxTtl: Duration.days(365),
-          minTtl: Duration.seconds(0),
-          enableAcceptEncodingBrotli: true,
-          enableAcceptEncodingGzip: true,
-          comment: "Shared Nextjs Server Cache Policy",
-          ...this.props.overrides?.serverCachePolicyProps,
-        },
-      );
+      this.sharedServerCachePolicy = new cloudfront.CachePolicy(this, 'SharedServerCachePolicy', {
+        queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+        headerBehavior: cloudfront.CacheHeaderBehavior.allowList('x-open-next-cache-key'),
+        cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+        defaultTtl: Duration.seconds(0),
+        maxTtl: Duration.days(365),
+        minTtl: Duration.seconds(0),
+        enableAcceptEncodingBrotli: true,
+        enableAcceptEncodingGzip: true,
+        comment: 'Shared Nextjs Server Cache Policy',
+        ...this.props.overrides?.serverCachePolicyProps,
+      });
     }
     return this.sharedServerCachePolicy;
   }
@@ -724,24 +751,20 @@ async function handler(event) {
    */
   private getSharedServerResponseHeadersPolicy(): ResponseHeadersPolicy {
     if (!this.sharedServerResponseHeadersPolicy) {
-      this.sharedServerResponseHeadersPolicy = new ResponseHeadersPolicy(
-        this,
-        "SharedServerResponseHeadersPolicy",
-        {
-          customHeadersBehavior: {
-            customHeaders: [
-              {
-                header: "cache-control",
-                override: false,
-                value: "no-cache",
-              },
-            ],
-          },
-          securityHeadersBehavior: this.commonSecurityHeadersBehavior,
-          comment: "Shared Nextjs Server Response Headers Policy",
-          ...this.props.overrides?.serverResponseHeadersPolicyProps,
+      this.sharedServerResponseHeadersPolicy = new ResponseHeadersPolicy(this, 'SharedServerResponseHeadersPolicy', {
+        customHeadersBehavior: {
+          customHeaders: [
+            {
+              header: 'cache-control',
+              override: false,
+              value: 'no-cache',
+            },
+          ],
         },
-      );
+        securityHeadersBehavior: this.commonSecurityHeadersBehavior,
+        comment: 'Shared Nextjs Server Response Headers Policy',
+        ...this.props.overrides?.serverResponseHeadersPolicyProps,
+      });
     }
     return this.sharedServerResponseHeadersPolicy;
   }
@@ -762,43 +785,35 @@ async function handler(event) {
     `;
       code = code.replace(
         /^\s*\/\/\s*INJECT_CLOUDFRONT_FUNCTION_HOST_HEADER.*$/im,
-        this.useCloudFrontFunctionHostHeader(),
+        this.useCloudFrontFunctionHostHeader()
       );
       code = code.replace(
         /^\s*\/\/\s*INJECT_CLOUDFRONT_FUNCTION_CACHE_HEADER_KEY.*$/im,
-        this.useCloudFrontFunctionCacheHeaderKey(),
+        this.useCloudFrontFunctionCacheHeaderKey()
       );
 
-      this.sharedCloudFrontFunction = new cloudfront.Function(
-        this,
-        "SharedCloudFrontFn",
-        {
-          runtime: cloudfront.FunctionRuntime.JS_2_0,
-          ...this.props.overrides?.viewerRequestFunctionProps,
-          code: cloudfront.FunctionCode.fromInline(code),
-        },
-      );
+      this.sharedCloudFrontFunction = new cloudfront.Function(this, 'SharedCloudFrontFn', {
+        runtime: cloudfront.FunctionRuntime.JS_2_0,
+        ...this.props.overrides?.viewerRequestFunctionProps,
+        code: cloudfront.FunctionCode.fromInline(code),
+      });
     }
     return this.sharedCloudFrontFunction;
   }
 
   private createBehaviorOptionsForFunction(
     origin: origins.HttpOrigin,
-    functionName: string,
+    functionName: string
   ): cloudfront.BehaviorOptions {
     const serverBehaviorOptions = this.props.overrides?.serverBehaviorOptions;
 
     // Use shared resources instead of creating individual ones
-    const cachePolicy =
-      serverBehaviorOptions?.cachePolicy ?? this.getSharedServerCachePolicy();
+    const cachePolicy = serverBehaviorOptions?.cachePolicy ?? this.getSharedServerCachePolicy();
     const responseHeadersPolicy =
-      serverBehaviorOptions?.responseHeadersPolicy ??
-      this.getSharedServerResponseHeadersPolicy();
+      serverBehaviorOptions?.responseHeadersPolicy ?? this.getSharedServerResponseHeadersPolicy();
 
     // Use shared CloudFront function for most cases, create individual only if needed
-    const functionAssociations = this.shouldUseIndividualCloudFrontFunction(
-      functionName,
-    )
+    const functionAssociations = this.shouldUseIndividualCloudFrontFunction(functionName)
       ? this.createCloudFrontFnAssociations(functionName)
       : [
           {
@@ -811,8 +826,7 @@ async function handler(event) {
       ...this.commonBehaviorOptions,
       origin,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-      originRequestPolicy:
-        cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       edgeLambdas: this.edgeLambdas.length ? this.edgeLambdas : undefined,
       functionAssociations,
       cachePolicy,
@@ -835,8 +849,7 @@ async function handler(event) {
    * needed for Next.js.
    */
   private getCloudFrontDistribution(): cloudfront.Distribution {
-    const distribution =
-      this.props.distribution || this.createCloudFrontDistribution();
+    const distribution = this.props.distribution || this.createCloudFrontDistribution();
 
     // Add behaviors based on configuration - unified approach to avoid duplicates
     this.addBehaviorsToDistribution(distribution);
@@ -847,9 +860,7 @@ async function handler(event) {
   /**
    * Unified method to add behaviors, resolving conflicts between dynamic and traditional approaches
    */
-  private addBehaviorsToDistribution(
-    distribution: cloudfront.Distribution,
-  ): void {
+  private addBehaviorsToDistribution(distribution: cloudfront.Distribution): void {
     if (this.shouldUseDynamicBehaviors()) {
       this.addDynamicBehaviors(distribution);
     } else {
@@ -867,36 +878,24 @@ async function handler(event) {
 
     // Track function usage for optimization insights
     const usedFunctions = new Set<string>();
-    const allCreatedFunctions =
-      this.props.multiServer?.getServerFunctionNames() || [];
+    const allCreatedFunctions = this.props.multiServer?.getServerFunctionNames() || [];
 
     for (const behaviorConfig of processedBehaviors) {
       // Skip wildcard pattern (handled by default behavior) and duplicates
-      if (
-        behaviorConfig.pattern === "*" ||
-        addedPatterns.has(behaviorConfig.pattern)
-      ) {
+      if (behaviorConfig.pattern === '*' || addedPatterns.has(behaviorConfig.pattern)) {
         continue;
       }
 
       // Track function usage
-      if (
-        behaviorConfig.originType === "function" &&
-        behaviorConfig.functionName
-      ) {
+      if (behaviorConfig.originType === 'function' && behaviorConfig.functionName) {
         usedFunctions.add(behaviorConfig.functionName);
       }
 
       const pathPattern = this.getPathPattern(behaviorConfig.pattern);
-      const cloudFrontConfig =
-        this.getBehaviorConfigFromProcessed(behaviorConfig);
+      const cloudFrontConfig = this.getBehaviorConfigFromProcessed(behaviorConfig);
 
       if (cloudFrontConfig) {
-        distribution.addBehavior(
-          pathPattern,
-          cloudFrontConfig.origin,
-          cloudFrontConfig.options,
-        );
+        distribution.addBehavior(pathPattern, cloudFrontConfig.origin, cloudFrontConfig.options);
         addedPatterns.add(behaviorConfig.pattern);
       }
     }
@@ -908,28 +907,17 @@ async function handler(event) {
   /**
    * Logs analysis of function usage to help identify optimization opportunities
    */
-  private logFunctionUsageAnalysis(
-    usedFunctions: Set<string>,
-    allCreatedFunctions: string[],
-  ): void {
+  private logFunctionUsageAnalysis(usedFunctions: Set<string>, allCreatedFunctions: string[]): void {
     const usedFunctionList = Array.from(usedFunctions);
-    const unusedFunctions = allCreatedFunctions.filter(
-      (fn) => !usedFunctions.has(fn),
-    );
+    const unusedFunctions = allCreatedFunctions.filter((fn) => !usedFunctions.has(fn));
 
     console.log(`🔍 Lambda Function Usage Analysis:`);
     console.log(`  📊 Total functions created: ${allCreatedFunctions.length}`);
-    console.log(
-      `  ✅ Functions used in CloudFront: ${usedFunctionList.length} (${usedFunctionList.join(", ")})`,
-    );
+    console.log(`  ✅ Functions used in CloudFront: ${usedFunctionList.length} (${usedFunctionList.join(', ')})`);
 
     if (unusedFunctions.length > 0) {
-      console.log(
-        `  ⚠️  Unused functions: ${unusedFunctions.length} (${unusedFunctions.join(", ")})`,
-      );
-      console.log(
-        `  💡 Consider enabling 'createOnlyUsedFunctions' to reduce costs`,
-      );
+      console.log(`  ⚠️  Unused functions: ${unusedFunctions.length} (${unusedFunctions.join(', ')})`);
+      console.log(`  💡 Consider enabling 'createOnlyUsedFunctions' to reduce costs`);
     } else {
       console.log(`  ✅ All functions are used - optimal configuration!`);
     }
@@ -939,18 +927,14 @@ async function handler(event) {
    * Enhanced method using ProcessedBehaviorConfig for direct mapping
    * Eliminates the need for pattern matching loops
    */
-  private getBehaviorConfigFromProcessed(
-    behaviorConfig: ProcessedBehaviorConfig,
-  ): {
+  private getBehaviorConfigFromProcessed(behaviorConfig: ProcessedBehaviorConfig): {
     origin: cloudfront.IOrigin;
     options: cloudfront.BehaviorOptions;
   } | null {
     switch (behaviorConfig.originType) {
-      case "function":
+      case 'function':
         if (behaviorConfig.functionName) {
-          const multiServerBehavior = this.serverBehaviorOptionsMap.get(
-            behaviorConfig.functionName,
-          );
+          const multiServerBehavior = this.serverBehaviorOptionsMap.get(behaviorConfig.functionName);
           if (multiServerBehavior) {
             return {
               origin: multiServerBehavior.origin,
@@ -967,13 +951,13 @@ async function handler(event) {
         }
         return null;
 
-      case "imageOptimizer":
+      case 'imageOptimizer':
         return {
           origin: this.imageBehaviorOptions.origin,
           options: this.imageBehaviorOptions,
         };
 
-      case "s3":
+      case 's3':
         // S3 behaviors are handled by addStaticBehaviorsToDistribution
         return null;
 
@@ -991,23 +975,23 @@ async function handler(event) {
 
   private addTraditionalBehaviors(distribution: cloudfront.Distribution) {
     if (!this.serverBehaviorOptions) {
-      throw new Error("Server behavior options are not available");
+      throw new Error('Server behavior options are not available');
     }
 
     distribution.addBehavior(
-      this.getPathPattern("api/*"),
+      this.getPathPattern('api/*'),
       this.serverBehaviorOptions.origin,
-      this.serverBehaviorOptions,
+      this.serverBehaviorOptions
     );
     distribution.addBehavior(
-      this.getPathPattern("_next/data/*"),
+      this.getPathPattern('_next/data/*'),
       this.serverBehaviorOptions.origin,
-      this.serverBehaviorOptions,
+      this.serverBehaviorOptions
     );
     distribution.addBehavior(
-      this.getPathPattern("_next/image*"),
+      this.getPathPattern('_next/image*'),
       this.imageBehaviorOptions.origin,
-      this.imageBehaviorOptions,
+      this.imageBehaviorOptions
     );
   }
 
@@ -1025,9 +1009,9 @@ async function handler(event) {
       cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
     };
 
-    return new cloudfront.Distribution(this, "Distribution", {
+    return new cloudfront.Distribution(this, 'Distribution', {
       // defaultRootObject: "index.html",
-      defaultRootObject: "",
+      defaultRootObject: '',
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
       domainNames: this.props.nextDomain?.domainNames,
       certificate: this.props.nextDomain?.certificate,
@@ -1045,49 +1029,38 @@ async function handler(event) {
   private addRootPathBehavior() {
     // if we don't have a static file called index.html then we should
     // redirect to the lambda handler
-    const hasIndexHtml = this.props.nextBuild
-      .readPublicFileList()
-      .includes("index.html");
+    const hasIndexHtml = this.props.nextBuild.readPublicFileList().includes('index.html');
     if (hasIndexHtml || !this.serverBehaviorOptions) return; // don't add root path behavior
 
     const { origin, ...options } = this.serverBehaviorOptions;
 
     // when basePath is set, we emulate the "default behavior" (*) for the site as `/base-path/*`
     if (this.props.basePath) {
-      this.distribution.addBehavior(this.getPathPattern(""), origin, options);
-      this.distribution.addBehavior(this.getPathPattern("*"), origin, options);
+      this.distribution.addBehavior(this.getPathPattern(''), origin, options);
+      this.distribution.addBehavior(this.getPathPattern('*'), origin, options);
     } else {
-      this.distribution.addBehavior(this.getPathPattern("/"), origin, options);
+      this.distribution.addBehavior(this.getPathPattern('/'), origin, options);
     }
   }
 
   private addStaticBehaviorsToDistribution() {
-    const publicFiles = fs.readdirSync(
-      path.join(this.props.nextjsPath, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR),
-      {
-        withFileTypes: true,
-      },
-    );
+    const publicFiles = fs.readdirSync(path.join(this.props.nextjsPath, NEXTJS_BUILD_DIR, NEXTJS_STATIC_DIR), {
+      withFileTypes: true,
+    });
     if (publicFiles.length >= 25) {
       throw new Error(
-        "Too many public/ files in Next.js build. CloudFront limits Distributions to 25 Cache Behaviors. See documented limit here: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions",
+        'Too many public/ files in Next.js build. CloudFront limits Distributions to 25 Cache Behaviors. See documented limit here: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions'
       );
     }
     for (const publicFile of publicFiles) {
-      const pathPattern = publicFile.isDirectory()
-        ? `${publicFile.name}/*`
-        : publicFile.name;
+      const pathPattern = publicFile.isDirectory() ? `${publicFile.name}/*` : publicFile.name;
       if (!/^[a-zA-Z0-9_\-\.\*\$/~"'@:+?&]+$/.test(pathPattern)) {
         throw new Error(
-          `Invalid CloudFront Distribution Cache Behavior Path Pattern: ${pathPattern}. Please see documentation here: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern`,
+          `Invalid CloudFront Distribution Cache Behavior Path Pattern: ${pathPattern}. Please see documentation here: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern`
         );
       }
       const finalPathPattern = this.getPathPattern(pathPattern);
-      this.distribution.addBehavior(
-        finalPathPattern,
-        this.s3Origin,
-        this.staticBehaviorOptions,
-      );
+      this.distribution.addBehavior(finalPathPattern, this.s3Origin, this.staticBehaviorOptions);
     }
   }
 
@@ -1097,7 +1070,7 @@ async function handler(event) {
   private getPathPattern(pathPattern: string) {
     if (this.props.basePath) {
       // because we already have a basePath we don't use / instead we use /base-path
-      if (pathPattern === "") return this.props.basePath;
+      if (pathPattern === '') return this.props.basePath;
       return `${this.props.basePath}/${pathPattern}`;
     }
 
@@ -1115,8 +1088,7 @@ async function handler(event) {
 
     // Create origins and behavior options for each server function
     for (const functionName of serverFunctions) {
-      const serverFunction =
-        this.props.multiServer.getServerFunction(functionName);
+      const serverFunction = this.props.multiServer.getServerFunction(functionName);
       if (!serverFunction) continue;
 
       // Determine invoke mode based on function type
@@ -1128,24 +1100,17 @@ async function handler(event) {
         invokeMode: invokeMode,
       });
 
-      const origin = new origins.HttpOrigin(
-        Fn.parseDomainName(fnUrl.url),
-        this.props.overrides?.serverHttpOriginProps,
-      );
+      const origin = new origins.HttpOrigin(Fn.parseDomainName(fnUrl.url), this.props.overrides?.serverHttpOriginProps);
       this.serverOrigins.set(functionName, origin);
 
       // Create behavior options for this function using enhanced method
-      const behaviorOptions = this.createBehaviorOptionsForFunction(
-        origin,
-        functionName,
-      );
+      const behaviorOptions = this.createBehaviorOptionsForFunction(origin, functionName);
       this.serverBehaviorOptionsMap.set(functionName, behaviorOptions);
     }
 
     // Set default server behavior options for fallback
     // Use the already created behavior options for the default function
     this.serverBehaviorOptions =
-      this.serverBehaviorOptionsMap.get("default") ||
-      this.serverBehaviorOptionsMap.values().next().value;
+      this.serverBehaviorOptionsMap.get('default') || this.serverBehaviorOptionsMap.values().next().value;
   }
 }

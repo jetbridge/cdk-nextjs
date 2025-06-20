@@ -17,7 +17,7 @@ export interface OpenNextEdgeFunction {
  */
 export interface OpenNextOrigin {
   /** Type of origin - either function or S3 */
-  type: "function" | "s3";
+  type: 'function' | 's3';
   /** Lambda function handler path */
   handler?: string;
   /** Bundle path for the function code */
@@ -150,12 +150,12 @@ export function validateOpenNextOutput(output: any): OpenNextValidationResult {
 
   if (!output) {
     result.isValid = false;
-    result.errors.push("OpenNext output is null or undefined");
+    result.errors.push('OpenNext output is null or undefined');
     return result;
   }
 
   // Validate required fields
-  if (!output.origins || typeof output.origins !== "object") {
+  if (!output.origins || typeof output.origins !== 'object') {
     result.isValid = false;
     result.errors.push("Missing or invalid 'origins' configuration");
   }
@@ -168,19 +168,19 @@ export function validateOpenNextOutput(output: any): OpenNextValidationResult {
   // Validate origins
   if (output.origins) {
     for (const [name, origin] of Object.entries(output.origins)) {
-      if (typeof origin !== "object" || !origin) {
+      if (typeof origin !== 'object' || !origin) {
         result.isValid = false;
         result.errors.push(`Invalid origin configuration for '${name}'`);
         continue;
       }
 
       const typedOrigin = origin as any;
-      if (!typedOrigin.type || !["function", "s3"].includes(typedOrigin.type)) {
+      if (!typedOrigin.type || !['function', 's3'].includes(typedOrigin.type)) {
         result.isValid = false;
         result.errors.push(`Invalid or missing type for origin '${name}'`);
       }
 
-      if (typedOrigin.type === "function" && !typedOrigin.bundle) {
+      if (typedOrigin.type === 'function' && !typedOrigin.bundle) {
         result.warnings.push(`Function origin '${name}' has no bundle path`);
       }
     }
@@ -192,9 +192,7 @@ export function validateOpenNextOutput(output: any): OpenNextValidationResult {
       const behavior = output.behaviors[i];
       if (!behavior.pattern || !behavior.origin) {
         result.isValid = false;
-        result.errors.push(
-          `Invalid behavior at index ${i}: missing pattern or origin`,
-        );
+        result.errors.push(`Invalid behavior at index ${i}: missing pattern or origin`);
       }
     }
   }
@@ -212,17 +210,17 @@ export interface ProcessedBehaviorConfig {
   /** Origin identifier */
   origin: string;
   /** Type of origin for easy classification */
-  originType: "function" | "imageOptimizer" | "s3" | "custom";
+  originType: 'function' | 'imageOptimizer' | 's3' | 'custom';
   /** Associated server function if origin is a function */
   serverFunction?: ParsedServerFunction;
   /** Function name for easy reference */
   functionName?: string;
   /** Lambda function type for optimization */
-  functionType?: import("./common-lambda-props").LambdaFunctionType;
+  functionType?: import('./common-lambda-props').LambdaFunctionType;
   /** Pre-generated description for the function */
   description?: string;
   /** Cache policy type hint */
-  cachePolicyType?: "server" | "image" | "static";
+  cachePolicyType?: 'server' | 'image' | 'static';
   /** Priority for behavior ordering (lower = higher priority) */
   priority: number;
 }
@@ -237,7 +235,7 @@ export class BehaviorProcessor {
 
   constructor(
     private behaviors: OpenNextBehavior[],
-    serverFunctions: ParsedServerFunction[],
+    serverFunctions: ParsedServerFunction[]
   ) {
     // Build function lookup map
     for (const func of serverFunctions) {
@@ -253,9 +251,7 @@ export class BehaviorProcessor {
       return this.processedBehaviors;
     }
 
-    this.processedBehaviors = this.behaviors.map((behavior, index) =>
-      this.processBehavior(behavior, index),
-    );
+    this.processedBehaviors = this.behaviors.map((behavior, index) => this.processBehavior(behavior, index));
 
     // Sort by priority (specific patterns first, wildcard last)
     this.processedBehaviors.sort((a, b) => a.priority - b.priority);
@@ -266,24 +262,16 @@ export class BehaviorProcessor {
   /**
    * Get behaviors by origin type
    */
-  public getBehaviorsByOriginType(
-    originType: ProcessedBehaviorConfig["originType"],
-  ): ProcessedBehaviorConfig[] {
-    return this.getProcessedBehaviors().filter(
-      (b) => b.originType === originType,
-    );
+  public getBehaviorsByOriginType(originType: ProcessedBehaviorConfig['originType']): ProcessedBehaviorConfig[] {
+    return this.getProcessedBehaviors().filter((b) => b.originType === originType);
   }
 
   /**
    * Get behaviors for a specific function
    */
-  public getBehaviorsForFunction(
-    functionName: string,
-  ): ProcessedBehaviorConfig[] {
+  public getBehaviorsForFunction(functionName: string): ProcessedBehaviorConfig[] {
     return this.getProcessedBehaviors().filter(
-      (b) =>
-        b.functionName === functionName ||
-        this.isPatternForFunction(b, functionName),
+      (b) => b.functionName === functionName || this.isPatternForFunction(b, functionName)
     );
   }
 
@@ -323,26 +311,20 @@ export class BehaviorProcessor {
     return this.behaviors.some((behavior) => behavior.origin === functionName);
   }
 
-  private processBehavior(
-    behavior: OpenNextBehavior,
-    index: number,
-  ): ProcessedBehaviorConfig {
-    const {
-      detectFunctionType,
-      getDescriptionForType,
-    } = require("./common-lambda-props");
+  private processBehavior(behavior: OpenNextBehavior, index: number): ProcessedBehaviorConfig {
+    const { detectFunctionType, getDescriptionForType } = require('./common-lambda-props');
 
-    let originType: ProcessedBehaviorConfig["originType"] = "custom";
+    let originType: ProcessedBehaviorConfig['originType'] = 'custom';
     let serverFunction: ParsedServerFunction | undefined;
     let functionName: string | undefined;
     let functionType: any;
     let description: string | undefined;
-    let cachePolicyType: ProcessedBehaviorConfig["cachePolicyType"];
+    let cachePolicyType: ProcessedBehaviorConfig['cachePolicyType'];
     let priority = index;
 
     // Determine origin type and associated data
     if (this.serverFunctions.has(behavior.origin)) {
-      originType = "function";
+      originType = 'function';
       serverFunction = this.serverFunctions.get(behavior.origin);
       functionName = behavior.origin;
 
@@ -350,26 +332,26 @@ export class BehaviorProcessor {
         functionType = detectFunctionType(functionName);
         const baseDescription = getDescriptionForType(functionType);
         description = `${baseDescription} | Handles: ${behavior.pattern}`;
-        cachePolicyType = "server";
+        cachePolicyType = 'server';
       }
-    } else if (behavior.origin === "imageOptimizer") {
-      originType = "imageOptimizer";
-      description = "Next.js Image Optimization Function";
-      cachePolicyType = "image";
+    } else if (behavior.origin === 'imageOptimizer') {
+      originType = 'imageOptimizer';
+      description = 'Next.js Image Optimization Function';
+      cachePolicyType = 'image';
       priority = 100; // Lower priority than function routes
-    } else if (behavior.origin === "s3") {
-      originType = "s3";
-      description = "Static Assets";
-      cachePolicyType = "static";
+    } else if (behavior.origin === 's3') {
+      originType = 's3';
+      description = 'Static Assets';
+      cachePolicyType = 'static';
       priority = 200; // Lowest priority
     }
 
     // Special pattern priorities
-    if (behavior.pattern === "*") {
+    if (behavior.pattern === '*') {
       priority = 1000; // Wildcard always last
-    } else if (behavior.pattern.includes("api/")) {
+    } else if (behavior.pattern.includes('api/')) {
       priority = 10; // API routes high priority
-    } else if (behavior.pattern.includes("_next/")) {
+    } else if (behavior.pattern.includes('_next/')) {
       priority = 20; // Next.js internals high priority
     }
 
@@ -386,32 +368,22 @@ export class BehaviorProcessor {
     };
   }
 
-  private isPatternForFunction(
-    behavior: ProcessedBehaviorConfig,
-    functionName: string,
-  ): boolean {
-    // imageOptimizer origin은 image 관련 함수들이 처리
+  private isPatternForFunction(behavior: ProcessedBehaviorConfig, functionName: string): boolean {
+    // Image optimizer origin is handled by image-related functions
+    if (behavior.origin === 'imageOptimizer' && functionName.toLowerCase().includes('image')) {
+      return true;
+    }
+
+    // Default origin is handled by main server function
     if (
-      behavior.origin === "imageOptimizer" &&
-      functionName.toLowerCase().includes("image")
+      behavior.origin === 'default' &&
+      (functionName === 'default' || functionName.toLowerCase().includes('server'))
     ) {
       return true;
     }
 
-    // default origin은 main server 함수가 처리
-    if (
-      behavior.origin === "default" &&
-      (functionName === "default" ||
-        functionName.toLowerCase().includes("server"))
-    ) {
-      return true;
-    }
-
-    // apiFn origin은 api 관련 함수들이 처리
-    if (
-      behavior.origin === "apiFn" &&
-      functionName.toLowerCase().includes("api")
-    ) {
+    // API function origin is handled by API-related functions
+    if (behavior.origin === 'apiFn' && functionName.toLowerCase().includes('api')) {
       return true;
     }
 

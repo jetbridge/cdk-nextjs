@@ -1,34 +1,25 @@
-import * as fs from "fs";
-import * as path from "path";
-import { CustomResource, Duration, RemovalPolicy, Stack } from "aws-cdk-lib";
-import {
-  AttributeType,
-  Billing,
-  TableV2 as Table,
-} from "aws-cdk-lib/aws-dynamodb";
-import { AnyPrincipal, Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import {
-  Architecture,
-  Code,
-  FunctionOptions,
-  Function as LambdaFunction,
-} from "aws-cdk-lib/aws-lambda";
-import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
-import { RetentionDays } from "aws-cdk-lib/aws-logs";
-import { Queue, QueueProps } from "aws-cdk-lib/aws-sqs";
-import { Provider } from "aws-cdk-lib/custom-resources";
-import { Construct } from "constructs";
+import { CustomResource, Duration, RemovalPolicy, Stack } from 'aws-cdk-lib';
+import { AttributeType, Billing, TableV2 as Table } from 'aws-cdk-lib/aws-dynamodb';
+import { AnyPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { Architecture, Code, FunctionOptions, Function as LambdaFunction } from 'aws-cdk-lib/aws-lambda';
+import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { Queue, QueueProps } from 'aws-cdk-lib/aws-sqs';
+import { Provider } from 'aws-cdk-lib/custom-resources';
+import { Construct } from 'constructs';
+import * as fs from 'fs';
+import * as path from 'path';
 
 import {
   OptionalCustomResourceProps,
   OptionalFunctionProps,
   OptionalProviderProps,
   OptionalTablePropsV2,
-} from "./generated-structs";
-import { NextjsBuild } from "./NextjsBuild";
-import { NextjsMultiServer } from "./NextjsMultiServer";
-import { NextjsServer } from "./NextjsServer";
-import { getCommonFunctionProps } from "./utils/common-lambda-props";
+} from './generated-structs';
+import { NextjsBuild } from './NextjsBuild';
+import { NextjsMultiServer } from './NextjsMultiServer';
+import { NextjsServer } from './NextjsServer';
+import { getCommonFunctionProps } from './utils/common-lambda-props';
 
 export interface NextjsRevalidationOverrides {
   readonly queueProps?: QueueProps;
@@ -93,37 +84,25 @@ export class NextjsRevalidation extends Construct {
       const mainLambdaFunction = this.getMainLambdaFunction();
 
       if (mainLambdaFunction) {
-        mainLambdaFunction.addEnvironment(
-          "CACHE_DYNAMO_TABLE",
-          this.table.tableName,
-        );
+        mainLambdaFunction.addEnvironment('CACHE_DYNAMO_TABLE', this.table.tableName);
 
         if (mainLambdaFunction.role) {
           this.table.grantReadWriteData(mainLambdaFunction.role);
         }
 
-        mainLambdaFunction.addEnvironment(
-          "REVALIDATION_QUEUE_URL",
-          this.queue.queueUrl,
-        );
-        mainLambdaFunction.addEnvironment(
-          "REVALIDATION_QUEUE_REGION",
-          Stack.of(this).region,
-        );
+        mainLambdaFunction.addEnvironment('REVALIDATION_QUEUE_URL', this.queue.queueUrl);
+        mainLambdaFunction.addEnvironment('REVALIDATION_QUEUE_REGION', Stack.of(this).region);
       }
 
       // In multi-server mode, add environment variables to all server functions
       if (this.props.multiServer) {
-        this.log("Configuring multi-server revalidation");
+        this.log('Configuring multi-server revalidation');
         for (const functionName of this.props.multiServer.getServerFunctionNames()) {
           const fn = this.props.multiServer.getServerFunction(functionName);
           if (fn) {
-            fn.addEnvironment("CACHE_DYNAMO_TABLE", this.table.tableName);
-            fn.addEnvironment("REVALIDATION_QUEUE_URL", this.queue.queueUrl);
-            fn.addEnvironment(
-              "REVALIDATION_QUEUE_REGION",
-              Stack.of(this).region,
-            );
+            fn.addEnvironment('CACHE_DYNAMO_TABLE', this.table.tableName);
+            fn.addEnvironment('REVALIDATION_QUEUE_URL', this.queue.queueUrl);
+            fn.addEnvironment('REVALIDATION_QUEUE_REGION', Stack.of(this).region);
 
             if (fn.role) {
               this.table.grantReadWriteData(fn.role);
@@ -133,7 +112,7 @@ export class NextjsRevalidation extends Construct {
       }
     } catch (error) {
       this.logError(
-        `Failed to initialize NextjsRevalidation: ${error instanceof Error ? error.message : String(error)}`,
+        `Failed to initialize NextjsRevalidation: ${error instanceof Error ? error.message : String(error)}`
       );
       throw error;
     }
@@ -142,20 +121,17 @@ export class NextjsRevalidation extends Construct {
   /**
    * Enhanced logging method
    */
-  private log(
-    message: string,
-    level: "info" | "warn" | "error" = "info",
-  ): void {
+  private log(message: string, level: 'info' | 'warn' | 'error' = 'info'): void {
     if (this.props.quiet) return;
 
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] [NextjsRevalidation] ${message}`;
 
     switch (level) {
-      case "error":
+      case 'error':
         console.error(logMessage);
         break;
-      case "warn":
+      case 'warn':
         console.warn(logMessage);
         break;
       default:
@@ -164,11 +140,11 @@ export class NextjsRevalidation extends Construct {
   }
 
   private logError(message: string): void {
-    this.log(message, "error");
+    this.log(message, 'error');
   }
 
   private logWarn(message: string): void {
-    this.log(message, "warn");
+    this.log(message, 'warn');
   }
 
   /**
@@ -186,8 +162,8 @@ export class NextjsRevalidation extends Construct {
 
   private createQueue(): Queue {
     try {
-      this.log("Creating revalidation queue");
-      const queue = new Queue(this, "Queue", {
+      this.log('Creating revalidation queue');
+      const queue = new Queue(this, 'Queue', {
         fifo: true,
         receiveMessageWaitTime: Duration.seconds(20),
         ...this.props.overrides?.queueProps,
@@ -195,15 +171,15 @@ export class NextjsRevalidation extends Construct {
       // https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-least-privilege-policy.html
       queue.addToResourcePolicy(
         new PolicyStatement({
-          sid: "DenyUnsecureTransport",
-          actions: ["sqs:*"],
+          sid: 'DenyUnsecureTransport',
+          actions: ['sqs:*'],
           effect: Effect.DENY,
           principals: [new AnyPrincipal()],
           resources: [queue.queueArn],
           conditions: {
-            Bool: { "aws:SecureTransport": "false" },
+            Bool: { 'aws:SecureTransport': 'false' },
           },
-        }),
+        })
       );
       // Allow server to send messages to the queue
       const mainLambdaFunction = this.getMainLambdaFunction();
@@ -221,30 +197,28 @@ export class NextjsRevalidation extends Construct {
         }
       }
 
-      this.log("Successfully created revalidation queue");
+      this.log('Successfully created revalidation queue');
       return queue;
     } catch (error) {
-      this.logError(
-        `Failed to create queue: ${error instanceof Error ? error.message : String(error)}`,
-      );
+      this.logError(`Failed to create queue: ${error instanceof Error ? error.message : String(error)}`);
       throw error;
     }
   }
 
   private createQueueFunction(): LambdaFunction {
     try {
-      this.log("Creating queue function");
+      this.log('Creating queue function');
       const queueFunctionDir = this.getQueueFunctionDirectory();
 
       if (!queueFunctionDir) {
-        throw new Error("Queue function directory not found");
+        throw new Error('Queue function directory not found');
       }
 
-      const fn = new LambdaFunction(this, "QueueFn", {
+      const fn = new LambdaFunction(this, 'QueueFn', {
         ...getCommonFunctionProps(this),
         architecture: Architecture.ARM_64,
         code: Code.fromAsset(queueFunctionDir),
-        handler: "index.handler",
+        handler: 'index.handler',
         timeout: Duration.seconds(30),
         environment: {
           ...this.props.lambdaOptions?.environment,
@@ -254,53 +228,49 @@ export class NextjsRevalidation extends Construct {
       });
       fn.addEventSource(new SqsEventSource(this.queue, { batchSize: 5 }));
 
-      this.log("Successfully created queue function");
+      this.log('Successfully created queue function');
       return fn;
     } catch (error) {
-      this.logError(
-        `Failed to create queue function: ${error instanceof Error ? error.message : String(error)}`,
-      );
+      this.logError(`Failed to create queue function: ${error instanceof Error ? error.message : String(error)}`);
       throw error;
     }
   }
 
   private createRevalidationTable() {
     try {
-      this.log("Creating revalidation table");
-      const table = new Table(this, "Table", {
-        partitionKey: { name: "tag", type: AttributeType.STRING },
-        sortKey: { name: "path", type: AttributeType.STRING },
+      this.log('Creating revalidation table');
+      const table = new Table(this, 'Table', {
+        partitionKey: { name: 'tag', type: AttributeType.STRING },
+        sortKey: { name: 'path', type: AttributeType.STRING },
         removalPolicy: RemovalPolicy.DESTROY,
         billing: Billing.onDemand(),
         pointInTimeRecovery: false,
         ...this.props.overrides?.tableProps,
       });
 
-      this.log("Successfully created revalidation table");
+      this.log('Successfully created revalidation table');
       return table;
     } catch (error) {
-      this.logError(
-        `Failed to create revalidation table: ${error instanceof Error ? error.message : String(error)}`,
-      );
+      this.logError(`Failed to create revalidation table: ${error instanceof Error ? error.message : String(error)}`);
       throw error;
     }
   }
 
   private createRevalidationInsertFunction(revalidationTable: Table) {
     try {
-      this.log("Creating revalidation insert function");
+      this.log('Creating revalidation insert function');
       const insertFunctionDir = this.getInsertFunctionDirectory();
 
       if (!insertFunctionDir) {
-        this.logWarn("Insert function directory not found, skipping creation");
+        this.logWarn('Insert function directory not found, skipping creation');
         return undefined;
       }
 
-      const fn = new LambdaFunction(this, "InsertFn", {
+      const fn = new LambdaFunction(this, 'InsertFn', {
         ...getCommonFunctionProps(this),
         architecture: Architecture.ARM_64,
         code: Code.fromAsset(insertFunctionDir),
-        handler: "index.handler",
+        handler: 'index.handler',
         environment: {
           CACHE_DYNAMO_TABLE: revalidationTable.tableName,
           ...this.props.lambdaOptions?.environment,
@@ -312,13 +282,13 @@ export class NextjsRevalidation extends Construct {
 
       revalidationTable.grantWriteData(fn);
 
-      const provider = new Provider(this, "InsertProvider", {
+      const provider = new Provider(this, 'InsertProvider', {
         onEventHandler: fn,
         logRetention: RetentionDays.ONE_DAY,
         ...this.props.overrides?.insertProviderProps,
       });
 
-      new CustomResource(this, "InsertCustomResource", {
+      new CustomResource(this, 'InsertCustomResource', {
         serviceToken: provider.serviceToken,
         properties: {
           version: Date.now().toString(),
@@ -326,11 +296,11 @@ export class NextjsRevalidation extends Construct {
         ...this.props.overrides?.insertCustomResourceProps,
       });
 
-      this.log("Successfully created revalidation insert function");
+      this.log('Successfully created revalidation insert function');
       return fn;
     } catch (error) {
       this.logError(
-        `Failed to create revalidation insert function: ${error instanceof Error ? error.message : String(error)}`,
+        `Failed to create revalidation insert function: ${error instanceof Error ? error.message : String(error)}`
       );
       throw error;
     }
@@ -341,19 +311,18 @@ export class NextjsRevalidation extends Construct {
    */
   private getInsertFunctionDirectory(): string | undefined {
     try {
-      // Insert Function은 배포 시 초기 데이터 삽입용이므로 항상 legacy 경로 사용
-      const legacyPath =
-        this.props.nextBuild.nextRevalidateDynamoDBProviderFnDir;
+      // Insert Function is used for initial data insertion during deployment, so always use legacy path
+      const legacyPath = this.props.nextBuild.nextRevalidateDynamoDBProviderFnDir;
       if (fs.existsSync(legacyPath)) {
         this.log(`Using revalidation insert function path: ${legacyPath}`);
         return legacyPath;
       }
 
-      this.logWarn("Revalidation insert function directory not found");
+      this.logWarn('Revalidation insert function directory not found');
       return undefined;
     } catch (error) {
       this.logError(
-        `Failed to get insert function directory: ${error instanceof Error ? error.message : String(error)}`,
+        `Failed to get insert function directory: ${error instanceof Error ? error.message : String(error)}`
       );
       return undefined;
     }
@@ -365,43 +334,29 @@ export class NextjsRevalidation extends Construct {
   private getQueueFunctionDirectory(): string | undefined {
     try {
       // First try to get from multi-server configuration
-      if (
-        this.props.nextBuild.openNextOutput?.additionalProps
-          ?.revalidationFunction
-      ) {
-        const revalidationConfig =
-          this.props.nextBuild.openNextOutput.additionalProps
-            .revalidationFunction;
-        const bundlePath = path.join(
-          this.props.nextBuild.props.nextjsPath,
-          revalidationConfig.bundle,
-        );
+      if (this.props.nextBuild.openNextOutput?.additionalProps?.revalidationFunction) {
+        const revalidationConfig = this.props.nextBuild.openNextOutput.additionalProps.revalidationFunction;
+        const bundlePath = path.join(this.props.nextBuild.props.nextjsPath, revalidationConfig.bundle);
         if (fs.existsSync(bundlePath)) {
-          this.log(
-            `Found revalidation queue function from open-next config: ${bundlePath}`,
-          );
+          this.log(`Found revalidation queue function from open-next config: ${bundlePath}`);
           return bundlePath;
         } else {
-          this.logWarn(
-            `Revalidation bundle path from config does not exist: ${bundlePath}`,
-          );
+          this.logWarn(`Revalidation bundle path from config does not exist: ${bundlePath}`);
         }
       }
 
       // Fallback to legacy path
       const legacyPath = this.props.nextBuild.nextRevalidateFnDir;
       if (fs.existsSync(legacyPath)) {
-        this.log(
-          `Using legacy revalidation queue function path: ${legacyPath}`,
-        );
+        this.log(`Using legacy revalidation queue function path: ${legacyPath}`);
         return legacyPath;
       }
 
-      this.logWarn("No valid revalidation queue function directory found");
+      this.logWarn('No valid revalidation queue function directory found');
       return this.props.nextBuild.nextRevalidateFnDir; // Return anyway for backward compatibility
     } catch (error) {
       this.logError(
-        `Failed to get queue function directory: ${error instanceof Error ? error.message : String(error)}`,
+        `Failed to get queue function directory: ${error instanceof Error ? error.message : String(error)}`
       );
       return this.props.nextBuild.nextRevalidateFnDir; // Return anyway for backward compatibility
     }

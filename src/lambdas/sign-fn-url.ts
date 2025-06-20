@@ -1,11 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import type {
-  CloudFrontHeaders,
-  CloudFrontRequest,
-  CloudFrontRequestHandler,
-} from "aws-lambda";
-import { Sha256 } from "@aws-crypto/sha256-js";
-import { SignatureV4 } from "@smithy/signature-v4";
+import type { CloudFrontHeaders, CloudFrontRequest, CloudFrontRequestHandler } from 'aws-lambda';
+import { Sha256 } from '@aws-crypto/sha256-js';
+import { SignatureV4 } from '@smithy/signature-v4';
 
 const debug = false;
 
@@ -17,15 +13,15 @@ const debug = false;
 export const handler: CloudFrontRequestHandler = async (event) => {
   const request = event?.Records?.[0]?.cf.request;
   if (!request) {
-    throw new Error("No request found");
+    throw new Error('No request found');
   }
 
-  if (debug) console.log("input request", JSON.stringify(request, null, 2));
+  if (debug) console.log('input request', JSON.stringify(request, null, 2));
 
   escapeQuerystring(request);
   await signRequest(request);
 
-  if (debug) console.log("output request", JSON.stringify(request), null, 2);
+  if (debug) console.log('output request', JSON.stringify(request), null, 2);
   return request;
 };
 
@@ -34,9 +30,7 @@ export const handler: CloudFrontRequestHandler = async (event) => {
  * https://github.dev/pwrdrvr/lambda-url-signing/blob/main/packages/edge-to-origin/src/translate-request.ts#L19-L31
  */
 function escapeQuerystring(request: CloudFrontRequest) {
-  request.querystring = request.querystring
-    .replace(/\[/g, "%5B")
-    .replace(/]/g, "%5D");
+  request.querystring = request.querystring.replace(/\[/g, '%5B').replace(/]/g, '%5D');
 }
 
 let sigv4: SignatureV4;
@@ -52,22 +46,20 @@ let sigv4: SignatureV4;
  */
 export async function signRequest(request: CloudFrontRequest) {
   if (!sigv4) {
-    const region = getRegionFromLambdaUrl(
-      request.origin?.custom?.domainName || "",
-    );
+    const region = getRegionFromLambdaUrl(request.origin?.custom?.domainName || '');
     sigv4 = getSigV4(region);
   }
   // remove x-forwarded-for b/c it changes from hop to hop
-  delete request.headers["x-forwarded-for"];
+  delete request.headers['x-forwarded-for'];
   const headerBag = cfHeadersToHeaderBag(request.headers);
   let body: string | undefined;
   if (request.body?.data) {
-    body = Buffer.from(request.body.data, "base64").toString();
+    body = Buffer.from(request.body.data, 'base64').toString();
   }
   const params = queryStringToQueryParamBag(request.querystring);
   const hostname = headerBag.host;
   if (!hostname) {
-    throw new Error("Host header is missing");
+    throw new Error('Host header is missing');
   }
 
   const signed = await sigv4.sign({
@@ -77,7 +69,7 @@ export async function signRequest(request: CloudFrontRequest) {
     path: request.uri,
     body,
     query: params,
-    protocol: "https",
+    protocol: 'https',
   });
   request.headers = headerBagToCfHeaders(signed.headers);
 }
@@ -86,12 +78,12 @@ function getSigV4(region: string): SignatureV4 {
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
   const sessionToken = process.env.AWS_SESSION_TOKEN;
-  if (!region) throw new Error("AWS_REGION missing");
-  if (!accessKeyId) throw new Error("AWS_ACCESS_KEY_ID missing");
-  if (!secretAccessKey) throw new Error("AWS_SECRET_ACCESS_KEY missing");
-  if (!sessionToken) throw new Error("AWS_SESSION_TOKEN missing");
+  if (!region) throw new Error('AWS_REGION missing');
+  if (!accessKeyId) throw new Error('AWS_ACCESS_KEY_ID missing');
+  if (!secretAccessKey) throw new Error('AWS_SECRET_ACCESS_KEY missing');
+  if (!sessionToken) throw new Error('AWS_SESSION_TOKEN missing');
   return new SignatureV4({
-    service: "lambda",
+    service: 'lambda',
     region,
     credentials: {
       accessKeyId,
@@ -103,9 +95,8 @@ function getSigV4(region: string): SignatureV4 {
 }
 
 export function getRegionFromLambdaUrl(url: string): string {
-  const region = url.split(".").at(2);
-  if (!region)
-    throw new Error("Region couldn't be extracted from Lambda Function URL");
+  const region = url.split('.').at(2);
+  if (!region) throw new Error("Region couldn't be extracted from Lambda Function URL");
   return region;
 }
 
@@ -133,8 +124,8 @@ export function cfHeadersToHeaderBag(headers: CloudFrontHeaders): Bag {
     headerBag[headerKey] = value;
     // if there is an authorization from CloudFront, move it as
     // it will be overwritten when the headers are signed
-    if (headerKey === "authorization") {
-      headerBag["origin-authorization"] = value;
+    if (headerKey === 'authorization') {
+      headerBag['origin-authorization'] = value;
     }
   }
   return headerBag;

@@ -1,9 +1,10 @@
-import { Code, Function as LambdaFunction, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
+import { Code, FunctionOptions, Function as LambdaFunction } from 'aws-cdk-lib/aws-lambda';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { OptionalFunctionProps } from './generated-structs';
 import type { NextjsBuild } from './NextjsBuild';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
+import { createArchive } from './utils/create-archive';
 
 export interface NextjsImageOverrides {
   readonly functionProps?: OptionalFunctionProps;
@@ -36,9 +37,16 @@ export class NextjsImage extends LambdaFunction {
     const { lambdaOptions, bucket } = props;
 
     const commonFnProps = getCommonFunctionProps(scope);
+
+    const archivePath = createArchive({
+      directory: props.nextBuild.nextImageFnDir,
+      zipFileName: 'image-fn.zip',
+      quiet: true,
+    });
+
     super(scope, id, {
       ...commonFnProps,
-      code: Code.fromAsset(props.nextBuild.nextImageFnDir),
+      code: Code.fromAsset(archivePath),
       handler: 'index.handler',
       description: 'Next.js Image Optimization Function',
       ...lambdaOptions,

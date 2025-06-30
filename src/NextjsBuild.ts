@@ -1,16 +1,9 @@
+import { Stack, Token } from 'aws-cdk-lib';
 import { execSync } from 'child_process';
+import { Construct } from 'constructs';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Stack, Token } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
 
-import type { NextjsProps } from './Nextjs';
-import type {
-  OpenNextBehavior,
-  OpenNextOutput,
-  ParsedServerFunction,
-  ProcessedBehaviorConfig,
-} from './utils/open-next-types';
 import {
   NEXTJS_BUILD_DIR,
   NEXTJS_BUILD_DYNAMODB_PROVIDER_FN_DIR,
@@ -20,8 +13,15 @@ import {
   NEXTJS_CACHE_DIR,
   NEXTJS_STATIC_DIR,
 } from './constants';
+import type { NextjsProps } from './Nextjs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { listDirectory } from './utils/list-directories';
+import type {
+  OpenNextBehavior,
+  OpenNextOutput,
+  ParsedServerFunction,
+  ProcessedBehaviorConfig,
+} from './utils/open-next-types';
 import { BehaviorProcessor, validateOpenNextOutput } from './utils/open-next-types';
 
 export interface NextjsBuildProps {
@@ -281,7 +281,9 @@ export class NextjsBuild extends Construct {
       this._openNextOutput = parsedOutput;
       return this._openNextOutput;
     } catch (error) {
-      const errorMessage = `Failed to parse open-next.output.json: ${error instanceof Error ? error.message : String(error)}`;
+      const errorMessage = `Failed to parse open-next.output.json: ${
+        error instanceof Error ? error.message : String(error)
+      }`;
       if (!this.props.quiet) {
         console.error(errorMessage);
       }
@@ -347,7 +349,9 @@ export class NextjsBuild extends Construct {
       this._cachedServerFunctions = serverFunctions;
       return this._cachedServerFunctions;
     } catch (error) {
-      const errorMessage = `Failed to parse server functions: ${error instanceof Error ? error.message : String(error)}`;
+      const errorMessage = `Failed to parse server functions: ${
+        error instanceof Error ? error.message : String(error)
+      }`;
       if (!this.props.quiet) {
         console.error(errorMessage);
       }
@@ -398,7 +402,9 @@ export class NextjsBuild extends Construct {
     } catch (error) {
       if (!this.props.quiet) {
         console.error(
-          `Failed to get server function directory for '${functionName}': ${error instanceof Error ? error.message : String(error)}`
+          `Failed to get server function directory for '${functionName}': ${
+            error instanceof Error ? error.message : String(error)
+          }`
         );
       }
       return undefined;

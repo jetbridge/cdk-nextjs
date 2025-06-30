@@ -1,13 +1,15 @@
-import { randomUUID } from 'node:crypto';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { resolve } from 'node:path';
 import { Stack } from 'aws-cdk-lib';
-import { Code, Function, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
+import { Code, Function, FunctionOptions, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
-import { CACHE_BUCKET_KEY_PREFIX } from './constants';
+import { randomUUID } from 'node:crypto';
+import * as fs from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { resolve } from 'node:path';
+
+import { CACHE_BUCKET_KEY_PREFIX, MAX_INLINE_ZIP_SIZE } from './constants';
 import { OptionalAssetProps, OptionalFunctionProps, OptionalNextjsBucketDeploymentProps } from './generated-structs';
 import { NextjsProps } from './Nextjs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
@@ -73,32 +75,56 @@ export class NextjsServer extends Construct {
     super(scope, id);
     this.props = props;
 
-    // must create code asset separately (typically it is implicitly created in
-    //`Function` construct) b/c we need to substitute unresolved env vars
-    const sourceAsset = this.createSourceCodeAsset();
-    // source and destination assets are defined separately so that source
-    // assets are immutable (easier debugging). Technically we could overwrite
-    // source asset
-    const destinationAsset = this.createDestinationCodeAsset();
-    const bucketDeployment = this.createBucketDeployment(sourceAsset, destinationAsset);
-    this.lambdaFunction = this.createFunction(destinationAsset);
-    // don't update lambda function until bucket deployment is complete
-    this.lambdaFunction.node.addDependency(bucketDeployment);
-  }
-
-  private createSourceCodeAsset() {
+    // 1) Create local archive once
     const archivePath = createArchive({
       directory: this.props.nextBuild.nextServerFnDir,
       quiet: this.props.quiet,
       zipFileName: 'server-fn.zip',
     });
-    const asset = new Asset(this, 'SourceCodeAsset', {
+
+    const zipSize = fs.statSync(archivePath).size;
+    const useDirect = zipSize <= MAX_INLINE_ZIP_SIZE;
+
+    if (useDirect) {
+      // Build lambda directly from local asset
+      const commonProps = getCommonFunctionProps(this, 'server');
+      const { runtime, ...otherProps } = commonProps;
+
+      this.lambdaFunction = new Function(this, 'Fn', {
+        ...otherProps,
+        runtime: runtime || Runtime.NODEJS_20_X,
+        code: Code.fromAsset(archivePath),
+        handler: 'index.handler',
+        description: 'Next.js Server Handler (direct asset)',
+        ...this.props.lambda,
+        environment: {
+          ...this.environment,
+          ...this.props.lambda?.environment,
+        },
+        ...this.props.overrides?.functionProps,
+      });
+
+      this.props.staticAssetBucket.grantReadWrite(this.lambdaFunction);
+
+      // cleanup local archive
+      rmSync(archivePath, { recursive: true });
+      return;
+    }
+
+    // 2) Fallback to existing BucketDeployment path for large archives
+    const sourceAsset = new Asset(this, 'SourceCodeAsset', {
       path: archivePath,
       ...this.props.overrides?.sourceCodeAssetProps,
     });
-    // new Asset() creates copy of zip into cdk.out/. This cleans up tmp folder
+
+    const destinationAsset = this.createDestinationCodeAsset();
+    const bucketDeployment = this.createBucketDeployment(sourceAsset, destinationAsset);
+
+    this.lambdaFunction = this.createFunction(destinationAsset);
+    this.lambdaFunction.node.addDependency(bucketDeployment);
+
+    // cleanup local archive after asset copy
     rmSync(archivePath, { recursive: true });
-    return asset;
   }
 
   private createDestinationCodeAsset() {
@@ -132,9 +158,13 @@ export class NextjsServer extends Construct {
   }
 
   private createFunction(asset: Asset) {
+    const commonProps = getCommonFunctionProps(this, 'server');
+    const { runtime, ...otherProps } = commonProps;
+
     // until after the build time env vars in code zip asset are substituted
     const fn = new Function(this, 'Fn', {
-      ...getCommonFunctionProps(this),
+      ...otherProps,
+      runtime: runtime || Runtime.NODEJS_20_X, // Provide default runtime
       code: Code.fromBucket(asset.bucket, asset.s3ObjectKey),
       handler: 'index.handler',
       description: 'Next.js Server Handler',

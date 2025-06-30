@@ -1,14 +1,14 @@
 import { CustomResource, Duration, RemovalPolicy, Stack } from 'aws-cdk-lib';
 import { AttributeType, Billing, TableV2 as Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AnyPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Architecture, Code, FunctionOptions, Function as LambdaFunction } from 'aws-cdk-lib/aws-lambda';
+import { Architecture, Code, FunctionOptions, Function as LambdaFunction, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Queue, QueueProps } from 'aws-cdk-lib/aws-sqs';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 import {
   OptionalCustomResourceProps,
@@ -214,8 +214,12 @@ export class NextjsRevalidation extends Construct {
         throw new Error('Queue function directory not found');
       }
 
+      const commonProps = getCommonFunctionProps(this, 'revalidation-queue');
+      const { runtime, ...otherProps } = commonProps;
+
       const fn = new LambdaFunction(this, 'QueueFn', {
-        ...getCommonFunctionProps(this),
+        ...otherProps,
+        runtime: runtime || Runtime.NODEJS_20_X, // Provide default runtime
         architecture: Architecture.ARM_64,
         code: Code.fromAsset(queueFunctionDir),
         handler: 'index.handler',
@@ -266,8 +270,12 @@ export class NextjsRevalidation extends Construct {
         return undefined;
       }
 
+      const commonProps = getCommonFunctionProps(this, 'revalidation-insert');
+      const { runtime, ...otherProps } = commonProps;
+
       const fn = new LambdaFunction(this, 'InsertFn', {
-        ...getCommonFunctionProps(this),
+        ...otherProps,
+        runtime: runtime || Runtime.NODEJS_20_X, // Provide default runtime
         architecture: Architecture.ARM_64,
         code: Code.fromAsset(insertFunctionDir),
         handler: 'index.handler',

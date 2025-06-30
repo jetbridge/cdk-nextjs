@@ -233,10 +233,7 @@ export class BehaviorProcessor {
   private serverFunctions: Map<string, ParsedServerFunction> = new Map();
   private processedBehaviors?: ProcessedBehaviorConfig[];
 
-  constructor(
-    private behaviors: OpenNextBehavior[],
-    serverFunctions: ParsedServerFunction[]
-  ) {
+  constructor(private behaviors: OpenNextBehavior[], serverFunctions: ParsedServerFunction[]) {
     // Build function lookup map
     for (const func of serverFunctions) {
       this.serverFunctions.set(func.name, func);
@@ -312,7 +309,7 @@ export class BehaviorProcessor {
   }
 
   private processBehavior(behavior: OpenNextBehavior, index: number): ProcessedBehaviorConfig {
-    const { detectFunctionType, getDescriptionForType } = require('./common-lambda-props');
+    const { getFunctionTypeFromServerFunction, getDescriptionForType } = require('./common-lambda-props');
 
     let originType: ProcessedBehaviorConfig['originType'] = 'custom';
     let serverFunction: ParsedServerFunction | undefined;
@@ -328,10 +325,12 @@ export class BehaviorProcessor {
       serverFunction = this.serverFunctions.get(behavior.origin);
       functionName = behavior.origin;
 
-      if (functionName) {
-        functionType = detectFunctionType(functionName);
+      if (serverFunction) {
+        // Use actual server function configuration instead of function name
+        functionType = getFunctionTypeFromServerFunction(serverFunction);
         const baseDescription = getDescriptionForType(functionType);
-        description = `${baseDescription} | Handles: ${behavior.pattern}`;
+        const streamingInfo = serverFunction.streaming ? ' | Streaming: Enabled' : ' | Streaming: Disabled';
+        description = `${baseDescription}${streamingInfo} | Handles: ${behavior.pattern}`;
         cachePolicyType = 'server';
       }
     } else if (behavior.origin === 'imageOptimizer') {

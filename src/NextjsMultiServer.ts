@@ -7,21 +7,60 @@ import * as fs from 'fs';
 import { randomUUID } from 'node:crypto';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 
-import { CACHE_BUCKET_KEY_PREFIX } from './constants';
+import { CACHE_BUCKET_KEY_PREFIX, MAX_INLINE_ZIP_SIZE } from './constants';
 import { OptionalAssetProps, OptionalFunctionProps, OptionalNextjsBucketDeploymentProps } from './generated-structs';
 import { NextjsProps } from './Nextjs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
 import { NextjsBuild } from './NextjsBuild';
 import {
-  detectFunctionType,
   getDescriptionForType,
-  getOptimizedFunctionProps,
+  getFunctionPropsFromServerFunction,
+  getFunctionTypeFromServerFunction,
   LambdaFunctionType,
 } from './utils/common-lambda-props';
 import { createArchive } from './utils/create-archive';
 import { ParsedServerFunction } from './utils/open-next-types';
+
+/**
+ * Default patterns to exclude from asset bundles
+ *
+ * Usage examples:
+ *
+ * // Use default exclude patterns
+ * new NextjsMultiServer(this, 'MyServer', {
+ *   // ... other props
+ * });
+ *
+ * // Use custom exclude patterns
+ * new NextjsMultiServer(this, 'MyServer', {
+ *   excludePatterns: [
+ *     '*.DS_Store',
+ *     '*.log',
+ *     'coverage/*',
+ *     'custom-exclude-pattern/*'
+ *   ],
+ *   // ... other props
+ * });
+ *
+ * // Disable all exclusions
+ * new NextjsMultiServer(this, 'MyServer', {
+ *   excludePatterns: [],
+ *   // ... other props
+ * });
+ *
+ * // Add to default patterns (merge with defaults)
+ * new NextjsMultiServer(this, 'MyServer', {
+ *   excludePatterns: [
+ *     ...DEFAULT_EXCLUDE_PATTERNS,
+ *     'my-custom-pattern/*',
+ *     '*.custom-ext'
+ *   ],
+ *   // ... other props
+ * });
+ */
+export const DEFAULT_EXCLUDE_PATTERNS = [] as const;
 
 export interface NextjsMultiServerOverrides {
   readonly sourceCodeAssetProps?: OptionalAssetProps;
@@ -68,6 +107,13 @@ export interface NextjsMultiServerProps {
    * @default false
    */
   readonly createOnlyUsedFunctions?: boolean;
+  /**
+   * Patterns to exclude from asset bundles. These patterns will be used with CDK Asset's exclude feature.
+   * If not provided, DEFAULT_EXCLUDE_PATTERNS will be used.
+   * Set to an empty array to disable exclusions.
+   * @default DEFAULT_EXCLUDE_PATTERNS
+   */
+  readonly excludePatterns?: string[];
 }
 
 /**
@@ -108,6 +154,27 @@ export class NextjsMultiServer extends Construct {
     super(scope, id);
     this.props = props;
 
+    // Initialization logs - always output
+    console.log(`[NextjsMultiServer] === INITIALIZATION START ===`);
+    console.log(`[NextjsMultiServer] ID: ${id}`);
+    console.log(`[NextjsMultiServer] Multi-server enabled: ${props.enableMultiServer || false}`);
+    console.log(`[NextjsMultiServer] Create only used functions: ${props.createOnlyUsedFunctions || false}`);
+    console.log(`[NextjsMultiServer] Quiet mode: ${props.quiet || false}`);
+    console.log(`[NextjsMultiServer] excludePatterns provided in props: ${props.excludePatterns ? 'YES' : 'NO'}`);
+
+    if (props.excludePatterns) {
+      console.log(
+        `[NextjsMultiServer] Custom excludePatterns (${props.excludePatterns.length} items):`,
+        props.excludePatterns
+      );
+    } else {
+      console.log(`[NextjsMultiServer] Will use DEFAULT_EXCLUDE_PATTERNS (${DEFAULT_EXCLUDE_PATTERNS.length} items):`, [
+        ...DEFAULT_EXCLUDE_PATTERNS,
+      ]);
+    }
+
+    console.log(`[NextjsMultiServer] === INITIALIZATION CONFIG END ===`);
+
     try {
       if (props.enableMultiServer) {
         this.log('Initializing multi-server mode');
@@ -117,6 +184,7 @@ export class NextjsMultiServer extends Construct {
         this.createSingleServerFunction();
       }
     } catch (error) {
+      console.error(`[NextjsMultiServer] CRITICAL ERROR during initialization:`, error);
       this.logError(
         `Failed to initialize NextjsMultiServer: ${error instanceof Error ? error.message : String(error)}`
       );
@@ -203,7 +271,9 @@ export class NextjsMultiServer extends Construct {
             this.lambdaFunction = fn;
           }
         } catch (error) {
-          const errorMessage = `Failed to create function ${serverFunction.name}: ${error instanceof Error ? error.message : String(error)}`;
+          const errorMessage = `Failed to create function ${serverFunction.name}: ${
+            error instanceof Error ? error.message : String(error)
+          }`;
           this.logError(errorMessage);
           failedFunctions.push({
             name: serverFunction.name,
@@ -243,14 +313,45 @@ export class NextjsMultiServer extends Construct {
     try {
       this.log('Creating single server function');
 
-      const sourceAsset = this.createSourceCodeAsset(this.props.nextBuild.nextServerFnDir, 'default');
+      // Build archive
+      const archivePath = createArchive({
+        directory: this.props.nextBuild.nextServerFnDir,
+        quiet: this.props.quiet,
+        zipFileName: 'server-fn-default.zip',
+        excludePatterns: this.props.excludePatterns ?? [...DEFAULT_EXCLUDE_PATTERNS],
+      });
+
+      const zipStats = fs.statSync(archivePath);
+      const useDirect = zipStats.size <= MAX_INLINE_ZIP_SIZE;
+
+      const defaultServerFunction = this.props.nextBuild.getServerFunctions().find((fn) => fn.name === 'default');
+      if (!defaultServerFunction) {
+        throw new Error('Default server function not found in open-next.output.json');
+      }
+
+      if (useDirect) {
+        this.lambdaFunction = this.createFunctionFromArchive(
+          archivePath,
+          defaultServerFunction,
+          defaultServerFunction.handler
+        );
+        rmSync(archivePath, { recursive: true });
+        this.log('Successfully created single server function (direct)');
+        return;
+      }
+
+      const sourceAsset = new Asset(this, `SourceZip-default-${randomUUID()}`, {
+        path: archivePath,
+        ...this.props.overrides?.sourceCodeAssetProps,
+      });
 
       const destinationAsset = this.createDestinationCodeAsset();
-
       const bucketDeployment = this.createBucketDeployment(sourceAsset, destinationAsset);
 
-      this.lambdaFunction = this.createFunction(destinationAsset, 'default');
+      this.lambdaFunction = this.createFunction(destinationAsset, defaultServerFunction);
       this.lambdaFunction.node.addDependency(bucketDeployment);
+
+      rmSync(archivePath, { recursive: true });
 
       this.log('Successfully created single server function');
     } catch (error) {
@@ -258,7 +359,9 @@ export class NextjsMultiServer extends Construct {
         `Failed to create single server function: ${error instanceof Error ? error.message : String(error)}`
       );
       throw new Error(
-        `Critical failure: Unable to create any server functions - ${error instanceof Error ? error.message : String(error)}`
+        `Critical failure: Unable to create any server functions - ${
+          error instanceof Error ? error.message : String(error)
+        }`
       );
     }
   }
@@ -276,36 +379,54 @@ export class NextjsMultiServer extends Construct {
         throw new Error(`Bundle path does not exist: ${serverFunction.bundlePath}`);
       }
 
-      // Create or reuse source asset
-      const sourceAsset = this.createSourceCodeAsset(serverFunction.bundlePath, serverFunction.name);
-
-      // Create unique destination asset for each function to prevent code mixing
-      const destinationAsset = this.createDestinationCodeAsset();
-
-      // Create bucket deployment
-      const bucketDeployment = this.createBucketDeployment(sourceAsset, destinationAsset);
-
-      // Create function with destination asset
-      const fn = this.createFunction(destinationAsset, serverFunction.name, {
-        handler: serverFunction.handler,
-        streaming: serverFunction.streaming,
+      // Create archive once here
+      const archivePath = createArchive({
+        directory: serverFunction.bundlePath,
+        quiet: this.props.quiet,
+        zipFileName: `server-fn-${serverFunction.name}.zip`,
+        excludePatterns: this.props.excludePatterns ?? [...DEFAULT_EXCLUDE_PATTERNS],
       });
 
-      // Ensure function waits for deployment
+      const zipStats = fs.statSync(archivePath);
+      const useDirect = zipStats.size <= MAX_INLINE_ZIP_SIZE;
+
+      if (useDirect) {
+        const fn = this.createFunctionFromArchive(archivePath, serverFunction, serverFunction.handler);
+        rmSync(archivePath, { recursive: true });
+        return fn;
+      }
+
+      // === fallback to original bucket deployment path ===
+      const assetId = `SourceZip-${serverFunction.name}-${randomUUID()}`;
+      const sourceAsset = new Asset(this, assetId, {
+        path: archivePath,
+        ...this.props.overrides?.sourceCodeAssetProps,
+      });
+
+      const destinationAsset = this.createDestinationCodeAsset();
+      const bucketDeployment = this.createBucketDeployment(sourceAsset, destinationAsset);
+
+      const fn = this.createFunction(destinationAsset, serverFunction, {
+        handler: serverFunction.handler,
+      });
       fn.node.addDependency(bucketDeployment);
 
       this.log(`Successfully created server function: ${serverFunction.name}`);
+      // cleanup local archive
+      rmSync(archivePath, { recursive: true });
       return fn;
     } catch (error) {
       this.logError(
-        `Failed to create server function ${serverFunction.name}: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to create server function ${serverFunction.name}: ${
+          error instanceof Error ? error.message : String(error)
+        }`
       );
       throw error;
     }
   }
 
   /**
-   * Enhanced source code asset creation with caching
+   * Enhanced source code asset creation with caching and exclude patterns
    */
   private createSourceCodeAsset(bundlePath: string, functionName?: string) {
     try {
@@ -316,18 +437,76 @@ export class NextjsMultiServer extends Construct {
         return this.assetCache.get(cacheKey)!;
       }
 
+      // Get exclude patterns from props or use defaults
+      const excludePatterns = this.props.excludePatterns ?? [...DEFAULT_EXCLUDE_PATTERNS];
+
+      // Add detailed logging - always output
+      console.log(`[NextjsMultiServer] Creating asset for function: ${functionName || 'default'}`);
+      console.log(`[NextjsMultiServer] Bundle path: ${bundlePath}`);
+      console.log(`[NextjsMultiServer] Props excludePatterns provided: ${this.props.excludePatterns ? 'YES' : 'NO'}`);
+      console.log(`[NextjsMultiServer] DEFAULT_EXCLUDE_PATTERNS length: ${DEFAULT_EXCLUDE_PATTERNS.length}`);
+      console.log(`[NextjsMultiServer] Final excludePatterns length: ${excludePatterns.length}`);
+      console.log(`[NextjsMultiServer] Final excludePatterns: ${JSON.stringify(excludePatterns, null, 2)}`);
+
+      // Check bundle directory file list
+      if (fs.existsSync(bundlePath)) {
+        const bundleFiles = this.listDirectoryFiles(bundlePath, 20);
+        console.log(`[NextjsMultiServer] Bundle directory contains ${bundleFiles.length} files (showing first 20):`);
+        bundleFiles.forEach((file, index) => {
+          console.log(`[NextjsMultiServer]   ${index + 1}. ${file}`);
+        });
+      } else {
+        console.warn(`[NextjsMultiServer] Bundle path does not exist: ${bundlePath}`);
+      }
+
+      if (!this.props.quiet && excludePatterns.length > 0) {
+        this.log(`Applying ${excludePatterns.length} exclude patterns for ${functionName || 'default'} function`);
+      }
+
       this.log(`Creating archive for ${bundlePath}`);
       const archivePath = createArchive({
         directory: bundlePath,
         quiet: this.props.quiet,
         zipFileName: `server-fn-${functionName || 'default'}.zip`,
+        excludePatterns: excludePatterns,
       });
 
+      console.log(`[NextjsMultiServer] Archive created at: ${archivePath}`);
+
+      // Check zip file size before creating Asset
+      const zipStats = fs.statSync(archivePath);
+      const zipSizeMB = zipStats.size / 1024 / 1024;
+      console.log(`[NextjsMultiServer] Zip file size: ${zipSizeMB.toFixed(2)}MB`);
+
+      // AWS Lambda limit is 250MB, warn if approaching
+      if (zipSizeMB > 200) {
+        console.warn(
+          `[NextjsMultiServer] WARNING: Zip file size (${zipSizeMB.toFixed(
+            2
+          )}MB) is approaching AWS Lambda limit (250MB)`
+        );
+      }
+      if (zipSizeMB > 250) {
+        console.error(
+          `[NextjsMultiServer] ERROR: Zip file size (${zipSizeMB.toFixed(2)}MB) exceeds AWS Lambda limit (250MB)`
+        );
+        throw new Error(`Lambda function size limit exceeded: ${zipSizeMB.toFixed(2)}MB > 250MB`);
+      }
+
       const assetId = `SourceCodeAsset-${functionName || bundlePath.split('/').pop() || 'unknown'}`;
+
+      console.log(`[NextjsMultiServer] Creating Asset with ID: ${assetId}`);
+      console.log(`[NextjsMultiServer] Asset path: ${archivePath}`);
+
       const asset = new Asset(this, assetId, {
         path: archivePath,
+        // exclude: excludePatterns,  // Removed: exclude is now handled during zip creation
         ...this.props.overrides?.sourceCodeAssetProps,
       });
+
+      console.log(`[NextjsMultiServer] Asset created successfully with ID: ${assetId}`);
+      console.log(`[NextjsMultiServer] Asset S3 bucket: ${asset.bucket.bucketName}`);
+      console.log(`[NextjsMultiServer] Asset S3 key: ${asset.s3ObjectKey}`);
 
       // Cache the asset for potential reuse
       this.assetCache.set(cacheKey, asset);
@@ -335,16 +514,22 @@ export class NextjsMultiServer extends Construct {
       // Clean up temporary archive with error handling
       try {
         rmSync(archivePath, { recursive: true });
+        console.log(`[NextjsMultiServer] Cleaned up temporary archive: ${archivePath}`);
       } catch (cleanupError) {
         this.logWarn(
-          `Failed to cleanup temporary archive ${archivePath}: ${cleanupError instanceof Error ? cleanupError.message : String(cleanupError)}`
+          `Failed to cleanup temporary archive ${archivePath}: ${
+            cleanupError instanceof Error ? cleanupError.message : String(cleanupError)
+          }`
         );
       }
 
       return asset;
     } catch (error) {
+      console.error(`[NextjsMultiServer] ERROR in createSourceCodeAsset:`, error);
       this.logError(
-        `Failed to create source code asset for ${bundlePath}: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to create source code asset for ${bundlePath}: ${
+          error instanceof Error ? error.message : String(error)
+        }`
       );
       throw error;
     }
@@ -360,22 +545,40 @@ export class NextjsMultiServer extends Construct {
 
       writeFileSync(resolve(assetsTmpDir, 'index.mjs'), `export function handler() { return '${uniqueId}' }`);
 
+      // Get exclude patterns from props or use defaults
+      const excludePatterns = this.props.excludePatterns ?? [...DEFAULT_EXCLUDE_PATTERNS];
+
+      // Add detailed logging
+      console.log(`[NextjsMultiServer] Creating destination asset with ID: ${uniqueId}`);
+      console.log(`[NextjsMultiServer] Destination temp dir: ${assetsTmpDir}`);
+      console.log(`[NextjsMultiServer] Destination excludePatterns length: ${excludePatterns.length}`);
+      console.log(`[NextjsMultiServer] Destination excludePatterns: ${JSON.stringify(excludePatterns, null, 2)}`);
+
       const destinationAsset = new Asset(this, `DestinationCodeAsset-${uniqueId}`, {
         path: assetsTmpDir,
+        // exclude: excludePatterns,  // Removed: not needed for simple destination asset
         ...this.props.overrides?.destinationCodeAssetProps,
       });
+
+      console.log(`[NextjsMultiServer] Destination asset created successfully`);
+      console.log(`[NextjsMultiServer] Destination asset S3 bucket: ${destinationAsset.bucket.bucketName}`);
+      console.log(`[NextjsMultiServer] Destination asset S3 key: ${destinationAsset.s3ObjectKey}`);
 
       // Clean up with error handling
       try {
         rmSync(assetsTmpDir, { recursive: true });
+        console.log(`[NextjsMultiServer] Cleaned up destination temp dir: ${assetsTmpDir}`);
       } catch (cleanupError) {
         this.logWarn(
-          `Failed to cleanup temporary directory ${assetsTmpDir}: ${cleanupError instanceof Error ? cleanupError.message : String(cleanupError)}`
+          `Failed to cleanup temporary directory ${assetsTmpDir}: ${
+            cleanupError instanceof Error ? cleanupError.message : String(cleanupError)
+          }`
         );
       }
 
       return destinationAsset;
     } catch (error) {
+      console.error(`[NextjsMultiServer] ERROR in createDestinationCodeAsset:`, error);
       this.logError(
         `Failed to create destination code asset: ${error instanceof Error ? error.message : String(error)}`
       );
@@ -403,11 +606,11 @@ export class NextjsMultiServer extends Construct {
   }
 
   /**
-   * Enhanced function creation with automatic optimization based on function type
+   * Enhanced function creation with automatic optimization based on ParsedServerFunction
    */
-  private createFunction(codeAsset: Asset, functionName: string, options?: { handler?: string; streaming?: boolean }) {
+  private createFunction(codeAsset: Asset, serverFunction: ParsedServerFunction, options?: { handler?: string }) {
     try {
-      this.log(`Creating Lambda function: ${functionName}`);
+      this.log(`Creating Lambda function: ${serverFunction.name} (streaming: ${serverFunction.streaming})`);
 
       // Merge user environment variables with default environment variables
       const userEnvironment = {
@@ -415,66 +618,64 @@ export class NextjsMultiServer extends Construct {
         ...this.props.lambda?.environment,
       };
 
-      // Use new optimization system (including environment variables)
-      const functionProps = getOptimizedFunctionProps(this, functionName, userEnvironment);
+      // Use new optimization system with ParsedServerFunction
+      const { functionProps, invokeMode } = getFunctionPropsFromServerFunction(this, serverFunction, userEnvironment);
 
       // Create unique description for each function (including patterns)
-      const customDescription = this.generateFunctionDescription(functionName);
+      const customDescription = this.generateFunctionDescription(serverFunction);
 
-      const fn = new Function(this, `Fn-${functionName}`, {
+      const fn = new Function(this, `Fn-${serverFunction.name}`, {
         ...functionProps,
         code: Code.fromBucket(codeAsset.bucket, codeAsset.s3ObjectKey),
-        handler: options?.handler || 'index.handler',
-        description: customDescription, // Use custom description
-        ...this.props.lambda,
-        environment: functionProps.environment,
-        ...this.props.overrides?.functionProps,
+        handler: options?.handler || serverFunction.handler,
+        description: customDescription,
       });
 
-      this.props.staticAssetBucket.grantReadWrite(fn);
+      // Set invoke mode separately if supported (for Function URL)
+      // Note: InvokeMode is typically set via Function URL configuration
+      // The invokeMode will be used when creating FunctionUrl in NextjsDistribution
+      this.log(`Lambda function created with invoke mode: ${invokeMode} for ${serverFunction.name}`);
 
-      // Log detected function type and environment variables
-      const detectedType = detectFunctionType(functionName);
       this.log(
-        `Successfully created Lambda function: ${functionName} (Type: ${detectedType}, Description: "${customDescription}")`
+        `✅ Lambda function created: ${fn.functionName} | Type: ${getFunctionTypeFromServerFunction(
+          serverFunction
+        )} | Streaming: ${serverFunction.streaming}`
       );
 
       return fn;
     } catch (error) {
-      this.logError(
-        `Failed to create Lambda function ${functionName}: ${error instanceof Error ? error.message : String(error)}`
-      );
+      this.log(`❌ Failed to create Lambda function ${serverFunction.name}: ${error}`);
       throw error;
     }
   }
 
   /**
    * Generate unique description for each function (including patterns it handles)
-   * Enhanced with pre-processed behavior data
+   * Enhanced with ParsedServerFunction data
    */
-  private generateFunctionDescription(functionName: string): string {
+  private generateFunctionDescription(serverFunction: ParsedServerFunction): string {
     try {
       // Get base description by function type
-      const functionType = detectFunctionType(functionName);
+      const functionType = getFunctionTypeFromServerFunction(serverFunction);
       const baseDescription = this.getBaseDescriptionForType(functionType);
 
-      // New approach: query directly from pre-processed behaviors
-      const behaviors = this.props.nextBuild.getBehaviorsForFunction(functionName);
+      // Query behaviors for this function
+      const behaviors = this.props.nextBuild.getBehaviorsForFunction(serverFunction.name);
 
       if (behaviors.length > 0) {
         const patterns = behaviors.map((b) => b.pattern).filter((pattern) => pattern !== '*'); // Exclude wildcards
 
         if (patterns.length > 0) {
           const patternInfo = patterns.join(', ');
-          return `${baseDescription} | Handles: ${patternInfo}`;
+          return `${baseDescription} | Handles: ${patternInfo} | Streaming: ${serverFunction.streaming}`;
         }
       }
 
-      // If no patterns, distinguish by function name
-      return `${baseDescription} | Function: ${functionName}`;
+      return `${baseDescription} | Function: ${serverFunction.name} | Streaming: ${serverFunction.streaming}`;
     } catch (error) {
-      this.logWarn(`Failed to generate description for ${functionName}: ${error}`);
-      return `Next.js Function | ${functionName}`;
+      this.log(`Warning: Failed to generate description for ${serverFunction.name}: ${error}`);
+      const functionType = getFunctionTypeFromServerFunction(serverFunction);
+      return `${this.getBaseDescriptionForType(functionType)} | Function: ${serverFunction.name}`;
     }
   }
 
@@ -524,5 +725,75 @@ export class NextjsMultiServer extends Construct {
       hasMainFunction: !!this.lambdaFunction,
       enabledMultiServer: !!this.props.enableMultiServer,
     };
+  }
+
+  /**
+   * Utility function to list files in a directory (for debugging exclude patterns)
+   */
+  private listDirectoryFiles(dirPath: string, maxFiles = 50): string[] {
+    try {
+      const files: string[] = [];
+      const walk = (currentPath: string, relativePath = '') => {
+        if (files.length >= maxFiles) return;
+
+        const items = fs.readdirSync(currentPath);
+        for (const item of items) {
+          if (files.length >= maxFiles) break;
+
+          const fullPath = join(currentPath, item);
+          const relativeItemPath = relativePath ? join(relativePath, item) : item;
+
+          const stat = fs.statSync(fullPath);
+          if (stat.isDirectory()) {
+            walk(fullPath, relativeItemPath);
+          } else {
+            files.push(relativeItemPath);
+          }
+        }
+      };
+
+      walk(dirPath);
+      return files;
+    } catch (error) {
+      console.error(`[NextjsMultiServer] Error listing directory files: ${error}`);
+      return [];
+    }
+  }
+
+  /**
+   * Create Lambda function directly from local archive using Code.fromAsset
+   * Used when archive size is below MAX_INLINE_ZIP_SIZE to skip extra S3 copy & BucketDeployment.
+   */
+  private createFunctionFromArchive(
+    archivePath: string,
+    serverFunction: ParsedServerFunction,
+    handler?: string
+  ): Function {
+    // Build environment merged
+    const userEnvironment = {
+      ...this.environment,
+      ...this.props.lambda?.environment,
+    };
+
+    const { functionProps, invokeMode } = getFunctionPropsFromServerFunction(this, serverFunction, userEnvironment);
+
+    const description = this.generateFunctionDescription(serverFunction);
+
+    const fn = new Function(this, `Fn-${serverFunction.name}`, {
+      ...functionProps,
+      code: Code.fromAsset(archivePath),
+      handler: handler || serverFunction.handler,
+      description,
+    });
+
+    this.log(
+      `✅ Lambda function (direct asset) created: ${fn.functionName} | size ${(
+        fs.statSync(archivePath).size /
+        (1024 * 1024)
+      ).toFixed(2)}MB | Streaming: ${serverFunction.streaming}`
+    );
+    this.log(`Lambda invoke mode: ${invokeMode}`);
+
+    return fn;
   }
 }

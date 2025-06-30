@@ -28,8 +28,7 @@ import { NextjsProps } from './Nextjs';
 import { NextjsBuild } from './NextjsBuild';
 import { NextjsDomain } from './NextjsDomain';
 import { NextjsMultiServer } from './NextjsMultiServer';
-import { detectFunctionType, getInvokeModeForType } from './utils/common-lambda-props';
-import type { ProcessedBehaviorConfig } from './utils/open-next-types';
+import type { ParsedServerFunction, ProcessedBehaviorConfig } from './utils/open-next-types';
 
 export interface ViewerRequestFunctionProps extends OptionalCloudFrontFunctionProps {
   /**
@@ -219,6 +218,7 @@ export class NextjsDistribution extends Construct {
   private sharedServerCachePolicy?: cloudfront.CachePolicy;
   private sharedServerResponseHeadersPolicy?: ResponseHeadersPolicy;
   private sharedCloudFrontFunction?: cloudfront.Function;
+  private streamingCachePolicy?: cloudfront.CachePolicy;
 
   constructor(scope: Construct, id: string, props: NextjsDistributionProps) {
     super(scope, id);
@@ -481,8 +481,15 @@ export class NextjsDistribution extends Construct {
   private createServerOrigin(serverFunction: lambda.IFunction): origins.HttpOrigin {
     // Extract function name from the function ARN or use fallback logic
     const functionName = serverFunction.functionName;
-    const functionType = detectFunctionType(functionName);
-    const invokeMode = getInvokeModeForType(functionType);
+
+    // Get actual server function configuration
+    const parsedServerFunction = this.getServerFunctionByName(functionName);
+    let invokeMode = lambda.InvokeMode.BUFFERED; // Default
+
+    if (parsedServerFunction) {
+      // Use actual streaming configuration
+      invokeMode = parsedServerFunction.streaming ? lambda.InvokeMode.RESPONSE_STREAM : lambda.InvokeMode.BUFFERED;
+    }
 
     const fnUrl = serverFunction.addFunctionUrl({
       authType: this.fnUrlAuthType,
@@ -807,8 +814,16 @@ async function handler(event) {
   ): cloudfront.BehaviorOptions {
     const serverBehaviorOptions = this.props.overrides?.serverBehaviorOptions;
 
+    // Check if this function supports streaming from ParsedServerFunction
+    const serverFunction = this.getServerFunctionByName(functionName);
+    const isStreamingFunction = serverFunction?.streaming || false;
+
     // Use shared resources instead of creating individual ones
-    const cachePolicy = serverBehaviorOptions?.cachePolicy ?? this.getSharedServerCachePolicy();
+    // For streaming functions, use a more restrictive cache policy
+    const cachePolicy =
+      serverBehaviorOptions?.cachePolicy ??
+      (isStreamingFunction ? this.getStreamingCachePolicy() : this.getSharedServerCachePolicy());
+
     const responseHeadersPolicy =
       serverBehaviorOptions?.responseHeadersPolicy ?? this.getSharedServerResponseHeadersPolicy();
 
@@ -833,6 +848,61 @@ async function handler(event) {
       responseHeadersPolicy,
       ...serverBehaviorOptions,
     };
+  }
+
+  /**
+   * Get server function by name from open-next.output.json
+   */
+  private getServerFunctionByName(functionName: string): ParsedServerFunction | undefined {
+    try {
+      const serverFunctions = this.props.nextBuild.getServerFunctions();
+      return serverFunctions.find((fn) => fn.name === functionName);
+    } catch (error) {
+      console.warn(`Failed to get server function ${functionName}: ${error}`);
+      return undefined;
+    }
+  }
+
+  /**
+   * Check if a function supports streaming based on open-next.output.json
+   * @deprecated Use getServerFunctionByName instead
+   */
+  private isStreamingFunction(functionName: string): boolean {
+    const serverFunction = this.getServerFunctionByName(functionName);
+    return serverFunction?.streaming || false;
+  }
+
+  /**
+   * Creates a more restrictive cache policy for streaming functions
+   */
+  private getStreamingCachePolicy(): cloudfront.CachePolicy {
+    if (!this.streamingCachePolicy) {
+      this.streamingCachePolicy = this.createCachePolicy(
+        'StreamingCachePolicy',
+        'Cache policy optimized for streaming functions',
+        this.props.overrides?.serverCachePolicyProps,
+        {
+          // Streaming functions need minimal caching for real-time responses
+          defaultTtl: Duration.seconds(0), // No default caching
+          maxTtl: Duration.seconds(1), // Very short max cache
+          minTtl: Duration.seconds(0), // No minimum cache
+          queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
+          headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
+            'authorization',
+            'content-type',
+            'accept',
+            'accept-language',
+            'referer',
+            'user-agent',
+            'x-forwarded-host'
+          ),
+          cookieBehavior: cloudfront.CacheCookieBehavior.all(),
+          enableAcceptEncodingGzip: true,
+          enableAcceptEncodingBrotli: true,
+        }
+      );
+    }
+    return this.streamingCachePolicy;
   }
 
   /**
@@ -1091,9 +1161,11 @@ async function handler(event) {
       const serverFunction = this.props.multiServer.getServerFunction(functionName);
       if (!serverFunction) continue;
 
-      // Determine invoke mode based on function type
-      const functionType = detectFunctionType(functionName);
-      const invokeMode = getInvokeModeForType(functionType);
+      // Get actual server function configuration for invoke mode
+      const parsedServerFunction = this.getServerFunctionByName(functionName);
+      const invokeMode = parsedServerFunction?.streaming
+        ? lambda.InvokeMode.RESPONSE_STREAM
+        : lambda.InvokeMode.BUFFERED;
 
       const fnUrl = serverFunction.addFunctionUrl({
         authType: this.fnUrlAuthType,

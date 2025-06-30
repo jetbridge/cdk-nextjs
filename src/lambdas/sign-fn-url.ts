@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import type { CloudFrontHeaders, CloudFrontRequest, CloudFrontRequestHandler } from 'aws-lambda';
 import { Sha256 } from '@aws-crypto/sha256-js';
 import { SignatureV4 } from '@smithy/signature-v4';
+import type { CloudFrontHeaders, CloudFrontRequest, CloudFrontRequestHandler } from 'aws-lambda';
 
 const debug = false;
 

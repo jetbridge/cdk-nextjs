@@ -1,6 +1,8 @@
-import { Duration, PhysicalName, Stack } from 'aws-cdk-lib';
+import { Duration, PhysicalName } from 'aws-cdk-lib';
 import { Architecture, FunctionProps, InvokeMode, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
+
+import type { ParsedServerFunction } from './open-next-types';
 
 /**
  * Defines types of Lambda functions.
@@ -17,6 +19,30 @@ export enum LambdaFunctionType {
 }
 
 /**
+ * Determine function type from ParsedServerFunction configuration
+ */
+export function getFunctionTypeFromServerFunction(serverFunction: ParsedServerFunction): LambdaFunctionType {
+  const { name } = serverFunction;
+
+  // Use actual function configuration to determine type
+  if (name === 'imageOptimizer' || name.includes('image')) {
+    return LambdaFunctionType.IMAGE;
+  }
+
+  if (name.includes('revalidat') || name.includes('warmer')) {
+    return LambdaFunctionType.REVALIDATION;
+  }
+
+  // Check if it's API-only based on common API patterns
+  if (name.includes('api') || name.includes('Auth') || name.includes('jwt')) {
+    return LambdaFunctionType.API;
+  }
+
+  // Default to SERVER for page rendering functions
+  return LambdaFunctionType.SERVER;
+}
+
+/**
  * Defines optimized configurations for each function type.
  */
 const FUNCTION_TYPE_CONFIGS: Record<
@@ -24,172 +50,167 @@ const FUNCTION_TYPE_CONFIGS: Record<
   {
     memorySize: number;
     timeout: Duration;
-    description: string;
-    environment: Record<string, string>;
+    architecture: Architecture;
     invokeMode: InvokeMode;
+    description: string;
   }
 > = {
   [LambdaFunctionType.SERVER]: {
-    memorySize: 1536, // SSR is memory-intensive
-    timeout: Duration.seconds(10),
-    description: 'Next.js Server-Side Rendering Handler',
-    environment: {
-      // SSR function uses only default environment variables
-    },
-    invokeMode: InvokeMode.RESPONSE_STREAM, // SSR supports streaming
+    memorySize: 1024,
+    timeout: Duration.seconds(30),
+    architecture: Architecture.ARM_64,
+    invokeMode: InvokeMode.BUFFERED, // Default, can be overridden for streaming
+    description: 'Next.js SSR function optimized for page rendering',
   },
   [LambdaFunctionType.API]: {
-    memorySize: 1024, // API requires lightweight and fast response
-    timeout: Duration.seconds(5),
-    description: 'Next.js API Handler',
-    environment: {
-      NODE_ENV: 'production', // API function requires production mode
-      NODE_OPTIONS: '--enable-source-maps', // Enable source maps for debugging
-    },
-    invokeMode: InvokeMode.BUFFERED, // API uses buffered response (stability and compatibility)
+    memorySize: 512,
+    timeout: Duration.seconds(15),
+    architecture: Architecture.ARM_64,
+    invokeMode: InvokeMode.BUFFERED, // API functions typically don't need streaming
+    description: 'Next.js API function optimized for fast response',
   },
   [LambdaFunctionType.IMAGE]: {
-    memorySize: 2048, // Image processing is memory-intensive
-    timeout: Duration.seconds(15),
-    description: 'Next.js Image Optimization Handler',
-    environment: {
-      NODE_ENV: 'production',
-      // Image processing optimization settings
-      NEXT_SHARP: '1', // Force use of Sharp library
-    },
-    invokeMode: InvokeMode.BUFFERED, // Image optimization uses buffering
+    memorySize: 1536,
+    timeout: Duration.seconds(60),
+    architecture: Architecture.ARM_64,
+    invokeMode: InvokeMode.BUFFERED, // Image processing doesn't benefit from streaming
+    description: 'Next.js image optimization function',
   },
   [LambdaFunctionType.REVALIDATION]: {
-    memorySize: 512, // Revalidation is lightweight
+    memorySize: 256,
     timeout: Duration.seconds(30),
-    description: 'Next.js Revalidation Handler',
-    environment: {
-      NODE_ENV: 'production',
-      // Cache invalidation optimization
-      REVALIDATION_MODE: 'background',
-    },
-    invokeMode: InvokeMode.BUFFERED, // Revalidation uses buffering
+    architecture: Architecture.ARM_64,
+    invokeMode: InvokeMode.BUFFERED, // Revalidation is typically batch processing
+    description: 'Next.js revalidation function for cache management',
   },
 };
 
 /**
- * Detects Lambda function type based on function name.
- */
-export function detectFunctionType(functionName: string): LambdaFunctionType {
-  const name = functionName.toLowerCase();
-
-  // Type detection through explicit mapping
-  const typePatterns: Array<[RegExp, LambdaFunctionType]> = [
-    [/^(api|apifn)$/i, LambdaFunctionType.API],
-    [/api/i, LambdaFunctionType.API],
-    [/(image|img)/i, LambdaFunctionType.IMAGE],
-    [/(revalidat|cache)/i, LambdaFunctionType.REVALIDATION],
-  ];
-
-  for (const [pattern, type] of typePatterns) {
-    if (pattern.test(name)) {
-      return type;
-    }
-  }
-
-  // Default is SERVER type
-  return LambdaFunctionType.SERVER;
-}
-
-/**
- * Returns default environment variables for function type.
- */
-export function getDefaultEnvironmentForType(functionType: LambdaFunctionType): Record<string, string> {
-  return FUNCTION_TYPE_CONFIGS[functionType].environment;
-}
-
-/**
- * Returns default description for function type.
+ * Get base description for function type
  */
 export function getDescriptionForType(functionType: LambdaFunctionType): string {
   return FUNCTION_TYPE_CONFIGS[functionType].description;
 }
 
 /**
- * Merges environment variables by function type.
- * Priority: userEnvironment > typeEnvironment
+ * Get invoke mode based on function type and streaming configuration
  */
-export function mergeEnvironmentVariables(
-  functionType: LambdaFunctionType,
-  userEnvironment: Record<string, string> = {}
-): Record<string, string> {
-  const typeEnvironment = getDefaultEnvironmentForType(functionType);
+export function getInvokeModeForFunction(functionType: LambdaFunctionType, streaming: boolean = false): InvokeMode {
+  // Override invoke mode for streaming functions
+  if (streaming && functionType === LambdaFunctionType.SERVER) {
+    return InvokeMode.RESPONSE_STREAM;
+  }
 
-  return {
-    ...typeEnvironment,
-    ...userEnvironment, // User settings take priority
-  };
+  return FUNCTION_TYPE_CONFIGS[functionType].invokeMode;
 }
 
 /**
- * Returns common Lambda function properties.
+ * Get optimized function properties based on ParsedServerFunction
  */
-function getBaseFunctionProps(
-  scope: Construct
-): Omit<FunctionProps, 'code' | 'handler' | 'memorySize' | 'timeout' | 'description' | 'environment'> {
-  return {
-    architecture: Architecture.ARM_64, // Use ARM64 for all functions (cost efficiency)
-    runtime: Runtime.NODEJS_20_X,
-    // prevents "Resolution error: Cannot use resource in a cross-environment
-    // fashion, the resource's physical name must be explicit set or use
-    // PhysicalName.GENERATE_IF_NEEDED."
-    functionName: Stack.of(scope).region !== 'us-east-1' ? PhysicalName.GENERATE_IF_NEEDED : undefined,
-  };
-}
-
-/**
- * Returns Lambda function properties optimized for the specified type.
- */
-export function getFunctionProps(
+export function getFunctionPropsFromServerFunction(
   scope: Construct,
-  functionType: LambdaFunctionType,
-  userEnvironment?: Record<string, string>
-): Omit<FunctionProps, 'code' | 'handler'> {
-  const baseProps = getBaseFunctionProps(scope);
-  const typeConfig = FUNCTION_TYPE_CONFIGS[functionType];
-  const environment = mergeEnvironmentVariables(functionType, userEnvironment);
+  serverFunction: ParsedServerFunction,
+  environment: Record<string, string> = {}
+): {
+  functionProps: Omit<FunctionProps, 'code' | 'handler'>;
+  invokeMode: InvokeMode;
+} {
+  const functionType = getFunctionTypeFromServerFunction(serverFunction);
+  const config = FUNCTION_TYPE_CONFIGS[functionType];
+
+  // Enhanced environment with streaming information
+  const enhancedEnvironment = {
+    ...environment,
+    NEXT_STREAMING: serverFunction.streaming.toString(),
+    NEXT_FUNCTION_NAME: serverFunction.name,
+    NEXT_FUNCTION_TYPE: functionType,
+  };
+
+  // Apply streaming optimizations if enabled
+  const streamingOptimizations = serverFunction.streaming ? getStreamingOptimizations(functionType) : {};
+
+  const baseProps: Omit<FunctionProps, 'code' | 'handler'> = {
+    runtime: Runtime.NODEJS_20_X,
+    architecture: config.architecture,
+    memorySize: streamingOptimizations.memorySize || config.memorySize,
+    timeout: streamingOptimizations.timeout || config.timeout,
+    environment: enhancedEnvironment,
+    description: generateFunctionDescription(serverFunction, functionType),
+    functionName: PhysicalName.GENERATE_IF_NEEDED,
+    ...streamingOptimizations.additionalProps,
+  };
 
   return {
-    ...baseProps,
-    memorySize: typeConfig.memorySize,
-    timeout: typeConfig.timeout,
-    description: typeConfig.description,
-    environment,
+    functionProps: baseProps,
+    invokeMode: getInvokeModeForFunction(functionType, serverFunction.streaming),
   };
 }
 
 /**
- * Returns automatically optimized Lambda function properties based on function name.
+ * Get streaming-specific optimizations
  */
-export function getOptimizedFunctionProps(
+function getStreamingOptimizations(functionType: LambdaFunctionType): {
+  memorySize?: number;
+  timeout?: Duration;
+  additionalProps?: Partial<FunctionProps>;
+} {
+  switch (functionType) {
+    case LambdaFunctionType.SERVER:
+      return {
+        memorySize: 1536, // More memory for streaming
+        timeout: Duration.seconds(45), // Longer timeout for streaming
+      };
+    default:
+      return {};
+  }
+}
+
+/**
+ * Generate comprehensive function description
+ */
+function generateFunctionDescription(serverFunction: ParsedServerFunction, functionType: LambdaFunctionType): string {
+  const baseDescription = getDescriptionForType(functionType);
+  const streamingInfo = serverFunction.streaming ? ' | Streaming: Enabled' : ' | Streaming: Disabled';
+  const wrapperInfo = serverFunction.wrapper ? ` | Wrapper: ${serverFunction.wrapper}` : '';
+
+  return `${baseDescription}${streamingInfo}${wrapperInfo}`;
+}
+
+/**
+ * Get common function properties for standard configurations
+ * Enhanced with function type detection and streaming support
+ */
+export function getCommonFunctionProps(
   scope: Construct,
   functionName: string,
-  userEnvironment?: Record<string, string>
-): Omit<FunctionProps, 'code' | 'handler'> {
-  const functionType = detectFunctionType(functionName);
-  return getFunctionProps(scope, functionType, userEnvironment);
+  environment: Record<string, string> = {}
+): Partial<FunctionProps> {
+  const functionType = getUtilityFunctionType(functionName);
+  const config = FUNCTION_TYPE_CONFIGS[functionType];
+
+  return {
+    runtime: Runtime.NODEJS_20_X,
+    architecture: config.architecture,
+    memorySize: config.memorySize,
+    timeout: config.timeout,
+    environment: {
+      ...environment,
+      NEXT_FUNCTION_NAME: functionName,
+      NEXT_FUNCTION_TYPE: functionType,
+    },
+    description: `${config.description} | Function: ${functionName}`,
+    functionName: PhysicalName.GENERATE_IF_NEEDED,
+  };
 }
 
-// Maintain existing functions for backward compatibility
-export function getCommonFunctionProps(scope: Construct): Omit<FunctionProps, 'code' | 'handler'> {
-  return getFunctionProps(scope, LambdaFunctionType.SERVER);
-}
+const UTILITY_FUNCTION_TYPE_MAP: Record<string, LambdaFunctionType> = {
+  'image-optimizer': LambdaFunctionType.IMAGE,
+  'revalidation-queue': LambdaFunctionType.REVALIDATION,
+  'revalidation-insert': LambdaFunctionType.REVALIDATION,
+  'nextjs-bucket-deployment': LambdaFunctionType.SERVER,
+  server: LambdaFunctionType.SERVER,
+};
 
-/**
- * @deprecated Use getOptimizedFunctionProps or getFunctionProps instead
- */
-export function getApiFunctionProps(scope: Construct): Omit<FunctionProps, 'code' | 'handler'> {
-  return getFunctionProps(scope, LambdaFunctionType.API);
-}
-
-/**
- * Returns default Invoke Mode for function type.
- */
-export function getInvokeModeForType(functionType: LambdaFunctionType): InvokeMode {
-  return FUNCTION_TYPE_CONFIGS[functionType].invokeMode;
+function getUtilityFunctionType(functionName: string): LambdaFunctionType {
+  return UTILITY_FUNCTION_TYPE_MAP[functionName] || LambdaFunctionType.SERVER;
 }

@@ -1,3 +1,14 @@
+import type { ListObjectsV2CommandInput, PutObjectCommandInput } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectsCommand,
+  GetObjectCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
+import { Options, Upload } from '@aws-sdk/lib-storage';
+import type { CloudFormationCustomResourceHandler } from 'aws-lambda';
+import type * as JSZipType from 'jszip';
 import {
   createReadStream,
   createWriteStream,
@@ -15,17 +26,6 @@ import {
 import { tmpdir } from 'node:os';
 import { dirname, join, relative, resolve as resolvePath } from 'node:path';
 import { Readable } from 'node:stream';
-import type { ListObjectsV2CommandInput, PutObjectCommandInput } from '@aws-sdk/client-s3';
-import type { CloudFormationCustomResourceHandler } from 'aws-lambda';
-import type * as JSZipType from 'jszip';
-import {
-  DeleteObjectsCommand,
-  GetObjectCommand,
-  ListObjectsV2Command,
-  PutObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3';
-import { Options, Upload } from '@aws-sdk/lib-storage';
 // @ts-ignore jsii doesn't support esModuleInterop
 // eslint-disable-next-line no-duplicate-imports
 import _JSZip from 'jszip';

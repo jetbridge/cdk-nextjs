@@ -1,9 +1,11 @@
-import { Code, Function as LambdaFunction, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
+import { Code, FunctionOptions, Function as LambdaFunction, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
+
 import { OptionalFunctionProps } from './generated-structs';
 import type { NextjsBuild } from './NextjsBuild';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
+import { createArchive } from './utils/create-archive';
 
 export interface NextjsImageOverrides {
   readonly functionProps?: OptionalFunctionProps;
@@ -35,10 +37,21 @@ export class NextjsImage extends LambdaFunction {
   constructor(scope: Construct, id: string, props: NextjsImageProps) {
     const { lambdaOptions, bucket } = props;
 
-    const commonFnProps = getCommonFunctionProps(scope);
+    const commonProps = getCommonFunctionProps(scope, 'image-optimizer');
+    const { runtime, ...otherProps } = commonProps;
+
+    // 1) Create ZIP archive from image optimization function directory to avoid symlink issues
+    const archivePath = createArchive({
+      directory: props.nextBuild.nextImageFnDir,
+      zipFileName: 'image-fn.zip',
+      quiet: true,
+    });
+
     super(scope, id, {
-      ...commonFnProps,
-      code: Code.fromAsset(props.nextBuild.nextImageFnDir),
+      ...otherProps,
+      runtime: runtime || Runtime.NODEJS_20_X, // Provide default runtime
+      // 2) Use ZIP file as Lambda code
+      code: Code.fromAsset(archivePath),
       handler: 'index.handler',
       description: 'Next.js Image Optimization Function',
       ...lambdaOptions,

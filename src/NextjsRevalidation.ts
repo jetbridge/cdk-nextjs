@@ -1,13 +1,15 @@
-import * as fs from 'fs';
 import { CustomResource, Duration, RemovalPolicy, Stack } from 'aws-cdk-lib';
 import { AttributeType, Billing, TableV2 as Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AnyPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Code, Function as LambdaFunction, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
+import { Architecture, Code, FunctionOptions, Function as LambdaFunction, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Queue, QueueProps } from 'aws-cdk-lib/aws-sqs';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
 import {
   OptionalCustomResourceProps,
   OptionalFunctionProps,
@@ -15,6 +17,7 @@ import {
   OptionalTablePropsV2,
 } from './generated-structs';
 import { NextjsBuild } from './NextjsBuild';
+import { NextjsMultiServer } from './NextjsMultiServer';
 import { NextjsServer } from './NextjsServer';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 
@@ -43,7 +46,12 @@ export interface NextjsRevalidationProps {
   /**
    * @see {@link NextjsServer}
    */
-  readonly serverFunction: NextjsServer;
+  readonly serverFunction?: NextjsServer;
+  /**
+   * @see {@link NextjsMultiServer}
+   */
+  readonly multiServer?: NextjsMultiServer;
+  readonly quiet?: boolean;
 }
 
 /**
@@ -58,123 +66,237 @@ export class NextjsRevalidation extends Construct {
   table: Table;
   queueFunction: LambdaFunction;
   tableFunction: LambdaFunction | undefined;
+
   private props: NextjsRevalidationProps;
 
   constructor(scope: Construct, id: string, props: NextjsRevalidationProps) {
     super(scope, id);
     this.props = props;
 
-    this.queue = this.createQueue();
-    this.queueFunction = this.createQueueFunction();
+    try {
+      this.queue = this.createQueue();
+      this.queueFunction = this.createQueueFunction();
 
-    this.table = this.createRevalidationTable();
-    this.tableFunction = this.createRevalidationInsertFunction(this.table);
+      this.table = this.createRevalidationTable();
+      this.tableFunction = this.createRevalidationInsertFunction(this.table);
 
-    this.props.serverFunction.lambdaFunction.addEnvironment('CACHE_DYNAMO_TABLE', this.table.tableName);
+      // Get the main Lambda function for environment variables and permissions
+      const mainLambdaFunction = this.getMainLambdaFunction();
 
-    if (this.props.serverFunction.lambdaFunction.role) {
-      this.table.grantReadWriteData(this.props.serverFunction.lambdaFunction.role);
+      if (mainLambdaFunction) {
+        mainLambdaFunction.addEnvironment('CACHE_DYNAMO_TABLE', this.table.tableName);
+
+        if (mainLambdaFunction.role) {
+          this.table.grantReadWriteData(mainLambdaFunction.role);
+        }
+
+        mainLambdaFunction.addEnvironment('REVALIDATION_QUEUE_URL', this.queue.queueUrl);
+        mainLambdaFunction.addEnvironment('REVALIDATION_QUEUE_REGION', Stack.of(this).region);
+      }
+
+      // In multi-server mode, add environment variables to all server functions
+      if (this.props.multiServer) {
+        this.log('Configuring multi-server revalidation');
+        for (const functionName of this.props.multiServer.getServerFunctionNames()) {
+          const fn = this.props.multiServer.getServerFunction(functionName);
+          if (fn) {
+            fn.addEnvironment('CACHE_DYNAMO_TABLE', this.table.tableName);
+            fn.addEnvironment('REVALIDATION_QUEUE_URL', this.queue.queueUrl);
+            fn.addEnvironment('REVALIDATION_QUEUE_REGION', Stack.of(this).region);
+
+            if (fn.role) {
+              this.table.grantReadWriteData(fn.role);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      this.logError(
+        `Failed to initialize NextjsRevalidation: ${error instanceof Error ? error.message : String(error)}`
+      );
+      throw error;
     }
-
-    this.props.serverFunction.lambdaFunction // allow server fn to send messages to queue
-      ?.addEnvironment('REVALIDATION_QUEUE_URL', this.queue.queueUrl);
-    props.serverFunction.lambdaFunction?.addEnvironment('REVALIDATION_QUEUE_REGION', Stack.of(this).region);
-  }
-
-  private createQueue(): Queue {
-    const queue = new Queue(this, 'Queue', {
-      fifo: true,
-      receiveMessageWaitTime: Duration.seconds(20),
-      ...this.props.overrides?.queueProps,
-    });
-    // https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-least-privilege-policy.html
-    queue.addToResourcePolicy(
-      new PolicyStatement({
-        sid: 'DenyUnsecureTransport',
-        actions: ['sqs:*'],
-        effect: Effect.DENY,
-        principals: [new AnyPrincipal()],
-        resources: [queue.queueArn],
-        conditions: {
-          Bool: { 'aws:SecureTransport': 'false' },
-        },
-      })
-    );
-    // Allow server to send messages to the queue
-    queue.grantSendMessages(this.props.serverFunction.lambdaFunction);
-    return queue;
-  }
-
-  private createQueueFunction(): LambdaFunction {
-    const commonFnProps = getCommonFunctionProps(this);
-    const fn = new LambdaFunction(this, 'QueueFn', {
-      ...commonFnProps,
-      // open-next revalidation-function
-      // see: https://github.com/serverless-stack/open-next/blob/274d446ed7e940cfbe7ce05a21108f4c854ee37a/README.md?plain=1#L65
-      code: Code.fromAsset(this.props.nextBuild.nextRevalidateFnDir),
-      handler: 'index.handler',
-      description: 'Next.js Queue Revalidation Function',
-      timeout: Duration.seconds(30),
-      ...this.props.overrides?.queueFunctionProps,
-    });
-    fn.addEventSource(new SqsEventSource(this.queue, { batchSize: 5 }));
-    return fn;
-  }
-
-  private createRevalidationTable() {
-    return new Table(this, 'Table', {
-      partitionKey: { name: 'tag', type: AttributeType.STRING },
-      sortKey: { name: 'path', type: AttributeType.STRING },
-      billing: Billing.onDemand(),
-      globalSecondaryIndexes: [
-        {
-          indexName: 'revalidate',
-          partitionKey: { name: 'path', type: AttributeType.STRING },
-          sortKey: { name: 'revalidatedAt', type: AttributeType.NUMBER },
-        },
-      ],
-      removalPolicy: RemovalPolicy.DESTROY,
-      ...this.props.overrides?.tableProps,
-    });
   }
 
   /**
-   * This function will insert the initial batch of tag / path / revalidation data into the DynamoDB table during deployment.
-   * @see: {@link https://open-next.js.org/inner_workings/isr#tags}
-   *
-   * @param revalidationTable table to grant function access to
-   * @returns the revalidation insert provider function
+   * Enhanced logging method
    */
-  private createRevalidationInsertFunction(revalidationTable: Table) {
-    const dynamodbProviderPath = this.props.nextBuild.nextRevalidateDynamoDBProviderFnDir;
+  private log(message: string, level: 'info' | 'warn' | 'error' = 'info'): void {
+    if (this.props.quiet) return;
 
-    // note the function may not exist - it only exists if there are cache tags values defined in Next.js build meta files to be inserted
-    // see: https://github.com/sst/open-next/blob/c2b05e3a5f82de40da1181e11c087265983c349d/packages/open-next/src/build.ts#L426-L458
-    if (fs.existsSync(dynamodbProviderPath)) {
-      const commonFnProps = getCommonFunctionProps(this);
-      const insertFn = new LambdaFunction(this, 'DynamoDBProviderFn', {
-        ...commonFnProps,
-        // open-next revalidation-function
-        // see: https://github.com/serverless-stack/open-next/blob/274d446ed7e940cfbe7ce05a21108f4c854ee37a/README.md?plain=1#L65
-        code: Code.fromAsset(this.props.nextBuild.nextRevalidateDynamoDBProviderFnDir),
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] [NextjsRevalidation] ${message}`;
+
+    switch (level) {
+      case 'error':
+        console.error(logMessage);
+        break;
+      case 'warn':
+        console.warn(logMessage);
+        break;
+      default:
+        console.log(logMessage);
+    }
+  }
+
+  private logError(message: string): void {
+    this.log(message, 'error');
+  }
+
+  private logWarn(message: string): void {
+    this.log(message, 'warn');
+  }
+
+  /**
+   * Gets the main Lambda function for single server mode or default function for multi-server mode
+   */
+  private getMainLambdaFunction(): LambdaFunction | undefined {
+    if (this.props.serverFunction?.lambdaFunction) {
+      return this.props.serverFunction.lambdaFunction;
+    }
+    if (this.props.multiServer?.lambdaFunction) {
+      return this.props.multiServer.lambdaFunction;
+    }
+    return undefined;
+  }
+
+  private createQueue(): Queue {
+    try {
+      this.log('Creating revalidation queue');
+      const queue = new Queue(this, 'Queue', {
+        fifo: true,
+        receiveMessageWaitTime: Duration.seconds(20),
+        ...this.props.overrides?.queueProps,
+      });
+      // https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-least-privilege-policy.html
+      queue.addToResourcePolicy(
+        new PolicyStatement({
+          sid: 'DenyUnsecureTransport',
+          actions: ['sqs:*'],
+          effect: Effect.DENY,
+          principals: [new AnyPrincipal()],
+          resources: [queue.queueArn],
+          conditions: {
+            Bool: { 'aws:SecureTransport': 'false' },
+          },
+        })
+      );
+      // Allow server to send messages to the queue
+      const mainLambdaFunction = this.getMainLambdaFunction();
+      if (mainLambdaFunction) {
+        queue.grantSendMessages(mainLambdaFunction);
+      }
+
+      // In multi-server mode, grant permissions to all server functions
+      if (this.props.multiServer) {
+        for (const functionName of this.props.multiServer.getServerFunctionNames()) {
+          const fn = this.props.multiServer.getServerFunction(functionName);
+          if (fn) {
+            queue.grantSendMessages(fn);
+          }
+        }
+      }
+
+      this.log('Successfully created revalidation queue');
+      return queue;
+    } catch (error) {
+      this.logError(`Failed to create queue: ${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    }
+  }
+
+  private createQueueFunction(): LambdaFunction {
+    try {
+      this.log('Creating queue function');
+      const queueFunctionDir = this.getQueueFunctionDirectory();
+
+      if (!queueFunctionDir) {
+        throw new Error('Queue function directory not found');
+      }
+
+      const commonProps = getCommonFunctionProps(this, 'revalidation-queue');
+      const { runtime, ...otherProps } = commonProps;
+
+      const fn = new LambdaFunction(this, 'QueueFn', {
+        ...otherProps,
+        runtime: runtime || Runtime.NODEJS_20_X, // Provide default runtime
+        architecture: Architecture.ARM_64,
+        code: Code.fromAsset(queueFunctionDir),
         handler: 'index.handler',
-        description: 'Next.js Revalidation DynamoDB Provider',
-        timeout: Duration.minutes(1),
+        timeout: Duration.seconds(30),
+        environment: {
+          ...this.props.lambdaOptions?.environment,
+        },
+        ...this.props.lambdaOptions,
+        ...this.props.overrides?.queueFunctionProps,
+      });
+      fn.addEventSource(new SqsEventSource(this.queue, { batchSize: 5 }));
+
+      this.log('Successfully created queue function');
+      return fn;
+    } catch (error) {
+      this.logError(`Failed to create queue function: ${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    }
+  }
+
+  private createRevalidationTable() {
+    try {
+      this.log('Creating revalidation table');
+      const table = new Table(this, 'Table', {
+        partitionKey: { name: 'tag', type: AttributeType.STRING },
+        sortKey: { name: 'path', type: AttributeType.STRING },
+        removalPolicy: RemovalPolicy.DESTROY,
+        billing: Billing.onDemand(),
+        pointInTimeRecovery: false,
+        ...this.props.overrides?.tableProps,
+      });
+
+      this.log('Successfully created revalidation table');
+      return table;
+    } catch (error) {
+      this.logError(`Failed to create revalidation table: ${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    }
+  }
+
+  private createRevalidationInsertFunction(revalidationTable: Table) {
+    try {
+      this.log('Creating revalidation insert function');
+      const insertFunctionDir = this.getInsertFunctionDirectory();
+
+      if (!insertFunctionDir) {
+        this.logWarn('Insert function directory not found, skipping creation');
+        return undefined;
+      }
+
+      const commonProps = getCommonFunctionProps(this, 'revalidation-insert');
+      const { runtime, ...otherProps } = commonProps;
+
+      const fn = new LambdaFunction(this, 'InsertFn', {
+        ...otherProps,
+        runtime: runtime || Runtime.NODEJS_20_X, // Provide default runtime
+        architecture: Architecture.ARM_64,
+        code: Code.fromAsset(insertFunctionDir),
+        handler: 'index.handler',
         environment: {
           CACHE_DYNAMO_TABLE: revalidationTable.tableName,
+          ...this.props.lambdaOptions?.environment,
         },
+        logRetention: RetentionDays.THREE_DAYS,
+        ...this.props.lambdaOptions,
         ...this.props.overrides?.insertFunctionProps,
       });
 
-      revalidationTable.grantReadWriteData(insertFn);
+      revalidationTable.grantWriteData(fn);
 
-      const provider = new Provider(this, 'DynamoDBProvider', {
-        onEventHandler: insertFn,
+      const provider = new Provider(this, 'InsertProvider', {
+        onEventHandler: fn,
         logRetention: RetentionDays.ONE_DAY,
         ...this.props.overrides?.insertProviderProps,
       });
 
-      new CustomResource(this, 'DynamoDBResource', {
+      new CustomResource(this, 'InsertCustomResource', {
         serviceToken: provider.serviceToken,
         properties: {
           version: Date.now().toString(),
@@ -182,9 +304,69 @@ export class NextjsRevalidation extends Construct {
         ...this.props.overrides?.insertCustomResourceProps,
       });
 
-      return insertFn;
+      this.log('Successfully created revalidation insert function');
+      return fn;
+    } catch (error) {
+      this.logError(
+        `Failed to create revalidation insert function: ${error instanceof Error ? error.message : String(error)}`
+      );
+      throw error;
     }
+  }
 
-    return undefined;
+  /**
+   * Gets insert function directory - always uses legacy path for deployment-time data insertion
+   */
+  private getInsertFunctionDirectory(): string | undefined {
+    try {
+      // Insert Function is used for initial data insertion during deployment, so always use legacy path
+      const legacyPath = this.props.nextBuild.nextRevalidateDynamoDBProviderFnDir;
+      if (fs.existsSync(legacyPath)) {
+        this.log(`Using revalidation insert function path: ${legacyPath}`);
+        return legacyPath;
+      }
+
+      this.logWarn('Revalidation insert function directory not found');
+      return undefined;
+    } catch (error) {
+      this.logError(
+        `Failed to get insert function directory: ${error instanceof Error ? error.message : String(error)}`
+      );
+      return undefined;
+    }
+  }
+
+  /**
+   * Enhanced method to get queue function directory with multi-server support
+   */
+  private getQueueFunctionDirectory(): string | undefined {
+    try {
+      // First try to get from multi-server configuration
+      if (this.props.nextBuild.openNextOutput?.additionalProps?.revalidationFunction) {
+        const revalidationConfig = this.props.nextBuild.openNextOutput.additionalProps.revalidationFunction;
+        const bundlePath = path.join(this.props.nextBuild.props.nextjsPath, revalidationConfig.bundle);
+        if (fs.existsSync(bundlePath)) {
+          this.log(`Found revalidation queue function from open-next config: ${bundlePath}`);
+          return bundlePath;
+        } else {
+          this.logWarn(`Revalidation bundle path from config does not exist: ${bundlePath}`);
+        }
+      }
+
+      // Fallback to legacy path
+      const legacyPath = this.props.nextBuild.nextRevalidateFnDir;
+      if (fs.existsSync(legacyPath)) {
+        this.log(`Using legacy revalidation queue function path: ${legacyPath}`);
+        return legacyPath;
+      }
+
+      this.logWarn('No valid revalidation queue function directory found');
+      return this.props.nextBuild.nextRevalidateFnDir; // Return anyway for backward compatibility
+    } catch (error) {
+      this.logError(
+        `Failed to get queue function directory: ${error instanceof Error ? error.message : String(error)}`
+      );
+      return this.props.nextBuild.nextRevalidateFnDir; // Return anyway for backward compatibility
+    }
   }
 }

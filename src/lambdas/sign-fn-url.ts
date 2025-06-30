@@ -11,7 +11,11 @@ const debug = false;
  * IAM Auth.
  */
 export const handler: CloudFrontRequestHandler = async (event) => {
-  const request = event.Records[0].cf.request;
+  const request = event?.Records?.[0]?.cf.request;
+  if (!request) {
+    throw new Error('No request found');
+  }
+
   if (debug) console.log('input request', JSON.stringify(request, null, 2));
 
   escapeQuerystring(request);
@@ -53,10 +57,15 @@ export async function signRequest(request: CloudFrontRequest) {
     body = Buffer.from(request.body.data, 'base64').toString();
   }
   const params = queryStringToQueryParamBag(request.querystring);
+  const hostname = headerBag.host;
+  if (!hostname) {
+    throw new Error('Host header is missing');
+  }
+
   const signed = await sigv4.sign({
     method: request.method,
     headers: headerBag,
-    hostname: headerBag.host,
+    hostname,
     path: request.uri,
     body,
     query: params,
@@ -107,7 +116,11 @@ export function cfHeadersToHeaderBag(headers: CloudFrontHeaders): Bag {
   // assume first header value is the best match
   // headerKey is case insensitive whereas key (adjacent property value that is
   // not destructured) is case sensitive. we arbitrarily use case insensitive key
-  for (const [headerKey, [{ value }]] of Object.entries(headers)) {
+  for (const [headerKey, headerValues] of Object.entries(headers)) {
+    if (!headerValues || headerValues.length === 0) continue;
+    const headerValue = headerValues[0];
+    if (!headerValue || !headerValue.value) continue;
+    const { value } = headerValue;
     headerBag[headerKey] = value;
     // if there is an authorization from CloudFront, move it as
     // it will be overwritten when the headers are signed

@@ -1,4 +1,14 @@
-/* eslint-disable import/no-extraneous-dependencies */
+import type { ListObjectsV2CommandInput, PutObjectCommandInput } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectsCommand,
+  GetObjectCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
+import { Options, Upload } from '@aws-sdk/lib-storage';
+import type { CloudFormationCustomResourceHandler } from 'aws-lambda';
+import type * as JSZipType from 'jszip';
 import {
   createReadStream,
   createWriteStream,
@@ -16,24 +26,16 @@ import {
 import { tmpdir } from 'node:os';
 import { dirname, join, relative, resolve as resolvePath } from 'node:path';
 import { Readable } from 'node:stream';
-import {
-  DeleteObjectsCommand,
-  GetObjectCommand,
-  ListObjectsV2Command,
-  type ListObjectsV2CommandInput,
-  PutObjectCommand,
-  type PutObjectCommandInput,
-  S3Client,
-} from '@aws-sdk/client-s3';
-import { Options, Upload } from '@aws-sdk/lib-storage';
-import type { CloudFormationCustomResourceHandler } from 'aws-lambda';
-import type * as JSZipType from 'jszip';
 // @ts-ignore jsii doesn't support esModuleInterop
 // eslint-disable-next-line no-duplicate-imports
 import _JSZip from 'jszip';
 import * as micromatch from 'micromatch';
 import * as mime from 'mime-types';
+
 import type { CustomResourceProperties, NextjsBucketDeploymentProps } from '../NextjsBucketDeployment';
+
+/* eslint-disable import/no-extraneous-dependencies */
+
 const JSZip = _JSZip as JSZipType;
 
 const s3 = new S3Client({});
@@ -54,7 +56,10 @@ export const handler: CloudFormationCustomResourceHandler = async (event, contex
         localDestinationPath: sourceZipFilePath,
       });
       debug('Extracting zip');
-      await extractZip({ sourceZipFilePath, destinationDirPath: sourceDirPath });
+      await extractZip({
+        sourceZipFilePath,
+        destinationDirPath: sourceDirPath,
+      });
       const filePaths = listFilePaths(sourceDirPath);
       if (props.substitutionConfig && Object.keys(props.substitutionConfig).length) {
         debug('Replacing environment variables: ' + JSON.stringify(props.substitutionConfig));
@@ -233,7 +238,10 @@ async function listOldObjectKeys({
   const oldObjectKeys: string[] = [];
   let nextToken: string | undefined = undefined;
   do {
-    const cmd: ListObjectsV2CommandInput = { Bucket: bucketName, Prefix: keyPrefix };
+    const cmd: ListObjectsV2CommandInput = {
+      Bucket: bucketName,
+      Prefix: keyPrefix,
+    };
     if (nextToken) {
       cmd.ContinuationToken = nextToken;
     }
@@ -330,7 +338,10 @@ function zipObjects({ tmpDir }: { tmpDir: string }): Promise<Buffer> {
         unixPermissions: parseInt('120755', 8),
       });
     } else {
-      zip.file(relativePath, readFileSync(filePath), { dir: stat.isDirectory(), unixPermissions: stat.mode });
+      zip.file(relativePath, readFileSync(filePath), {
+        dir: stat.isDirectory(),
+        unixPermissions: stat.mode,
+      });
     }
   }
   return zip.generateAsync({

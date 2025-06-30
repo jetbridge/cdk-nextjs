@@ -1,10 +1,11 @@
-import * as fs from 'node:fs';
-import { tmpdir } from 'node:os';
-import { resolve } from 'node:path';
 import { RemovalPolicy, Stack } from 'aws-cdk-lib';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
+import * as fs from 'node:fs';
+import { tmpdir } from 'node:os';
+import { resolve } from 'node:path';
+
 import { CACHE_BUCKET_KEY_PREFIX } from './constants';
 import { OptionalAssetProps, OptionalNextjsBucketDeploymentProps } from './generated-structs';
 import { NextjsBucketDeployment } from './NextjsBucketDeployment';
@@ -104,8 +105,23 @@ export class NextjsStaticAssets extends Construct {
   private createAsset(): Asset {
     // create temporary directory to join open-next's static output with cache output
     const tmpAssetsDir = fs.mkdtempSync(resolve(tmpdir(), 'cdk-nextjs-assets-'));
-    fs.cpSync(this.props.nextBuild.nextStaticDir, tmpAssetsDir, { recursive: true });
-    fs.cpSync(this.props.nextBuild.nextCacheDir, resolve(tmpAssetsDir, CACHE_BUCKET_KEY_PREFIX), { recursive: true });
+
+    // 1) Copy static files
+    fs.cpSync(this.props.nextBuild.nextStaticDir, tmpAssetsDir, {
+      recursive: true,
+    });
+
+    // 2) Copy cache directory only if it exists
+    const cacheDir = this.props.nextBuild.nextCacheDir;
+    if (fs.existsSync(cacheDir)) {
+      fs.cpSync(cacheDir, resolve(tmpAssetsDir, CACHE_BUCKET_KEY_PREFIX), {
+        recursive: true,
+      });
+    } else {
+      // Show warning only when needed (quietly ignore)
+      console.warn(`Warning: cache directory not found at ${cacheDir}, skipping copy.`);
+    }
+
     const asset = new Asset(this, 'Asset', {
       path: tmpAssetsDir,
       ...this.props.overrides?.assetProps,

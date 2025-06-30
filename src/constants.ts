@@ -6,3 +6,4 @@ export const NEXTJS_BUILD_REVALIDATE_FN_DIR = 'revalidation-function';
 export const NEXTJS_BUILD_DYNAMODB_PROVIDER_FN_DIR = 'dynamodb-provider';
 export const NEXTJS_BUILD_IMAGE_FN_DIR = 'image-optimization-function';
 export const NEXTJS_BUILD_SERVER_FN_DIR = 'server-functions/default';
+export const MAX_INLINE_ZIP_SIZE = 50 * 1024 * 1024; // 50MB

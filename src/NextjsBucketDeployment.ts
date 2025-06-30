@@ -1,9 +1,10 @@
-import * as path from 'node:path';
 import { CustomResource, Duration, Token } from 'aws-cdk-lib';
-import { Code, Function } from 'aws-cdk-lib/aws-lambda';
+import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { Construct } from 'constructs';
+import * as path from 'node:path';
+
 import { OptionalCustomResourceProps, OptionalFunctionProps } from './generated-structs';
 import { getCommonFunctionProps } from './utils/common-lambda-props';
 
@@ -129,8 +130,12 @@ export class NextjsBucketDeployment extends Construct {
   }
 
   private createFunction() {
+    const commonProps = getCommonFunctionProps(this, 'nextjs-bucket-deployment');
+    const { runtime, ...otherProps } = commonProps;
+
     const fn = new Function(this, 'Fn', {
-      ...getCommonFunctionProps(this),
+      ...otherProps,
+      runtime: runtime || Runtime.NODEJS_20_X, // Provide default runtime
       code: Code.fromAsset(path.resolve(__dirname, '..', 'assets', 'lambdas', 'nextjs-bucket-deployment')),
       handler: 'index.handler',
       timeout: Duration.minutes(5),

@@ -6,7 +6,8 @@ Here is a short before you get started:
 
 1. Please make sure to create an issue first.
 2. Link the bug in your pull request.
-3. Run `yarn build` after you made your changes and before you open a pull request.
+3. If first time building you must run `yarn install` and then `yarn compile`.
+4. Run `yarn build` after you made your changes and before you open a pull request.
 
 ## Projen
 This project uses [Projen](https://projen.io/). Don't manually update package.json or use `yarn add`. Update dependencies in .projenrc.ts then run `yarn projen`.

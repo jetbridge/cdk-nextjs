@@ -302,7 +302,7 @@ export class NextjsDistribution extends Construct {
     originRequestEdgeFn.currentVersion.grantInvoke(new ServicePrincipal('lambda.amazonaws.com'));
     originRequestEdgeFn.addToRolePolicy(
       new PolicyStatement({
-        actions: ['lambda:InvokeFunctionUrl'],
+        actions: ['lambda:InvokeFunctionUrl', 'lambda:InvokeFunction'],
         resources: [this.props.serverFunction.functionArn, this.props.imageOptFunction.functionArn],
       })
     );

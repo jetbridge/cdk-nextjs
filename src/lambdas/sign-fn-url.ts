@@ -36,8 +36,8 @@ let sigv4: SignatureV4;
  * `lambda.FunctionUrlAuthType.AWS_IAM` we need to sign the `CloudFrontRequest`s
  * with AWS IAM SigV4 so that CloudFront can invoke the Nextjs server and image
  * optimization functions via function URLs. When configured, this lambda@edge
- * function has the permission, lambda:InvokeFunctionUrl, to invoke both
- * functions.
+ * function has the permissions, lambda:InvokeFunctionUrl and lambda:InvokeFunction,
+ * to invoke both functions.
  * @link https://medium.com/@dario_26152/restrict-access-to-lambda-functionurl-to-cloudfront-using-aws-iam-988583834705
  */
 export async function signRequest(request: CloudFrontRequest) {

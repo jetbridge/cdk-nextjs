@@ -38,7 +38,7 @@ describe('LambdaOriginRequestIamAuth', () => {
     const signedAuthorizationHeader = request.headers.authorization[0].value;
 
     const volatileHeaders = ['via', 'x-forwarded-for'];
-    volatileHeaders.every((h) => expect(signedAuthorizationHeader).not.toContain(h));
+    volatileHeaders.forEach((h) => expect(signedAuthorizationHeader).not.toContain(h));
   });
 
   test('getRegionFromLambdaUrl should correctly get region', () => {

@@ -52,7 +52,7 @@ export async function signRequest(request: CloudFrontRequest) {
   }
   const params = queryStringToQueryParamBag(request.querystring);
 
-  // This headers tend to change from hop to hop
+  // These headers tend to change from hop to hop
   const volatileHeaders = new Set(['via', 'x-forwarded-for']);
   const signed = await sigv4.sign(
     {

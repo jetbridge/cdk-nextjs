@@ -45,23 +45,27 @@ export async function signRequest(request: CloudFrontRequest) {
     const region = getRegionFromLambdaUrl(request.origin?.custom?.domainName || '');
     sigv4 = getSigV4(region);
   }
-  // remove x-forwarded-for b/c it changes from hop to hop
-  delete request.headers['x-forwarded-for'];
   const headerBag = cfHeadersToHeaderBag(request.headers);
   let body: string | undefined;
   if (request.body?.data) {
     body = Buffer.from(request.body.data, 'base64').toString();
   }
   const params = queryStringToQueryParamBag(request.querystring);
-  const signed = await sigv4.sign({
-    method: request.method,
-    headers: headerBag,
-    hostname: headerBag.host,
-    path: request.uri,
-    body,
-    query: params,
-    protocol: 'https',
-  });
+
+  // These headers tend to change from hop to hop
+  const volatileHeaders = new Set(['via', 'x-forwarded-for']);
+  const signed = await sigv4.sign(
+    {
+      method: request.method,
+      headers: headerBag,
+      hostname: headerBag.host,
+      path: request.uri,
+      body,
+      query: params,
+      protocol: 'https',
+    },
+    { unsignableHeaders: volatileHeaders }
+  );
   request.headers = headerBagToCfHeaders(signed.headers);
 }
 
@@ -103,7 +107,7 @@ type Bag = Record<string, string>;
  * mismatch
  */
 export function cfHeadersToHeaderBag(headers: CloudFrontHeaders): Bag {
-  let headerBag: Bag = {};
+  const headerBag: Bag = {};
   // assume first header value is the best match
   // headerKey is case insensitive whereas key (adjacent property value that is
   // not destructured) is case sensitive. we arbitrarily use case insensitive key

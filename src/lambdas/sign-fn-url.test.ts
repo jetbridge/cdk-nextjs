@@ -1,13 +1,24 @@
-import type { CloudFrontRequestEvent } from 'aws-lambda';
+import type { CloudFrontRequest, CloudFrontRequestEvent } from 'aws-lambda';
 import { getRegionFromLambdaUrl, signRequest } from './sign-fn-url';
 
 describe('LambdaOriginRequestIamAuth', () => {
-  test('signRequest should add x-amz headers', async () => {
+  const originalEnv = process.env;
+
+  beforeEach(() => {
     // dummy AWS credentials
     process.env = { ...process.env, ...getFakeAwsCreds() };
+  });
+
+  afterEach(() => {
+    process.env = { ...originalEnv };
+  });
+
+  test('signRequest should add x-amz headers', async () => {
     const event = getFakePageRequest();
-    const request = event.Records[0].cf.request;
+    const request: CloudFrontRequest = event.Records[0].cf.request;
+
     await signRequest(request);
+
     const securityHeaders = [
       'x-amz-date',
       'x-amz-security-token',
@@ -17,6 +28,17 @@ describe('LambdaOriginRequestIamAuth', () => {
     ];
     const hasSignedHeaders = securityHeaders.every((h) => h in request.headers);
     expect(hasSignedHeaders).toBe(true);
+  });
+
+  test('signRequest should omit volatile headers', async () => {
+    const event = getFakePageRequest();
+    const request: CloudFrontRequest = event.Records[0].cf.request;
+
+    await signRequest(request);
+    const signedAuthorizationHeader = request.headers.authorization[0].value;
+
+    const volatileHeaders = ['via', 'x-forwarded-for'];
+    volatileHeaders.forEach((h) => expect(signedAuthorizationHeader).not.toContain(h));
   });
 
   test('getRegionFromLambdaUrl should correctly get region', () => {

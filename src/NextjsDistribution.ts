@@ -289,7 +289,7 @@ export class NextjsDistribution extends Construct {
   private createEdgeLambda(): cloudfront.EdgeLambda {
     const signFnUrlDir = path.resolve(__dirname, '..', 'assets', 'lambdas', 'sign-fn-url');
     const originRequestEdgeFn = new cloudfront.experimental.EdgeFunction(this, 'EdgeFn', {
-      runtime: Runtime.NODEJS_20_X,
+      runtime: Runtime.NODEJS_22_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset(signFnUrlDir),
       currentVersionOptions: {

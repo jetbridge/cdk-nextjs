@@ -65,6 +65,13 @@ export interface OptionalARecordProps {
    */
   readonly multiValueAnswer?: boolean;
   /**
+   * The health check to associate with the record set.
+   * Route53 will return this record set in response to DNS queries only if the health check is passing.
+   * @default - No health check configured
+   * @stability stable
+   */
+  readonly healthCheck?: aws_route53.IHealthCheck;
+  /**
    * The geographical origin for this record to return DNS records based on the user's location.
    * @stability stable
    */
@@ -80,7 +87,8 @@ export interface OptionalARecordProps {
    * > an existing Record Set's `deleteExisting` property from `false -> true` after deployment
    * > will delete the record!
    * @default false
-   * @stability stable
+   * @deprecated This property is dangerous and can lead to unintended record deletion in case of deployment failure.
+   * @stability deprecated
    */
   readonly deleteExisting?: boolean;
   /**
@@ -89,6 +97,13 @@ export interface OptionalARecordProps {
    * @stability stable
    */
   readonly comment?: string;
+  /**
+   * The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
+   * A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
+   * @default - No CIDR routing configured
+   * @stability stable
+   */
+  readonly cidrRoutingConfig?: aws_route53.CidrRoutingConfig;
   /**
    * The hosted zone in which to define the new record.
    * @stability stable

@@ -59,7 +59,7 @@
       "description": "Create a JavaScript bundle from ./src/lambdas/nextjs-bucket-deployment.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle ./src/lambdas/nextjs-bucket-deployment.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap --minify"
+          "exec": "esbuild --bundle ./src/lambdas/nextjs-bucket-deployment.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap --minify"
         }
       ]
     },
@@ -68,7 +68,7 @@
       "description": "Continuously update the JavaScript bundle from ./src/lambdas/nextjs-bucket-deployment.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle ./src/lambdas/nextjs-bucket-deployment.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap --minify --watch"
+          "exec": "esbuild --bundle ./src/lambdas/nextjs-bucket-deployment.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/lambdas/nextjs-bucket-deployment/index.js\" --sourcemap --minify --watch"
         }
       ]
     },
@@ -77,7 +77,7 @@
       "description": "Create a JavaScript bundle from ./src/lambdas/sign-fn-url.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle ./src/lambdas/sign-fn-url.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-url/index.js\" --sourcemap --minify"
+          "exec": "esbuild --bundle ./src/lambdas/sign-fn-url.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-url/index.js\" --sourcemap --minify"
         }
       ]
     },
@@ -86,7 +86,7 @@
       "description": "Continuously update the JavaScript bundle from ./src/lambdas/sign-fn-url.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle ./src/lambdas/sign-fn-url.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-url/index.js\" --sourcemap --minify --watch"
+          "exec": "esbuild --bundle ./src/lambdas/sign-fn-url.ts --target=\"node20\" --platform=\"node\" --outfile=\"assets/lambdas/sign-fn-url/index.js\" --sourcemap --minify --watch"
         }
       ]
     },
@@ -327,13 +327,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@aws-crypto/sha256-js,@aws-sdk/client-s3,@aws-sdk/lib-storage,@mrgrain/jsii-struct-builder,@smithy/signature-v4,@types/adm-zip,@types/aws-lambda,@types/jest,@types/micromatch,@types/mime-types,aws-lambda,esbuild,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-pacmak,jszip,micromatch,mime-types,prettier,projen,ts-jest,ts-node,typescript,undici"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@aws-crypto/sha256-js,@aws-sdk/client-s3,@aws-sdk/lib-storage,@mrgrain/jsii-struct-builder,@smithy/signature-v4,@types/adm-zip,@types/aws-lambda,@types/jest,@types/micromatch,@types/mime-types,aws-lambda,esbuild,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-pacmak,jszip,micromatch,mime-types,prettier,projen,ts-jest,ts-node,typescript"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @aws-crypto/sha256-js @aws-sdk/client-s3 @aws-sdk/lib-storage @mrgrain/jsii-struct-builder @smithy/signature-v4 @types/adm-zip @types/aws-lambda @types/jest @types/micromatch @types/mime-types @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-lambda commit-and-tag-version esbuild eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii jszip micromatch mime-types prettier projen ts-jest ts-node typescript undici aws-cdk-lib constructs"
+          "exec": "yarn upgrade @aws-crypto/sha256-js @aws-sdk/client-s3 @aws-sdk/lib-storage @mrgrain/jsii-struct-builder @smithy/signature-v4 @types/adm-zip @types/aws-lambda @types/jest @types/micromatch @types/mime-types @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-lambda commit-and-tag-version esbuild eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii jszip micromatch mime-types prettier projen ts-jest ts-node typescript aws-cdk-lib constructs"
         },
         {
           "exec": "npx projen"

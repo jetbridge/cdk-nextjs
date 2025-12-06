@@ -50,10 +50,10 @@
     "@types/jest": "^27",
     "@types/micromatch": "^4.0.9",
     "@types/mime-types": "^2.1.4",
-    "@types/node": "^18",
+    "@types/node": "^20",
     "@typescript-eslint/eslint-plugin": "^8",
     "@typescript-eslint/parser": "^8",
-    "aws-cdk-lib": "2.131.0",
+    "aws-cdk-lib": "2.232.1",
     "aws-lambda": "^1.0.7",
     "commit-and-tag-version": "^12",
     "constructs": "10.0.5",
@@ -77,11 +77,10 @@
     "projen": "^0.91.13",
     "ts-jest": "^27",
     "ts-node": "^10.9.2",
-    "typescript": "4.9.5",
-    "undici": "^5.28.5"
+    "typescript": "4.9.5"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "^2.131.0",
+    "aws-cdk-lib": "^2.232.1",
     "constructs": "^10.0.5"
   },
   "keywords": [
@@ -98,7 +97,7 @@
     "standalone"
   ],
   "engines": {
-    "node": ">= 18.18.0"
+    "node": ">= 20.0.0"
   },
   "main": "lib/index.js",
   "license": "Apache-2.0",

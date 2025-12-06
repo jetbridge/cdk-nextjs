@@ -43,6 +43,14 @@ export interface OptionalCertificateProps {
    */
   readonly certificateName?: string;
   /**
+   * Enable or disable export of this certificate.
+   * If you issue an exportable public certificate, there is a charge at certificate issuance and again when the certificate renews.
+   * Ref: https://aws.amazon.com/certificate-manager/pricing
+   * @default false
+   * @stability stable
+   */
+  readonly allowExport?: boolean;
+  /**
    * Fully-qualified domain name to request a certificate for.
    * May contain wildcards, such as ``*.domain.com``.
    * @stability stable

@@ -9,7 +9,7 @@ const commonBundlingOptions = {
   minify: true,
   platform: 'node',
   sourcemap: true,
-  target: 'node18',
+  target: 'node20',
 } satisfies BuildOptions;
 
 const commonTscOptions: TypeScriptCompilerOptions = {
@@ -18,7 +18,7 @@ const commonTscOptions: TypeScriptCompilerOptions = {
   // esModuleInterop: true, // why doesn't this work?
 };
 
-const minNodeVersion = '18.18.0';
+const minNodeVersion = '20.0.0';
 
 const project = new awscdk.AwsCdkConstructLibrary({
   // repository config
@@ -65,7 +65,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   gitignore: ['.idea', '.DS_Store'],
   // dependency config
   jsiiVersion: '~5.7.1',
-  cdkVersion: '2.131.0',
+  cdkVersion: '2.232.1',
   bundledDeps: [] /* Runtime dependencies of this module. */,
   devDeps: [
     '@aws-crypto/sha256-js',
@@ -77,13 +77,12 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@types/aws-lambda',
     '@types/micromatch',
     '@types/mime-types',
-    '@types/node@^18',
+    '@types/node@^20',
     'aws-lambda',
     'constructs',
     'jszip',
     'micromatch',
     'mime-types',
-    'undici',
   ] /* Build dependencies for this module. */,
   // misc config
   sampleCode: false, // do not generate sample test files

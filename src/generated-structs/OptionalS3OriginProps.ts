@@ -19,6 +19,15 @@ export interface OptionalS3OriginProps {
    */
   readonly originPath?: string;
   /**
+   * The time that a request from CloudFront to the origin can stay open and wait for a response.
+   * If the complete response isn't received from the origin by this time, CloudFront ends the connection.
+   *
+   * Valid values are 1-3600 seconds, inclusive.
+   * @default undefined -  AWS CloudFront default is not enforcing a maximum value
+   * @stability stable
+   */
+  readonly responseCompletionTimeout?: Duration;
+  /**
    * When you enable Origin Shield in the AWS Region that has the lowest latency to your origin, you can get better network performance.
    * @default - origin shield not enabled
    * @stability stable
@@ -37,6 +46,12 @@ export interface OptionalS3OriginProps {
    * @stability stable
    */
   readonly originId?: string;
+  /**
+   * The unique identifier of an origin access control for this origin.
+   * @default - no origin access control
+   * @stability stable
+   */
+  readonly originAccessControlId?: string;
   /**
    * A list of HTTP header names and values that CloudFront adds to requests it sends to the origin.
    * @default {}

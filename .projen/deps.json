@@ -42,7 +42,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^18",
+      "version": "^20",
       "type": "build"
     },
     {
@@ -154,12 +154,8 @@
       "type": "build"
     },
     {
-      "name": "undici",
-      "type": "build"
-    },
-    {
       "name": "aws-cdk-lib",
-      "version": "^2.131.0",
+      "version": "^2.232.1",
       "type": "peer"
     },
     {

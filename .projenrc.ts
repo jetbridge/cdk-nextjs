@@ -90,6 +90,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
 project.bundler.addBundle('./src/lambdas/nextjs-bucket-deployment.ts', commonBundlingOptions);
 project.bundler.addBundle('./src/lambdas/sign-fn-url.ts', commonBundlingOptions);
+project.npmignore?.exclude('/examples/**');
 
 const buildWorkflow = project.tryFindObjectFile('.github/workflows/build.yml');
 buildWorkflow?.patch(JsonPatch.replace('/jobs/build/steps/3/run', 'npx projen compile && npx projen build'));

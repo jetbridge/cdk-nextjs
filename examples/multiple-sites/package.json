@@ -8,14 +8,14 @@
   },
   "devDependencies": {
     "@types/node": "20.5.7",
-    "aws-cdk": "2.94.0",
-    "esbuild": "^0.19.3",
-    "tsx": "^3.12.10",
+    "aws-cdk": "^2.1105.0",
+    "esbuild": "^0.25.12",
+    "tsx": "^4.21.0",
     "typescript": "~5.2.2"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.94.0",
+    "aws-cdk-lib": "^2.237.1",
     "cdk-nextjs-standalone": "link:../..",
-    "constructs": "^10.0.0"
+    "constructs": "^10.4.5"
   }
 }

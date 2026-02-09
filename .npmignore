@@ -23,6 +23,7 @@ tsconfig.tsbuildinfo
 /.eslintrc.json
 !.jsii
 !/assets/
+/examples/**
 /.gitattributes
 /.projenrc.ts
 /projenrc

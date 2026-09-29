@@ -1,7 +1,7 @@
 import { ProjenStruct, Struct } from '@mrgrain/jsii-struct-builder';
 import { BuildOptions } from 'esbuild';
 import { JsonPatch, awscdk } from 'projen';
-import { TypeScriptCompilerOptions, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
+import { NodePackageManager, TypeScriptCompilerOptions, UpgradeDependenciesSchedule } from 'projen/lib/javascript';
 
 const commonBundlingOptions = {
   bundle: true,
@@ -35,6 +35,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   // package config
   name: 'cdk-nextjs-standalone',
   packageName: 'cdk-nextjs-standalone',
+  packageManager: NodePackageManager.YARN_CLASSIC,
+  npmTrustedPublishing: true,
   majorVersion: 4,
   // prerelease: 'beta',
   minNodeVersion,
@@ -64,7 +66,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   tsconfigDev: { compilerOptions: { ...commonTscOptions } },
   gitignore: ['.idea', '.DS_Store'],
   // dependency config
-  jsiiVersion: '~5.7.1',
+  jsiiVersion: '~5.9.0',
   cdkVersion: '2.232.1',
   bundledDeps: [] /* Runtime dependencies of this module. */,
   devDeps: [

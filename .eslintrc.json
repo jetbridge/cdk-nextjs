@@ -13,7 +13,12 @@
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
-    "project": "./tsconfig.dev.json"
+    "projectService": {
+      "allowDefaultProject": [
+        ".projenrc.ts"
+      ],
+      "defaultProject": "./tsconfig.json"
+    }
   },
   "extends": [
     "plugin:import/typescript",
@@ -29,7 +34,7 @@
     "import/resolver": {
       "node": {},
       "typescript": {
-        "project": "./tsconfig.dev.json",
+        "project": "./tsconfig.json",
         "alwaysTryTypes": true
       }
     }
@@ -42,9 +47,12 @@
     "!projenrc/**/*.ts"
   ],
   "rules": {
-    "@typescript-eslint/no-require-imports": [
-      "error"
+    "curly": [
+      "error",
+      "multi-line",
+      "consistent"
     ],
+    "@typescript-eslint/no-require-imports": "error",
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -80,27 +88,12 @@
     "no-shadow": [
       "off"
     ],
-    "@typescript-eslint/no-shadow": [
-      "error"
-    ],
-    "key-spacing": [
-      "error"
-    ],
-    "no-multiple-empty-lines": [
-      "error"
-    ],
-    "@typescript-eslint/no-floating-promises": [
-      "error"
-    ],
+    "@typescript-eslint/no-shadow": "error",
+    "@typescript-eslint/no-floating-promises": "error",
     "no-return-await": [
       "off"
     ],
-    "@typescript-eslint/return-await": [
-      "error"
-    ],
-    "no-trailing-spaces": [
-      "error"
-    ],
+    "@typescript-eslint/return-await": "error",
     "dot-notation": [
       "error"
     ],

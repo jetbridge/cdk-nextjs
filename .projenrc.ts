@@ -37,6 +37,11 @@ const project = new awscdk.AwsCdkConstructLibrary({
   packageName: 'cdk-nextjs-standalone',
   packageManager: NodePackageManager.YARN_CLASSIC,
   npmTrustedPublishing: true,
+  publishToPypi: {
+    distName: 'cdk-nextjs-standalone',
+    module: 'cdk_nextjs_standalone',
+    trustedPublishing: true,
+  },
   majorVersion: 4,
   // prerelease: 'beta',
   minNodeVersion,

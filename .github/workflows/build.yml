@@ -138,3 +138,49 @@ jobs:
       - name: Collect js artifact
         id: collect_js_artifact
         run: mv .repo/dist dist
+  package-python:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    if: ${{ !needs.build.outputs.self_mutation_happened }}
+    steps:
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: ">=20.0.0"
+          package-manager-cache: false
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: 3.x
+      - name: Download build artifacts
+        id: download_build_artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          artifact-ids: ${{ needs.build.outputs.artifact_id }}
+          path: dist
+      - name: Restore build artifact permissions
+        id: restore_build_artifact_permissions
+        run: cd dist && setfacl --restore=permissions-backup.acl
+        continue-on-error: true
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          path: .repo
+      - name: Install Dependencies
+        id: install_dependencies
+        run: cd .repo && yarn install --check-files --frozen-lockfile
+      - name: Extract build artifact
+        id: extract_build_artifact
+        run: tar --strip-components=1 -xzvf dist/js/*.tgz -C .repo
+      - name: Move build artifact out of the way
+        id: move_build_artifact_out_of_the_way
+        run: mv dist dist.old
+      - name: Create python artifact
+        id: create_python_artifact
+        run: cd .repo && npx projen package:python
+      - name: Collect python artifact
+        id: collect_python_artifact
+        run: mv .repo/dist dist

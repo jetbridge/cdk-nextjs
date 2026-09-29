@@ -9625,7 +9625,7 @@ const optionalS3OriginProps: OptionalS3OriginProps = { ... }
 | <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.connectionTimeout">connectionTimeout</a></code> | <code>aws-cdk-lib.Duration</code> | The number of seconds that CloudFront waits when trying to establish a connection to the origin. |
 | <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.customHeaders">customHeaders</a></code> | <code>{[ key: string ]: string}</code> | A list of HTTP header names and values that CloudFront adds to requests it sends to the origin. |
 | <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.originAccessControlId">originAccessControlId</a></code> | <code>string</code> | The unique identifier of an origin access control for this origin. |
-| <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.originAccessIdentity">originAccessIdentity</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginAccessIdentity</code> | An optional Origin Access Identity of the origin identity cloudfront will use when calling your s3 bucket. |
+| <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.originAccessIdentity">originAccessIdentity</a></code> | <code>aws-cdk-lib.aws_cloudfront.IOriginAccessIdentity</code> | An optional Origin Access Identity. |
 | <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.originId">originId</a></code> | <code>string</code> | A unique identifier for the origin. |
 | <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.originPath">originPath</a></code> | <code>string</code> | An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin. |
 | <code><a href="#cdk-nextjs-standalone.OptionalS3OriginProps.property.originShieldEnabled">originShieldEnabled</a></code> | <code>boolean</code> | Origin Shield is enabled by setting originShieldRegion to a valid region, after this to disable Origin Shield again you must set this flag to false. |
@@ -9697,9 +9697,9 @@ public readonly originAccessIdentity: IOriginAccessIdentity;
 ```
 
 - *Type:* aws-cdk-lib.aws_cloudfront.IOriginAccessIdentity
-- *Default:* An Origin Access Identity will be created.
+- *Default:* an Origin Access Identity will be created.
 
-An optional Origin Access Identity of the origin identity cloudfront will use when calling your s3 bucket.
+An optional Origin Access Identity.
 
 ---
 

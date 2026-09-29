@@ -107,7 +107,7 @@ new ProjenStruct(project, { name: 'OptionalCustomResourceProps', filePath: getFi
   .mixin(Struct.fromFqn('aws-cdk-lib.CustomResourceProps'))
   .allOptional();
 new ProjenStruct(project, { name: 'OptionalS3OriginProps', filePath: getFilePath('OptionalS3OriginProps') })
-  .mixin(Struct.fromFqn('aws-cdk-lib.aws_cloudfront_origins.S3OriginProps'))
+  .mixin(Struct.fromFqn('aws-cdk-lib.aws_cloudfront_origins.S3BucketOriginWithOAIProps'))
   .allOptional();
 new ProjenStruct(project, { name: 'OptionalEdgeFunctionProps', filePath: getFilePath('OptionalEdgeFunctionProps') })
   .mixin(Struct.fromFqn('aws-cdk-lib.aws_cloudfront.experimental.EdgeFunctionProps'))

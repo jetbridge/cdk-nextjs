@@ -4,7 +4,7 @@ import { AttributeType, Billing, TableV2 as Table } from 'aws-cdk-lib/aws-dynamo
 import { AnyPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Code, Function as LambdaFunction, FunctionOptions } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
-import { RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Queue, QueueProps } from 'aws-cdk-lib/aws-sqs';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
@@ -170,7 +170,10 @@ export class NextjsRevalidation extends Construct {
 
       const provider = new Provider(this, 'DynamoDBProvider', {
         onEventHandler: insertFn,
-        logRetention: RetentionDays.ONE_DAY,
+        logGroup: new LogGroup(this, 'DynamoDBProviderLogGroup', {
+          retention: RetentionDays.ONE_DAY,
+          removalPolicy: RemovalPolicy.DESTROY,
+        }),
         ...this.props.overrides?.insertProviderProps,
       });
 

@@ -187,7 +187,7 @@ export class NextjsDistribution extends Construct {
     xssProtection: { override: false, protection: true, modeBlock: true },
   };
 
-  private s3Origin: origins.S3Origin;
+  private s3Origin: cloudfront.IOrigin;
 
   private staticBehaviorOptions: cloudfront.BehaviorOptions;
 
@@ -203,7 +203,13 @@ export class NextjsDistribution extends Construct {
     this.props = props;
 
     // Create Behaviors
-    this.s3Origin = new origins.S3Origin(this.props.staticAssetsBucket, this.props.overrides?.s3OriginProps);
+    // OAI is kept (rather than OAC) so upgrading doesn't change the bucket policy of
+    // existing deployments; switching an in-place distribution from OAI to OAC can
+    // cause a brief loss of access while the bucket policy propagates.
+    this.s3Origin = origins.S3BucketOrigin.withOriginAccessIdentity(
+      this.props.staticAssetsBucket,
+      this.props.overrides?.s3OriginProps
+    );
     this.staticBehaviorOptions = this.createStaticBehaviorOptions();
     if (this.isFnUrlIamAuth) {
       this.edgeLambdas.push(this.createEdgeLambda());

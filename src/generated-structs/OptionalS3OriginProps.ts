@@ -6,8 +6,8 @@ import type { aws_cloudfront, Duration } from 'aws-cdk-lib';
  */
 export interface OptionalS3OriginProps {
   /**
-   * An optional Origin Access Identity of the origin identity cloudfront will use when calling your s3 bucket.
-   * @default - An Origin Access Identity will be created.
+   * An optional Origin Access Identity.
+   * @default - an Origin Access Identity will be created.
    * @stability stable
    */
   readonly originAccessIdentity?: aws_cloudfront.IOriginAccessIdentity;

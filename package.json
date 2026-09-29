@@ -24,6 +24,7 @@
     "package": "projen package",
     "package-all": "projen package-all",
     "package:js": "projen package:js",
+    "package:python": "projen package:python",
     "post-compile": "projen post-compile",
     "post-upgrade": "projen post-upgrade",
     "pre-compile": "projen pre-compile",
@@ -160,7 +161,12 @@
   "types": "lib/index.d.ts",
   "jsii": {
     "outdir": "dist",
-    "targets": {},
+    "targets": {
+      "python": {
+        "distName": "cdk-nextjs-standalone",
+        "module": "cdk_nextjs_standalone"
+      }
+    },
     "tsconfig": "tsconfig.json",
     "validateTsconfig": "strict"
   },

@@ -8,6 +8,7 @@ queue_rules:
       - -label~=(do-not-merge)
       - status-success=build
       - status-success=package-js
+      - status-success=package-python
     merge_method: squash
     commit_message_format:
       title: pr-title
@@ -22,5 +23,6 @@ pull_request_rules:
       - -label~=(do-not-merge)
       - status-success=build
       - status-success=package-js
+      - status-success=package-python
 merge_queue:
   max_parallel_checks: 1

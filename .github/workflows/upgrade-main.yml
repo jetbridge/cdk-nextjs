@@ -30,7 +30,7 @@ jobs:
         run: yarn install --check-files --frozen-lockfile
       - name: Upgrade dependencies
         id: upgrade_dependencies
-        run: npx projen upgrade
+        run: npx projen compile && npx projen upgrade
       - name: Find mutations
         id: create_patch
         run: |-

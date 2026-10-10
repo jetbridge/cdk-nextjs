@@ -98,6 +98,10 @@ const buildWorkflow = project.tryFindObjectFile('.github/workflows/build.yml');
 buildWorkflow?.patch(JsonPatch.replace('/jobs/build/steps/3/run', 'npx projen compile && npx projen build'));
 const releaseWorkflow = project.tryFindObjectFile('.github/workflows/release.yml');
 releaseWorkflow?.patch(JsonPatch.replace('/jobs/release/steps/4/run', 'npx projen compile && npx projen release'));
+// .projenrc.ts reads the jsii assembly to build the Optional* structs, so projen can't synth
+// until the project has been compiled once. Same fix as build/release above.
+const upgradeWorkflow = project.tryFindObjectFile('.github/workflows/upgrade-main.yml');
+upgradeWorkflow?.patch(JsonPatch.replace('/jobs/upgrade/steps/3/run', 'npx projen compile && npx projen upgrade'));
 
 const getFilePath = (fileName: string) => 'src/generated-structs/' + fileName + '.ts';
 new ProjenStruct(project, { name: 'OptionalFunctionProps', filePath: getFilePath('OptionalFunctionProps') })

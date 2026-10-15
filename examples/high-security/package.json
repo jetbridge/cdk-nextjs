@@ -11,13 +11,13 @@
     "@types/node": "20.10.4",
     "aws-cdk": "^2.1105.0",
     "cdk-nag": "^2.37.55",
-    "esbuild": "^0.27.0",
-    "tsx": "^4.21.0",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
     "typescript": "~5.3.3"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.237.1",
+    "aws-cdk-lib": "^2.273.0",
     "cdk-nextjs-standalone": "link:../..",
-    "constructs": "^10.4.5"
+    "constructs": "^10.8.1"
   }
 }

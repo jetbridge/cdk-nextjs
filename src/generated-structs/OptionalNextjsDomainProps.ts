@@ -33,6 +33,10 @@ export interface OptionalNextjsDomainProps {
   /**
    * If this prop is `undefined` then an ACM `Certificate` will be created based on {@link NextjsDomainProps.domainName} with DNS Validation. This prop allows you to control the TLS/SSL certificate created. The certificate you create must be in the `us-east-1` (N. Virginia) region as required by AWS CloudFront.
    * Set this option if you have an existing certificate in the `us-east-1` region in AWS Certificate Manager you want to use.
+   *
+   * Required when the stack is deployed outside `us-east-1`, since a certificate
+   * created by this construct lives in the stack's region. Create it in a separate
+   * `us-east-1` stack and pass it in, using `crossRegionReferences: true` on both stacks.
    * @stability stable
    */
   readonly certificate?: aws_certificatemanager.ICertificate;

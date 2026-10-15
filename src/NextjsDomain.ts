@@ -1,3 +1,4 @@
+import { Stack, Token } from 'aws-cdk-lib';
 import { ICertificate, Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
 import {
@@ -69,6 +70,10 @@ export interface NextjsDomainProps {
    * (N. Virginia) region as required by AWS CloudFront.
    *
    * Set this option if you have an existing certificate in the `us-east-1` region in AWS Certificate Manager you want to use.
+   *
+   * Required when the stack is deployed outside `us-east-1`, since a certificate
+   * created by this construct lives in the stack's region. Create it in a separate
+   * `us-east-1` stack and pass it in, using `crossRegionReferences: true` on both stacks.
    */
   readonly certificate?: ICertificate;
   /**
@@ -144,6 +149,14 @@ export class NextjsDomain extends Construct {
 
   private getCertificate(): ICertificate {
     if (!this.props.certificate) {
+      const region = Stack.of(this).region;
+      if (!Token.isUnresolved(region) && region !== 'us-east-1') {
+        throw new Error(
+          `NextjsDomain can only create a certificate when the stack is in us-east-1 (stack region is ${region}). ` +
+            'CloudFront requires certificates in us-east-1. Create the certificate in a us-east-1 stack and pass it ' +
+            'via the `certificate` prop, using `crossRegionReferences: true` on both stacks.'
+        );
+      }
       return new Certificate(this, 'Certificate', {
         domainName: this.props.certificateDomainName ?? this.props.domainName,
         validation: CertificateValidation.fromDns(this.hostedZone),
